@@ -51,4 +51,6 @@ Ui                          ->界面
         ...
     MainWindow.py           ->主窗口
     QCustomButton.py        ->自定义按钮
+Scripts                     ->脚本(与软件无关)
+    ReleaseBuilder.py       ->构建一个Release版本
 ```
