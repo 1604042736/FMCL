@@ -17,33 +17,29 @@
    <item row="0" column="0">
     <widget class="QWidget" name="widget" native="true">
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="2" column="0">
-       <widget class="QPushButton" name="pb_chooseversion">
-        <property name="text">
-         <string>选择版本</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="2">
-       <widget class="QPushButton" name="pb_start">
-        <property name="text">
-         <string>开始游戏</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
+      <item row="2" column="2">
        <widget class="QPushButton" name="pb_manageversion">
         <property name="text">
          <string>版本管理</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="0" colspan="2">
-       <widget class="QQuickWidget" name="quickWidget">
-        <property name="resizeMode">
-         <enum>QQuickWidget::SizeRootObjectToView</enum>
+      <item row="2" column="1">
+       <widget class="QPushButton" name="pb_chooseversion">
+        <property name="text">
+         <string>选择版本</string>
         </property>
        </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="pb_start">
+        <property name="text">
+         <string>开始游戏</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="3">
+       <widget class="QQuickWidget" name="quickWidget" native="true"/>
       </item>
      </layout>
     </widget>
