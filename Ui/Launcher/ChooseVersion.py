@@ -20,7 +20,10 @@ class ChooseVersion(QFBNWidget, Ui_ChooseVersion):
 
     def set_versions(self):
         self.lw_versions.clear()
-        for i in os.listdir(g.cur_gamepath+"/versions"):
+        self.version_path=g.cur_gamepath+"/versions"
+        if not os.path.exists(self.version_path):
+            os.makedirs(self.version_path)
+        for i in os.listdir(self.version_path):
             item = QListWidgetItem()
             item.setSizeHint(QSize(256, 64))
             widget = VersionInfo(i)
