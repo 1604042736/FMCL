@@ -16,6 +16,7 @@ pip install -r requirements.txt
 ## 软件功能
 - 原版的下载与运行
 - `Forge`版本的下载安装与运行
+- `Fabric`版本的下载安装与运行
 - 通过`QML`改变`Launcher`里面的内容
 - 对版本进行管理
 - (只)支持离线登录

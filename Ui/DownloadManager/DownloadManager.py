@@ -1,3 +1,4 @@
+from Core import CoreBase
 from QtFBN.QFBNWidget import QFBNWidget
 from Ui.DownloadManager.TaskInfo import TaskInfo
 from Ui.DownloadManager.ui_DownloadManager import Ui_DownloadManager
@@ -14,12 +15,13 @@ class DownloadManager(QFBNWidget, Ui_DownloadManager):
         self.setupUi(self)
         self.task_num = 0  # 任务数量
 
-    def add_task(self, name, ins, func, args):
+    def add_task(self, name, ins: CoreBase, func, args):
         """添加一个任务"""
         item = QListWidgetItem()
         item.setSizeHint(QSize(256, 64))
         widget = TaskInfo(name, ins, func, args, self.lw_tasks.count())
         widget.Finished.connect(self.task_finished)
+        widget.Error.connect(self.task_error)
         self.lw_tasks.addItem(item)
         self.lw_tasks.setItemWidget(item, widget)
         self.task_num += 1
@@ -27,8 +29,15 @@ class DownloadManager(QFBNWidget, Ui_DownloadManager):
         self.show()
 
     def task_finished(self, task_id):
+        self.notify("任务完成",self.lw_tasks.itemWidget(self.lw_tasks.item(task_id)).name)
         self.lw_tasks.takeItem(task_id)
         self.task_num = self.lw_tasks.count()
         if self.task_num == 0:
             self.NoTask.emit()
-            self.close()
+
+    def task_error(self, msg, task_id):
+        self.notify("错误", msg)
+        self.lw_tasks.takeItem(task_id)
+        self.task_num = self.lw_tasks.count()
+        if self.task_num == 0:
+            self.NoTask.emit()

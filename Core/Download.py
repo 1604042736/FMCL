@@ -1,13 +1,10 @@
-from PyQt5.QtCore import pyqtSignal
 import os
-from PyQt5.QtCore import QObject
 import requests
 
+from Core import CoreBase
 
-class Download(QObject):
-    Finished = pyqtSignal()
-    Progress = pyqtSignal(int, int)
 
+class Download(CoreBase):
     def __init__(self, url, path) -> None:
         super().__init__()
         self.url = url
@@ -32,8 +29,9 @@ class Download(QObject):
                             break
                         fileobj.write(chunk)  # 写入文件
                         offset = offset + len(chunk)
-                        self.Progress.emit(offset,
-                                           int(rsp.headers['Content-Length']))
+                        if "Content-Length" in rsp.headers:
+                            self.Progress.emit(offset,
+                                               int(rsp.headers['Content-Length']))
                     break
                 except Exception as e:
                     print(e)
@@ -47,7 +45,7 @@ class Download(QObject):
         self.start()
 
 
-def download(url, path, cls, check=False):
+def download(url, path, cls: CoreBase, check=False):
     """下载"""
     d = Download(url, path)
     d.Progress.connect(lambda cur, total: cls.Progress.emit(cur, total))

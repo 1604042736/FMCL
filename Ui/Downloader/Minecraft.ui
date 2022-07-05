@@ -46,22 +46,38 @@
       <string>下载内容</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-      <item row="1" column="0">
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>Optifine</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Forge</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
+      <item row="3" column="1">
+       <widget class="QComboBox" name="cb_optifine"/>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="cb_minecraft"/>
+      </item>
+      <item row="4" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
          <string>Liteloader</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="2" column="1">
        <widget class="QComboBox" name="cb_forge"/>
+      </item>
+      <item row="4" column="1">
+       <widget class="QComboBox" name="cb_liteloader"/>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_5">
@@ -70,21 +86,15 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="cb_minecraft"/>
-      </item>
-      <item row="3" column="1">
-       <widget class="QComboBox" name="cb_liteloader"/>
-      </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="cb_optifine"/>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_3">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Optifine</string>
+         <string>Fabric</string>
         </property>
        </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="cb_fabric"/>
       </item>
      </layout>
     </widget>

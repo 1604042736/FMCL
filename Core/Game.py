@@ -1,20 +1,14 @@
-from http import client
 import shutil
 import requests
 import json
+from Core import CoreBase
 from Core.Download import download
-from Core.Launch import Launch
 import Globals as g
 import os
 from zipfile import *
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtCore import QObject
 
 
-class Game(QObject):
-    Finished = pyqtSignal()
-    Progress = pyqtSignal(int, int)
-
+class Game(CoreBase):
     def get_versions(self) -> list:
         '''获取游戏版本'''
         url = 'http://launchermeta.mojang.com/mc/game/version_manifest.json'
@@ -32,6 +26,14 @@ class Game(QObject):
         for forge in json.loads(r.content):
             forges.append(forge['version'])
         return forges
+
+    def get_fabric(self, version) -> list:
+        url = f"https://meta.fabricmc.net/v1/versions/loader/{version}"
+        r = requests.get(url)
+        fabrics = []
+        for fabric in json.loads(r.content):
+            fabrics.append(fabric["loader"]["version"])
+        return fabrics
 
     def get_optifine(self, version) -> list:
         '''获取optifine版本'''
@@ -55,15 +57,19 @@ class Game(QObject):
             pass
         return liteloaders
 
-    def __init__(self, name="", version="", forge_version="") -> None:
+    def __init__(self, name="", version="", forge_version="", fabric_version="") -> None:
         super().__init__()
         self.name = name
         self.version = version
         self.forge_version = forge_version
+        self.fabric_version = fabric_version
         self.class_path = {}
 
     def download_version(self):
         '''下载版本'''
+        if self.forge_version and self.fabric_version:
+            self.Error.emit("Forge和Fabric不兼容")
+            return
 
         version_path = os.path.join(g.cur_gamepath, 'versions')
         game_path = os.path.join(version_path, self.name)
@@ -80,11 +86,14 @@ class Game(QObject):
 
         if self.forge_version:
             self.install_forge()
+        elif self.fabric_version:
+            self.install_fabric()
 
         config = {  # 游戏配置信息
             "name": self.name,
             "version": self.version,
-            "forge_version": self.forge_version
+            "forge_version": self.forge_version,
+            "fabric_version": self.fabric_version
         }
         json.dump(config, open(f'{game_path}/FMCL/config.json', mode='w'))
 
@@ -109,9 +118,9 @@ class Game(QObject):
             open(os.path.join(game_path, f'install_profile.json')))
 
         for i in self.install_profile['libraries']:
-            self.analysis_library(zip, i)
+            self.analysis_library(i, zip)
         for i in forge_config['libraries']:
-            self.analysis_library(zip, i)
+            self.analysis_library(i, zip)
 
         # client
         client_binpatch = self.get_client('BINPATCH')
@@ -220,27 +229,65 @@ class Game(QObject):
             else:
                 self.splicing(a[key], b[key])  # 继续拼接
 
-    def analysis_library(self, forge_zip, lib):
+    def analysis_library(self, lib, forge_zip=None):
         '''解析lib'''
-        path = os.path.join(
-            self.lib_path, lib['downloads']['artifact']['path'])
-        url = lib['downloads']['artifact']['url']
-        self.class_path[lib["name"]] = path
-        if url:  # 下载
-            download(url, path, self, True)
-        else:  # 解压
-            path = lib['downloads']['artifact']['path']
-            jarpath = 'maven/'+path
-            newpath = f'{self.lib_path}/{path}'
-            try:
-                os.makedirs(os.path.dirname(newpath))
-            except:
-                pass
-            forge_zip.extract(jarpath, self.lib_path)
-            shutil.move(f'{self.lib_path}/{jarpath}', newpath)
+        if "downloads" in lib:
+            path = os.path.join(
+                self.lib_path, lib['downloads']['artifact']['path'])
+            url = lib['downloads']['artifact']['url']
+            self.class_path[lib["name"]] = path
+            if url:  # 下载
+                download(url, path, self, True)
+            else:  # 解压
+                path = lib['downloads']['artifact']['path']
+                jarpath = 'maven/'+path
+                newpath = f'{self.lib_path}/{path}'
+                try:
+                    os.makedirs(os.path.dirname(newpath))
+                except:
+                    pass
+                forge_zip.extract(jarpath, self.lib_path)
+                shutil.move(f'{self.lib_path}/{jarpath}', newpath)
+        else:
+            name = lib["name"]
+            path = self.name_to_path(name)
+            url = lib["url"]+path
+            download(url, f"{g.cur_gamepath}/libraries/{path}", self, True)
+
+    def name_to_path(self, name):
+        """将name转换成path"""
+        a, b = name.split(":", 1)
+        jar_file = b.replace(":", "-")+".jar"
+        return a.replace(".", "/")+"/"+b.replace(":", "/")+"/"+jar_file
 
     def del_game(self):
         '''删除游戏'''
         version_path = os.path.join(g.cur_gamepath, 'versions')
         game_path = os.path.join(version_path, self.name)
         shutil.rmtree(game_path)
+
+    def install_fabric(self):
+        """安装Fabric"""
+        name = f"fabric-loader-{self.fabric_version}-{self.version}"
+        version_path = os.path.join(g.cur_gamepath, 'versions')
+        game_path = os.path.join(version_path, self.name)
+
+        r = requests.get(
+            f"https://meta.fabricmc.net/v2/versions/loader/{self.version}/{self.fabric_version}/profile/json")
+        for i in json.loads(r.content)["libraries"]:
+            self.analysis_library(i)
+
+        download(f"https://meta.fabricmc.net/v2/versions/loader/{self.version}/{self.fabric_version}/profile/zip",
+                 game_path+"/profile.zip",
+                 self, True)
+        zip = ZipFile(game_path+"/profile.zip")
+        loader_config = json.loads(zip.read(name+"/"+name+".json"))
+        # 防止出现"-DFabricMcEmu= net.minecraft.client.main.Main "这样的情况
+        # 这种情况会导致无法加载Fabri
+        loader_config["arguments"]["jvm"][-1] = "-DFabricMcEmu=net.minecraft.client.main.Main "
+
+        config = json.load(open(os.path.join(game_path, f'{self.name}.json')))
+
+        self.splicing(config, loader_config)
+        json.dump(config, open(os.path.join(
+            game_path, f'{self.name}.json'), mode='w'))

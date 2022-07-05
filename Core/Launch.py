@@ -5,19 +5,16 @@ import shutil
 from zipfile import ZipFile
 import platform
 import sys
+from Core import CoreBase
 import Globals as g
 from Core.Download import download
-from PyQt5.QtCore import QObject, pyqtSignal
 
 
-class Launch(QObject):
+class Launch(CoreBase):
     '''
     启动游戏
     参考https://minecraft.fandom.com/zh/wiki/%E6%95%99%E7%A8%8B/%E7%BC%96%E5%86%99%E5%90%AF%E5%8A%A8%E5%99%A8?amp%3Bvariant=zh
     '''
-    Finished = pyqtSignal()
-    Progress = pyqtSignal(int, int)
-
     system_name = platform.system().lower()
     system_version = platform.version()
 
@@ -115,14 +112,14 @@ class Launch(QObject):
         args = args.replace('${auth_access_token}',
                             '000000000000300C95C489********86')
         args = args.replace('${user_type}', 'Legacy')
-        args = args.replace('${version_type}', 'MinecraftLaucnher')
+        args = args.replace('${version_type}', 'FMCL')
         args = args.replace('${resolution_width}', str(width))
         args = args.replace('${resolution_height}', str(height))
         args = args.replace('${natives_directory}', f'"{self.native_path}"')
-        args = args.replace('${launcher_name}', 'MinecraftLauncher')
+        args = args.replace('${launcher_name}', 'FMCL')
         args = args.replace('${launcher_version}', '1')
         args = args.replace('${classpath}', f'"{";".join(self.classpath)}"')
-
+        print(args)
         os.system(args)
 
         self.Finished.emit()
@@ -158,32 +155,43 @@ class Launch(QObject):
     def analysis_library(self, lib):
         '''解析json文件中的library'''
         try:
-            # 有classifiers的为natives库
-            if 'classifiers' in lib['downloads']:
-                try:
-                    native_name = lib['natives'][self.system_name]
-                    path = os.path.join(
-                        self.lib_path, lib['downloads']['classifiers'][native_name]['path'])
-                    url = lib['downloads']['classifiers'][native_name]['url']
-                    download(url, path, self, True)
+            if "downloads" in lib:
+                # 有classifiers的为natives库
+                if 'classifiers' in lib['downloads']:
+                    try:
+                        native_name = lib['natives'][self.system_name]
+                        path = os.path.join(
+                            self.lib_path, lib['downloads']['classifiers'][native_name]['path'])
+                        url = lib['downloads']['classifiers'][native_name]['url']
+                        download(url, path, self, True)
+                        if 'rules' in lib and not self.check_rule(lib['rules']):
+                            return
+                        self.unzip_native(path)
+                    except KeyError as e:
+                        pass
+                else:
                     if 'rules' in lib and not self.check_rule(lib['rules']):
                         return
-                    self.unzip_native(path)
-                except KeyError as e:
-                    pass
-            else:
-                if 'rules' in lib and not self.check_rule(lib['rules']):
-                    return
-                path = os.path.join(
-                    self.lib_path, lib['downloads']['artifact']['path'])
-                url = lib['downloads']['artifact']['url']
-                download(url, path, self, True)
-                if "native" in path:  # 属于native的另一种情况
-                    self.unzip_native(path)
-                else:
-                    self.add_classpath(path)
+                    path = os.path.join(
+                        self.lib_path, lib['downloads']['artifact']['path'])
+                    url = lib['downloads']['artifact']['url']
+                    download(url, path, self, True)
+                    if "native" in path:  # 属于native的另一种情况
+                        self.unzip_native(path)
+                    else:
+                        self.add_classpath(path)
+            else:  # Fabric的library
+                name = lib["name"]
+                path = self.name_to_path(name)
+                self.add_classpath(self.lib_path+"/"+path)
         except Exception as e:
             print(e)
+
+    def name_to_path(self, name):
+        """将name转换成path"""
+        a, b = name.split(":", 1)
+        jar_file = b.replace(":", "-")+".jar"
+        return a.replace(".", "/")+"/"+b.replace(":", "/")+"/"+jar_file
 
     def add_classpath(self, path):
         '''添加classpath'''

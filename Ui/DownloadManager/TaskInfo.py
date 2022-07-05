@@ -1,13 +1,15 @@
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QProgressBar, QPushButton
 from PyQt5.QtCore import pyqtSignal, QTimer
+from Core import CoreBase
 
 from Ui.DownloadManager.Task import Task
 
 
 class TaskInfo(QWidget):
     Finished = pyqtSignal(int)
+    Error = pyqtSignal(str, int)
 
-    def __init__(self, name, ins, func, args, id, parent=None):
+    def __init__(self, name, ins: CoreBase, func, args, id, parent=None):
         super().__init__(parent)
         self.name = name  # 任务名称
         self.ins = ins  # 类的实例
@@ -37,6 +39,7 @@ class TaskInfo(QWidget):
         self.task = Task(ins, func, args)
         self.task.Progress.connect(self.progress)
         self.task.Finished.connect(lambda: self.Finished.emit(self.id))
+        self.task.Error.connect(lambda a: self.Error.emit(a, self.id))
         self.task.start()
 
         self.cur_progress = (0, 1)

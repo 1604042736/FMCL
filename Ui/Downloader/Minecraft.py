@@ -26,14 +26,17 @@ class Minecraft(QFBNWidget, Ui_Minecraft):
         self.cb_forge.clear()
         self.cb_optifine.clear()
         self.cb_liteloader.clear()
+        self.cb_fabric.clear()
 
         self.cb_forge.addItems([""]+Game().get_forge(version))
         self.cb_optifine.addItems([""]+Game().get_optifine(version))
         self.cb_liteloader.addItems([""]+Game().get_liteloader(version))
+        self.cb_fabric.addItems([""]+Game().get_fabric(version))
 
     def install(self):
         name = self.le_name.text()
         version = self.cb_minecraft.currentText()
         forge_version = self.cb_forge.currentText()
+        fabric_version = self.cb_fabric.currentText()
         g.dmgr.add_task(f"下载{name}", Game(
-            name, version, forge_version), "download_version", tuple())
+            name, version, forge_version, fabric_version), "download_version", tuple())
