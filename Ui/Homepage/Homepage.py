@@ -57,7 +57,7 @@ class Homepage(QFBNWidget, Ui_Homepage):
 
         self.panel_state = "simple"  # 面板状态
 
-    def back_to_widget(self, w):
+    def widget_to_self(self, w):
         if self.w_ui == w:
             self.set_ui(w)
         else:   # 当前w_ui显示的不是w

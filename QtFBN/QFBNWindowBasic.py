@@ -101,5 +101,5 @@ class QFBNWindowBasic(QWidget):
         else:  # 回到原来的widget中去
             self.target.setParent(self.target.parent_)
             QWidget.show(self.target)
-            self.target.parent_.back_to_widget(self.target)
+            self.target.parent_.widget_to_self(self.target)
             self.close()

@@ -66,5 +66,5 @@ class QFBNWidget(QWidget):
             self.parent_ = w
         super().setParent(w)
 
-    def back_to_widget(self, w) -> None:
-        """回到自己的某个控件上"""
+    def widget_to_self(self, w) -> None:
+        """对回到自己的widget进行设置"""

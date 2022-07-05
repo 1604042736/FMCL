@@ -35,7 +35,7 @@ class Downloader(QFBNWidget, Ui_Downloader):
             button.move(button_x, 0)
             button_x += button.width()
 
-    def back_to_widget(self, w):
+    def widget_to_self(self, w):
         if self.w_ui == w:
             self.set_ui(w)
         else:   # 当前w_ui显示的不是w
