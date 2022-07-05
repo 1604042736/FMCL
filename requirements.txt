@@ -1,0 +1,5 @@
+PyQt5==5.15.7
+pywin32==303
+QtAwesome==1.1.1
+requests==2.27.1
+win32gui==221.6
