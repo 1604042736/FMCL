@@ -25,11 +25,13 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
         self.version = config["version"]
         self.forge_version = config["forge_version"]
         self.fabric_version = config["fabric_version"]
+        self.optifine_version = config["optifine_version"]
 
         self.le_name.setText(self.name)
         self.l_version.setText(self.version)
         self.l_forgeversion.setText(self.forge_version)
         self.l_fabricversion.setText(self.fabric_version)
+        self.l_optifineversion.setText(self.optifine_version)
 
         self.pb_del.clicked.connect(self.del_game)
         self.pb_reinstall.clicked.connect(self.reinstall_game)
@@ -58,7 +60,7 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
 
     def reinstall_game(self):
         g.dmgr.add_task(f"下载{self.name}", Game(
-            self.name, self.version, self.forge_version, self.fabric_version), "download_version", tuple())
+            self.name, self.version, self.forge_version, self.fabric_version, self.optifine_version), "download_version", tuple())
 
     def rename_game(self):
         new_name = self.le_name.text()

@@ -57,12 +57,13 @@ class Game(CoreBase):
             pass
         return liteloaders
 
-    def __init__(self, name="", version="", forge_version="", fabric_version="") -> None:
+    def __init__(self, name="", version="", forge_version="", fabric_version="", optifine_version="") -> None:
         super().__init__()
         self.name = name
         self.version = version
         self.forge_version = forge_version
         self.fabric_version = fabric_version
+        self.optifine_version = optifine_version
         self.class_path = {}
 
     def download_version(self):
@@ -77,23 +78,35 @@ class Game(CoreBase):
                      [f'https://bmclapi2.bangbang93.com/version/{self.version}/json', game_path + f'\\{self.name}.json']]
         if self.forge_version:  # 附带forge
             downloads.append(
-                [f'https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/{self.version}-{self.forge_version}/forge-{self.version}-{self.forge_version}-installer.jar', game_path+f'\\installer.jar'])
+                [f'https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/{self.version}-{self.forge_version}/forge-{self.version}-{self.forge_version}-installer.jar',
+                 game_path+f'\\installer.jar'])
             downloads.append(
-                [f'https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/{self.version}-{self.forge_version}/forge-{self.version}-{self.forge_version}-userdev.jar', game_path+f'\\userdev.jar'])
-
+                [f'https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/{self.version}-{self.forge_version}/forge-{self.version}-{self.forge_version}-userdev.jar',
+                 game_path+f'\\userdev.jar'])
+        if self.fabric_version:
+            downloads.append([f"https://meta.fabricmc.net/v2/versions/loader/{self.version}/{self.fabric_version}/profile/zip",
+                              game_path+"/profile.zip"])
+        if self.optifine_version:
+            mcversion, type_, patch = self.optifine_version.split()
+            self.optifine_jar = f"{game_path}/Optifine-{mcversion}_{type_}_{patch}.jar"
+            downloads.append([f"https://bmclapi2.bangbang93.com/optifine/{mcversion}/{type_}/{patch}",
+                              self.optifine_jar])
         for task in downloads:
             download(task[0], task[1], self, True)
 
         if self.forge_version:
             self.install_forge()
-        elif self.fabric_version:
+        if self.fabric_version:
             self.install_fabric()
+        if self.optifine_version:
+            self.install_optifine()
 
         config = {  # 游戏配置信息
             "name": self.name,
             "version": self.version,
             "forge_version": self.forge_version,
-            "fabric_version": self.fabric_version
+            "fabric_version": self.fabric_version,
+            "optifine_version": self.optifine_version
         }
         json.dump(config, open(f'{game_path}/FMCL/config.json', mode='w'))
 
@@ -277,17 +290,63 @@ class Game(CoreBase):
         for i in json.loads(r.content)["libraries"]:
             self.analysis_library(i)
 
-        download(f"https://meta.fabricmc.net/v2/versions/loader/{self.version}/{self.fabric_version}/profile/zip",
-                 game_path+"/profile.zip",
-                 self, True)
         zip = ZipFile(game_path+"/profile.zip")
         loader_config = json.loads(zip.read(name+"/"+name+".json"))
         # 防止出现"-DFabricMcEmu= net.minecraft.client.main.Main "这样的情况
-        # 这种情况会导致无法加载Fabri
+        # 这种情况会导致无法加载Fabric
         loader_config["arguments"]["jvm"][-1] = "-DFabricMcEmu=net.minecraft.client.main.Main "
 
         config = json.load(open(os.path.join(game_path, f'{self.name}.json')))
 
         self.splicing(config, loader_config)
+        json.dump(config, open(os.path.join(
+            game_path, f'{self.name}.json'), mode='w'))
+
+    def install_optifine(self):
+        """安装Optifine"""
+        version_path = os.path.join(g.cur_gamepath, 'versions')
+        game_path = os.path.join(version_path, self.name)
+
+        zip = ZipFile(self.optifine_jar)
+        launchwrapper_of_version = zip.read(
+            "launchwrapper-of.txt").decode("utf-8")
+        launchwrapper_of_jar = f"launchwrapper-of-{launchwrapper_of_version}.jar"
+
+        # 生成libraries
+        self.lib_path = os.path.join(g.cur_gamepath, f'libraries')
+        zip.extract(launchwrapper_of_jar,
+                    f"{self.lib_path}/optifine/launchwrapper-of/{launchwrapper_of_version}")
+        zip.close()
+        path = f"{self.lib_path}/optifine/OptiFine/{'_'.join(self.optifine_version.split())}"
+        try:
+            os.makedirs(path)
+        except:
+            pass
+        shutil.move(self.optifine_jar, path)
+
+        # 生成json
+        config = json.load(open(os.path.join(game_path, f'{self.name}.json')))
+        mcversion, type_, patch = self.optifine_version.split()
+        optifine_config = {
+            "id": f"{mcversion}-Optifine_{type_}_{patch}",
+            "inheritsFrom": f"{mcversion}",
+            "type": "release",
+            "libraries": [
+                {
+                    "name": f"optifine:OptiFine:{mcversion}_{type_}_{patch}"
+                },
+                {
+                    "name": f"optifine:launchwrapper-of:{launchwrapper_of_version}"
+                }
+            ],
+            "mainClass": "net.minecraft.launchwrapper.Launch",
+            "arguments": {
+                "game": [
+                    "--tweakClass",
+                    "optifine.OptiFineTweaker"
+                ]
+            }
+        }
+        self.splicing(config, optifine_config)
         json.dump(config, open(os.path.join(
             game_path, f'{self.name}.json'), mode='w'))

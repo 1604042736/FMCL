@@ -38,5 +38,6 @@ class Minecraft(QFBNWidget, Ui_Minecraft):
         version = self.cb_minecraft.currentText()
         forge_version = self.cb_forge.currentText()
         fabric_version = self.cb_fabric.currentText()
+        optifine_version=self.cb_optifine.currentText()
         g.dmgr.add_task(f"下载{name}", Game(
-            name, version, forge_version, fabric_version), "download_version", tuple())
+            name, version, forge_version, fabric_version,optifine_version), "download_version", tuple())

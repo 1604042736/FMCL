@@ -180,7 +180,7 @@ class Launch(CoreBase):
                         self.unzip_native(path)
                     else:
                         self.add_classpath(path)
-            else:  # Fabric的library
+            else:  # Fabric或Optifine的library
                 name = lib["name"]
                 path = self.name_to_path(name)
                 self.add_classpath(self.lib_path+"/"+path)
