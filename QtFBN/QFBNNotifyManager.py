@@ -51,6 +51,7 @@ class QFBNNotifyManager(QWidget):
 
         l = 0
         for i in self.notices:
+            i.show()
             l += i.height()
             i.move(width-i.width(), height-l)
 
@@ -67,4 +68,5 @@ class QFBNNotifyManager(QWidget):
                     i[1].deleteLater()
                     self.notices.remove(i[1])
                     self.killTimer(i[0])
+                    self.update_geometry()
                     break

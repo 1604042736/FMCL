@@ -65,6 +65,9 @@ class Game(CoreBase):
         self.fabric_version = fabric_version
         self.optifine_version = optifine_version
         self.class_path = {}
+        self.lib_path = os.path.join(g.cur_gamepath, f'libraries')
+        self.version_path = os.path.join(g.cur_gamepath, 'versions')
+        self.game_path = os.path.join(self.version_path, self.name)
 
     def download_version(self):
         '''下载版本'''
@@ -72,23 +75,21 @@ class Game(CoreBase):
             self.Error.emit("Forge和Fabric不兼容")
             return
 
-        version_path = os.path.join(g.cur_gamepath, 'versions')
-        game_path = os.path.join(version_path, self.name)
-        downloads = [[f'https://bmclapi2.bangbang93.com/version/{self.version}/client', game_path + f'\\{self.name}.jar'],
-                     [f'https://bmclapi2.bangbang93.com/version/{self.version}/json', game_path + f'\\{self.name}.json']]
+        downloads = [[f'https://bmclapi2.bangbang93.com/version/{self.version}/client', self.game_path + f'\\{self.name}.jar'],
+                     [f'https://bmclapi2.bangbang93.com/version/{self.version}/json', self.game_path + f'\\{self.name}.json']]
         if self.forge_version:  # 附带forge
             downloads.append(
                 [f'https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/{self.version}-{self.forge_version}/forge-{self.version}-{self.forge_version}-installer.jar',
-                 game_path+f'\\installer.jar'])
+                 self.game_path+f'\\installer.jar'])
             downloads.append(
                 [f'https://bmclapi2.bangbang93.com/maven/net/minecraftforge/forge/{self.version}-{self.forge_version}/forge-{self.version}-{self.forge_version}-userdev.jar',
-                 game_path+f'\\userdev.jar'])
+                 self.game_path+f'\\userdev.jar'])
         if self.fabric_version:
             downloads.append([f"https://meta.fabricmc.net/v2/versions/loader/{self.version}/{self.fabric_version}/profile/zip",
-                              game_path+"/profile.zip"])
+                              self.game_path+"/profile.zip"])
         if self.optifine_version:
             mcversion, type_, patch = self.optifine_version.split()
-            self.optifine_jar = f"{game_path}/Optifine-{mcversion}_{type_}_{patch}.jar"
+            self.optifine_jar = f"{self.game_path}/Optifine-{mcversion}_{type_}_{patch}.jar"
             downloads.append([f"https://bmclapi2.bangbang93.com/optifine/{mcversion}/{type_}/{patch}",
                               self.optifine_jar])
         for task in downloads:
@@ -108,27 +109,25 @@ class Game(CoreBase):
             "fabric_version": self.fabric_version,
             "optifine_version": self.optifine_version
         }
-        json.dump(config, open(f'{game_path}/FMCL/config.json', mode='w'))
+        json.dump(config, open(f'{self.game_path}/FMCL/config.json', mode='w'))
 
         self.Finished.emit()
 
     def install_forge(self):
         '''安装forge'''
-        version_path = os.path.join(g.cur_gamepath, 'versions')
-        game_path = os.path.join(version_path, self.name)
-        config = json.load(open(os.path.join(game_path, f'{self.name}.json')))
+        config = json.load(
+            open(os.path.join(self.game_path, f'{self.name}.json')))
 
-        installerpath = game_path+f'\\installer.jar'
+        installerpath = self.game_path+f'\\installer.jar'
         # 获取forge的配置
         zip = ZipFile(installerpath)
-        zip.extract('version.json', game_path)
-        zip.extract('install_profile.json', game_path)
-        self.lib_path = os.path.join(g.cur_gamepath, f'libraries')
+        zip.extract('version.json', self.game_path)
+        zip.extract('install_profile.json', self.game_path)
         forge_config = json.load(
-            open(os.path.join(game_path, f'version.json')))
+            open(os.path.join(self.game_path, f'version.json')))
 
         self.install_profile = json.load(
-            open(os.path.join(game_path, f'install_profile.json')))
+            open(os.path.join(self.game_path, f'install_profile.json')))
 
         for i in self.install_profile['libraries']:
             self.analysis_library(i, zip)
@@ -137,19 +136,20 @@ class Game(CoreBase):
 
         # client
         client_binpatch = self.get_client('BINPATCH')
-        zip.extract(client_binpatch[1:], game_path)
-        client_binpatch = os.path.abspath(game_path+f'{client_binpatch}')
+        zip.extract(client_binpatch[1:], self.game_path)
+        client_binpatch = os.path.abspath(self.game_path+f'{client_binpatch}')
 
         for i in self.install_profile['processors']:
             if "sides" in i and "client" not in i["sides"]:
                 continue
-            self.execute(i, game_path + f'\\{self.name}.jar', client_binpatch)
+            self.execute(i, self.game_path +
+                         f'\\{self.name}.jar', client_binpatch)
 
         zip.close()
         # 拼接
         self.splicing(config, forge_config)
         json.dump(config, open(os.path.join(
-            game_path, f'{self.name}.json'), mode='w'))
+            self.game_path, f'{self.name}.json'), mode='w'))
 
     def get_special_client(self, key):
         '''获取特殊的client'''
@@ -275,45 +275,38 @@ class Game(CoreBase):
 
     def del_game(self):
         '''删除游戏'''
-        version_path = os.path.join(g.cur_gamepath, 'versions')
-        game_path = os.path.join(version_path, self.name)
-        shutil.rmtree(game_path)
+        shutil.rmtree(self.game_path)
 
     def install_fabric(self):
         """安装Fabric"""
         name = f"fabric-loader-{self.fabric_version}-{self.version}"
-        version_path = os.path.join(g.cur_gamepath, 'versions')
-        game_path = os.path.join(version_path, self.name)
 
         r = requests.get(
             f"https://meta.fabricmc.net/v2/versions/loader/{self.version}/{self.fabric_version}/profile/json")
         for i in json.loads(r.content)["libraries"]:
             self.analysis_library(i)
 
-        zip = ZipFile(game_path+"/profile.zip")
+        zip = ZipFile(self.game_path+"/profile.zip")
         loader_config = json.loads(zip.read(name+"/"+name+".json"))
         # 防止出现"-DFabricMcEmu= net.minecraft.client.main.Main "这样的情况
         # 这种情况会导致无法加载Fabric
         loader_config["arguments"]["jvm"][-1] = "-DFabricMcEmu=net.minecraft.client.main.Main "
 
-        config = json.load(open(os.path.join(game_path, f'{self.name}.json')))
+        config = json.load(
+            open(os.path.join(self.game_path, f'{self.name}.json')))
 
         self.splicing(config, loader_config)
         json.dump(config, open(os.path.join(
-            game_path, f'{self.name}.json'), mode='w'))
+            self.game_path, f'{self.name}.json'), mode='w'))
 
     def install_optifine(self):
         """安装Optifine"""
-        version_path = os.path.join(g.cur_gamepath, 'versions')
-        game_path = os.path.join(version_path, self.name)
-
         zip = ZipFile(self.optifine_jar)
         launchwrapper_of_version = zip.read(
             "launchwrapper-of.txt").decode("utf-8")
         launchwrapper_of_jar = f"launchwrapper-of-{launchwrapper_of_version}.jar"
 
         # 生成libraries
-        self.lib_path = os.path.join(g.cur_gamepath, f'libraries')
         zip.extract(launchwrapper_of_jar,
                     f"{self.lib_path}/optifine/launchwrapper-of/{launchwrapper_of_version}")
         zip.close()
@@ -325,7 +318,8 @@ class Game(CoreBase):
         shutil.move(self.optifine_jar, path)
 
         # 生成json
-        config = json.load(open(os.path.join(game_path, f'{self.name}.json')))
+        config = json.load(
+            open(os.path.join(self.game_path, f'{self.name}.json')))
         mcversion, type_, patch = self.optifine_version.split()
         optifine_config = {
             "id": f"{mcversion}-Optifine_{type_}_{patch}",
@@ -349,4 +343,4 @@ class Game(CoreBase):
         }
         self.splicing(config, optifine_config)
         json.dump(config, open(os.path.join(
-            game_path, f'{self.name}.json'), mode='w'))
+            self.game_path, f'{self.name}.json'), mode='w'))

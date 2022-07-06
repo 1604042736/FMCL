@@ -5,7 +5,7 @@ from Core.Game import Game
 from QtFBN.QFBNWidget import QFBNWidget
 from Ui.VersionManager.ui_VersionManager import Ui_VersionManager
 import Globals as g
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QMessageBox, QWidget
 from PyQt5.QtCore import pyqtSignal
 
 
@@ -19,13 +19,13 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
         self.version_path = os.path.join(g.cur_gamepath, "versions")
         self.game_path = os.path.join(self.version_path, name)
 
-        config = json.load(open(self.game_path+"/FMCL/config.json"))
+        self.config = json.load(open(self.game_path+"/FMCL/config.json"))
 
-        self.name = config["name"]
-        self.version = config["version"]
-        self.forge_version = config["forge_version"]
-        self.fabric_version = config["fabric_version"]
-        self.optifine_version = config["optifine_version"]
+        self.name = self.config["name"]
+        self.version = self.config["version"]
+        self.forge_version = self.config["forge_version"]
+        self.fabric_version = self.config["fabric_version"]
+        self.optifine_version = self.config["optifine_version"]
 
         self.le_name.setText(self.name)
         self.l_version.setText(self.version)
@@ -40,12 +40,9 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
 
     def close(self, called_del=False) -> bool:
         if not called_del:
-            config = {
-                "name": self.name,
-                "version": self.version,
-                "forge_version": self.forge_version
-            }
-            json.dump(config, open(self.game_path+"/FMCL/config.json"))
+            for key in self.config:
+                self.config[key] = getattr(self, key)
+            json.dump(self.config, open(self.game_path+"/FMCL/config.json"))
         return super().close()
 
     def del_game(self):

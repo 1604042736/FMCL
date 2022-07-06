@@ -29,11 +29,13 @@ class DownloadManager(QFBNWidget, Ui_DownloadManager):
         self.show()
 
     def task_finished(self, task_id):
-        self.notify("任务完成",self.lw_tasks.itemWidget(self.lw_tasks.item(task_id)).name)
+        self.notify("任务结束", self.lw_tasks.itemWidget(
+            self.lw_tasks.item(task_id)).name)
         self.lw_tasks.takeItem(task_id)
         self.task_num = self.lw_tasks.count()
         if self.task_num == 0:
             self.NoTask.emit()
+            self.close()
 
     def task_error(self, msg, task_id):
         self.notify("错误", msg)
@@ -41,3 +43,4 @@ class DownloadManager(QFBNWidget, Ui_DownloadManager):
         self.task_num = self.lw_tasks.count()
         if self.task_num == 0:
             self.NoTask.emit()
+            self.close()

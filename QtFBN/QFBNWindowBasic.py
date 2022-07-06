@@ -103,3 +103,6 @@ class QFBNWindowBasic(QWidget):
             QWidget.show(self.target)
             self.target.parent_.widget_to_self(self.target)
             self.close()
+
+    def notify(self,title,msg):
+        self.target.notify(title,msg)

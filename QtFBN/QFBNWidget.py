@@ -19,8 +19,9 @@ class QFBNWidget(QWidget):
         self.notifymanager.hide()
 
     def notify(self, title, msg):
-        self.notifymanager.notify(title, msg)
-        self.notifymanager.show()
+        widget = QApplication.activeWindow()
+        widget.target.notifymanager.notify(title, msg)
+        widget.target.notifymanager.show()
 
     def show(self, mode: Literal["default", "separate", "original"] = "default") -> None:
         if(mode == "default"

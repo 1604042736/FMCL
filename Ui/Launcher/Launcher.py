@@ -11,7 +11,7 @@ class Launcher(QFBNWidget, Ui_Launcher):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
-        self.pb_start.clicked.connect(lambda:self.launch_game(g.cur_version))
+        self.pb_start.clicked.connect(lambda: self.launch_game(g.cur_version))
         self.pb_chooseversion.clicked.connect(self.choose_version)
         self.pb_manageversion.clicked.connect(
             lambda: self.open_version_manager(g.cur_version))
@@ -24,11 +24,11 @@ class Launcher(QFBNWidget, Ui_Launcher):
     def launch_game(self, version):
         g.dmgr.add_task(f"启动{version}", Launch(
             version), "launch", (g.java_path,
-                                       g.cur_user["name"],
-                                       g.width,
-                                       g.height,
-                                       g.maxmem,
-                                       g.minmem))
+                                 g.cur_user["name"],
+                                 g.width,
+                                 g.height,
+                                 g.maxmem,
+                                 g.minmem))
 
     def choose_version(self):
         chooseversion = ChooseVersion()
@@ -43,9 +43,13 @@ class Launcher(QFBNWidget, Ui_Launcher):
 
     def open_version_manager(self, name):
         if name:
-            versionmanager = VersionManager(name)
-            versionmanager.GameDeleted.connect(self.refresh_cur_version)
-            versionmanager.show()
+            try:
+                versionmanager = VersionManager(name)
+                versionmanager.GameDeleted.connect(self.refresh_cur_version)
+                versionmanager.Error.connect(self.error)
+                versionmanager.show()
+            except Exception as e:
+                self.notify("错误", e)
 
     def refresh_cur_version(self):
         if g.cur_version:
