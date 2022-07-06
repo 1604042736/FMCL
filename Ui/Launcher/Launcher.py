@@ -56,3 +56,7 @@ class Launcher(QFBNWidget, Ui_Launcher):
             self.pb_start.setText(f'开始游戏:{g.cur_version}')
         else:
             self.pb_start.setText(f'开始游戏')
+
+    def error(self, msg, w):
+        self.notify("错误", msg)
+        w.close()

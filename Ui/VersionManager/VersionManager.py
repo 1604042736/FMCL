@@ -11,6 +11,7 @@ from PyQt5.QtCore import pyqtSignal
 
 class VersionManager(QFBNWidget, Ui_VersionManager):
     GameDeleted = pyqtSignal()
+    Error = pyqtSignal(str, QWidget)
 
     def __init__(self, name, parent=None) -> None:
         super().__init__(parent)
