@@ -65,7 +65,7 @@ QComboBox::drop-down{
     g.dmgr = DownloadManager()
 
     mainwindow = MainWindow()
-    mainwindow.show()
+    mainwindow.show(True)
 
     app.exec_()
     g.save()

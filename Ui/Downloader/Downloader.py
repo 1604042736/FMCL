@@ -3,6 +3,7 @@ from Ui.Downloader.Minecraft import Minecraft
 from Ui.Downloader.ui_Downloader import Ui_Downloader
 from PyQt5.QtGui import QResizeEvent
 from PyQt5.QtWidgets import QWidget
+from Ui.Downloader.Mods import Mods
 
 
 class Downloader(QFBNWidget, Ui_Downloader):
@@ -14,12 +15,16 @@ class Downloader(QFBNWidget, Ui_Downloader):
         super().__init__(parent)
         self.setupUi(self)
 
-        self.panel_buttons = [self.pb_minecraft]
+        self.panel_buttons = [self.pb_minecraft,self.pb_mod]
 
         self.minecraft = Minecraft()
+        self.mods=Mods()
 
         self.pb_minecraft.clicked.connect(lambda: self.set_ui(self.minecraft))
         self.pb_minecraft.mouseDoubleClicked.connect(self.separate_ui)
+
+        self.pb_mod.clicked.connect(lambda: self.set_ui(self.mods))
+        self.pb_mod.mouseDoubleClicked.connect(self.separate_ui)
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.f_panel.resize(self.width(), self.panel_height)
@@ -36,7 +41,7 @@ class Downloader(QFBNWidget, Ui_Downloader):
             button_x += button.width()
 
     def widget_to_self(self, w):
-        if self.w_ui == w:
+        if self.w_ui == w:  #独立之后没有切换过界面
             self.set_ui(w)
         else:   # 当前w_ui显示的不是w
             w.hide()

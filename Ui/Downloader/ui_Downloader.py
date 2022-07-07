@@ -38,6 +38,11 @@ class Ui_Downloader(object):
         self.pb_minecraft.setAutoExclusive(True)
         self.pb_minecraft.setAutoDefault(False)
         self.pb_minecraft.setObjectName("pb_minecraft")
+        self.pb_mod = QCustomButton(self.f_panel)
+        self.pb_mod.setGeometry(QtCore.QRect(64, 0, 64, 45))
+        self.pb_mod.setCheckable(True)
+        self.pb_mod.setAutoExclusive(True)
+        self.pb_mod.setObjectName("pb_mod")
         self.w_ui = QtWidgets.QWidget(Downloader)
         self.w_ui.setGeometry(QtCore.QRect(0, 45, 1000, 573))
         self.w_ui.setObjectName("w_ui")
@@ -49,4 +54,5 @@ class Ui_Downloader(object):
         _translate = QtCore.QCoreApplication.translate
         Downloader.setWindowTitle(_translate("Downloader", "下载"))
         self.pb_minecraft.setText(_translate("Downloader", "Minecraft"))
+        self.pb_mod.setText(_translate("Downloader", "Mod"))
 from Ui.QCustomButton import QCustomButton

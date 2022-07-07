@@ -81,7 +81,13 @@ class QFBNWindowManager(QStackedWidget, QFBNWidget):
         except ValueError:
             pass
 
-    def show(self, call_ready=True) -> None:
+    def show(self, call_ready=False) -> None:
         super().show()
         if call_ready:
             self.ready()
+
+    def reshow(self):
+        """重新显示"""
+        if not self.isVisible():
+            self.show()
+        self.activateWindow()

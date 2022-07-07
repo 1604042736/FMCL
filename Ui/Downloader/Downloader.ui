@@ -64,6 +64,25 @@ QPushButton:checked{
      <bool>false</bool>
     </property>
    </widget>
+   <widget class="QCustomButton" name="pb_mod">
+    <property name="geometry">
+     <rect>
+      <x>64</x>
+      <y>0</y>
+      <width>64</width>
+      <height>45</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Mod</string>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="autoExclusive">
+     <bool>true</bool>
+    </property>
+   </widget>
   </widget>
   <widget class="QWidget" name="w_ui" native="true">
    <property name="geometry">

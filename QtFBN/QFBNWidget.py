@@ -33,7 +33,7 @@ class QFBNWidget(QWidget):
                 self.win.close()
             try:
                 if QApplication.activeWindow().target is not g.manager:
-                    g.manager.activateWindow()
+                    g.manager.reshow()
             except:
                 pass
             g.manager.catch_widget(self)

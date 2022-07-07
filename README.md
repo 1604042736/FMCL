@@ -29,6 +29,7 @@ Core                        ->核心代码(与界面无关的代码)
     Download.py             ->与下载有关的操作
     Game.py                 ->与游戏有关的操作
     Launcher.py             ->启动游戏的操作
+    Mod.py                  ->与Mod有关的操作
 QtFBN                       ->自己写的窗口框架
     QFBNNotifyManager.py    ->通知管理
     QFBNWidget.py           ->扩展QWidget
@@ -53,6 +54,4 @@ Ui                          ->界面
         ...
     MainWindow.py           ->主窗口
     QCustomButton.py        ->自定义按钮
-Scripts                     ->脚本(与软件无关)
-    ReleaseBuilder.py       ->构建一个Release版本
 ```
