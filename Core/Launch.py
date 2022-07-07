@@ -124,8 +124,8 @@ class Launch(CoreBase):
         args = args.replace('${launcher_name}', 'FMCL')
         args = args.replace('${launcher_version}', '1')
         args = args.replace('${classpath}', f'"{";".join(self.classpath)}"')
-        print(args)
-        os.system(args)
+        
+        os.popen(args)
 
         self.Finished.emit()
 
