@@ -30,6 +30,7 @@ Core                        ->核心代码(与界面无关的代码)
     Game.py                 ->与游戏有关的操作
     Launcher.py             ->启动游戏的操作
     Mod.py                  ->与Mod有关的操作
+    Updata.py               ->与更新有关的操作
 QtFBN                       ->自己写的窗口框架
     QFBNNotifyManager.py    ->通知管理
     QFBNWidget.py           ->扩展QWidget

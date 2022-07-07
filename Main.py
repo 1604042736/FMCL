@@ -1,5 +1,6 @@
 # pipreqs . --encoding utf-8 --force
 
+import os
 from Ui.MainWindow import MainWindow
 from PyQt5.QtWidgets import QApplication
 import sys
@@ -61,6 +62,12 @@ QComboBox::drop-down{
     border:none;
 }
 """)
+    try:
+        i = sys.argv.index("--updataed")
+        old_name = sys.argv[i+1]
+        os.remove(old_name)
+    except ValueError:
+        pass
 
     g.dmgr = DownloadManager()
 

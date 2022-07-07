@@ -2,6 +2,7 @@ import os
 import threading
 import json
 
+TAG_NAME = "1.0-pre2"  # 当前版本号
 
 dmgr = None  # 下载管理
 
