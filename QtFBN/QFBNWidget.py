@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QApplication, QWidget
 import QtFBN as g
 from QtFBN.QFBNNotifyManager import QFBNNotifyManager
 from QtFBN.QFBNWindow import QFBNWindow
+from PyQt5.QtCore import QTimer
 
 
 class QFBNWidget(QWidget):
@@ -20,8 +21,14 @@ class QFBNWidget(QWidget):
 
     def notify(self, title, msg):
         widget = QApplication.activeWindow()
-        widget.target.notifymanager.notify(title, msg)
-        widget.target.notifymanager.show()
+        if widget:
+            widget.target.notifymanager.notify(title, msg)
+            widget.target.notifymanager.show()
+        else:
+            # 等待一会儿再试试
+            timer = QTimer()
+            timer.timeout.connect(lambda: self.notify(title, msg))
+            timer.start(500)
 
     def show(self, mode: Literal["default", "separate", "original"] = "default") -> None:
         if(mode == "default"

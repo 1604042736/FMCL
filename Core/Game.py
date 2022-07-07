@@ -279,9 +279,6 @@ class Game(CoreBase):
 
         zip = ZipFile(self.game_path+"/profile.zip")
         loader_config = json.loads(zip.read(name+"/"+name+".json"))
-        # 防止出现"-DFabricMcEmu= net.minecraft.client.main.Main "这样的情况
-        # 这种情况会导致无法加载Fabric
-        loader_config["arguments"]["jvm"][-1] = "-DFabricMcEmu=net.minecraft.client.main.Main "
 
         config = json.load(
             open(os.path.join(self.game_path, f'{self.name}.json')))
