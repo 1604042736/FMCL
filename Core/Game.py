@@ -102,15 +102,6 @@ class Game(CoreBase):
         if self.optifine_version:
             self.install_optifine()
 
-        config = {  # 游戏配置信息
-            "name": self.name,
-            "version": self.version,
-            "forge_version": self.forge_version,
-            "fabric_version": self.fabric_version,
-            "optifine_version": self.optifine_version
-        }
-        json.dump(config, open(f'{self.game_path}/FMCL/config.json', mode='w'))
-
         self.Finished.emit()
 
     def install_forge(self):
@@ -344,3 +335,53 @@ class Game(CoreBase):
         self.splicing(config, optifine_config)
         json.dump(config, open(os.path.join(
             self.game_path, f'{self.name}.json'), mode='w'))
+
+    def complete_info(self):
+        """补全信息"""
+        config = json.load(
+            open(os.path.join(self.game_path, f'{self.name}.json')))
+        info = {
+            "name": self.name,
+            "version": "",
+            "forge_version": "",
+            "fabric_version": "",
+            "optifine_version": ""
+        }
+        if config["mainClass"] == "net.minecraft.launchwrapper.Launch":  # Optifine
+            info['version'], info["optifine_version"] = config["id"].split("-")
+            info["optifine_version"] = info["optifine_version"].replace(
+                "Optifine_", "")
+        elif config["mainClass"] == "net.fabricmc.loader.impl.launch.knot.KnotClient":  # Fabric
+            a = config["id"].split("-")
+            info["version"] = a[-1]
+            info["fabric_version"] = a[-2]
+        elif config["mainClass"] == "cpw.mods.modlauncher.Launcher":  # Forge
+            a = config["id"].split("-")
+            info["version"] = a[0]
+            info["forge_version"] = a[-1]
+        else:
+            info["version"] = config["id"]
+        try:
+            os.makedirs(f'{self.game_path}/FMCL')
+        except:
+            pass
+        json.dump(info, open(f'{self.game_path}/FMCL/config.json', mode='w'))
+
+    def del_game(self):
+        shutil.rmtree(self.game_path)
+        if self.name == g.cur_version:
+            g.cur_version = ""
+
+    def rename(self, new_name):
+        old_name = self.name
+        os.rename(self.game_path, os.path.join(self.version_path, new_name))
+        if self.name == g.cur_version:
+            g.cur_version = new_name
+        self.name = new_name
+        self.game_path = os.path.join(self.version_path, self.name)
+        os.rename(self.game_path+f"/{old_name}.jar",
+                  self.game_path+f"/{self.name}.jar")
+        os.rename(self.game_path+f"/{old_name}.json",
+                  self.game_path+f"/{self.name}.json")
+        os.rename(self.game_path+f"/{old_name}-natives",
+                  self.game_path+f"/{self.name}-natives")

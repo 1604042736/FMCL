@@ -46,7 +46,6 @@ class Launcher(QFBNWidget, Ui_Launcher):
             try:
                 versionmanager = VersionManager(name)
                 versionmanager.GameDeleted.connect(self.refresh_cur_version)
-                versionmanager.Error.connect(self.error)
                 versionmanager.show()
             except Exception as e:
                 self.notify("错误", e)
@@ -56,7 +55,3 @@ class Launcher(QFBNWidget, Ui_Launcher):
             self.pb_start.setText(f'开始游戏:{g.cur_version}')
         else:
             self.pb_start.setText(f'开始游戏')
-
-    def error(self, msg, w):
-        self.notify("错误", msg)
-        w.close()

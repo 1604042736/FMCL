@@ -24,9 +24,9 @@ class QFBNNotifyManager(QWidget):
         label = QLabel(self)
         label.setText(text)
         label.setStyleSheet(
-            "background-color:rgb(0,255,0);color:rgb(255,255,255);font-size:16px")
+            "background-color:rgb(0,255,0);color:rgb(255,255,255);font-size:13px")
         font = label.font()
-        font.setPointSize(16)
+        font.setPointSize(13)
         fontm = QFontMetrics(font)
         label.resize(fontm.width(text), fontm.height())
 
@@ -69,4 +69,6 @@ class QFBNNotifyManager(QWidget):
                     self.notices.remove(i[1])
                     self.killTimer(i[0])
                     self.update_geometry()
+                    if not self.notices:
+                        self.hide()
                     break

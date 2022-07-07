@@ -9,11 +9,11 @@ from Ui.VersionManager.ui_VersionManager import Ui_VersionManager
 import Globals as g
 from PyQt5.QtWidgets import QMessageBox, QWidget, QListWidgetItem
 from PyQt5.QtCore import pyqtSignal, QSize
+from Core.Game import Game
 
 
 class VersionManager(QFBNWidget, Ui_VersionManager):
     GameDeleted = pyqtSignal()
-    Error = pyqtSignal(str, QWidget)
 
     def __init__(self, name, parent=None) -> None:
         super().__init__(parent)
@@ -23,6 +23,8 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
         self.game_path = os.path.join(self.version_path, name)
         self.mods_path = g.cur_gamepath+"\\mods"
 
+        if not os.path.exists(self.game_path+"/FMCL/config.json"):
+            Game(name).complete_info()
         self.config = json.load(open(self.game_path+"/FMCL/config.json"))
 
         self.name = self.config["name"]
@@ -57,9 +59,7 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
         reply = QMessageBox.warning(self, "删除", "确认删除?",
                                     QMessageBox.Yes | QMessageBox.No)
         if reply == QMessageBox.Yes:
-            shutil.rmtree(self.game_path)
-            if self.name == g.cur_version:
-                g.cur_version = ""
+            Game(self.name).del_game()
             self.GameDeleted.emit()
             self.close(True)
 
@@ -69,13 +69,14 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
 
     def rename_game(self):
         new_name = self.le_name.text()
-        os.rename(self.game_path, os.path.join(self.version_path, new_name))
-        if self.name == g.cur_version:
-            g.cur_version = new_name
+        Game(self.name).rename(new_name)
         self.name = new_name
         self.game_path = os.path.join(self.version_path, self.name)
 
     def set_mods(self):
+        if not (self.forge_version or self.fabric_version):
+            self.notify("Mod", "该版本不可用Mod")
+            return
         self.lw_mods.clear()
         for i in Mod(path=self.mods_path).get_mods():
             item = QListWidgetItem()
