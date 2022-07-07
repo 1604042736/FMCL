@@ -4,8 +4,9 @@ from Ui.User.UserInfo import UserInfo
 from Ui.User.ui_User import Ui_User
 import qtawesome as qta
 import Globals as g
-from PyQt5.QtWidgets import QListWidgetItem, QMessageBox
+from PyQt5.QtWidgets import QListWidgetItem, QApplication
 from PyQt5.QtCore import QSize, pyqtSignal
+from QtFBN.QFBNMessageBox import QFBNMessageBox
 
 
 class User(QFBNWidget, Ui_User):
@@ -49,14 +50,16 @@ class User(QFBNWidget, Ui_User):
         self.CurUserChanged.emit()
 
     def del_user(self, info):
-        reply = QMessageBox.warning(
-            self, "删除", "确定删除?", QMessageBox.Yes | QMessageBox.No)
-        if reply == QMessageBox.Yes:
+        def ok():
             g.users.remove(info)
             if g.cur_user == info:
                 g.cur_user = None
             self.set_users()
             self.CurUserChanged.emit()
+        msgbox = QFBNMessageBox(
+            QApplication.activeWindow(), "删除", "确定删除?")
+        msgbox.Ok.connect(ok)
+        msgbox.show()
 
     def create_user(self, info):
         g.users.append(info)

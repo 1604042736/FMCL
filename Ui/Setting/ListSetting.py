@@ -1,18 +1,19 @@
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QComboBox, QPushButton, QFileDialog, QInputDialog, QMessageBox
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QComboBox, QPushButton, QFileDialog, QInputDialog, QApplication
 import qtawesome as qta
 import Globals as g
+from QtFBN.QFBNMessageBox import QFBNMessageBox
 
 
 class ListSetting(QWidget):
     """类型为列表的设置"""
 
-    def __init__(self, id, name, val,relation_id="", add_type="input",parent=None) -> None:
+    def __init__(self, id, name, val, relation_id="", add_type="input", parent=None) -> None:
         super().__init__(parent)
         self.id = id
         self.name = name
         self.val = val
         self.add_type = add_type  # 添加的时侯的方式
-        self.relation_id=relation_id  #关联的id
+        self.relation_id = relation_id  # 关联的id
 
         self.hbox = QHBoxLayout()
 
@@ -44,10 +45,10 @@ class ListSetting(QWidget):
         cur = self.cb_val.currentText()
         l.remove(cur)
         l.insert(0, cur)
-        
+
         setattr(g, self.id, l)
         if self.relation_id:
-            setattr(g,self.relation_id,l[0])
+            setattr(g, self.relation_id, l[0])
 
     def get_all_text(self) -> list:
         l = []
@@ -68,7 +69,8 @@ class ListSetting(QWidget):
             self.cb_val.setCurrentText(text)
 
     def delete(self):
-        reply = QMessageBox.warning(self, "删除", "确认删除?",
-                                    QMessageBox.Yes | QMessageBox.No)
-        if reply == QMessageBox.Yes:
+        def ok():
             self.cb_val.removeItem(self.cb_val.currentIndex())
+        msgbox = QFBNMessageBox(QApplication.activeWindow(), "删除", "确认删除?")
+        msgbox.Ok.connect(ok)
+        msgbox.show()

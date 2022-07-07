@@ -1,15 +1,15 @@
 import os
 import json
-import shutil
 from Core.Game import Game
 from Core.Mod import Mod
 from QtFBN.QFBNWidget import QFBNWidget
 from Ui.VersionManager.ModItem import ModItem
 from Ui.VersionManager.ui_VersionManager import Ui_VersionManager
 import Globals as g
-from PyQt5.QtWidgets import QMessageBox, QWidget, QListWidgetItem
+from PyQt5.QtWidgets import QApplication, QListWidgetItem
 from PyQt5.QtCore import pyqtSignal, QSize
 from Core.Game import Game
+from QtFBN.QFBNMessageBox import QFBNMessageBox
 
 
 class VersionManager(QFBNWidget, Ui_VersionManager):
@@ -56,12 +56,14 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
         return super().close()
 
     def del_game(self):
-        reply = QMessageBox.warning(self, "删除", "确认删除?",
-                                    QMessageBox.Yes | QMessageBox.No)
-        if reply == QMessageBox.Yes:
+        def ok():
             Game(self.name).del_game()
             self.GameDeleted.emit()
             self.close(True)
+        msgbox = QFBNMessageBox(
+            QApplication.activeWindow(), "删除", "确定删除?")
+        msgbox.Ok.connect(ok)
+        msgbox.show()
 
     def reinstall_game(self):
         g.dmgr.add_task(f"下载{self.name}", Game(

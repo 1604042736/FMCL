@@ -11,7 +11,7 @@ class QFBNNotifyManager(QWidget):
     def __init__(self, parent) -> None:
         super().__init__(parent)
         self.wait_time = 5000  # 等待时间
-        self.display_time = 500
+        self.display_time = 100
 
         self.notices: list[QLabel] = []  # 所有的通知
         self.notice_timers: list[tuple[int, QLabel]] = []

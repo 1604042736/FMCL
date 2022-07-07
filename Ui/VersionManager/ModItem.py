@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QHBoxLayout, QMessageBox
+from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QHBoxLayout, QApplication
 from PyQt5.QtCore import pyqtSignal
-
+from QtFBN.QFBNMessageBox import QFBNMessageBox
 from Core.Mod import Mod
 
 
@@ -46,8 +46,10 @@ class ModItem(QWidget):
         self.name = new_name
 
     def del_mod(self):
-        reply = QMessageBox.warning(
-            self, "删除", "确定删除?", QMessageBox.Yes | QMessageBox.No)
-        if reply == QMessageBox.Yes:
+        def ok():
             Mod(name=self.name, path=self.path).del_mod()
             self.ModDeleted.emit(self.name)
+        msgbox = QFBNMessageBox(
+            QApplication.activeWindow(), "删除", "确定删除?")
+        msgbox.Ok.connect(ok)
+        msgbox.show()

@@ -147,6 +147,25 @@ QPushButton:checked{
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QCustomButton" name="pb_more">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>135</y>
+      <width>45</width>
+      <height>45</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="autoExclusive">
+     <bool>true</bool>
+    </property>
+   </widget>
   </widget>
   <widget class="QWidget" name="w_ui" native="true">
    <property name="geometry">

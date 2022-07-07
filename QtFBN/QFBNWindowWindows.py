@@ -120,6 +120,7 @@ QPushButton#pb_close:hover{
         self.target.move(0, self.title_height)
         self.title.resize(self.width(), self.title_height)
         self.resize_title_widgets()
+        super().resizeEvent(a0)
 
     def moveEvent(self, event: QMoveEvent) -> None:
         pos = event.pos()

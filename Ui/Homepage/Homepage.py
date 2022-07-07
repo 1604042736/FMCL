@@ -6,6 +6,7 @@ import qtawesome as qta
 from PyQt5.QtCore import QSize
 from PyQt5.QtWidgets import QWidget
 from Ui.Launcher.Launcher import Launcher
+from Ui.More.More import More
 from Ui.Setting.Setting import Setting
 from Ui.User.User import User
 import Globals as g
@@ -25,6 +26,7 @@ class Homepage(QFBNWidget, Ui_Homepage):
         self.panel_buttons = [[self.pb_detail, "top"],
                               [self.pb_launch, "top", "启动"],
                               [self.pb_download, "top", "下载"],
+                              [self.pb_more, "top", "更多"],
                               [self.pb_setting, "bottom", "设置"],
                               [self.pb_user, "bottom", "未选择用户"]]  # 面板上的按钮
         if g.cur_user:
@@ -35,6 +37,7 @@ class Homepage(QFBNWidget, Ui_Homepage):
         self.user = User()
         self.user.CurUserChanged.connect(self.cur_user_changed)
         self.setting = Setting()
+        self.more = More()
 
         self.pb_launch.setIcon(qta.icon("fa.power-off"))
         self.pb_launch.clicked.connect(lambda: self.set_ui(self.launcher))
@@ -54,6 +57,10 @@ class Homepage(QFBNWidget, Ui_Homepage):
         self.pb_setting.setIcon(qta.icon("ri.settings-5-line"))
         self.pb_setting.clicked.connect(lambda: self.set_ui(self.setting))
         self.pb_setting.mouseDoubleClicked.connect(self.separate_ui)
+
+        self.pb_more.setIcon(qta.icon("ph.squares-four-fill"))
+        self.pb_more.clicked.connect(lambda: self.set_ui(self.more))
+        self.pb_more.mouseDoubleClicked.connect(self.separate_ui)
 
         self.panel_state = "simple"  # 面板状态
 
