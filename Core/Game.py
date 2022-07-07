@@ -279,6 +279,7 @@ class Game(CoreBase):
 
         zip = ZipFile(self.game_path+"/profile.zip")
         loader_config = json.loads(zip.read(name+"/"+name+".json"))
+        loader_config["id"] = f"{self.version}-Fabric {self.fabric_version}"
 
         config = json.load(
             open(os.path.join(self.game_path, f'{self.name}.json')))
@@ -350,8 +351,8 @@ class Game(CoreBase):
                 "Optifine_", "")
         elif config["mainClass"] == "net.fabricmc.loader.impl.launch.knot.KnotClient":  # Fabric
             a = config["id"].split("-")
-            info["version"] = a[-1]
-            info["fabric_version"] = a[-2]
+            info["version"] = a[0]
+            info["fabric_version"] = a[1].split()[-1]
         elif config["mainClass"] == "cpw.mods.modlauncher.Launcher":  # Forge
             a = config["id"].split("-")
             info["version"] = a[0]
