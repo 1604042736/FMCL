@@ -348,17 +348,19 @@ class Game(CoreBase):
         if config["mainClass"] == "net.minecraft.launchwrapper.Launch":  # Optifine
             info['version'], info["optifine_version"] = config["id"].split("-")
             info["optifine_version"] = info["optifine_version"].replace(
-                "Optifine_", "")
-        elif config["mainClass"] == "net.fabricmc.loader.impl.launch.knot.KnotClient":  # Fabric
+                "Optifine_", "").replace("OptiFine_", "").replace("OptiFine ", "")
+        elif "fabricmc" in config["mainClass"]:  # Fabric
             a = config["id"].split("-")
             info["version"] = a[0]
             info["fabric_version"] = a[1].split()[-1]
-        elif config["mainClass"] == "cpw.mods.modlauncher.Launcher":  # Forge
+        elif "cpw.mods" in config["mainClass"]:  # Forge
             a = config["id"].split("-")
             info["version"] = a[0]
-            info["forge_version"] = a[-1]
+            info["forge_version"] = a[-1].replace("Forge_", "").strip()
         else:
             info["version"] = config["id"]
+        if "clientVersion" in config:
+            info["version"] = config["clientVersion"]
         try:
             os.makedirs(f'{self.game_path}/FMCL')
         except:
