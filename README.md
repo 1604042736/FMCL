@@ -21,6 +21,7 @@ pip install -r requirements.txt
 - 通过`QML`改变`Launcher`里面的内容
 - 对版本进行管理
 - (只)支持离线登录
+- 支持更新
 ## 项目结构
 ```
 Main.py                     ->主程序
