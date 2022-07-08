@@ -63,7 +63,7 @@ QComboBox::drop-down{
 }
 """)
     try:
-        i = sys.argv.index("--updataed")
+        i = sys.argv.index("--updated")
         old_name = sys.argv[i+1]
         os.remove(old_name)
     except ValueError:

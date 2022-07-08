@@ -18,7 +18,7 @@ class Download(CoreBase):
     def start(self):
         """下载"""
         if self.url == '':
-            return
+            self.Finished.emit()
         with open(self.path, 'wb')as fileobj:
             while True:
                 try:
@@ -41,6 +41,7 @@ class Download(CoreBase):
     def check(self, redownload=False):
         '''检查文件是否下载'''
         if not redownload and os.path.exists(self.path):
+            self.Finished.emit()
             return
         self.start()
 
@@ -48,7 +49,9 @@ class Download(CoreBase):
 def download(url, path, cls: CoreBase, check=False):
     """下载"""
     d = Download(url, path)
+    d.Finished.connect(lambda: cls.Finished.emit())
     d.Progress.connect(lambda cur, total: cls.Progress.emit(cur, total))
+    d.Error.connect(lambda a: cls.Error.emit(a))
     if check:
         d.check()
     else:
