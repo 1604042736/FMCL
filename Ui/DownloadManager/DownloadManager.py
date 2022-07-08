@@ -27,6 +27,7 @@ class DownloadManager(QFBNWidget, Ui_DownloadManager):
         self.task_num += 1
         self.HasTask.emit()
         self.show()
+        widget.start()  # 防止任务执行太快
 
     def task_finished(self, task_id):
         self.notify("任务结束", self.lw_tasks.itemWidget(

@@ -40,7 +40,6 @@ class TaskInfo(QWidget):
         self.task.Progress.connect(self.progress)
         self.task.Finished.connect(lambda: self.Finished.emit(self.id))
         self.task.Error.connect(lambda a: self.Error.emit(a, self.id))
-        self.task.start()
 
         self.cur_progress = (0, 1)
 
@@ -48,6 +47,9 @@ class TaskInfo(QWidget):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.updata_progress)
         self.timer.start(500)
+
+    def start(self):
+        self.task.start()
 
     def progress(self, cur, total):
         self.cur_progress = (cur, total)
