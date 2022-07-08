@@ -20,7 +20,8 @@ class ModFileInfo(QWidget):
         self.setLayout(self.hbox)
 
     def download_mod_file(self):
-        path = QFileDialog.getExistingDirectory(self, '选择文件夹', '.')
+        path = QFileDialog.getSaveFileName(
+            self, '保存', f"./{self.info['name']}.jar")[0]
         if path:
-            g.dmgr.add_task("下载Mod", Mod(info=self.info, path=path),
+            g.dmgr.add_task(f"下载{self.info['name']}", Mod(info=self.info, path=path),
                             "download_mod_file", tuple())

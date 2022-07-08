@@ -22,6 +22,7 @@ pip install -r requirements.txt
 - 对版本进行管理
 - (只)支持离线登录
 - 支持更新
+- 支持Mod的搜索下载与安装
 ## 项目结构
 ```
 Main.py                     ->主程序

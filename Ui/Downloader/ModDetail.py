@@ -1,9 +1,8 @@
-import webbrowser
 from QtFBN.QFBNWidget import QFBNWidget
 from Ui.Downloader.ModFileInfo import ModFileInfo
 from Ui.Downloader.ui_ModDetail import Ui_ModDetail
-from PyQt5.QtCore import Qt, pyqtSlot, QSize, pyqtSignal
-from PyQt5.QtWidgets import QListWidgetItem
+from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtWidgets import QGroupBox, QVBoxLayout
 from Core.Mod import Mod
 import Globals as g
 
@@ -22,28 +21,33 @@ class ModDetail(QFBNWidget, Ui_ModDetail):
         self.get_modfiles()
 
     def set_info(self):
-        self.l_name.setText(self.mod_info['name'])
-        self.l_name.setStyleSheet('font-weight: bold;')
-        self.l_describe.setText(self.mod_info['describe'])
+        self.l_title.setText(self.mod_info['title'])
+        self.l_title.setStyleSheet('font-weight: bold;')
+        self.l_describe.setText(self.mod_info['description'])
         self.l_describe.setWordWrap(True)
         self.l_describe.setAlignment(Qt.AlignTop)
 
-    @pyqtSlot(bool)
-    def on_pb_mcmod_clicked(self, _):
-        webbrowser.open(self.mod_info['mcmod_url'])
-
-    @pyqtSlot(bool)
-    def on_pb_curseforge_clicked(self, _):
-        webbrowser.open(self.mod_info['curseforge_url'])
-
     def set_modfiles(self, files):
-        self.lw_modfiles.clear()
+        if files:
+            from Ui.Downloader.ModInfo import ModInfo
+            if files[0]["dependencies"]:
+                dependencies = files[0]["dependencies"]
+                gb = QGroupBox()
+                vbox = QVBoxLayout(gb)
+                for i in dependencies:
+                    vbox.addWidget(ModInfo(i, True))
+                self.tb_modfiles.removeItem(0)
+                self.tb_modfiles.addItem(gb, "前置Mod")
+        self.version_groups = {}
         for i in files:
-            item = QListWidgetItem()
-            item.setSizeHint(QSize(256, 64))
-            widget = ModFileInfo(i)
-            self.lw_modfiles.addItem(item)
-            self.lw_modfiles.setItemWidget(item, widget)
+            if i["game_version"] not in self.version_groups:
+                gb = QGroupBox()
+                vbox = QVBoxLayout(gb)
+                self.version_groups[i["game_version"]] = [gb, vbox]
+            gb, vbox = self.version_groups[i["game_version"]]
+            vbox.addWidget(ModFileInfo(i))
+        for key, val in self.version_groups.items():
+            self.tb_modfiles.addItem(val[0], key)
 
     @g.run_as_thread
     def get_modfiles(self):
