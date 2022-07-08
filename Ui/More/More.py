@@ -22,5 +22,5 @@ class More(QFBNWidget, Ui_More):
         webbrowser.open("https://bmclapidoc.bangbang93.com")
 
     @pyqtSlot(bool)
-    def on_pb_openmcmodurl_clicked(self, _):
-        webbrowser.open("https://www.mcmod.cn/")
+    def on_pb_openhmclurl_clicked(self, _):
+        webbrowser.open("https://github.com/huanghongxun/HMCL")
