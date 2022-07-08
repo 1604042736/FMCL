@@ -359,23 +359,24 @@ class Game(CoreBase):
             "optifine_version": ""
         }
         if config["mainClass"] == "net.minecraft.launchwrapper.Launch":  # Optifine
-            info['version'], info["optifine_version"] = config["id"].split("-")
-            info["optifine_version"] = info["optifine_version"].replace(
-                "Optifine_", "").replace("OptiFine_", "").replace("OptiFine ", "")
+            # optifine:OptiFine:MCVERSION_VERSION
+            a = config["libraries"][-2]["name"]
+            info["optifine_version"] = a.split(":")[-1].split("_",1)[-1]
         elif "fabricmc" in config["mainClass"]:  # Fabric
-            a = config["id"].split("-")
-            info["version"] = a[0]
-            info["fabric_version"] = a[1].split()[-1]
+            # net.fabricmc:fabric-loader:VERSION
+            a = config["libraries"][-1]["name"]
+            info["fabric_version"] = a.split(":")[-1]
         elif "cpw.mods" in config["mainClass"]:  # Forge
-            a = config["id"].split("-")
-            info["version"] = a[0]
-            info["forge_version"] = a[-1].replace("Forge_", "").strip()
+            a = config["arguments"]["game"].index("--fml.forgeVersion")
+            info["forge_version"] = config["arguments"]["game"][a+1]
         else:
             info["version"] = config["id"]
+
         if "clientVersion" in config:
             info["version"] = config["clientVersion"]
         elif "inheritsFrom" in config:
             info["version"] = config["inheritsFrom"]
+
         try:
             os.makedirs(f'{self.game_path}/FMCL')
         except:
