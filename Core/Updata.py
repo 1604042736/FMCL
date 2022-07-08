@@ -4,6 +4,7 @@ import requests
 from Core import CoreBase
 from PyQt5.QtCore import pyqtSignal
 from Core.Download import download
+from PyQt5.QtWidgets import qApp
 
 
 class Updata(CoreBase):
@@ -34,5 +35,5 @@ class Updata(CoreBase):
         name = f'FMCL_{self.info["tag_name"]}.pyzw'
         url = self.info["assets"][0]["browser_download_url"]
         download(url, name, self)
-        os.system(f"start pythonw {name} --updated {old_name}")
-        exit()
+        os.popen(f"start {name} --updated {old_name}")
+        qApp.quit()
