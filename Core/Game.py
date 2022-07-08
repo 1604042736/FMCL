@@ -41,8 +41,7 @@ class Game(CoreBase):
         r = requests.get(url)
         optifines = []
         for optifine in json.loads(r.content):
-            optifines.append(
-                optifine['mcversion'] + ' ' + optifine['type'] + ' ' + optifine['patch'])
+            optifines.append(optifine['type'] + ' ' + optifine['patch'])
         return optifines
 
     def get_liteloader(self, version) -> list:
@@ -51,8 +50,7 @@ class Game(CoreBase):
         r = requests.get(url)
         liteloaders = []
         try:
-            liteloaders.append(json.loads(r.content)[
-                               'mcversion'] + ' ' + json.loads(r.content)['version'])
+            liteloaders.append(json.loads(r.content)['version'])
         except:
             pass
         return liteloaders
@@ -101,9 +99,9 @@ class Game(CoreBase):
             downloads.append([f"https://meta.fabricmc.net/v2/versions/loader/{self.version}/{self.fabric_version}/profile/zip",
                               self.game_path+"/profile.zip"])
         if self.optifine_version:
-            mcversion, type_, patch = self.optifine_version.split()
-            self.optifine_jar = f"{self.game_path}/Optifine-{mcversion}_{type_}_{patch}.jar"
-            downloads.append([f"https://bmclapi2.bangbang93.com/optifine/{mcversion}/{type_}/{patch}",
+            type_, patch = self.optifine_version.split()
+            self.optifine_jar = f"{self.game_path}/Optifine-{self.versioin}_{type_}_{patch}.jar"
+            downloads.append([f"https://bmclapi2.bangbang93.com/optifine/{self.version}/{type_}/{patch}",
                               self.optifine_jar])
         for task in downloads:
             download(task[0], task[1], self, True)
@@ -322,14 +320,14 @@ class Game(CoreBase):
         # 生成json
         config = json.load(
             open(os.path.join(self.game_path, f'{self.name}.json')))
-        mcversion, type_, patch = self.optifine_version.split()
+        type_, patch = self.optifine_version.split()
         optifine_config = {
-            "id": f"{mcversion}-Optifine_{type_}_{patch}",
-            "inheritsFrom": f"{mcversion}",
+            "id": f"{self.version}-Optifine_{type_}_{patch}",
+            "inheritsFrom": f"{self.version}",
             "type": "release",
             "libraries": [
                 {
-                    "name": f"optifine:OptiFine:{mcversion}_{type_}_{patch}"
+                    "name": f"optifine:OptiFine:{self.version}_{type_}_{patch}"
                 },
                 {
                     "name": f"optifine:launchwrapper-of:{launchwrapper_of_version}"
@@ -361,7 +359,10 @@ class Game(CoreBase):
         if config["mainClass"] == "net.minecraft.launchwrapper.Launch":  # Optifine
             # optifine:OptiFine:MCVERSION_VERSION
             a = config["libraries"][-2]["name"]
-            info["optifine_version"] = a.split(":")[-1].split("_",1)[-1]
+            info["optifine_version"] = a.split(":")[-1].split("_", 1)[-1]
+            type_ = "_".join(info["optifine_version"].split("_")[:-1])
+            patch = info["optifine_version"].split("_")[-1]
+            info["optifine_version"] = type_+" "+patch
         elif "fabricmc" in config["mainClass"]:  # Fabric
             # net.fabricmc:fabric-loader:VERSION
             a = config["libraries"][-1]["name"]
