@@ -75,6 +75,19 @@ class Game(CoreBase):
             self.Error.emit("Forge和Fabric不兼容")
             return
 
+        info = {
+            "name": self.name,
+            "version": self.version,
+            "forge_version": self.forge_version,
+            "fabric_version": self.fabric_version,
+            "optifine_version": self.optifine_version
+        }
+        try:
+            os.makedirs(f'{self.game_path}/FMCL')
+        except:
+            pass
+        json.dump(info, open(f'{self.game_path}/FMCL/config.json', mode='w'))
+
         downloads = [[f'https://bmclapi2.bangbang93.com/version/{self.version}/client', self.game_path + f'\\{self.name}.jar'],
                      [f'https://bmclapi2.bangbang93.com/version/{self.version}/json', self.game_path + f'\\{self.name}.json']]
         if self.forge_version:  # 附带forge
@@ -361,6 +374,8 @@ class Game(CoreBase):
             info["version"] = config["id"]
         if "clientVersion" in config:
             info["version"] = config["clientVersion"]
+        elif "inheritsFrom" in config:
+            info["version"] = config["inheritsFrom"]
         try:
             os.makedirs(f'{self.game_path}/FMCL')
         except:
