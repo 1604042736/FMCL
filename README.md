@@ -1,9 +1,12 @@
 # FMCL
 ![](https://img.shields.io/github/languages/code-size/1604042736/FMCL)
+
+[English](README.en.md)
 ## 简介
 `FMCL`(`Functional Minecraft Launcher`)是一个MC启动器
 ## 支持的操作系统
 - `Windows`
+
 未来会支持更多的系统
 ## 项目使用
 首先安装所需的模块
@@ -22,7 +25,7 @@ pip install -r requirements.txt
 - 对版本进行管理
 - (只)支持离线登录
 - 支持更新
-- 支持Mod的搜索下载与安装
+- 支持Mod的搜索与下载
 ## 项目结构
 ```
 Main.py                     ->主程序
