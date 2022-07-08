@@ -2,7 +2,7 @@ import os
 import threading
 import json
 
-TAG_NAME = "1.0"  # 当前版本号
+TAG_NAME = "1.1"  # 当前版本号
 
 dmgr = None  # 下载管理
 
