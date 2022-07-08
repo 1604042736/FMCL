@@ -356,27 +356,31 @@ class Game(CoreBase):
             "fabric_version": "",
             "optifine_version": ""
         }
-        if config["mainClass"] == "net.minecraft.launchwrapper.Launch":  # Optifine
-            # optifine:OptiFine:MCVERSION_VERSION
-            a = config["libraries"][-2]["name"]
-            info["optifine_version"] = a.split(":")[-1].split("_", 1)[-1]
-            type_ = "_".join(info["optifine_version"].split("_")[:-1])
-            patch = info["optifine_version"].split("_")[-1]
-            info["optifine_version"] = type_+" "+patch
-        elif "fabricmc" in config["mainClass"]:  # Fabric
-            # net.fabricmc:fabric-loader:VERSION
-            a = config["libraries"][-1]["name"]
-            info["fabric_version"] = a.split(":")[-1]
-        elif "cpw.mods" in config["mainClass"]:  # Forge
+        try:
             a = config["arguments"]["game"].index("--fml.forgeVersion")
             info["forge_version"] = config["arguments"]["game"][a+1]
-        else:
-            info["version"] = config["id"]
+        except ValueError:
+            pass
+
+        for i in config["libraries"]:
+            # net.fabricmc:fabric-loader:VERSION
+            if "net.fabricmc:fabric-loader" in i["name"]:
+                a = i["name"]
+                info["fabric_version"] = a.split(":")[-1]
+            # optifine:OptiFine:MCVERSION_VERSION
+            if "optifine:OptiFine" in i["name"]:
+                a = i["name"]
+                info["optifine_version"] = a.split(":")[-1].split("_", 1)[-1]
+                type_ = "_".join(info["optifine_version"].split("_")[:-1])
+                patch = info["optifine_version"].split("_")[-1]
+                info["optifine_version"] = type_+" "+patch
 
         if "clientVersion" in config:
             info["version"] = config["clientVersion"]
         elif "inheritsFrom" in config:
             info["version"] = config["inheritsFrom"]
+        else:
+            info["version"]=config["id"]
 
         try:
             os.makedirs(f'{self.game_path}/FMCL')
