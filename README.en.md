@@ -24,6 +24,7 @@ Then run `Main.py` directly
 - (Only)Support offline login 
 - Support updata
 - Support Mods' search and download
+- Support change theme color
 ## Project Structure
 ```
 Main.py                     ->Main program

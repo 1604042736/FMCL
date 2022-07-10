@@ -24,6 +24,7 @@ class QFBNWindowBasic(QWidget):
         self.right_widgets: list[QWidget] = []  # 标题栏靠右的控件
         self.left_widgets: list[QWidget] = []  # 标题栏靠左的控件
         self.title = QFrame(self)
+        self.title.setObjectName("f_title")
         self.title.move(0, 0)
 
         self.set_title()

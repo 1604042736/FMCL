@@ -17,7 +17,6 @@ class ModInfo(QWidget):
         self.vbox = QVBoxLayout()
 
         self.l_title = QLabel(self, text=self.info['title'])
-        self.l_title.setStyleSheet('font-weight: bold;')
         self.l_describe = QLabel(self, text=self.info['description'])
         self.l_describe.setWordWrap(True)
         self.l_describe.setAlignment(Qt.AlignTop)

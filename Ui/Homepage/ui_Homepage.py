@@ -17,22 +17,6 @@ class Ui_Homepage(object):
         Homepage.resize(1000, 618)
         self.f_panel = QtWidgets.QFrame(Homepage)
         self.f_panel.setGeometry(QtCore.QRect(0, 0, 45, 618))
-        self.f_panel.setStyleSheet("QFrame{\n"
-"    background-color:rgb(255,255,255);\n"
-"}\n"
-"\n"
-"QPushButton{\n"
-"    border:none;\n"
-"    text-align:left;\n"
-"}\n"
-"\n"
-"QPushButton:hover{\n"
-"    background-color:rgb(229,229,229);\n"
-"}\n"
-"\n"
-"QPushButton:checked{\n"
-"    border-left:2px solid rgb(0,0,0);\n"
-"}")
         self.f_panel.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.f_panel.setFrameShadow(QtWidgets.QFrame.Raised)
         self.f_panel.setObjectName("f_panel")

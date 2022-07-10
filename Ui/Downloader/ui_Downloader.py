@@ -15,30 +15,18 @@ class Ui_Downloader(object):
     def setupUi(self, Downloader):
         Downloader.setObjectName("Downloader")
         Downloader.resize(1000, 618)
-        self.f_panel = QtWidgets.QFrame(Downloader)
-        self.f_panel.setGeometry(QtCore.QRect(0, 0, 1000, 45))
-        self.f_panel.setStyleSheet("QPushButton{\n"
-"    border:none;\n"
-"    background-color:rgb(255,255,255);\n"
-"}\n"
-"\n"
-"QPushButton:hover{\n"
-"    background-color:rgb(229,229,229);\n"
-"}\n"
-"\n"
-"QPushButton:checked{\n"
-"    border-bottom:2px solid rbg(0,0,0);\n"
-"}")
-        self.f_panel.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.f_panel.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.f_panel.setObjectName("f_panel")
-        self.pb_minecraft = QCustomButton(self.f_panel)
+        self.f_panel_download = QtWidgets.QFrame(Downloader)
+        self.f_panel_download.setGeometry(QtCore.QRect(0, 0, 1000, 45))
+        self.f_panel_download.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.f_panel_download.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.f_panel_download.setObjectName("f_panel_download")
+        self.pb_minecraft = QCustomButton(self.f_panel_download)
         self.pb_minecraft.setGeometry(QtCore.QRect(0, 0, 64, 45))
         self.pb_minecraft.setCheckable(True)
         self.pb_minecraft.setAutoExclusive(True)
         self.pb_minecraft.setAutoDefault(False)
         self.pb_minecraft.setObjectName("pb_minecraft")
-        self.pb_mod = QCustomButton(self.f_panel)
+        self.pb_mod = QCustomButton(self.f_panel_download)
         self.pb_mod.setGeometry(QtCore.QRect(64, 0, 64, 45))
         self.pb_mod.setCheckable(True)
         self.pb_mod.setAutoExclusive(True)

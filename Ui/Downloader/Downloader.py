@@ -15,10 +15,10 @@ class Downloader(QFBNWidget, Ui_Downloader):
         super().__init__(parent)
         self.setupUi(self)
 
-        self.panel_buttons = [self.pb_minecraft,self.pb_mod]
+        self.panel_buttons = [self.pb_minecraft, self.pb_mod]
 
         self.minecraft = Minecraft()
-        self.mods=Mods()
+        self.mods = Mods()
 
         self.pb_minecraft.clicked.connect(lambda: self.set_ui(self.minecraft))
         self.pb_minecraft.mouseDoubleClicked.connect(self.separate_ui)
@@ -27,7 +27,7 @@ class Downloader(QFBNWidget, Ui_Downloader):
         self.pb_mod.mouseDoubleClicked.connect(self.separate_ui)
 
     def resizeEvent(self, event: QResizeEvent) -> None:
-        self.f_panel.resize(self.width(), self.panel_height)
+        self.f_panel_download.resize(self.width(), self.panel_height)
         self.w_ui.move(0, self.panel_height)
         self.w_ui.resize(self.width(), self.height()-self.panel_height)
 
@@ -41,7 +41,7 @@ class Downloader(QFBNWidget, Ui_Downloader):
             button_x += button.width()
 
     def widget_to_self(self, w):
-        if self.w_ui == w:  #独立之后没有切换过界面
+        if self.w_ui == w:  # 独立之后没有切换过界面
             self.set_ui(w)
         else:   # 当前w_ui显示的不是w
             w.hide()

@@ -54,7 +54,7 @@ class QFBNWindowManager(QStackedWidget, QFBNWidget):
 
     def set_title_widget_state(self) -> None:
         """设置控件的状态"""
-        if self.count() > 1:  # 只有1个没有独立的必要
+        if self.count():
             self.pb_sepwin.show()
         else:
             self.pb_sepwin.hide()

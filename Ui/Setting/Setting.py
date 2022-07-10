@@ -1,4 +1,5 @@
 from QtFBN.QFBNWidget import QFBNWidget
+from Ui.Setting.ColorSetting import ColorSetting
 from Ui.Setting.IntSetting import IntSetting
 from Ui.Setting.ListSetting import ListSetting
 from Ui.Setting.StrSetting import StrSetting
@@ -23,12 +24,15 @@ class Setting(QFBNWidget, Ui_Setting):
             "最大内存": [g.maxmem, "maxmem"],
             "最小内存": [g.minmem, "minmem"],
             "Java路径": [g.java_path, "java_path"],
-            "QML文件路径": [g.homepage_qml, "homepage_qml"]
+            "QML文件路径": [g.homepage_qml, "homepage_qml"],
+            "主题": [g.theme, "theme"]
         }
         for key, val in config.items():
             item = QListWidgetItem()
             item.setSizeHint(QSize(256, 64))
-            if isinstance(val[0], str):
+            if isinstance(val[0], str) and "rgb" in val[0]:
+                widget = ColorSetting(val[1], key, val[0])
+            elif isinstance(val[0], str):
                 widget = StrSetting(val[1], key, val[0])
             elif isinstance(val[0], list):
                 widget = ListSetting(

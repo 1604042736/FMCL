@@ -28,7 +28,7 @@ class User(QFBNWidget, Ui_User):
     def set_users(self):
         def add_item(i):
             item = QListWidgetItem()
-            item.setSizeHint(QSize(256, 64))
+            item.setSizeHint(QSize(256, 32))
             widget = UserInfo(i)
             widget.CurUserChanged.connect(self.set_cur_user)
             widget.UserDel.connect(self.del_user)

@@ -18,7 +18,7 @@ class ModItem(QWidget):
         self.l_name = QLabel(self)
         self.l_name.setText(self.name)
         if "disabled" in self.name:
-            self.l_name.setStyleSheet("color:rgb(100,100,100);")
+            pass
 
         self.pb_edable = QPushButton(self)
         self.pb_edable.setText("禁用")

@@ -1,7 +1,8 @@
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QPushButton, QLabel
+from PyQt5.QtWidgets import QWidget, QPushButton, QLabel
 import qtawesome as qta
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, QSize
 import Globals as g
+from PyQt5.QtGui import QResizeEvent
 
 
 class UserInfo(QWidget):
@@ -11,8 +12,6 @@ class UserInfo(QWidget):
     def __init__(self, info: dict, parent=None) -> None:
         super().__init__(parent)
         self.info = info
-
-        self.hbox = QHBoxLayout()
 
         self.l_name = QLabel(self)
         self.l_name.setText(info["name"])
@@ -30,11 +29,19 @@ class UserInfo(QWidget):
         self.pb_del.setIcon(qta.icon("mdi.delete"))
         self.pb_del.clicked.connect(lambda: self.UserDel.emit(self.info))
 
-        self.hbox.addWidget(self.l_name)
-        self.hbox.addWidget(self.l_type)
         if info != g.cur_user:
-            self.hbox.addWidget(self.pb_settocur)
             self.pb_settocur.show()
-        self.hbox.addWidget(self.pb_del)
 
-        self.setLayout(self.hbox)
+    def resizeEvent(self, a0: QResizeEvent) -> None:
+        height = self.height()
+        left_width = self.width()-int((self.height()-height)/2)
+        self.pb_del.move(left_width-height, int((self.height()-height)/2))
+        self.pb_del.resize(height, height)
+        self.pb_del.setIconSize(
+            QSize(self.pb_del.width(), self.pb_del.height()))
+
+        self.l_name.move(0, 0)
+        self.l_name.resize(left_width-height, int(self.height()/2))
+
+        self.l_type.move(0, int(self.height()/2))
+        self.l_type.resize(left_width-height, int(self.height()/2))

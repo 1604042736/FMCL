@@ -70,21 +70,6 @@ class QFBNWindowWindows(QFBNWindowBasic):
         self.add_right_widget(self.pb_min)
         self.add_left_widget(self.l_title)
 
-        self.title.setStyleSheet('''
-QFrame{
-    background-color:rgb(255,255,255);
-}
-QPushButton{
-    border:none;
-}
-QPushButton:hover{
-    background-color:rgb(229,229,229);
-}
-QPushButton#pb_close:hover{
-    background-color:rgb(232,17,35);
-}
-        ''')
-
         return super().set_title()
 
     def set_connection(self) -> None:

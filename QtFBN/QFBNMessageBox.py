@@ -10,18 +10,6 @@ class QFBNMessageBox(QWidget):
             super().__init__(parent)
             self.setupUi(self)
 
-            self.setStyleSheet("""
-QFrame#Dialog{
-    border:2px solid rgb(0,0,0);
-    background-color:rgb(250,250,250);
-}
-QLabel{
-    font-size:16px;
-}""")
-
-    DIALOG_WIDTH = 500
-    DIALOG_HEIGHT = 314
-
     Ok = pyqtSignal()
 
     def __init__(self, parent, title, msg):
@@ -42,5 +30,5 @@ QLabel{
         self.raise_()
 
     def resizeEvent(self, a0: QResizeEvent) -> None:
-        self.w_dialog.move(int((self.width()-self.DIALOG_WIDTH)/2),
-                           int((self.height()-self.DIALOG_HEIGHT)/2))
+        self.w_dialog.move(int((self.width()-self.w_dialog.width())/2),
+                           int((self.height()-self.w_dialog.height())/2))

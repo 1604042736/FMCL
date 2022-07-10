@@ -22,7 +22,6 @@ class ModDetail(QFBNWidget, Ui_ModDetail):
 
     def set_info(self):
         self.l_title.setText(self.mod_info['title'])
-        self.l_title.setStyleSheet('font-weight: bold;')
         self.l_describe.setText(self.mod_info['description'])
         self.l_describe.setWordWrap(True)
         self.l_describe.setAlignment(Qt.AlignTop)

@@ -26,6 +26,7 @@ pip install -r requirements.txt
 - (只)支持离线登录
 - 支持更新
 - 支持Mod的搜索与下载
+- 支持更改主题颜色
 ## 项目结构
 ```
 Main.py                     ->主程序

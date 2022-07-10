@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>下载</string>
   </property>
-  <widget class="QFrame" name="f_panel">
+  <widget class="QFrame" name="f_panel_download">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -21,20 +21,6 @@
      <width>1000</width>
      <height>45</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QPushButton{
-	border:none;
-	background-color:rgb(255,255,255);
-}
-
-QPushButton:hover{
-	background-color:rgb(229,229,229);
-}
-
-QPushButton:checked{
-	border-bottom:2px solid rbg(0,0,0);
-}</string>
    </property>
    <property name="frameShape">
     <enum>QFrame::StyledPanel</enum>
