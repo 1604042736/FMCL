@@ -3,7 +3,7 @@ import threading
 import json
 from PyQt5.QtWidgets import qApp
 
-TAG_NAME = "1.1"  # 当前版本号
+TAG_NAME = "1.2"  # 当前版本号
 
 dmgr = None  # 下载管理
 
