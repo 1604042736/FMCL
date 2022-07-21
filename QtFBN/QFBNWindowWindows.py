@@ -153,7 +153,7 @@ class QFBNWindowWindows(QFBNWindowBasic):
             bottom = self.height()-self.BOTTOM_DISTANCE
             if (self.TOP_DISTANCE < yPos < self.title_height+self.y_shift
                     and self.LEFT_DISTANCE+self.left_width < xPos < right-self.right_width
-                    ):  # 使标题栏上的按钮可点击
+                ):  # 使标题栏上的按钮可点击
                 return True, HTCAPTION
             if xPos <= self.LEFT_DISTANCE and yPos <= self.TOP_DISTANCE:
                 return True, HTTOPLEFT
@@ -174,5 +174,6 @@ class QFBNWindowWindows(QFBNWindowBasic):
         return super().nativeEvent(eventType, message)
 
     def resize_title_widgets(self) -> None:
-        self.l_title.move(int((self.title.width()-self.l_title.width())/2), 0)
-        return super().resize_title_widgets()
+        super().resize_title_widgets()
+        self.l_title.move(int(
+            (self.title.width()-self.left_width-self.right_width-self.l_title.width())/2), 0)
