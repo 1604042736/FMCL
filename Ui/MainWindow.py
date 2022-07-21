@@ -1,4 +1,3 @@
-from matplotlib import widgets
 from Core.Updata import Updata
 from QtFBN.QFBNWindowManager import QFBNWindowManager
 from Ui.Homepage.Homepage import Homepage
@@ -6,6 +5,7 @@ import Globals as g
 from QtFBN.QFBNMessageBox import QFBNMessageBox
 from PyQt5.QtWidgets import QApplication, QPushButton
 import qtawesome as qta
+from Ui.DownloadManager.DownloadManager import DownloadManager
 
 
 class MainWindow(QFBNWindowManager):
@@ -63,7 +63,7 @@ class MainWindow(QFBNWindowManager):
         self.donot_show[self.sender()] = not self.donot_show[self.sender()]
 
     def catch_widget(self, widget) -> None:
-        if not isinstance(widget, Homepage):
+        if not isinstance(widget, Homepage) and not isinstance(widget, DownloadManager):
             self.removeWidget(self.currentWidget())
             for _, val in self.page_map.items():
                 if val is widget:
@@ -86,7 +86,7 @@ class MainWindow(QFBNWindowManager):
         return super().catch_widget(widget)
 
     def release_widget(self, widget) -> None:
-        if not isinstance(widget, Homepage):
+        if not isinstance(widget, Homepage) and not isinstance(widget, DownloadManager):
             for key, val in self.page_map.items():
                 if val is widget:
                     self.win.remove_left_widget(key)
