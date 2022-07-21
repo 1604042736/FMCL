@@ -68,7 +68,6 @@ class QFBNWindowWindows(QFBNWindowBasic):
         self.add_right_widget(self.pb_close)
         self.add_right_widget(self.pb_maxnormal, set_icon_size=False)
         self.add_right_widget(self.pb_min)
-        self.add_left_widget(self.l_title)
 
         return super().set_title()
 
@@ -90,6 +89,7 @@ class QFBNWindowWindows(QFBNWindowBasic):
         font = self.l_title.font()
         fontm = QFontMetrics(font)
         self.l_title.resize(fontm.width(a0), self.title_height)
+        self.resize_title_widgets()
         return super().setWindowTitle(a0)
 
     def showMaximized(self) -> None:
@@ -153,7 +153,7 @@ class QFBNWindowWindows(QFBNWindowBasic):
             bottom = self.height()-self.BOTTOM_DISTANCE
             if (self.TOP_DISTANCE < yPos < self.title_height+self.y_shift
                     and self.LEFT_DISTANCE+self.left_width < xPos < right-self.right_width
-                ):  # 使标题栏上的按钮可点击
+                    ):  # 使标题栏上的按钮可点击
                 return True, HTCAPTION
             if xPos <= self.LEFT_DISTANCE and yPos <= self.TOP_DISTANCE:
                 return True, HTTOPLEFT
@@ -172,3 +172,7 @@ class QFBNWindowWindows(QFBNWindowBasic):
             elif yPos >= bottom:
                 return True, HTBOTTOM
         return super().nativeEvent(eventType, message)
+
+    def resize_title_widgets(self) -> None:
+        self.l_title.move(int((self.title.width()-self.l_title.width())/2), 0)
+        return super().resize_title_widgets()

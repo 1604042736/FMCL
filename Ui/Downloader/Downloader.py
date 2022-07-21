@@ -4,6 +4,7 @@ from Ui.Downloader.ui_Downloader import Ui_Downloader
 from PyQt5.QtGui import QResizeEvent
 from PyQt5.QtWidgets import QWidget
 from Ui.Downloader.Mods import Mods
+import qtawesome as qta
 
 
 class Downloader(QFBNWidget, Ui_Downloader):
@@ -11,9 +12,12 @@ class Downloader(QFBNWidget, Ui_Downloader):
     panel_button_width = 64
     panel_button_height = panel_height
 
+    icon = "ph.download-simple-bold"
+
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
+        self.setWindowIcon(qta.icon("ph.download-simple-bold"))
 
         self.panel_buttons = [self.pb_minecraft, self.pb_mod]
 

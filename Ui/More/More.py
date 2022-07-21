@@ -3,12 +3,16 @@ from QtFBN.QFBNWidget import QFBNWidget
 from Ui.More.ui_More import Ui_More
 from PyQt5.QtCore import pyqtSlot
 import Globals as g
+import qtawesome as qta
 
 
 class More(QFBNWidget, Ui_More):
+    icon = "msc.three-bars"
+
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
+        self.setWindowIcon(qta.icon("msc.three-bars"))
 
         self.l_fmclversion.setText(
             self.l_fmclversion.text()+f"[v{g.TAG_NAME}]")

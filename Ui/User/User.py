@@ -12,9 +12,12 @@ from QtFBN.QFBNMessageBox import QFBNMessageBox
 class User(QFBNWidget, Ui_User):
     CurUserChanged = pyqtSignal()
 
-    def __init__(self, parent=None) -> None:
+    def __init__(self, connection=None, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
+        self.setWindowIcon(qta.icon("ph.user-circle"))
+        if connection:
+            self.CurUserChanged.connect(connection)
         self.set_users()
 
         self.pb_add.setIcon(qta.icon("msc.add"))

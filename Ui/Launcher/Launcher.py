@@ -5,12 +5,16 @@ from Ui.Launcher.ui_Launcher import Ui_Launcher
 import Globals as g
 from Ui.VersionManager.VersionManager import VersionManager
 from PyQt5.QtCore import QUrl
+import qtawesome as qta
 
 
 class Launcher(QFBNWidget, Ui_Launcher):
+    icon = "fa.power-off"
+
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
+        self.setWindowIcon(qta.icon("fa.power-off"))
         self.pb_start.clicked.connect(lambda: self.launch_game(g.cur_version))
         self.pb_chooseversion.clicked.connect(self.choose_version)
         self.pb_manageversion.clicked.connect(

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\Ui\Homepage\Homepage.ui'
+# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL.New2\Ui\Homepage\Homepage.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -20,20 +20,6 @@ class Ui_Homepage(object):
         self.f_panel.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.f_panel.setFrameShadow(QtWidgets.QFrame.Raised)
         self.f_panel.setObjectName("f_panel")
-        self.pb_launch = QCustomButton(self.f_panel)
-        self.pb_launch.setGeometry(QtCore.QRect(0, 45, 45, 45))
-        self.pb_launch.setText("")
-        self.pb_launch.setIconSize(QtCore.QSize(20, 20))
-        self.pb_launch.setCheckable(True)
-        self.pb_launch.setAutoExclusive(True)
-        self.pb_launch.setObjectName("pb_launch")
-        self.pb_download = QCustomButton(self.f_panel)
-        self.pb_download.setGeometry(QtCore.QRect(0, 90, 45, 45))
-        self.pb_download.setText("")
-        self.pb_download.setIconSize(QtCore.QSize(20, 20))
-        self.pb_download.setCheckable(True)
-        self.pb_download.setAutoExclusive(True)
-        self.pb_download.setObjectName("pb_download")
         self.pb_detail = QtWidgets.QPushButton(self.f_panel)
         self.pb_detail.setGeometry(QtCore.QRect(0, 0, 45, 45))
         self.pb_detail.setText("")
@@ -50,12 +36,10 @@ class Ui_Homepage(object):
         self.pb_setting.setCheckable(True)
         self.pb_setting.setAutoExclusive(True)
         self.pb_setting.setObjectName("pb_setting")
-        self.pb_more = QCustomButton(self.f_panel)
-        self.pb_more.setGeometry(QtCore.QRect(0, 135, 45, 45))
-        self.pb_more.setText("")
-        self.pb_more.setCheckable(True)
-        self.pb_more.setAutoExclusive(True)
-        self.pb_more.setObjectName("pb_more")
+        self.pb_allfunc = QCustomButton(self.f_panel)
+        self.pb_allfunc.setGeometry(QtCore.QRect(0, 90, 45, 45))
+        self.pb_allfunc.setText("")
+        self.pb_allfunc.setObjectName("pb_allfunc")
         self.w_ui = QtWidgets.QWidget(Homepage)
         self.w_ui.setGeometry(QtCore.QRect(45, 0, 955, 618))
         self.w_ui.setObjectName("w_ui")

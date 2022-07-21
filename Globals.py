@@ -3,7 +3,7 @@ import threading
 import json
 from PyQt5.QtWidgets import qApp
 
-TAG_NAME = "1.2"  # 当前版本号
+TAG_NAME = "1.2.1"  # 当前版本号
 
 dmgr = None  # 下载管理
 
@@ -110,9 +110,6 @@ QFrame#f_panel{{
 QFrame#f_panel QPushButton{{
     text-align:left;
 }}
-QFrame#f_panel QPushButton:checked{{
-    border-left:2px solid {BUTTON_CHECKED_BORDER_COLOR};
-}}
 QFrame#f_panel_download{{
     background-color:{PANEL_COLOR};
 }}
@@ -145,6 +142,9 @@ QLabel#l_notice{{
     background-color:rgb(0,255,0);
     color:rgb(255,255,255);
     font-size:13px;
+}}
+QTableWidget{{
+    border:none;
 }}
 """
     qApp.setStyleSheet(APP_QSS)

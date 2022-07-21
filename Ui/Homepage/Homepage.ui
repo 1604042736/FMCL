@@ -28,56 +28,6 @@
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
    </property>
-   <widget class="QCustomButton" name="pb_launch">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>45</y>
-      <width>45</width>
-      <height>45</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>20</width>
-      <height>20</height>
-     </size>
-    </property>
-    <property name="checkable">
-     <bool>true</bool>
-    </property>
-    <property name="autoExclusive">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QCustomButton" name="pb_download">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>90</y>
-      <width>45</width>
-      <height>45</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>20</width>
-      <height>20</height>
-     </size>
-    </property>
-    <property name="checkable">
-     <bool>true</bool>
-    </property>
-    <property name="autoExclusive">
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pb_detail">
     <property name="geometry">
      <rect>
@@ -129,23 +79,17 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QCustomButton" name="pb_more">
+   <widget class="QCustomButton" name="pb_allfunc">
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>135</y>
+      <y>90</y>
       <width>45</width>
       <height>45</height>
      </rect>
     </property>
     <property name="text">
      <string/>
-    </property>
-    <property name="checkable">
-     <bool>true</bool>
-    </property>
-    <property name="autoExclusive">
-     <bool>true</bool>
     </property>
    </widget>
   </widget>

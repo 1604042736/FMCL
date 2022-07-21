@@ -24,8 +24,28 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="3">
+       <widget class="QPushButton" name="pb_manageversion">
+        <property name="text">
+         <string>版本管理</string>
+        </property>
+       </widget>
+      </item>
       <item row="2" column="0">
        <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="4">
+       <spacer name="horizontalSpacer_2">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -43,26 +63,6 @@
          <string>开始游戏</string>
         </property>
        </widget>
-      </item>
-      <item row="2" column="3">
-       <widget class="QPushButton" name="pb_manageversion">
-        <property name="text">
-         <string>版本管理</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="4">
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
       </item>
       <item row="0" column="0" colspan="5">
        <widget class="QQuickWidget" name="quickWidget" native="true"/>

@@ -7,12 +7,14 @@ from Ui.Setting.ui_Setting import Ui_Setting
 import Globals as g
 from PyQt5.QtWidgets import QListWidgetItem
 from PyQt5.QtCore import QSize
+import qtawesome as qta
 
 
 class Setting(QFBNWidget, Ui_Setting):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
+        self.setWindowIcon(qta.icon("ri.settings-5-line"))
         self.load_settings()
 
     def load_settings(self):
