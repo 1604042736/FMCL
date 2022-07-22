@@ -19,7 +19,6 @@ Then run `Main.py` directly
 - Download,install and run Minecraft with `Forge`
 - Download,install and run Minecraft with `Fabric`
 - Download,install and run Minecraft with `Optifine`
-- Change content in `Launcher` through `QML`
 - Manage versions
 - (Only)Support offline login 
 - Support updata
