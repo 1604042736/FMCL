@@ -3,7 +3,7 @@ import threading
 import json
 from PyQt5.QtWidgets import qApp
 
-TAG_NAME = "1.2.1"  # 当前版本号
+TAG_NAME = "1.2.2"  # 当前版本号
 
 dmgr = None  # 下载管理
 
@@ -83,6 +83,7 @@ def save():
 
 
 def set_theme():
+    global BUTTON_HOVER_COLOR, TITLE_COLOR
     color = theme.replace("rgba(", "").replace(")", "").split(",")
     color = list(map(int, color))
 

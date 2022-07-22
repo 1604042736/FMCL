@@ -176,4 +176,4 @@ class QFBNWindowWindows(QFBNWindowBasic):
     def resize_title_widgets(self) -> None:
         super().resize_title_widgets()
         self.l_title.move(int(
-            (self.title.width()-self.left_width-self.right_width-self.l_title.width())/2), 0)
+            (self.title.width()-self.left_width-self.right_width-self.l_title.width())/2+self.left_width), 0)
