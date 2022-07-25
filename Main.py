@@ -1,4 +1,5 @@
 # pipreqs . --encoding utf-8 --force
+# pyrcc5 Resources.qrc -o __init__.py
 
 import os
 from Ui.MainWindow import MainWindow
@@ -6,10 +7,13 @@ from PyQt5.QtWidgets import QApplication
 import sys
 import Globals as g
 from Ui.DownloadManager.DownloadManager import DownloadManager
+from PyQt5.QtGui import QIcon
+import Resources
 
 
 def main():
     app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon(":/Icon/fmcl.ico"))
     g.set_theme()
     try:
         i = sys.argv.index("--updated")
