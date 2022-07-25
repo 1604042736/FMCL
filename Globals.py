@@ -111,6 +111,9 @@ QFrame#f_panel{{
 QFrame#f_panel QPushButton{{
     text-align:left;
 }}
+QFrame#f_panel QPushButton:checked{{
+    border-left:2px solid {BUTTON_CHECKED_BORDER_COLOR};
+}}
 QFrame#f_panel_download{{
     background-color:{PANEL_COLOR};
 }}

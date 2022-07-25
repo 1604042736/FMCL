@@ -41,6 +41,11 @@ QtFBN                       ->Window framework written by myself
     QFBNWindowBasic.py      ->Window hosting QFBNWidget
     QFBNWindowManager.py    ->Manage windows in APP
     QFBNWindowWindows.py    ->QFBNWindow in Windows system
+Resources                   ->Save resources
+    Icon                    ->Icon
+Scripts                     ->Some scripts
+    IconMaker.py            ->Make icon
+    ReleaseBuilder.py       ->Build a release version
 Ui                          ->UI
     Desktop                 ->Desktop Ui
         ...

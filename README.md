@@ -43,6 +43,11 @@ QtFBN                       ->自己写的窗口框架
     QFBNWindowBasic.py      ->承载QFBNWidget的窗口
     QFBNWindowManager.py    ->软件中窗口的管理
     QFBNWindowWindows.py    ->Windows系统的QFBNWindow实现
+Resources                   ->存放资源
+    Icon                    ->图标
+Scripts                     ->一些脚本
+    IconMaker.py            ->制作图标
+    ReleaseBuilder.py       ->构建一个发行版本
 Ui                          ->界面
     Desktop                 ->桌面界面
         ...
