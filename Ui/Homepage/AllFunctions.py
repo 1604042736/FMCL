@@ -28,6 +28,8 @@ class AllFunctions(QFBNWidget, Ui_AllFunctions):
 
     def set_functions(self):
         self.tw_func.clear()
+        self.row_count = 1
+        self.col_count = 1
         j = 0
         for key, val in self.functions.items():
             if j == self.max_col_count:

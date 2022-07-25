@@ -26,7 +26,8 @@ class Desktop(QFBNWidget, Ui_Desktop):
         self.version_path = g.cur_gamepath+"/versions"
         if not os.path.exists(self.version_path):
             os.makedirs(self.version_path)
-
+        self.row_count = 1
+        self.col_count = 1
         j = 0
         for i in os.listdir(self.version_path):
             if j == self.max_row_count:
