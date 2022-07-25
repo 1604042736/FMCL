@@ -4,12 +4,13 @@ from QtFBN.QFBNWidget import QFBNWidget
 from Ui.Desktop.ui_Desktop import Ui_Desktop
 import Globals as g
 from PyQt5.QtWidgets import QTableWidgetItem, QMenu, QAction
-from PyQt5.QtGui import QCursor
-
+from PyQt5.QtGui import QCursor, QResizeEvent
 from Ui.VersionManager.VersionManager import VersionManager
 
 
 class Desktop(QFBNWidget, Ui_Desktop):
+    UNIT_HEIGHT = 64
+
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
@@ -28,6 +29,12 @@ class Desktop(QFBNWidget, Ui_Desktop):
 
         j = 0
         for i in os.listdir(self.version_path):
+            if j == self.max_row_count:
+                j = 0
+                self.col_count += 1
+            elif j == self.row_count:
+                self.row_count += 1
+
             self.tableWidget.setRowCount(self.row_count)
             self.tableWidget.setColumnCount(self.col_count)
 
@@ -35,11 +42,6 @@ class Desktop(QFBNWidget, Ui_Desktop):
             item.setText(i)
             self.tableWidget.setItem(j, self.col_count-1, item)
             j += 1
-            if j == self.max_row_count:
-                j = 0
-                self.col_count += 1
-            elif j == self.row_count:
-                self.row_count += 1
 
     def show_menu(self):
         item = self.tableWidget.currentItem()
@@ -72,3 +74,7 @@ class Desktop(QFBNWidget, Ui_Desktop):
                 versionmanager.show()
             except Exception as e:
                 self.notify("错误", e)
+
+    def resizeEvent(self, a0: QResizeEvent) -> None:
+        self.max_row_count = int(self.height()/self.UNIT_HEIGHT)
+        self.set_versions()

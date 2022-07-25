@@ -29,7 +29,8 @@ class ColorSetting(QWidget):
 
     def save(self):
         color = QColorDialog.getColor().getRgb()
-        self.val = f"rgba({','.join(map(str,color))})"
-        self.l_color.setStyleSheet(f"background-color:{self.val}")
-        setattr(g, self.id, self.val)
-        g.set_theme()
+        if color != (0, 0, 0, 255):
+            self.val = f"rgba({','.join(map(str,color))})"
+            self.l_color.setStyleSheet(f"background-color:{self.val}")
+            setattr(g, self.id, self.val)
+            g.set_theme()

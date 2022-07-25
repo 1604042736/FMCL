@@ -72,7 +72,7 @@ class MainWindow(QFBNWindowManager):
                               self.win.title_height)
                 button.clicked.connect(self.change_page)
                 button.setText(widget.windowTitle())
-                button.setObjectName(f"pb_homepage")
+                button.setObjectName("pb_homepage")
                 button.setIcon(widget.windowIcon())
                 button.show()
                 self.win.add_left_widget(button, len(self.task_buttons)+1)
@@ -96,7 +96,13 @@ class MainWindow(QFBNWindowManager):
             if val == self.currentWidget():
                 key.setStyleSheet(f"background-color:{g.BUTTON_HOVER_COLOR};")
             else:
-                key.setStyleSheet(f"background-color:{g.TITLE_COLOR};")
+                key.setStyleSheet(f"""
+QPushButton{{
+    border:none;
+}}
+QPushButton:hover{{
+    background-color:{g.BUTTON_HOVER_COLOR};
+}}""")
 
     def setCurrentWidget(self, w) -> None:
         if self.indexOf(w) == -1:

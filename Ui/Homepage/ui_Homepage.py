@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL.New2\Ui\Homepage\Homepage.ui'
+# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\Ui\Homepage\Homepage.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -27,18 +27,20 @@ class Ui_Homepage(object):
         self.pb_user = QCustomButton(self.f_panel)
         self.pb_user.setGeometry(QtCore.QRect(0, 528, 45, 45))
         self.pb_user.setText("")
-        self.pb_user.setCheckable(True)
-        self.pb_user.setAutoExclusive(True)
+        self.pb_user.setCheckable(False)
+        self.pb_user.setAutoExclusive(False)
         self.pb_user.setObjectName("pb_user")
         self.pb_setting = QCustomButton(self.f_panel)
         self.pb_setting.setGeometry(QtCore.QRect(0, 573, 45, 45))
         self.pb_setting.setText("")
-        self.pb_setting.setCheckable(True)
-        self.pb_setting.setAutoExclusive(True)
+        self.pb_setting.setCheckable(False)
+        self.pb_setting.setAutoExclusive(False)
         self.pb_setting.setObjectName("pb_setting")
         self.pb_allfunc = QCustomButton(self.f_panel)
         self.pb_allfunc.setGeometry(QtCore.QRect(0, 90, 45, 45))
         self.pb_allfunc.setText("")
+        self.pb_allfunc.setCheckable(True)
+        self.pb_allfunc.setAutoExclusive(True)
         self.pb_allfunc.setObjectName("pb_allfunc")
         self.w_ui = QtWidgets.QWidget(Homepage)
         self.w_ui.setGeometry(QtCore.QRect(45, 0, 955, 618))
