@@ -2,7 +2,7 @@ import os
 from Core.Launch import Launch
 from QtFBN.QFBNWidget import QFBNWidget
 import Globals as g
-from PyQt5.QtWidgets import QTableWidgetItem, QMenu, QAction, QTableWidget
+from PyQt5.QtWidgets import QTableWidgetItem, QMenu, QAction, QTableWidget, QAbstractItemView
 from PyQt5.QtGui import QCursor, QResizeEvent
 from Ui.VersionManager.VersionManager import VersionManager
 
@@ -24,6 +24,9 @@ class Desktop(QTableWidget, QFBNWidget):
         self.verticalHeader().setDefaultSectionSize(64)
         self.verticalHeader().setHighlightSections(False)
         self.verticalHeader().setMinimumSectionSize(64)
+
+        self.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
+        self.setDragDropMode(QAbstractItemView.DragDropMode.NoDragDrop)
 
         self.setObjectName("Desktop")
         self.customContextMenuRequested.connect(self.show_menu)

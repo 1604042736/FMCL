@@ -2,7 +2,7 @@ from QtFBN.QFBNWidget import QFBNWidget
 from Ui.Downloader.Minecraft import Minecraft
 from Ui.Downloader.Mods import Mods
 from Ui.More.More import More
-from PyQt5.QtWidgets import QTableWidgetItem, QTableWidget
+from PyQt5.QtWidgets import QTableWidgetItem, QTableWidget, QAbstractItemView
 import qtawesome as qta
 from PyQt5.QtGui import QResizeEvent
 
@@ -29,6 +29,9 @@ class AllFunctions(QTableWidget, QFBNWidget):
         self.verticalHeader().setDefaultSectionSize(45)
         self.verticalHeader().setHighlightSections(False)
         self.verticalHeader().setMinimumSectionSize(45)
+
+        self.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
+        self.setDragDropMode(QAbstractItemView.DragDropMode.NoDragDrop)
 
         self.set_functions()
         self.cellDoubleClicked.connect(self.launch_function)
