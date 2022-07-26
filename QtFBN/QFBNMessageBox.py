@@ -12,16 +12,23 @@ class QFBNMessageBox(QWidget):
 
     Ok = pyqtSignal()
 
-    def __init__(self, parent, title, msg):
+    def __init__(self, parent, title, msg, custom=None):
         super().__init__(parent)
         # 一般情况下parent都是QFBNWindow
         self.setGeometry(0, 30, parent.width(), parent.height()-30)
         setattr(parent, "_msgbox", self)
 
-        self.w_dialog = self.Dialog(self)
+        if custom:
+            self.w_dialog = custom
+            self.w_dialog.setParent(self)
+        else:
+            self.w_dialog = self.Dialog(self)
 
-        self.w_dialog.l_title.setText(title)
-        self.w_dialog.l_msg.setText(msg)
+            self.w_dialog.l_title.setText(title)
+            self.w_dialog.l_msg.setText(msg)
+
+        QWidget.show(self.w_dialog)
+        self.w_dialog.resize(500, 309)
 
         self.w_dialog.pb_ok.clicked.connect(lambda: self.Ok.emit())
         self.w_dialog.pb_ok.clicked.connect(self.close)

@@ -20,10 +20,10 @@ class UserInfo(QWidget):
         self.l_type.setText(info["type"])
 
         self.pb_settocur = QPushButton(self)
-        self.pb_settocur.setText("设置成当前用户")
         self.pb_settocur.clicked.connect(
             lambda: self.CurUserChanged.emit(self.info))
         self.pb_settocur.hide()
+        self.pb_settocur.setIcon(qta.icon("fa5s.user-check"))
 
         self.pb_del = QPushButton(self)
         self.pb_del.setIcon(qta.icon("mdi.delete"))
@@ -39,6 +39,12 @@ class UserInfo(QWidget):
         self.pb_del.resize(height, height)
         self.pb_del.setIconSize(
             QSize(self.pb_del.width(), self.pb_del.height()))
+
+        self.pb_settocur.move(left_width-height*2,
+                              int((self.height()-height)/2))
+        self.pb_settocur.resize(height, height)
+        self.pb_settocur.setIconSize(
+            QSize(self.pb_settocur.width(), self.pb_settocur.height()))
 
         self.l_name.move(0, 0)
         self.l_name.resize(left_width-height, int(self.height()/2))

@@ -26,7 +26,8 @@ class User(QFBNWidget, Ui_User):
     def add_user(self):
         newuser = NewUser()
         newuser.CreateUser.connect(self.create_user)
-        newuser.show()
+        msgbox = QFBNMessageBox(QApplication.activeWindow(), "", "", newuser)
+        msgbox.show()
 
     def set_users(self):
         def add_item(i):

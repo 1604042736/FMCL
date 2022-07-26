@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(500, 314)
+        Dialog.resize(500, 309)
         Dialog.setWindowTitle("")
         self.l_title = QtWidgets.QLabel(Dialog)
         self.l_title.setGeometry(QtCore.QRect(0, 0, 500, 32))
@@ -29,10 +29,10 @@ class Ui_Dialog(object):
         self.l_msg.setWordWrap(True)
         self.l_msg.setObjectName("l_msg")
         self.pb_ok = QtWidgets.QPushButton(Dialog)
-        self.pb_ok.setGeometry(QtCore.QRect(372, 282, 64, 32))
+        self.pb_ok.setGeometry(QtCore.QRect(372, 277, 64, 32))
         self.pb_ok.setObjectName("pb_ok")
         self.pb_cancel = QtWidgets.QPushButton(Dialog)
-        self.pb_cancel.setGeometry(QtCore.QRect(436, 282, 64, 32))
+        self.pb_cancel.setGeometry(QtCore.QRect(436, 277, 64, 32))
         self.pb_cancel.setObjectName("pb_cancel")
 
         self.retranslateUi(Dialog)
