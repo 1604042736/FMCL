@@ -42,7 +42,7 @@ QtFBN                       ->Window framework written by myself
     QFBNWindowManager.py    ->Manage windows in APP
     QFBNWindowWindows.py    ->QFBNWindow in Windows system
 Resources                   ->Save resources
-    Icon                    ->Icon
+    Image                   ->Images
 Scripts                     ->Some scripts
     IconMaker.py            ->Make icon
     ReleaseBuilder.py       ->Build a release version
