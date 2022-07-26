@@ -358,8 +358,9 @@ class Game(CoreBase):
             "optifine_version": ""
         }
         try:
-            a = config["arguments"]["game"].index("--fml.forgeVersion")
-            info["forge_version"] = config["arguments"]["game"][a+1]
+            if "arguments" in config:
+                a = config["arguments"]["game"].index("--fml.forgeVersion")
+                info["forge_version"] = config["arguments"]["game"][a+1]
         except ValueError:
             pass
 
@@ -423,9 +424,9 @@ class Game(CoreBase):
         """获取配置信息"""
         if not os.path.exists(self.game_path+"/FMCL/config.json"):
             self.complete_info()
-        info=json.load(open(self.game_path+"/FMCL/config.json"))
+        info = json.load(open(self.game_path+"/FMCL/config.json"))
         if not self.is_complete(info):
-            info=self.complete_info()
+            info = self.complete_info()
         return info
 
     def is_complete(self, info) -> bool:

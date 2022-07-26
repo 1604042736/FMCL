@@ -77,34 +77,38 @@ class Launch(CoreBase):
             args += f'-Dos.name="Windows 10" '
             args += f'-Dos.version=10.0 '
 
-        if "-DFabricMcEmu" in self.config['arguments']['jvm'][-1]:
-            # 防止出现"-DFabricMcEmu= net.minecraft.client.main.Main "这样的情况
-            # 这种情况会导致无法加载Fabric
-            self.config["arguments"]["jvm"][-1] = "-DFabricMcEmu=net.minecraft.client.main.Main "
+        if "arguments" in self.config:  #有些版本的json文件是没有arguments的,比如1.8.9
+            if "-DFabricMcEmu" in self.config['arguments']['jvm'][-1]:
+                # 防止出现"-DFabricMcEmu= net.minecraft.client.main.Main "这样的情况
+                # 这种情况会导致无法加载Fabric
+                self.config["arguments"]["jvm"][-1] = "-DFabricMcEmu=net.minecraft.client.main.Main "
 
-        for i in self.config['arguments']['jvm']:
-            if isinstance(i, str):
-                args += i+' '
-            elif isinstance(i, dict):
-                if 'rules' in i:
-                    if self.check_rule(i['rules']):
-                        if isinstance(i['value'], str):
-                            args += i['value']+' '
+            for i in self.config['arguments']['jvm']:
+                if isinstance(i, str):
+                    args += i+' '
+                elif isinstance(i, dict):
+                    if 'rules' in i:
+                        if self.check_rule(i['rules']):
+                            if isinstance(i['value'], str):
+                                args += i['value']+' '
 
         args += f'-Xmn{minmem}m '
         args += f'-Xmx{maxmem}m '
         args += f'{self.config["mainClass"]} '
 
-        for i in self.config['arguments']['game']:
-            if isinstance(i, str):
-                args += i+' '
-            elif isinstance(i, dict):
-                if 'rules' in i:
-                    if self.check_rule(i['rules']):
-                        if isinstance(i['value'], str):
-                            args += i['value']+' '
-                        else:
-                            args += ' '.join(i['value'])+' '
+        if "arguments" in self.config:
+            for i in self.config['arguments']['game']:
+                if isinstance(i, str):
+                    args += i+' '
+                elif isinstance(i, dict):
+                    if 'rules' in i:
+                        if self.check_rule(i['rules']):
+                            if isinstance(i['value'], str):
+                                args += i['value']+' '
+                            else:
+                                args += ' '.join(i['value'])+' '
+        else:
+            args += self.config["minecraftArguments"]+" "
 
         args = args.replace('${auth_player_name}', playername)
         args = args.replace('${version_name}', self.config["id"])
@@ -124,7 +128,7 @@ class Launch(CoreBase):
         args = args.replace('${launcher_name}', 'FMCL')
         args = args.replace('${launcher_version}', '1')
         args = args.replace('${classpath}', f'"{";".join(self.classpath)}"')
-        
+
         os.popen(args)
 
         self.Finished.emit()
