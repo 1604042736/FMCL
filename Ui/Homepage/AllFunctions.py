@@ -8,7 +8,7 @@ from PyQt5.QtGui import QResizeEvent
 
 
 class AllFunctions(QTableWidget, QFBNWidget):
-    UNIT_WIDTH = 45
+    UNIT_WIDTH = 64
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
@@ -22,13 +22,13 @@ class AllFunctions(QTableWidget, QFBNWidget):
         self.max_col_count = 16
 
         self.horizontalHeader().setVisible(False)
-        self.horizontalHeader().setDefaultSectionSize(45)
+        self.horizontalHeader().setDefaultSectionSize(self.UNIT_WIDTH)
         self.horizontalHeader().setHighlightSections(False)
-        self.horizontalHeader().setMinimumSectionSize(45)
+        self.horizontalHeader().setMinimumSectionSize(self.UNIT_WIDTH)
         self.verticalHeader().setVisible(False)
-        self.verticalHeader().setDefaultSectionSize(45)
+        self.verticalHeader().setDefaultSectionSize(self.UNIT_WIDTH)
         self.verticalHeader().setHighlightSections(False)
-        self.verticalHeader().setMinimumSectionSize(45)
+        self.verticalHeader().setMinimumSectionSize(self.UNIT_WIDTH)
 
         self.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
         self.setDragDropMode(QAbstractItemView.DragDropMode.NoDragDrop)

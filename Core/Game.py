@@ -84,6 +84,7 @@ class Game(CoreBase):
             os.makedirs(f'{self.game_path}/FMCL')
         except:
             pass
+        self.set_default_icon(info)
         json.dump(info, open(f'{self.game_path}/FMCL/config.json', mode='w'))
 
         downloads = [[f'https://bmclapi2.bangbang93.com/version/{self.version}/client', self.game_path + f'\\{self.name}.jar'],
@@ -345,7 +346,7 @@ class Game(CoreBase):
         json.dump(config, open(os.path.join(
             self.game_path, f'{self.name}.json'), mode='w'))
 
-    def complete_info(self):
+    def complete_info(self) -> dict:
         """补全信息"""
         config = json.load(
             open(os.path.join(self.game_path, f'{self.name}.json')))
@@ -380,13 +381,15 @@ class Game(CoreBase):
         elif "inheritsFrom" in config:
             info["version"] = config["inheritsFrom"]
         else:
-            info["version"]=config["id"]
+            info["version"] = config["id"]
 
         try:
             os.makedirs(f'{self.game_path}/FMCL')
         except:
             pass
+        self.set_default_icon(info)
         json.dump(info, open(f'{self.game_path}/FMCL/config.json', mode='w'))
+        return info
 
     def del_game(self):
         shutil.rmtree(self.game_path)
@@ -406,3 +409,30 @@ class Game(CoreBase):
                   self.game_path+f"/{self.name}.json")
         os.rename(self.game_path+f"/{old_name}-natives",
                   self.game_path+f"/{self.name}-natives")
+
+    def set_default_icon(self, info):
+        """为游戏设置默认图标"""
+        icon = ":/Image/grass.png"
+        if info["fabric_version"]:
+            icon = ":/Image/fabric.png"
+        elif info["forge_version"]:
+            icon = ":/Image/forge.png"
+        info["icon"] = icon
+
+    def get_info(self) -> dict:
+        """获取配置信息"""
+        if not os.path.exists(self.game_path+"/FMCL/config.json"):
+            self.complete_info()
+        info=json.load(open(self.game_path+"/FMCL/config.json"))
+        if not self.is_complete(info):
+            info=self.complete_info()
+        return info
+
+    def is_complete(self, info) -> bool:
+        """判断信息是否完整"""
+        return ("name" in info
+                and "version" in info
+                and "forge_version" in info
+                and "fabric_version" in info
+                and "optifine_version" in info
+                and "icon" in info)

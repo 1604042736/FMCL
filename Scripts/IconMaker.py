@@ -3,7 +3,7 @@ from PIL import Image
 
 
 def main():
-    path = '../Resources/Icon/fmcl.ico'
+    path = '../Resources/Image/icon.png'
     try:
         os.makedirs(os.path.dirname(path))
     except:

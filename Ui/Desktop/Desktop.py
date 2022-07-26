@@ -1,9 +1,10 @@
 import os
+from Core.Game import Game
 from Core.Launch import Launch
 from QtFBN.QFBNWidget import QFBNWidget
 import Globals as g
 from PyQt5.QtWidgets import QTableWidgetItem, QMenu, QAction, QTableWidget, QAbstractItemView
-from PyQt5.QtGui import QCursor, QResizeEvent
+from PyQt5.QtGui import QCursor, QIcon, QResizeEvent
 from Ui.VersionManager.VersionManager import VersionManager
 from PyQt5.QtCore import Qt
 
@@ -18,13 +19,13 @@ class Desktop(QTableWidget, QFBNWidget):
         self.max_row_count = 8
 
         self.horizontalHeader().setVisible(False)
-        self.horizontalHeader().setDefaultSectionSize(64)
+        self.horizontalHeader().setDefaultSectionSize(self.UNIT_HEIGHT)
         self.horizontalHeader().setHighlightSections(False)
-        self.horizontalHeader().setMinimumSectionSize(64)
+        self.horizontalHeader().setMinimumSectionSize(self.UNIT_HEIGHT)
         self.verticalHeader().setVisible(False)
-        self.verticalHeader().setDefaultSectionSize(64)
+        self.verticalHeader().setDefaultSectionSize(self.UNIT_HEIGHT)
         self.verticalHeader().setHighlightSections(False)
-        self.verticalHeader().setMinimumSectionSize(64)
+        self.verticalHeader().setMinimumSectionSize(self.UNIT_HEIGHT)
 
         self.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
         self.setDragDropMode(QAbstractItemView.DragDropMode.NoDragDrop)
@@ -54,6 +55,7 @@ class Desktop(QTableWidget, QFBNWidget):
 
             item = QTableWidgetItem()
             item.setText(i)
+            item.setIcon(QIcon(Game(i).get_info()["icon"]))
             self.setItem(j, self.col_count-1, item)
             j += 1
 
@@ -82,12 +84,10 @@ class Desktop(QTableWidget, QFBNWidget):
 
     def open_version_manager(self, name):
         if name:
-            try:
-                versionmanager = VersionManager(name)
-                versionmanager.GameDeleted.connect(self.set_versions)
-                versionmanager.show()
-            except Exception as e:
-                self.notify("错误", e)
+            versionmanager = VersionManager(name)
+            versionmanager.GameDeleted.connect(self.set_versions)
+            versionmanager.IconChanged.connect(self.set_versions)
+            versionmanager.show()
 
     def resizeEvent(self, a0: QResizeEvent) -> None:
         self.max_row_count = int(self.height()/self.UNIT_HEIGHT)

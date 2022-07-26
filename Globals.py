@@ -122,9 +122,7 @@ QFrame#f_panel_download QPushButton:checked{{
 }}
 QFrame#Dialog{{
     border:1px solid rgb(0,0,0);
-}}
-QFrame#Dialog QPushButton{{
-    border-bottom:1px solid rgb(0,0,0);
+    background-color:rgb(255,255,255);
 }}
 QGroupBox{{
     font-size: 13px;

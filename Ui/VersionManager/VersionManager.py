@@ -1,8 +1,10 @@
+from http.client import OK
 import os
 import json
 from Core.Game import Game
 from Core.Mod import Mod
 from QtFBN.QFBNWidget import QFBNWidget
+from Ui.VersionManager.IconSelector import IconSelector
 from Ui.VersionManager.ModItem import ModItem
 from Ui.VersionManager.ui_VersionManager import Ui_VersionManager
 import Globals as g
@@ -10,10 +12,12 @@ from PyQt5.QtWidgets import QApplication, QListWidgetItem
 from PyQt5.QtCore import pyqtSignal, QSize
 from Core.Game import Game
 from QtFBN.QFBNMessageBox import QFBNMessageBox
+from PyQt5.QtGui import QPixmap
 
 
 class VersionManager(QFBNWidget, Ui_VersionManager):
     GameDeleted = pyqtSignal()
+    IconChanged = pyqtSignal()
 
     def __init__(self, name, parent=None) -> None:
         super().__init__(parent)
@@ -23,21 +27,21 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
         self.game_path = os.path.join(self.version_path, name)
         self.mods_path = g.cur_gamepath+"\\mods"
 
-        if not os.path.exists(self.game_path+"/FMCL/config.json"):
-            Game(name).complete_info()
-        self.config = json.load(open(self.game_path+"/FMCL/config.json"))
+        self.config = Game(name).get_info()
 
         self.name = self.config["name"]
         self.version = self.config["version"]
         self.forge_version = self.config["forge_version"]
         self.fabric_version = self.config["fabric_version"]
         self.optifine_version = self.config["optifine_version"]
+        self.icon = self.config["icon"]
 
         self.le_name.setText(self.name)
         self.l_version.setText(self.version)
         self.l_forgeversion.setText(self.forge_version)
         self.l_fabricversion.setText(self.fabric_version)
         self.l_optifineversion.setText(self.optifine_version)
+        self.l_icon.setPixmap(QPixmap(self.icon))
 
         self.pb_del.clicked.connect(self.del_game)
         self.pb_reinstall.clicked.connect(self.reinstall_game)
@@ -45,14 +49,19 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
         self.le_name.textEdited.connect(self.rename_game)
         self.pb_openmodfoder.clicked.connect(
             lambda: os.startfile(self.mods_path))
+        self.pb_changeicon.clicked.connect(self.change_icon)
 
         self.set_mods()
 
+    def save(self):
+        for key in self.config:
+            self.config[key] = getattr(self, key)
+            json.dump(self.config, open(
+                self.game_path+"/FMCL/config.json", "w"))
+
     def close(self, called_del=False) -> bool:
         if not called_del:
-            for key in self.config:
-                self.config[key] = getattr(self, key)
-            json.dump(self.config, open(self.game_path+"/FMCL/config.json"))
+            self.save()
         return super().close()
 
     def del_game(self):
@@ -88,3 +97,18 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
             widget.ModDeleted.connect(self.set_mods)
             self.lw_mods.addItem(item)
             self.lw_mods.setItemWidget(item, widget)
+
+    def change_icon(self):
+        def ok(icon=""):  # 因为连接了两个参数不同的Signal
+            if icon:
+                self.icon = icon
+                self.l_icon.setPixmap(QPixmap(self.icon))
+                self.save()
+            self.IconChanged.emit()
+
+        iconselector = IconSelector()
+        iconselector.Selected.connect(ok)
+        msgbox = QFBNMessageBox(
+            QApplication.activeWindow(), "", "", iconselector)
+        msgbox.Ok.connect(ok)
+        msgbox.show()

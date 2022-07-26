@@ -13,7 +13,7 @@ import Resources
 
 def main():
     app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon(":/Icon/fmcl.ico"))
+    app.setWindowIcon(QIcon(":/Image/icon.png"))
     g.set_theme()
     try:
         i = sys.argv.index("--updated")
