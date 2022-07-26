@@ -26,7 +26,7 @@ class Setting(QFBNWidget, Ui_Setting):
             "最大内存": [g.maxmem, "maxmem"],
             "最小内存": [g.minmem, "minmem"],
             "Java路径": [g.java_path, "java_path"],
-            "QML文件路径": [g.homepage_qml, "homepage_qml"],
+            "背景图片": [g.background_image, "background_image"],
             "主题": [g.theme, "theme"]
         }
         for key, val in config.items():

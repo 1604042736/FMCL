@@ -1,28 +1,36 @@
 import os
 from Core.Launch import Launch
 from QtFBN.QFBNWidget import QFBNWidget
-from Ui.Desktop.ui_Desktop import Ui_Desktop
 import Globals as g
-from PyQt5.QtWidgets import QTableWidgetItem, QMenu, QAction
+from PyQt5.QtWidgets import QTableWidgetItem, QMenu, QAction, QTableWidget
 from PyQt5.QtGui import QCursor, QResizeEvent
 from Ui.VersionManager.VersionManager import VersionManager
 
 
-class Desktop(QFBNWidget, Ui_Desktop):
+class Desktop(QTableWidget, QFBNWidget):
     UNIT_HEIGHT = 64
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        self.setupUi(self)
         self.row_count = 1
         self.col_count = 1
         self.max_row_count = 8
 
-        self.tableWidget.customContextMenuRequested.connect(self.show_menu)
+        self.horizontalHeader().setVisible(False)
+        self.horizontalHeader().setDefaultSectionSize(64)
+        self.horizontalHeader().setHighlightSections(False)
+        self.horizontalHeader().setMinimumSectionSize(64)
+        self.verticalHeader().setVisible(False)
+        self.verticalHeader().setDefaultSectionSize(64)
+        self.verticalHeader().setHighlightSections(False)
+        self.verticalHeader().setMinimumSectionSize(64)
+
+        self.setObjectName("Desktop")
+        self.customContextMenuRequested.connect(self.show_menu)
         self.set_versions()
 
     def set_versions(self):
-        self.tableWidget.clear()
+        self.clear()
         self.version_path = g.cur_gamepath+"/versions"
         if not os.path.exists(self.version_path):
             os.makedirs(self.version_path)
@@ -36,19 +44,19 @@ class Desktop(QFBNWidget, Ui_Desktop):
             elif j == self.row_count:
                 self.row_count += 1
 
-            self.tableWidget.setRowCount(self.row_count)
-            self.tableWidget.setColumnCount(self.col_count)
+            self.setRowCount(self.row_count)
+            self.setColumnCount(self.col_count)
 
             item = QTableWidgetItem()
             item.setText(i)
-            self.tableWidget.setItem(j, self.col_count-1, item)
+            self.setItem(j, self.col_count-1, item)
             j += 1
 
     def show_menu(self):
-        item = self.tableWidget.currentItem()
+        item = self.currentItem()
         if item:
             text = item.text()
-            menu = QMenu(self.tableWidget)
+            menu = QMenu(self)
             a_launch = QAction(f'启动"{text}"', self)
             a_launch.triggered.connect(lambda: self.launch_game(text))
             a_manage = QAction(f'管理"{text}"', self)

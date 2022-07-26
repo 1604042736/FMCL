@@ -26,7 +26,7 @@ width = 1000
 height = 618
 maxmem = 1024
 minmem = 256
-homepage_qml = ""
+background_image = ""
 theme = "rgba(255,255,255,255)"
 
 try:
@@ -42,7 +42,7 @@ try:
     height = int(config["height"])
     maxmen = int(config["maxmem"])
     minmem = int(config["minmem"])
-    homepage_qml = config["homepage_qml"]
+    background_image = config["background_image"]
     theme = config["theme"]
 except Exception as e:
     print(e)
@@ -72,7 +72,7 @@ def save():
         "height": height,
         "maxmem": maxmem,
         "minmem": minmem,
-        "homepage_qml": homepage_qml,
+        "background_image": background_image,
         "theme": theme
     }
     if cur_user in users:
@@ -149,6 +149,9 @@ QLabel#l_notice{{
 }}
 QTableWidget{{
     border:none;
+}}
+QTableWidget#Desktop{{
+    background-image:url({background_image});
 }}
 """
     qApp.setStyleSheet(APP_QSS)
