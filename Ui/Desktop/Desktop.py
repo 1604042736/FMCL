@@ -5,6 +5,7 @@ import Globals as g
 from PyQt5.QtWidgets import QTableWidgetItem, QMenu, QAction, QTableWidget, QAbstractItemView
 from PyQt5.QtGui import QCursor, QResizeEvent
 from Ui.VersionManager.VersionManager import VersionManager
+from PyQt5.QtCore import Qt
 
 
 class Desktop(QTableWidget, QFBNWidget):
@@ -27,6 +28,7 @@ class Desktop(QTableWidget, QFBNWidget):
 
         self.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
         self.setDragDropMode(QAbstractItemView.DragDropMode.NoDragDrop)
+        self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
 
         self.setObjectName("Desktop")
         self.customContextMenuRequested.connect(self.show_menu)
