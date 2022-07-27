@@ -7,10 +7,12 @@ import qtawesome as qta
 
 
 class More(QFBNWidget, Ui_More):
+    icon_exp = 'qta.icon("msc.three-bars")'
+
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
-        self.setWindowIcon(qta.icon("msc.three-bars"))
+        self.setWindowIcon(eval(self.icon_exp))
 
         self.l_fmclversion.setText(
             self.l_fmclversion.text()+f"[v{g.TAG_NAME}]")

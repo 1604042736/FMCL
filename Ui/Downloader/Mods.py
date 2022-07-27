@@ -19,11 +19,12 @@ class Mods(QFBNWidget, Ui_Mods):
         "创建日期": "newest",
         "更新日期": "updated"
     }
+    icon_exp='qta.icon("mdi.puzzle-outline")'
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
-        self.setWindowIcon(qta.icon("mdi.puzzle-outline"))
+        self.setWindowIcon(eval(self.icon_exp))
 
         self.cb_index.clear()
         self.cb_index.addItems(self.index_map.keys())

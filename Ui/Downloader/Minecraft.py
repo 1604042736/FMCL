@@ -7,11 +7,13 @@ import qtawesome as qta
 
 
 class Minecraft(QFBNWidget, Ui_Minecraft):
+    icon_exp = 'qta.icon("mdi.minecraft")'
+
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
 
-        self.setWindowIcon(qta.icon("mdi.minecraft"))
+        self.setWindowIcon(eval(self.icon_exp))
 
         self.set_version()
 

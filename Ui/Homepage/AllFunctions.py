@@ -52,7 +52,8 @@ class AllFunctions(QTableWidget, QFBNWidget):
             self.setColumnCount(self.col_count)
             item = QTableWidgetItem()
             item.setText(key)
-            item.setIcon(val().windowIcon())
+            if "icon_exp" in val.__dict__:
+                item.setIcon(eval(val.icon_exp))
             self.setItem(self.row_count-1, j, item)
             j += 1
 
