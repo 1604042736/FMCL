@@ -1,7 +1,43 @@
 import os
 import threading
 import json
+import logging
+import sys
 from PyQt5.QtWidgets import qApp
+
+
+class StdLog:
+    __console__ = sys.stdout
+
+    def __init__(self) -> None:
+        try:
+            os.makedirs("FMCL")
+        except:
+            pass
+        self.logfile = open("./FMCL/latest.log", mode='w', encoding='utf-8')
+
+    def write(self, msg):
+        self.__console__.write(msg)
+        self.logfile.write(msg)
+
+    def flush(self):
+        self.__console__.flush()
+
+
+sys.stdout = sys.stderr = StdLog()
+
+logformat = logging.Formatter(
+    '[%(threadName)s=>%(funcName)s]:[%(asctime)s][%(levelname)s]:%(message)s', '%Y-%m-%d,%H:%M:%S')
+
+logapi = logging.getLogger()  # 日志接口
+logapi.setLevel(logging.DEBUG)
+
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+ch.setFormatter(logformat)
+
+logapi.addHandler(ch)
+
 
 TAG_NAME = "1.2.4"  # 当前版本号
 
