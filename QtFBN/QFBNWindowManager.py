@@ -67,6 +67,8 @@ class QFBNWindowManager(QStackedWidget, QFBNWidget):
         if self.win:
             self.win.resize_title_widgets()  # 防止按钮show或hide之后没有及时更新
 
+        self.notifymanager.update_geometry()
+
     def catch_widget(self, widget: QFBNWidget) -> None:
         """捕获一个窗体"""
         self.caught_widgets.append(widget)

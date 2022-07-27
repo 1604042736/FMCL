@@ -14,6 +14,7 @@ class Desktop(QTableWidget, QFBNWidget):
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
+        self.setWindowTitle("桌面")
         self.row_count = 1
         self.col_count = 1
         self.max_row_count = 8

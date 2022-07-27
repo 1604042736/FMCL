@@ -4,6 +4,7 @@ import QtFBN as g
 from QtFBN.QFBNNotifyManager import QFBNNotifyManager
 from QtFBN.QFBNWindow import QFBNWindow
 from PyQt5.QtCore import QTimer
+from PyQt5.QtGui import QResizeEvent
 
 
 class QFBNWidget(QWidget):
@@ -28,7 +29,7 @@ class QFBNWidget(QWidget):
             # 等待一会儿再试试
             timer = QTimer()
             timer.timeout.connect(lambda: self.notify(title, msg))
-            timer.start(500)
+            timer.start(10)
 
     def show(self, mode: Literal["default", "separate", "original"] = "default") -> None:
         if(mode == "default"
@@ -76,3 +77,8 @@ class QFBNWidget(QWidget):
 
     def widget_to_self(self, w) -> None:
         """对回到自己的widget进行设置"""
+
+    def resizeEvent(self, a0: QResizeEvent) -> None:
+        if "_msgbox" in self.__dict__:
+            self._msgbox.resize(self.width(), self.height())
+        self.notifymanager.update_geometry()

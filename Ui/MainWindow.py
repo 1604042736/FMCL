@@ -68,11 +68,11 @@ class MainWindow(QFBNWindowManager):
                     break
             else:
                 button = QPushButton(self.win.title)
-                button.resize(self.win.title_button_width,
+                button.resize(64,
                               self.win.title_height)
                 button.clicked.connect(self.change_page)
                 button.setText(widget.windowTitle())
-                button.setObjectName("pb_homepage")
+                button.setObjectName("task_button")
                 button.setIcon(widget.windowIcon())
                 button.show()
                 self.win.add_left_widget(button, len(self.task_buttons)+1)

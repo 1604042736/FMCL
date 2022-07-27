@@ -3,12 +3,16 @@ from QtFBN.QFBNWidget import QFBNWidget
 from Ui.Downloader.ui_Minecraft import Ui_Minecraft
 import Globals as g
 from PyQt5.QtWidgets import QComboBox
+from PyQt5.QtGui import QIcon
+import Resources
 
 
 class Minecraft(QFBNWidget, Ui_Minecraft):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
+
+        self.setWindowIcon(QIcon(":/Image/craft_table.png"))
 
         self.set_version()
 
@@ -38,6 +42,6 @@ class Minecraft(QFBNWidget, Ui_Minecraft):
         version = self.cb_minecraft.currentText()
         forge_version = self.cb_forge.currentText()
         fabric_version = self.cb_fabric.currentText()
-        optifine_version=self.cb_optifine.currentText()
+        optifine_version = self.cb_optifine.currentText()
         g.dmgr.add_task(f"下载{name}", Game(
-            name, version, forge_version, fabric_version,optifine_version), "download_version", tuple())
+            name, version, forge_version, fabric_version, optifine_version), "download_version", tuple())

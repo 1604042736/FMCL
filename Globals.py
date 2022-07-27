@@ -124,6 +124,9 @@ QFrame#Dialog{{
     border:1px solid rgb(0,0,0);
     background-color:rgb(255,255,255);
 }}
+QPushButton#task_button{{
+    text-align:left;
+}}
 QGroupBox{{
     font-size: 13px;
     font-weight: bold;

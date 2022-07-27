@@ -12,6 +12,7 @@ class AllFunctions(QTableWidget, QFBNWidget):
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
+        self.setWindowTitle("所有应用")
         self.functions = {
             "下载Minecraft": Minecraft,
             "下载Mod": Mods,
@@ -34,7 +35,7 @@ class AllFunctions(QTableWidget, QFBNWidget):
         self.setDragDropMode(QAbstractItemView.DragDropMode.NoDragDrop)
 
         self.set_functions()
-        self.cellDoubleClicked.connect(self.launch_function)
+        self.cellClicked.connect(self.launch_function)
 
     def set_functions(self):
         self.clear()
@@ -51,8 +52,7 @@ class AllFunctions(QTableWidget, QFBNWidget):
             self.setColumnCount(self.col_count)
             item = QTableWidgetItem()
             item.setText(key)
-            if "icon" in val.__dict__:
-                item.setIcon(qta.icon(val.icon))  # TODO 不是所有的图标都来自qta
+            item.setIcon(val().windowIcon())
             self.setItem(self.row_count-1, j, item)
             j += 1
 

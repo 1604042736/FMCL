@@ -1,7 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QFrame, QPushButton
 import qtawesome as qta
 from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QResizeEvent
 
 
 class QFBNWindowBasic(QWidget):
@@ -108,7 +107,3 @@ class QFBNWindowBasic(QWidget):
 
     def notify(self, title, msg):
         self.target.notify(title, msg)
-
-    def resizeEvent(self, a0: QResizeEvent) -> None:
-        if "_msgbox" in self.__dict__:
-            self._msgbox.resize(self.width(), self.height()-self.title_height)

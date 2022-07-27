@@ -7,8 +7,6 @@ import qtawesome as qta
 
 
 class More(QFBNWidget, Ui_More):
-    icon = "msc.three-bars"
-
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)

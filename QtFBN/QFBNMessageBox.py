@@ -1,7 +1,9 @@
 from PyQt5.QtWidgets import QWidget, QFrame, QLabel
 from PyQt5.QtGui import QResizeEvent
+from QtFBN.QFBNWindow import QFBNWindow
 from QtFBN.ui_Dialog import Ui_Dialog
 from PyQt5.QtCore import pyqtSignal
+from QtFBN.QFBNWindowManager import QFBNWindowManager
 
 
 class QFBNMessageBox(QWidget):
@@ -13,9 +15,14 @@ class QFBNMessageBox(QWidget):
     Ok = pyqtSignal()
 
     def __init__(self, parent, title, msg, custom: QWidget = None):
+        if isinstance(parent, QFBNWindow):
+            parent = parent.target
+            if isinstance(parent, QFBNWindowManager):
+                if parent.currentWidget():
+                    parent = parent.currentWidget()
         super().__init__(parent)
         # 一般情况下parent都是QFBNWindow
-        self.setGeometry(0, 30, parent.width(), parent.height()-30)
+        self.setGeometry(0, 0, parent.width(), parent.height())
         setattr(parent, "_msgbox", self)
 
         self.w_dialog = self.Dialog(self)
