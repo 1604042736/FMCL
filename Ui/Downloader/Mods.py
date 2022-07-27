@@ -24,7 +24,7 @@ class Mods(QFBNWidget, Ui_Mods):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
-        self.setWindowIcon(qta.icon("mdi.puzzle"))
+        self.setWindowIcon(qta.icon("mdi.puzzle-outline"))
 
         self.cb_index.clear()
         self.cb_index.addItems(self.index_map.keys())
