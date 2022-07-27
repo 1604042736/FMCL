@@ -77,7 +77,7 @@ class Launch(CoreBase):
             args += f'-Dos.name="Windows 10" '
             args += f'-Dos.version=10.0 '
 
-        if "arguments" in self.config:  #有些版本的json文件是没有arguments的,比如1.8.9
+        if "arguments" in self.config:  # 有些版本的json文件是没有arguments的,比如1.8.9
             if "-DFabricMcEmu" in self.config['arguments']['jvm'][-1]:
                 # 防止出现"-DFabricMcEmu= net.minecraft.client.main.Main "这样的情况
                 # 这种情况会导致无法加载Fabric
@@ -129,6 +129,7 @@ class Launch(CoreBase):
         args = args.replace('${launcher_version}', '1')
         args = args.replace('${classpath}', f'"{";".join(self.classpath)}"')
 
+        g.logapi.info(args)
         os.popen(args)
 
         self.Finished.emit()

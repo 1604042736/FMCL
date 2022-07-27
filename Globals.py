@@ -27,7 +27,7 @@ class StdLog:
 sys.stdout = sys.stderr = StdLog()
 
 logformat = logging.Formatter(
-    '[%(threadName)s=>%(funcName)s]:[%(asctime)s][%(levelname)s]:%(message)s', '%Y-%m-%d,%H:%M:%S')
+    '[%(asctime)s] [%(levelname)s]: %(message)s', '%Y-%m-%d,%H:%M:%S')
 
 logapi = logging.getLogger()  # 日志接口
 logapi.setLevel(logging.DEBUG)

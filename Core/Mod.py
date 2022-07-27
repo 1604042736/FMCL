@@ -3,6 +3,7 @@ import json
 import requests
 from Core import CoreBase
 from Core.Download import download
+import Globals as g
 
 
 class Mod(CoreBase):
@@ -15,6 +16,7 @@ class Mod(CoreBase):
     def search_mod(self, index="relevance", limit=100) -> list[dict]:
         '''搜索模组'''
         query = self.name
+        g.logapi.info(f"搜索模组:{query}")
         url = f"https://api.modrinth.com/v2/search?query={query}&limit={limit}&index={index}"
         r = requests.get(url)
         result = []

@@ -87,6 +87,8 @@ class Game(CoreBase):
         self.set_default_icon(info)
         json.dump(info, open(f'{self.game_path}/FMCL/config.json', mode='w'))
 
+        g.logapi.info(f"下载信息:{info}")
+
         downloads = [[f'https://bmclapi2.bangbang93.com/version/{self.version}/client', self.game_path + f'\\{self.name}.jar'],
                      [f'https://bmclapi2.bangbang93.com/version/{self.version}/json', self.game_path + f'\\{self.name}.json']]
         if self.forge_version:  # 附带forge

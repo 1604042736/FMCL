@@ -1,6 +1,6 @@
 import os
 import requests
-
+import Globals as g
 from Core import CoreBase
 
 
@@ -19,6 +19,7 @@ class Download(CoreBase):
         """下载"""
         if self.url == '':
             self.Finished.emit()
+        g.logapi.info(f'下载"{self.url}"到"{self.path}')
         with open(self.path, 'wb')as fileobj:
             while True:
                 try:

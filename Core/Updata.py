@@ -5,6 +5,7 @@ from Core import CoreBase
 from PyQt5.QtCore import pyqtSignal
 from Core.Download import download
 from PyQt5.QtWidgets import qApp
+import Globals as g
 
 
 class Updata(CoreBase):
@@ -22,6 +23,7 @@ class Updata(CoreBase):
 
     def check(self):
         """检查"""
+        g.logapi.info("检查更新")
         self.get_info()
 
         if self.info["tag_name"] != self.tag_name:
