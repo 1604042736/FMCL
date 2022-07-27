@@ -1,4 +1,3 @@
-from operator import index
 from Core.Mod import Mod
 from QtFBN.QFBNWidget import QFBNWidget
 from Ui.Downloader.ModInfo import ModInfo
