@@ -6,8 +6,7 @@ from Ui.Downloader.ui_Mods import Ui_Mods
 from PyQt5.QtWidgets import QListWidgetItem
 from PyQt5.QtCore import QSize, pyqtSignal
 import Globals as g
-from PyQt5.QtGui import QIcon
-import Resources
+import qtawesome as qta
 
 
 class Mods(QFBNWidget, Ui_Mods):
@@ -25,7 +24,7 @@ class Mods(QFBNWidget, Ui_Mods):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
-        self.setWindowIcon(QIcon(":/Image/forge.png"))
+        self.setWindowIcon(qta.icon("mdi.puzzle"))
 
         self.cb_index.clear()
         self.cb_index.addItems(self.index_map.keys())

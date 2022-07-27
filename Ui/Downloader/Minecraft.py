@@ -3,8 +3,7 @@ from QtFBN.QFBNWidget import QFBNWidget
 from Ui.Downloader.ui_Minecraft import Ui_Minecraft
 import Globals as g
 from PyQt5.QtWidgets import QComboBox
-from PyQt5.QtGui import QIcon
-import Resources
+import qtawesome as qta
 
 
 class Minecraft(QFBNWidget, Ui_Minecraft):
@@ -12,7 +11,7 @@ class Minecraft(QFBNWidget, Ui_Minecraft):
         super().__init__(parent)
         self.setupUi(self)
 
-        self.setWindowIcon(QIcon(":/Image/craft_table.png"))
+        self.setWindowIcon(qta.icon("mdi.minecraft"))
 
         self.set_version()
 
