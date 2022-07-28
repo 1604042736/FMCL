@@ -9,9 +9,12 @@ from PyQt5.QtWidgets import QApplication, QPushButton
 import qtawesome as qta
 from Ui.DownloadManager.DownloadManager import DownloadManager
 import QtFBN as gg
+from PyQt5.QtGui import QResizeEvent
 
 
 class MainWindow(QFBNWindowManager):
+    TASKBUTTON_WIDTH = 64
+
     def __init__(self) -> None:
         super().__init__()
         self.ignore_widget = [Homepage, DownloadManager, Desktop]
@@ -60,6 +63,7 @@ class MainWindow(QFBNWindowManager):
         self.pb_desktop.clicked.connect(
             lambda: self.setCurrentWidget(self.desktop))
         self.pb_desktop.setObjectName("pb_desktop")
+        self.pb_desktop.setToolTip("显示桌面")
         self.win.add_right_widget(self.pb_desktop)
 
         self.page_map = {
@@ -79,12 +83,13 @@ class MainWindow(QFBNWindowManager):
                     break
             else:
                 button = QPushButton(self.win.title)
-                button.resize(64,
+                button.resize(self.TASKBUTTON_WIDTH,
                               self.win.title_height)
                 button.clicked.connect(self.change_page)
                 button.setText(widget.windowTitle())
                 button.setObjectName("task_button")
                 button.setIcon(widget.windowIcon())
+                button.setToolTip(button.text())
                 button.show()
                 self.win.add_left_widget(button, len(self.task_buttons)+1)
                 self.page_map[button] = widget

@@ -33,6 +33,7 @@ class QFBNWindowManager(QStackedWidget, QFBNWidget):
         self.pb_sepwin.setObjectName('pb_sepwin')
         self.pb_sepwin.setIcon(qta.icon('ph.arrow-square-out-light'))
         self.pb_sepwin.hide()
+        self.pb_sepwin.setToolTip("独立窗口")
         self.win.add_right_widget(self.pb_sepwin)
 
         self.pb_back.clicked.connect(self.go_back)
