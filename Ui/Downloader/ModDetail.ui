@@ -44,22 +44,41 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0">
-       <widget class="QToolBox" name="tb_modfiles">
-        <property name="currentIndex">
-         <number>0</number>
+       <widget class="QScrollArea" name="scrollArea">
+        <property name="widgetResizable">
+         <bool>true</bool>
         </property>
-        <widget class="QWidget" name="page_1">
+        <widget class="QWidget" name="scrollAreaWidgetContents">
          <property name="geometry">
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>962</width>
-           <height>474</height>
+           <width>960</width>
+           <height>494</height>
           </rect>
          </property>
-         <attribute name="label">
-          <string>前置Mod</string>
-         </attribute>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0">
+           <widget class="QToolBox" name="tb_modfiles">
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <widget class="QWidget" name="page_1">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>942</width>
+               <height>450</height>
+              </rect>
+             </property>
+             <attribute name="label">
+              <string>前置Mod</string>
+             </attribute>
+            </widget>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </widget>
       </item>

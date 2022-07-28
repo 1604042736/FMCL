@@ -27,7 +27,6 @@ class ModDetail(QFBNWidget, Ui_ModDetail):
         self.l_describe.setAlignment(Qt.AlignTop)
 
     def set_modfiles(self, files):
-        # TODO 已知bug：文件太多会导致不显示
         if files:
             from Ui.Downloader.ModInfo import ModInfo
             if files[0]["dependencies"]:
