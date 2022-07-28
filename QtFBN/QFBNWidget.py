@@ -35,7 +35,6 @@ class QFBNWidget(QWidget):
         if(mode == "default"
             and g.manager != None
             and self is not g.manager
-            and g.manager.win.isVisible()
            ):  # 有符合条件的manager就让它捕获
             if self.win:
                 self.win.close()

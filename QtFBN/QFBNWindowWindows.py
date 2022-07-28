@@ -36,14 +36,12 @@ class QFBNWindowWindows(QFBNWindowBasic):
 
     def set_windowstyle(self) -> None:
         """设置窗口样式"""
-        self.setWindowFlags(Qt.Window |
-                            Qt.FramelessWindowHint |
-                            Qt.WindowSystemMenuHint |
-                            Qt.WindowMinMaxButtonsHint
-                            )  # 不设置会导致窗口大小不正确
+        self.setWindowFlags(self.windowFlags() |
+                            Qt.FramelessWindowHint)  # 不设置会导致窗口大小不正确
         hwnd = self.winId()
-        SetWindowLong(hwnd, GWL_STYLE, WS_POPUP | WS_CAPTION |
-                      WS_THICKFRAME | WS_MAXIMIZEBOX | WS_MINIMIZEBOX)
+        style = GetWindowLong(hwnd, GWL_STYLE)
+        SetWindowLong(hwnd, GWL_STYLE, style | WS_MAXIMIZEBOX |
+                      WS_THICKFRAME | WS_CAPTION)
 
     def set_title(self) -> None:
         self.pb_close = QPushButton(self.title)
@@ -89,6 +87,7 @@ class QFBNWindowWindows(QFBNWindowBasic):
         font = self.l_title.font()
         fontm = QFontMetrics(font)
         self.l_title.resize(fontm.width(a0), self.title_height)
+        self.wintitle_width = fontm.width(a0)
         self.resize_title_widgets()
         return super().setWindowTitle(a0)
 
@@ -152,7 +151,7 @@ class QFBNWindowWindows(QFBNWindowBasic):
             right = self.width()-self.RIGHT_DISTANCE
             bottom = self.height()-self.BOTTOM_DISTANCE
             if (self.TOP_DISTANCE < yPos < self.title_height+self.y_shift
-                    and self.LEFT_DISTANCE+self.left_width < xPos < right-self.right_width
+                and self.LEFT_DISTANCE+self.left_width < xPos < right-self.right_width
                 ):  # 使标题栏上的按钮可点击
                 return True, HTCAPTION
             if xPos <= self.LEFT_DISTANCE and yPos <= self.TOP_DISTANCE:

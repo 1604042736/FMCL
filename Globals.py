@@ -3,7 +3,9 @@ import threading
 import json
 import logging
 import sys
-from PyQt5.QtWidgets import qApp
+from PyQt5.QtWidgets import qApp, QPushButton
+import QtFBN as g
+import qtawesome as qta
 
 
 class StdLog:
@@ -42,6 +44,7 @@ logapi.addHandler(ch)
 TAG_NAME = "1.3"  # 当前版本号
 
 dmgr = None  # 下载管理
+desktop = None  # 桌面
 
 cur_gamepath = ".minecraft"
 cur_version = ""
@@ -192,3 +195,32 @@ QTableWidget#Desktop{{
 }}
 """
     qApp.setStyleSheet(APP_QSS)
+
+
+def on_any_win_ready(win) -> None:
+    win.pb_dmgr = QPushButton(win.win.title)
+    win.pb_dmgr.resize(win.win.title_button_width,
+                       win.win.title_height)
+    win.pb_dmgr.setObjectName('pb_dmgr')
+    win.pb_dmgr.setIcon(qta.icon('ri.download-2-fill'))
+    win.pb_dmgr.clicked.connect(lambda: dmgr.show())
+    win.pb_dmgr.hide()
+    win.win.add_right_widget(win.pb_dmgr)
+    if dmgr.task_num:  # 只有在有任务的时侯才会显示
+        win.pb_dmgr.show()
+
+    dmgr.NoTask.connect(lambda: notask(win))
+    dmgr.HasTask.connect(lambda: hastask(win))
+
+
+def notask(win):
+    win.pb_dmgr.hide()
+    win.win.resize_title_widgets()
+
+
+def hastask(win):
+    win.pb_dmgr.show()
+    win.win.resize_title_widgets()
+
+
+g.on_any_win_ready = on_any_win_ready

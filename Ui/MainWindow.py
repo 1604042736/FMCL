@@ -1,4 +1,5 @@
 from Core.Updata import Updata
+from QtFBN.QFBNWidget import QFBNWidget
 from QtFBN.QFBNWindowManager import QFBNWindowManager
 from Ui.Desktop.Desktop import Desktop
 from Ui.Homepage.Homepage import Homepage
@@ -7,6 +8,7 @@ from QtFBN.QFBNMessageBox import QFBNMessageBox
 from PyQt5.QtWidgets import QApplication, QPushButton
 import qtawesome as qta
 from Ui.DownloadManager.DownloadManager import DownloadManager
+import QtFBN as gg
 
 
 class MainWindow(QFBNWindowManager):
@@ -17,7 +19,7 @@ class MainWindow(QFBNWindowManager):
         self.updata = Updata(g.TAG_NAME)
         self.updata.HasNewVersion.connect(self.has_updata)
         self.homepage = Homepage()
-        self.desktop = Desktop()
+        self.desktop = g.desktop
         self.task_buttons = []
 
     def ready(self) -> None:
@@ -50,6 +52,15 @@ class MainWindow(QFBNWindowManager):
         self.win.add_left_widget(self.pb_homepage, 0)
 
         self.win.remove_left_widget(self.pb_back)
+
+        self.pb_desktop = QPushButton(self.win.title)
+        self.pb_desktop.resize(
+            self.win.title_button_width, self.win.title_height)
+        self.pb_desktop.setIcon(qta.icon("ph.desktop"))
+        self.pb_desktop.clicked.connect(
+            lambda: self.setCurrentWidget(self.desktop))
+        self.pb_desktop.setObjectName("pb_desktop")
+        self.win.add_right_widget(self.pb_desktop)
 
         self.page_map = {
             self.pb_homepage: self.homepage
@@ -107,4 +118,11 @@ QPushButton:hover{{
     def setCurrentWidget(self, w) -> None:
         if self.indexOf(w) == -1:
             self.addWidget(w)
+        if isinstance(w, QFBNWidget) and w.win != None:
+            w.win.close()
+        try:
+            if QApplication.activeWindow().target is not gg.manager:
+                gg.manager.reshow()
+        except:
+            pass
         return super().setCurrentWidget(w)
