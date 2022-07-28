@@ -19,11 +19,13 @@ class StdLog:
         self.logfile = open("./FMCL/latest.log", mode='w', encoding='utf-8')
 
     def write(self, msg):
-        self.__console__.write(msg)
+        if self.__console__:
+            self.__console__.write(msg)
         self.logfile.write(msg)
 
     def flush(self):
-        self.__console__.flush()
+        if self.__console__:
+            self.__console__.flush()
 
 
 sys.stdout = sys.stderr = StdLog()
