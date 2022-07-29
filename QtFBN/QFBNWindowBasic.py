@@ -48,6 +48,8 @@ class QFBNWindowBasic(QWidget):
 
     def add_right_widget(self, widget: QWidget, index: int = -1, set_icon_size=True) -> None:
         """添加右边的控件"""
+        if widget in self.left_widgets:  # 不添加相同的控件
+            return
         if index < 0:
             index = len(self.right_widgets)+index+1
         self.right_widgets.insert(index, widget)
@@ -65,6 +67,8 @@ class QFBNWindowBasic(QWidget):
 
     def add_left_widget(self, widget: QWidget, index: int = -1, set_icon_size=True) -> None:
         """添加左边的控件"""
+        if widget in self.left_widgets:  # 不添加相同的控件
+            return
         if index < 0:
             index = len(self.left_widgets)+index+1
         self.left_widgets.insert(index, widget)
