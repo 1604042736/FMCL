@@ -33,6 +33,7 @@ class AllFunctions(QTableWidget, QFBNWidget):
 
         self.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
         self.setDragDropMode(QAbstractItemView.DragDropMode.NoDragDrop)
+        self.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 
         self.set_functions()
         self.cellClicked.connect(self.launch_function)

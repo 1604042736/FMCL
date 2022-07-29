@@ -31,6 +31,7 @@ class Desktop(QTableWidget, QFBNWidget):
         self.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
         self.setDragDropMode(QAbstractItemView.DragDropMode.NoDragDrop)
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 
         self.setObjectName("Desktop")
         self.customContextMenuRequested.connect(self.show_menu)
@@ -55,6 +56,7 @@ class Desktop(QTableWidget, QFBNWidget):
             self.setColumnCount(self.col_count)
 
             item = QTableWidgetItem()
+            item.setToolTip(i)
             item.setText(i)
             item.setIcon(QIcon(Game(i).get_info()["icon"]))
             self.setItem(j, self.col_count-1, item)
