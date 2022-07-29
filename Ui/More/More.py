@@ -7,7 +7,7 @@ import qtawesome as qta
 
 
 class More(QFBNWidget, Ui_More):
-    icon_exp = 'qta.icon("msc.three-bars")'
+    icon_exp = 'qta.icon("ph.squares-four-fill")'
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
