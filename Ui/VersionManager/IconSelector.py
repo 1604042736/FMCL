@@ -1,4 +1,5 @@
 from QtFBN.QFBNWidget import QFBNWidget
+from Translate import tr
 from Ui.VersionManager.ui_IconSelector import Ui_IconSelector
 from PyQt5.QtGui import QResizeEvent, QIcon
 from PyQt5.QtWidgets import QTableWidgetItem, QFileDialog
@@ -12,6 +13,11 @@ class IconSelector(QFBNWidget, Ui_IconSelector):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
+        self.setWindowTitle(tr("图标选择"))
+        self.pb_custom.setText(tr("自定义图标"))
+        self.le_custom.setPlaceholderText(tr("这是自定义图标的路径"))
+        self.pb_ok.setText(tr("确定"))
+        self.pb_cancel.setText(tr("取消"))
 
         self.row_count = 1
         self.col_count = 1
@@ -45,7 +51,7 @@ class IconSelector(QFBNWidget, Ui_IconSelector):
             j += 1
 
     def set_custom(self):
-        path = QFileDialog.getOpenFileName(self, '选择图标', ".")[0]
+        path = QFileDialog.getOpenFileName(self, tr('选择图标'), ".")[0]
         if path:
             self.le_custom.setText(path)
 

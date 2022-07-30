@@ -4,6 +4,7 @@ import json
 from Core.Game import Game
 from Core.Mod import Mod
 from QtFBN.QFBNWidget import QFBNWidget
+from Translate import tr
 from Ui.VersionManager.IconSelector import IconSelector
 from Ui.VersionManager.ModItem import ModItem
 from Ui.VersionManager.ui_VersionManager import Ui_VersionManager
@@ -22,6 +23,19 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
     def __init__(self, name, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
+        self.setWindowTitle(tr("版本管理"))
+        self.groupBox.setTitle(tr("基础"))
+        self.label_4.setText(tr("Fabric版本"))
+        self.label_5.setText(tr("Optifine版本"))
+        self.pb_openfoder.setText(tr("打开版本文件夹"))
+        self.label_2.setText(tr("版本"))
+        self.pb_del.setText(tr("删除"))
+        self.pb_reinstall.setText(tr("重新安装"))
+        self.label.setText(tr("名称"))
+        self.label_3.setText(tr("Forge版本"))
+        self.pb_changeicon.setText(tr("更改图标"))
+        self.groupBox_2.setTitle(tr("Mod管理"))
+        self.pb_openmodfoder.setText(tr("打开mod文件夹"))
 
         self.version_path = os.path.join(g.cur_gamepath, "versions")
         self.game_path = os.path.join(self.version_path, name)
@@ -70,12 +84,12 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
             self.GameDeleted.emit()
             self.close(True)
         msgbox = QFBNMessageBox(
-            QApplication.activeWindow(), "删除", "确定删除?")
+            QApplication.activeWindow(), tr("删除"), tr("确定删除")+"?")
         msgbox.Ok.connect(ok)
         msgbox.show()
 
     def reinstall_game(self):
-        g.dmgr.add_task(f"下载{self.name}", Game(
+        g.dmgr.add_task(f"{tr('下载')} {self.name}", Game(
             self.name, self.version, self.forge_version, self.fabric_version, self.optifine_version), "download_version", tuple())
 
     def rename_game(self):
@@ -86,7 +100,7 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
 
     def set_mods(self):
         if not (self.forge_version or self.fabric_version):
-            self.notify("Mod", "该版本不可用Mod")
+            self.notify("Mod", tr("该版本不可用Mod"))
             return
         self.lw_mods.clear()
         for i in Mod(path=self.mods_path).get_mods():

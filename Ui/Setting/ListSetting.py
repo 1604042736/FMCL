@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QComboBox, QPushButton
 import qtawesome as qta
 import Globals as g
 from QtFBN.QFBNMessageBox import QFBNMessageBox
+from Translate import tr
 
 
 class ListSetting(QWidget):
@@ -39,7 +40,7 @@ class ListSetting(QWidget):
 
         self.setLayout(self.hbox)
 
-    def save(self) -> tuple:
+    def save(self):
         l = self.get_all_text()
         # 将cur放在l的最前面
         cur = self.cb_val.currentText()
@@ -59,11 +60,11 @@ class ListSetting(QWidget):
     def add(self):
         text = ""
         if self.add_type == "input":
-            text, ok = QInputDialog.getText(self, "添加", "输入要添加的内容")
+            text, ok = QInputDialog.getText(self, tr("添加"), tr("输入要添加的内容"))
             if not ok:
                 text = ""
         elif self.add_type == "file":
-            text = QFileDialog.getExistingDirectory(self, "选择文件夹", "./")
+            text = QFileDialog.getExistingDirectory(self, tr("选择文件夹"), "./")
         if text != "":
             self.cb_val.addItem(text)
             self.cb_val.setCurrentText(text)
@@ -71,6 +72,7 @@ class ListSetting(QWidget):
     def delete(self):
         def ok():
             self.cb_val.removeItem(self.cb_val.currentIndex())
-        msgbox = QFBNMessageBox(QApplication.activeWindow(), "删除", "确认删除?")
+        msgbox = QFBNMessageBox(
+            QApplication.activeWindow(), tr("删除"), tr("确认删除")+"?")
         msgbox.Ok.connect(ok)
         msgbox.show()

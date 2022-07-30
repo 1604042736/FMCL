@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QProgressBar, QPushButton
 from PyQt5.QtCore import pyqtSignal, QTimer
 from Core import CoreBase
+from Translate import tr
 
 from Ui.DownloadManager.Task import Task
 
@@ -27,7 +28,7 @@ class TaskInfo(QWidget):
         self.pbr_progress.setValue(0)
 
         self.pb_cancel = QPushButton(self)
-        self.pb_cancel.setText("取消")
+        self.pb_cancel.setText(tr("取消"))
         self.pb_cancel.clicked.connect(lambda: self.Finished.emit(self.id))
 
         self.hbox.addWidget(self.l_name)

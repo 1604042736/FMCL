@@ -1,4 +1,5 @@
 from QtFBN.QFBNWidget import QFBNWidget
+from Translate import tr
 from Ui.Downloader.Minecraft import Minecraft
 from Ui.Downloader.Mods import Mods
 from Ui.More.More import More
@@ -12,11 +13,11 @@ class AllFunctions(QTableWidget, QFBNWidget):
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        self.setWindowTitle("所有应用")
+        self.setWindowTitle(tr("所有应用"))
         self.functions = {
-            "下载Minecraft": Minecraft,
-            "下载Mod": Mods,
-            "更多": More
+            tr("下载Minecraft"): Minecraft,
+            tr("下载Mod"): Mods,
+            tr("更多"): More
         }
         self.row_count = 1
         self.col_count = 1

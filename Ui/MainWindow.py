@@ -1,6 +1,7 @@
 from Core.Updata import Updata
 from QtFBN.QFBNWidget import QFBNWidget
 from QtFBN.QFBNWindowManager import QFBNWindowManager
+from Translate import tr
 from Ui.Desktop.Desktop import Desktop
 from Ui.Homepage.Homepage import Homepage
 import Globals as g
@@ -39,10 +40,10 @@ class MainWindow(QFBNWindowManager):
 
     def has_updata(self, new_version):
         def ok():
-            g.dmgr.add_task(f"安装新版本{new_version}",
+            g.dmgr.add_task(f"{tr('安装新版本')} {new_version}",
                             self.updata, "updata", tuple())
         msgbox = QFBNMessageBox(
-            QApplication.activeWindow(), f"有新版本{new_version}", "确定更新吗?")
+            QApplication.activeWindow(), f"{tr('有新版本')} {new_version}", tr("确定更新吗")+"?")
         msgbox.Ok.connect(ok)
         msgbox.show()
 
@@ -65,7 +66,7 @@ class MainWindow(QFBNWindowManager):
         self.pb_desktop.clicked.connect(
             lambda: self.setCurrentWidget(self.desktop))
         self.pb_desktop.setObjectName("pb_desktop")
-        self.pb_desktop.setToolTip("显示桌面")
+        self.pb_desktop.setToolTip(tr("显示桌面"))
         self.win.add_right_widget(self.pb_desktop)
 
         self.page_map = {

@@ -1,5 +1,6 @@
 from Core.Mod import Mod
 from QtFBN.QFBNWidget import QFBNWidget
+from Translate import tr
 from Ui.Downloader.ModInfo import ModInfo
 from Ui.Downloader.ui_Mods import Ui_Mods
 from PyQt5.QtWidgets import QListWidgetItem
@@ -14,12 +15,12 @@ class Mods(QFBNWidget, Ui_Mods):
     # 模组搜索索引
     index_map = {
         "": "relevance",
-        "下载量": "downloads",
-        "热度": "follows",
-        "创建日期": "newest",
-        "更新日期": "updated"
+        tr("下载量"): "downloads",
+        tr("热度"): "follows",
+        tr("创建日期"): "newest",
+        tr("更新日期"): "updated"
     }
-    icon_exp='qta.icon("mdi.puzzle-outline")'
+    icon_exp = 'qta.icon("mdi.puzzle-outline")'
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)

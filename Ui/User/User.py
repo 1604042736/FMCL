@@ -1,4 +1,5 @@
 from QtFBN.QFBNWidget import QFBNWidget
+from Translate import tr
 from Ui.User.NewUser import NewUser
 from Ui.User.UserInfo import UserInfo
 from Ui.User.ui_User import Ui_User
@@ -15,6 +16,7 @@ class User(QFBNWidget, Ui_User):
     def __init__(self, connection=None, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
+        self.setWindowTitle(tr("用户"))
         self.setWindowIcon(qta.icon("ph.user-circle"))
         if connection:
             self.CurUserChanged.connect(connection)
@@ -61,7 +63,7 @@ class User(QFBNWidget, Ui_User):
             self.set_users()
             self.CurUserChanged.emit()
         msgbox = QFBNMessageBox(
-            QApplication.activeWindow(), "删除", "确定删除?")
+            QApplication.activeWindow(), tr("删除"), tr("确认删除")+"?")
         msgbox.Ok.connect(ok)
         msgbox.show()
 

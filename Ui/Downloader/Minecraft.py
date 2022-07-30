@@ -4,6 +4,7 @@ from Ui.Downloader.ui_Minecraft import Ui_Minecraft
 import Globals as g
 from PyQt5.QtWidgets import QComboBox
 import qtawesome as qta
+from Translate import tr
 
 
 class Minecraft(QFBNWidget, Ui_Minecraft):
@@ -44,5 +45,5 @@ class Minecraft(QFBNWidget, Ui_Minecraft):
         forge_version = self.cb_forge.currentText()
         fabric_version = self.cb_fabric.currentText()
         optifine_version = self.cb_optifine.currentText()
-        g.dmgr.add_task(f"下载{name}", Game(
+        g.dmgr.add_task(tr("下载")+name, Game(
             name, version, forge_version, fabric_version, optifine_version), "download_version", tuple())

@@ -1,7 +1,9 @@
 from QtFBN.QFBNWidget import QFBNWidget
+from Translate import tr, all_languages
 from Ui.Setting.ColorSetting import ColorSetting
 from Ui.Setting.IntSetting import IntSetting
 from Ui.Setting.ListSetting import ListSetting
+from Ui.Setting.SelectSetting import SelectSetting
 from Ui.Setting.StrSetting import StrSetting
 from Ui.Setting.ui_Setting import Ui_Setting
 import Globals as g
@@ -14,20 +16,22 @@ class Setting(QFBNWidget, Ui_Setting):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
+        self.setWindowTitle(tr("设置"))
         self.setWindowIcon(qta.icon("ri.settings-5-line"))
         self.load_settings()
 
     def load_settings(self):
         self.lw_settings.clear()
         config = {
-            "游戏路径": [g.all_gamepath, "all_gamepath"],
-            "游戏窗口宽度": [g.width, "width"],
-            "游戏窗口高度": [g.height, "height"],
-            "最大内存": [g.maxmem, "maxmem"],
-            "最小内存": [g.minmem, "minmem"],
-            "Java路径": [g.java_path, "java_path"],
-            "背景图片": [g.background_image, "background_image"],
-            "主题": [g.theme, "theme"]
+            tr("游戏路径"): [g.all_gamepath, "all_gamepath"],
+            tr("游戏窗口宽度"): [g.width, "width"],
+            tr("游戏窗口高度"): [g.height, "height"],
+            tr("最大内存"): [g.maxmem, "maxmem"],
+            tr("最小内存"): [g.minmem, "minmem"],
+            tr("Java路径"): [g.java_path, "java_path"],
+            tr("背景图片"): [g.background_image, "background_image"],
+            tr("主题"): [g.theme, "theme"],
+            tr("所有语言"): [all_languages, "language"]
         }
         for key, val in config.items():
             item = QListWidgetItem()
@@ -41,6 +45,8 @@ class Setting(QFBNWidget, Ui_Setting):
                     val[1], key, val[0], "cur_gamepath", "file")
             elif isinstance(val[0], int):
                 widget = IntSetting(val[1], key, val[0])
+            elif isinstance(val[0], tuple):
+                widget = SelectSetting(val[1], key, val[0])
             else:
                 continue
 

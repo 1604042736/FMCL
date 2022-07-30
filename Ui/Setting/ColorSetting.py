@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QPushButton, QColorDialog
 import Globals as g
+from Translate import tr
 
 
 class ColorSetting(QWidget):
@@ -18,7 +19,7 @@ class ColorSetting(QWidget):
         self.l_color.setStyleSheet(f"background-color:{self.val}")
 
         self.pb_change = QPushButton(self)
-        self.pb_change.setText("更改")
+        self.pb_change.setText(tr("更改"))
         self.pb_change.clicked.connect(self.save)
 
         self.hbox.addWidget(self.l_name)

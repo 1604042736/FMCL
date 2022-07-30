@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QTableWidgetItem, QMenu, QAction, QTableWidget, QAbs
 from PyQt5.QtGui import QCursor, QIcon, QResizeEvent
 from Ui.VersionManager.VersionManager import VersionManager
 from PyQt5.QtCore import Qt
+from Translate import tr
 
 
 class Desktop(QTableWidget, QFBNWidget):
@@ -14,7 +15,7 @@ class Desktop(QTableWidget, QFBNWidget):
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        self.setWindowTitle("桌面")
+        self.setWindowTitle(tr("桌面"))
         self.row_count = 1
         self.col_count = 1
         self.max_row_count = 8
@@ -67,9 +68,9 @@ class Desktop(QTableWidget, QFBNWidget):
         if item:
             text = item.text()
             menu = QMenu(self)
-            a_launch = QAction(f'启动"{text}"', self)
+            a_launch = QAction(tr("启动")+f'"{text}"', self)
             a_launch.triggered.connect(lambda: self.launch_game(text))
-            a_manage = QAction(f'管理"{text}"', self)
+            a_manage = QAction(tr("管理")+f'"{text}"', self)
             a_manage.triggered.connect(
                 lambda: self.open_version_manager(text))
             menu.addAction(a_launch)
@@ -77,7 +78,7 @@ class Desktop(QTableWidget, QFBNWidget):
             menu.exec_(QCursor.pos())
 
     def launch_game(self, version):
-        g.dmgr.add_task(f"启动{version}", Launch(
+        g.dmgr.add_task(tr("启动")+version, Launch(
             version), "launch", (g.java_path,
                                  g.cur_user["name"],
                                  g.width,

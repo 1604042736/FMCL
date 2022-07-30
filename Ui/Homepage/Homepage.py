@@ -1,4 +1,5 @@
 from QtFBN.QFBNWidget import QFBNWidget
+from Translate import tr
 from Ui.Homepage.AllFunctions import AllFunctions
 from Ui.Homepage.ui_Homepage import Ui_Homepage
 from PyQt5.QtGui import QResizeEvent
@@ -20,11 +21,12 @@ class Homepage(QFBNWidget, Ui_Homepage):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
+        self.setWindowTitle(tr("主页"))
 
         self.panel_buttons = [[self.pb_detail, "top"],
-                              [self.pb_allfunc, "top", "所有应用"],
-                              [self.pb_setting, "bottom", "设置"],
-                              [self.pb_user, "bottom", "未选择用户"]]  # 面板上的按钮
+                              [self.pb_allfunc, "top", tr("所有应用")],
+                              [self.pb_setting, "bottom", tr("设置")],
+                              [self.pb_user, "bottom", tr("未选择用户")]]  # 面板上的按钮
         if g.cur_user:
             self.panel_buttons[self.PB_USER_INDEX][2] = g.cur_user["name"]
 
@@ -104,4 +106,4 @@ class Homepage(QFBNWidget, Ui_Homepage):
         if g.cur_user:
             self.panel_buttons[self.PB_USER_INDEX][2] = g.cur_user["name"]
         else:
-            self.panel_buttons[self.PB_USER_INDEX][2] = "未选择用户"
+            self.panel_buttons[self.PB_USER_INDEX][2] = tr("未选择用户")

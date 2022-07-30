@@ -43,7 +43,7 @@ ch.setFormatter(logformat)
 logapi.addHandler(ch)
 
 
-TAG_NAME = "1.3.2"  # 当前版本号
+TAG_NAME = "1.4"  # 当前版本号
 
 dmgr = None  # 下载管理
 desktop = None  # 桌面
@@ -69,6 +69,7 @@ maxmem = 1024
 minmem = 256
 background_image = ""
 theme = "rgba(255,255,255,255)"
+language = "Chinese"
 
 try:
     config = json.load(open("FMCL/config.json", encoding="utf-8"))
@@ -85,6 +86,7 @@ try:
     minmem = int(config["minmem"])
     background_image = config["background_image"]
     theme = config["theme"]
+    language = config["language"]
 except Exception as e:
     print(e)
 
@@ -114,7 +116,8 @@ def save():
         "maxmem": maxmem,
         "minmem": minmem,
         "background_image": background_image,
-        "theme": theme
+        "theme": theme,
+        "language": language
     }
     if cur_user in users:
         config["cur_user_index"] = users.index(cur_user)

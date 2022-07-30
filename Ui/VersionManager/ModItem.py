@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QHBoxLayout, QApplicat
 from PyQt5.QtCore import pyqtSignal
 from QtFBN.QFBNMessageBox import QFBNMessageBox
 from Core.Mod import Mod
+from Translate import tr
 
 
 class ModItem(QWidget):
@@ -21,13 +22,13 @@ class ModItem(QWidget):
             pass
 
         self.pb_edable = QPushButton(self)
-        self.pb_edable.setText("禁用")
+        self.pb_edable.setText(tr("禁用"))
         self.pb_edable.clicked.connect(self.endisable_mod)
         if "disabled" in self.name:
-            self.pb_edable.setText("启用")
+            self.pb_edable.setText(tr("启用"))
 
         self.pb_del = QPushButton(self)
-        self.pb_del.setText("删除")
+        self.pb_del.setText(tr("删除"))
         self.pb_del.clicked.connect(self.del_mod)
 
         self.hbox.addWidget(self.l_name)
@@ -39,9 +40,9 @@ class ModItem(QWidget):
     def endisable_mod(self):
         result, new_name = Mod(name=self.name, path=self.path).endisable_mod()
         if result == "disabled":
-            self.pb_edable.setText("启用")
+            self.pb_edable.setText(tr("启用"))
         else:
-            self.pb_edable.setText("禁用")
+            self.pb_edable.setText(tr("禁用"))
         self.ModEnDisAble.emit(self.name, new_name)
         self.name = new_name
 
@@ -50,6 +51,6 @@ class ModItem(QWidget):
             Mod(name=self.name, path=self.path).del_mod()
             self.ModDeleted.emit(self.name)
         msgbox = QFBNMessageBox(
-            QApplication.activeWindow(), "删除", "确定删除?")
+            QApplication.activeWindow(), tr("删除"), tr("确定删除")+"?")
         msgbox.Ok.connect(ok)
         msgbox.show()

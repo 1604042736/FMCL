@@ -1,4 +1,5 @@
 from QtFBN.QFBNWidget import QFBNWidget
+from Translate import tr
 from Ui.Downloader.ModFileInfo import ModFileInfo
 from Ui.Downloader.ui_ModDetail import Ui_ModDetail
 from PyQt5.QtCore import Qt, pyqtSignal
@@ -36,7 +37,7 @@ class ModDetail(QFBNWidget, Ui_ModDetail):
                 for i in dependencies:
                     vbox.addWidget(ModInfo(i, True))
                 self.tb_modfiles.removeItem(0)
-                self.tb_modfiles.addItem(gb, "前置Mod")
+                self.tb_modfiles.addItem(gb, tr("前置Mod"))
         self.version_groups = {}
         for i in files:
             if i["game_version"] not in self.version_groups:
