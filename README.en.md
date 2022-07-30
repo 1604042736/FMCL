@@ -1,30 +1,45 @@
 # FMCL
+
 ![](https://img.shields.io/github/languages/code-size/1604042736/FMCL)
+
 ## Introduction
+
 `FMCL`(`Functional Minecraft Launcher`) is a Minecraft Launcher
+
 ## Support Systems
+
 - `Windows`
 
 We will support more systems in the future
+
 ## Project Usage
+
 First install required modules
+
 ```
 pip install -r requirements.txt
 ```
+
 Then run `Main.py` directly
+
 ## Note
+
 - Non `Windows`users do not need to install`win32gui`和`pywin32`
+
 ## APP Functions
+
 - Download and run Minecraft
 - Download,install and run Minecraft with `Forge`
 - Download,install and run Minecraft with `Fabric`
 - Download,install and run Minecraft with `Optifine`
 - Manage versions
-- (Only)Support offline login 
+- (Only)Support offline login
 - Support updata
 - Support Mods' search and download
 - Support change theme color
+
 ## Project Structure
+
 ```
 Main.py                     ->Main program
 Globals.py                  ->Store globals variables
@@ -46,6 +61,8 @@ Resources                   ->Save resources
 Scripts                     ->Some scripts
     IconMaker.py            ->Make icon
     ReleaseBuilder.py       ->Build a release version
+Translate                   ->Translate
+    English.py              ->English
 Ui                          ->UI
     Desktop                 ->Desktop Ui
         ...
