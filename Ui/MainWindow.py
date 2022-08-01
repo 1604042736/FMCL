@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import QApplication, QPushButton, QMenu, QAction
 import qtawesome as qta
 from Ui.DownloadManager.DownloadManager import DownloadManager
 import QtFBN as gg
-from PyQt5.QtGui import QResizeEvent
+from PyQt5.QtGui import QResizeEvent, QIcon
 from PyQt5.QtCore import QPoint
 
 
@@ -25,7 +25,7 @@ class MainWindow(QFBNWindowManager):
         self.updata = Updata(g.TAG_NAME)
         self.updata.HasNewVersion.connect(self.has_updata)
         self.homepage = Homepage()
-        self.desktop = g.desktop
+        self.desktop = Desktop()
         self.task_buttons = []
 
     def ready(self) -> None:
@@ -52,7 +52,7 @@ class MainWindow(QFBNWindowManager):
         self.pb_homepage = QPushButton(self.win.title)
         self.pb_homepage.resize(
             self.win.title_button_width, self.win.title_height)
-        self.pb_homepage.setIcon(qta.icon("fa.home"))
+        self.pb_homepage.setIcon(QIcon(":/Image/icon.png"))
         self.pb_homepage.clicked.connect(self.change_page)
         self.pb_homepage.setObjectName("pb_homepage")
         self.win.add_left_widget(self.pb_homepage, 0)
@@ -87,8 +87,8 @@ class MainWindow(QFBNWindowManager):
             action = QAction(self.task_buttons[i].text(), self.win)
             action.triggered.connect(
                 lambda _, button=self.task_buttons[i]: self.change_page(sender=button))
+            action.setIcon(self.page_map[self.task_buttons[i]].windowIcon())
             menu.addAction(action)
-        g.logapi.debug(f"{self.more_button.pos()=}")
         menu.exec_(QPoint(self.win.x()+self.more_button.x(),
                    self.win.y()+self.more_button.y()+self.win.title_height))
 
@@ -169,8 +169,6 @@ QPushButton:hover{{
         right_width = self.win.right_width
         wintitle_width = self.win.wintitle_width
         width = self.win.width()
-        g.logapi.debug(
-            f"{width=},{right_width=},{wintitle_width=},{self.MOREBUTTON_WIDTH=},{self.TASKBUTTON_WIDTH=},{left_width=}")
         self.exceed_index = []
         for i, w in enumerate(self.task_buttons):
             left_width += w.width()
@@ -178,7 +176,6 @@ QPushButton:hover{{
             if left_width >= width-right_width-wintitle_width-self.MOREBUTTON_WIDTH:
                 self.exceed_index.append(i)
                 w.hide()
-        g.logapi.debug(f"超出部分索引:{self.exceed_index}")
         if self.exceed_index:
             self.more_button.show()
             self.win.add_left_widget(self.more_button)

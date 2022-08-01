@@ -24,7 +24,6 @@ def main():
         pass
 
     g.dmgr = DownloadManager()
-    g.desktop = Desktop()
 
     mainwindow = MainWindow()
     mainwindow.show(True)

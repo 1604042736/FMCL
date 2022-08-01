@@ -14,6 +14,7 @@ class AllFunctions(QTableWidget, QFBNWidget):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setWindowTitle(tr("所有应用"))
+        self.setWindowIcon(qta.icon("mdi.format-list-checkbox"))
         self.functions = {
             tr("下载Minecraft"): Minecraft,
             tr("下载Mod"): Mods,

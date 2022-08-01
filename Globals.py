@@ -43,10 +43,9 @@ ch.setFormatter(logformat)
 logapi.addHandler(ch)
 
 
-TAG_NAME = "1.4"  # 当前版本号
+TAG_NAME = "1.5"  # 当前版本号
 
 dmgr = None  # 下载管理
-desktop = None  # 桌面
 
 cur_gamepath = ".minecraft"
 cur_version = ""

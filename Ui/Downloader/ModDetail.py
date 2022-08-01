@@ -6,6 +6,7 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import QGroupBox, QVBoxLayout
 from Core.Mod import Mod
 import Globals as g
+import qtawesome as qta
 
 
 class ModDetail(QFBNWidget, Ui_ModDetail):
@@ -14,6 +15,8 @@ class ModDetail(QFBNWidget, Ui_ModDetail):
     def __init__(self, mod_info, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
+        self.setWindowTitle(tr("模组细节")+f":{mod_info['title']}")
+        self.setWindowIcon(qta.icon("mdi.details"))
         self.mod_info = mod_info
 
         self._ModFilesOut.connect(self.set_modfiles)

@@ -14,6 +14,7 @@ from PyQt5.QtCore import pyqtSignal, QSize
 from Core.Game import Game
 from QtFBN.QFBNMessageBox import QFBNMessageBox
 from PyQt5.QtGui import QPixmap
+import qtawesome as qta
 
 
 class VersionManager(QFBNWidget, Ui_VersionManager):
@@ -23,7 +24,8 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
     def __init__(self, name, parent=None) -> None:
         super().__init__(parent)
         self.setupUi(self)
-        self.setWindowTitle(tr("版本管理"))
+        self.setWindowIcon(qta.icon("msc.versions"))
+        self.setWindowTitle(tr("版本管理")+f':{name}')
         self.groupBox.setTitle(tr("基础"))
         self.label_4.setText(tr("Fabric版本"))
         self.label_5.setText(tr("Optifine版本"))

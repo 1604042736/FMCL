@@ -133,15 +133,28 @@
       <string>Mod管理</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-      <item row="0" column="0">
-       <widget class="QListWidget" name="lw_mods"/>
-      </item>
-      <item row="1" column="0">
+      <item row="1" column="1">
        <widget class="QPushButton" name="pb_openmodfoder">
         <property name="text">
          <string>打开mod文件夹</string>
         </property>
        </widget>
+      </item>
+      <item row="1" column="0">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QListWidget" name="lw_mods"/>
       </item>
      </layout>
     </widget>

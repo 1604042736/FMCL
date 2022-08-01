@@ -8,6 +8,7 @@ from PyQt5.QtGui import QCursor, QIcon, QResizeEvent
 from Ui.VersionManager.VersionManager import VersionManager
 from PyQt5.QtCore import Qt
 from Translate import tr
+import qtawesome as qta
 
 
 class Desktop(QTableWidget, QFBNWidget):
@@ -70,9 +71,11 @@ class Desktop(QTableWidget, QFBNWidget):
             menu = QMenu(self)
             a_launch = QAction(tr("启动")+f'"{text}"', self)
             a_launch.triggered.connect(lambda: self.launch_game(text))
+            a_launch.setIcon(qta.icon("fa.power-off"))
             a_manage = QAction(tr("管理")+f'"{text}"', self)
             a_manage.triggered.connect(
                 lambda: self.open_version_manager(text))
+            a_manage.setIcon(qta.icon("msc.versions"))
             menu.addAction(a_launch)
             menu.addAction(a_manage)
             menu.exec_(QCursor.pos())

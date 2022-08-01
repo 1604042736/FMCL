@@ -5,9 +5,8 @@ from PyQt5.QtGui import QResizeEvent, QIcon
 from PyQt5.QtWidgets import QTableWidgetItem, QFileDialog
 from PyQt5.QtCore import pyqtSignal
 
-
 class IconSelector(QFBNWidget, Ui_IconSelector):
-    UNIT_WIDTH = 64
+    UNIT_WIDTH = 80
     Selected = pyqtSignal(str)
 
     def __init__(self, parent=None) -> None:
