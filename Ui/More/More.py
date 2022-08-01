@@ -1,10 +1,13 @@
 import webbrowser
+from Core.Update import Update
+from QtFBN.QFBNMessageBox import QFBNMessageBox
 from QtFBN.QFBNWidget import QFBNWidget
 from Translate import tr
 from Ui.More.ui_More import Ui_More
 from PyQt5.QtCore import pyqtSlot
 import Globals as g
 import qtawesome as qta
+from PyQt5.QtWidgets import QApplication
 
 
 class More(QFBNWidget, Ui_More):
@@ -38,3 +41,28 @@ class More(QFBNWidget, Ui_More):
     @pyqtSlot(bool)
     def on_pb_openhmclurl_clicked(self, _):
         webbrowser.open("https://github.com/huanghongxun/HMCL")
+
+    @pyqtSlot(bool)
+    def on_pb_checkupdate_clicked(self, _):
+        self.update_ = Update(g.TAG_NAME)
+        self.update_.HasNewVersion.connect(self.has_update)
+        self.update_.NoNewVersion.connect(self.no_update)
+        self.check_update()
+
+    @g.run_as_thread
+    def check_update(self):
+        self.update_.check()
+
+    def has_update(self, new_version):
+        def ok():
+            g.dmgr.add_task(f"{tr('安装新版本')} {new_version}",
+                            self.update_, "update", tuple())
+        msgbox = QFBNMessageBox(
+            QApplication.activeWindow(), f"{tr('有新版本')} {new_version}", tr("确定更新吗")+"?")
+        msgbox.Ok.connect(ok)
+        msgbox.show()
+
+    def no_update(self):
+        msgbox = QFBNMessageBox(
+            QApplication.activeWindow(), tr('没有新版本'), tr("这是最新版本"))
+        msgbox.show()

@@ -8,7 +8,7 @@ translate = {
     "下载量": "downloads",
     "热度": "hot",
     "创建日期": "create",
-    "更新日期": "updata",
+    "更新日期": "update",
     "任务结束": "Task finished",
     "错误": "Error",
     "取消": "Cancel",
@@ -38,7 +38,7 @@ translate = {
     "该版本不可用Mod": "This version is not available Mod",
     "安装新版本": "Install new version",
     "有新版本": "Have new version",
-    "确定更新吗": "Confierm updata",
+    "确定更新吗": "Confierm update",
     "显示桌面": "Show desktop",
     "下载管理": "Download manage",
     "主页": "Homepage",
@@ -69,5 +69,7 @@ translate = {
     "打开网址": "Open website",
     "bangbang93: 提供镜像源": "bangbang93: provide image source",
     "huanghongxun: 提供技术帮助(HMCL)": "huanghongxun: provide technical assistance (HMCL)",
-    "模组细节": "Mod detail"
+    "模组细节": "Mod detail",
+    "没有新版本": "No new version",
+    "这是最新版本": "This is the latest version"
 }
