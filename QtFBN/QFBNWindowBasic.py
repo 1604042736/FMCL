@@ -86,24 +86,28 @@ class QFBNWindowBasic(QWidget):
 
     def set_title(self) -> None:
         """设置标题栏"""
+        self.pb_backtomanager = QPushButton(self.title)
+        self.pb_backtomanager.resize(
+            self.title_button_width, self.title_height)
+        self.pb_backtomanager.setObjectName('pb_backtomanager')
+        self.pb_backtomanager.setIcon(qta.icon('msc.reply'))
+        self.pb_backtomanager.setToolTip("回到主窗口")
         if g.manager != None:
-            self.pb_backtomanager = QPushButton(self.title)
-            self.pb_backtomanager.resize(
-                self.title_button_width, self.title_height)
-            self.pb_backtomanager.setObjectName('pb_backtomanager')
-            self.pb_backtomanager.setIcon(qta.icon('msc.reply'))
-            self.pb_backtomanager.setToolTip("回到主窗口")
             self.add_right_widget(self.pb_backtomanager)
+        else:
+            self.pb_backtomanager.hide()
 
+        self.pb_home = QPushButton(self.title)
+        self.pb_home.resize(self.title_button_width,
+                            self.title_height)
+        self.pb_home.setObjectName('pb_home')
+        self.pb_home.setIcon(qta.icon('msc.window'))
+        self.pb_home.clicked.connect(lambda: g.manager.reshow())
+        self.pb_home.setToolTip("显示主窗口")
         if self.target is not g.manager and g.manager != None:
-            self.pb_home = QPushButton(self.title)
-            self.pb_home.resize(self.title_button_width,
-                                self.title_height)
-            self.pb_home.setObjectName('pb_home')
-            self.pb_home.setIcon(qta.icon('msc.window'))
-            self.pb_home.clicked.connect(lambda: g.manager.reshow())
-            self.pb_home.setToolTip("显示主窗口")
             self.add_right_widget(self.pb_home)
+        else:
+            self.pb_home.hide()
 
         self.title.raise_()
 
