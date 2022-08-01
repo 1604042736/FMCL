@@ -8,8 +8,9 @@ from PyQt5.QtWidgets import qApp
 import Globals as g
 
 
-class Updata(CoreBase):
+class Update(CoreBase):
     HasNewVersion = pyqtSignal(str)
+    NoNewVersion = pyqtSignal()
 
     def __init__(self, tag_name) -> None:
         super().__init__()
@@ -28,8 +29,10 @@ class Updata(CoreBase):
 
         if self.info["tag_name"] != self.tag_name:
             self.HasNewVersion.emit(self.info["tag_name"])
+        else:
+            self.NoNewVersion.emit()
 
-    def updata(self):
+    def update(self):
         """更新"""
         self.get_info()
 

@@ -46,7 +46,7 @@ class TaskInfo(QWidget):
 
         # 防止界面卡死
         self.timer = QTimer(self)
-        self.timer.timeout.connect(self.updata_progress)
+        self.timer.timeout.connect(self.update_progress)
         self.timer.start(500)
 
     def start(self):
@@ -55,7 +55,7 @@ class TaskInfo(QWidget):
     def progress(self, cur, total):
         self.cur_progress = (cur, total)
 
-    def updata_progress(self):
+    def update_progress(self):
         try:
             cur, total = self.cur_progress
             self.pbr_progress.setValue(int(cur/total*100))

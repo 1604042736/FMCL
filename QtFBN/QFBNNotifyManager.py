@@ -16,7 +16,7 @@ class QFBNNotifyManager(QWidget):
         self.notices: list[QLabel] = []  # 所有的通知
         self.notice_timers: list[tuple[int, QLabel]] = []
 
-        self.timer_updata = self.startTimer(self.wait_time)
+        self.timer_update = self.startTimer(self.wait_time)
 
     def notify(self, title, msg):
         """新通知"""
@@ -57,7 +57,7 @@ class QFBNNotifyManager(QWidget):
         self.raise_()
 
     def timerEvent(self, a0: QTimerEvent) -> None:
-        if a0.timerId() == self.timer_updata:
+        if a0.timerId() == self.timer_update:
             self.update_geometry()
         else:
             for i in self.notice_timers:

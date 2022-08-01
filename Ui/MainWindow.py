@@ -1,4 +1,4 @@
-from Core.Updata import Updata
+from Core.Update import Update
 from QtFBN.QFBNWidget import QFBNWidget
 from QtFBN.QFBNWindowManager import QFBNWindowManager
 from Translate import tr
@@ -22,8 +22,8 @@ class MainWindow(QFBNWindowManager):
         super().__init__()
         self.ignore_widget = [Homepage, DownloadManager, Desktop]
         self.setWindowTitle("Functional Minecraft Launcher")
-        self.updata = Updata(g.TAG_NAME)
-        self.updata.HasNewVersion.connect(self.has_updata)
+        self.update_ = Update(g.TAG_NAME)
+        self.update_.HasNewVersion.connect(self.has_update)
         self.homepage = Homepage()
         self.desktop = Desktop()
         self.task_buttons = []
@@ -32,16 +32,16 @@ class MainWindow(QFBNWindowManager):
         self.desktop.show()
         self.homepage.show()
         self.setCurrentWidget(self.desktop)
-        self.check_updata()
+        self.check_update()
 
     @g.run_as_thread
-    def check_updata(self):
-        self.updata.check()
+    def check_update(self):
+        self.update_.check()
 
-    def has_updata(self, new_version):
+    def has_update(self, new_version):
         def ok():
             g.dmgr.add_task(f"{tr('安装新版本')} {new_version}",
-                            self.updata, "updata", tuple())
+                            self.update_, "update", tuple())
         msgbox = QFBNMessageBox(
             QApplication.activeWindow(), f"{tr('有新版本')} {new_version}", tr("确定更新吗")+"?")
         msgbox.Ok.connect(ok)
