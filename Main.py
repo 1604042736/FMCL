@@ -10,6 +10,7 @@ import Globals as g
 from Ui.DownloadManager.DownloadManager import DownloadManager
 from PyQt5.QtGui import QIcon
 import Resources
+from importlib import import_module
 
 
 def main():
@@ -23,10 +24,18 @@ def main():
     except ValueError:
         pass
 
-    g.dmgr = DownloadManager()
+    g.dmgr = DownloadManager()  # 因为有些Ui要用到,所以要放到前面
 
-    mainwindow = MainWindow()
-    mainwindow.show(True)
+    if '--only' in sys.argv:
+        i = sys.argv.index('--only')
+        name = sys.argv[i+1]
+        g.logapi.info(f"单独打开:{name}")
+        module = import_module(f"Ui.{name}")
+        widget = getattr(module, name.split('.')[-1])()
+        widget.show()
+    else:
+        mainwindow = MainWindow()
+        mainwindow.show(True)
 
     app.exec_()
     g.save()

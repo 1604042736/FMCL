@@ -34,10 +34,16 @@ Then run `Main.py` directly
 - Download,install and run Minecraft with `Optifine`
 - Manage versions
 - (Only)Support offline login
-- Support updata
+- Support update
 - Support Mods' search and download
 - Support change theme color
 - Support more languages
+
+## Command line parameters
+
+- `--updated filename` will delete `filename`. Generally, the old version will be deleted when updating
+
+- `--only module` import `module` and display UI in it. The default class name is the same as the file name, and there is only one class in a file
 
 ## Project Structure
 
@@ -49,7 +55,7 @@ Core                        ->Core code(Has nothing to do with UI code)
     Game.py                 ->Game related operations
     Launcher.py             ->Launching game related operations
     Mod.py                  ->Mod related operations
-    Updata.py               ->Updata related operations
+    Update.py               ->Update related operations
 QtFBN                       ->Window framework written by myself
     QFBNNotifyManager.py    ->Notify Manager
     QFBNWidget.py           ->Extend QWidget
