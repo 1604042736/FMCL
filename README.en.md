@@ -1,5 +1,9 @@
 # FMCL
 
+<p align="center">
+<img src="./Resources/Image/icon.png" alt="FMCL logo" width="25%"/>
+</p>
+
 ![](https://img.shields.io/github/languages/code-size/1604042736/FMCL)
 
 ## Introduction
