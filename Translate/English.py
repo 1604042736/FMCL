@@ -62,11 +62,12 @@ translate = {
     "打开mod文件夹": "Open mod folder",
     "请输入用户名": "please enter one user name",
     "离线登录": "Offline",
-    "所有语言": "All languages",
+    "语言": "Language",
     "关于": "About",
     "打开开源网址": "Open the open source website",
     "鸣谢": "Acknowledge",
     "打开网址": "Open website",
     "bangbang93: 提供镜像源": "bangbang93: provide image source",
-    "huanghongxun: 提供技术帮助(HMCL)": "huanghongxun: provide technical assistance (HMCL)"
+    "huanghongxun: 提供技术帮助(HMCL)": "huanghongxun: provide technical assistance (HMCL)",
+    "模组细节": "Mod detail"
 }
