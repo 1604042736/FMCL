@@ -37,6 +37,7 @@ Then run `Main.py` directly
 - Support updata
 - Support Mods' search and download
 - Support change theme color
+- Support more languages
 
 ## Project Structure
 

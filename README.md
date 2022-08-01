@@ -39,6 +39,7 @@ pip install -r requirements.txt
 - 支持更新
 - 支持Mod的搜索与下载
 - 支持更改主题颜色
+- 支持多种语言
 
 ## 项目结构
 
