@@ -57,6 +57,7 @@ Core                        ->Core code(Has nothing to do with UI code)
     Mod.py                  ->Mod related operations
     Update.py               ->Update related operations
 QtFBN                       ->Window framework written by myself
+    QFBNDialog.py           ->Dialog
     QFBNNotifyManager.py    ->Notify Manager
     QFBNWidget.py           ->Extend QWidget
     QFBNWindow.py           ->Selected class according to the operating system

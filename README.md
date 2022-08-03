@@ -58,6 +58,7 @@ Core                        ->核心代码(与界面无关的代码)
     Mod.py                  ->与Mod有关的操作
     Update.py               ->与更新有关的操作
 QtFBN                       ->自己写的窗口框架
+    QFBNDialog.py           ->对话框
     QFBNNotifyManager.py    ->通知管理
     QFBNWidget.py           ->扩展QWidget
     QFBNWindow.py           ->将根据操作系统选择对应类
