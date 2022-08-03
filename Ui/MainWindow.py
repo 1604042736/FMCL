@@ -42,10 +42,8 @@ class MainWindow(QFBNWindowManager):
         def ok():
             g.dmgr.add_task(f"{tr('安装新版本')} {new_version}",
                             self.update_, "update", tuple())
-        msgbox = QFBNMessageBox(
-            QApplication.activeWindow(), f"{tr('有新版本')} {new_version}", tr("确定更新吗")+"?")
-        msgbox.Ok.connect(ok)
-        msgbox.show()
+        msgbox = QFBNMessageBox.info(self, f"{tr('有新版本')} {new_version}", tr("确定更新吗")+"?",ok)
+        msgbox.show("original")
 
     def on_win_ready(self) -> None:
         super().on_win_ready()

@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_NewUser(object):
     def setupUi(self, NewUser):
         NewUser.setObjectName("NewUser")
-        NewUser.resize(1000, 618)
+        NewUser.resize(500, 309)
         self.gridLayout = QtWidgets.QGridLayout(NewUser)
         self.gridLayout.setObjectName("gridLayout")
         self.pb_ok = QtWidgets.QPushButton(NewUser)

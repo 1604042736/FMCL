@@ -72,7 +72,5 @@ class ListSetting(QWidget):
     def delete(self):
         def ok():
             self.cb_val.removeItem(self.cb_val.currentIndex())
-        msgbox = QFBNMessageBox(
-            QApplication.activeWindow(), tr("删除"), tr("确认删除")+"?")
-        msgbox.Ok.connect(ok)
-        msgbox.show()
+        msgbox = QFBNMessageBox.info(self, tr("删除"), tr("确认删除")+"?", ok)
+        msgbox.show("original")

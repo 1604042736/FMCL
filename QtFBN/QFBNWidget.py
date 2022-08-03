@@ -47,7 +47,7 @@ class QFBNWidget(QWidget):
             return
 
         if mode == "original":  # 原来的显示方法
-            super().show()
+            QWidget.show(self)
             return
 
         if mode == "separate" or mode == "default":  # 独立显示
@@ -78,6 +78,4 @@ class QFBNWidget(QWidget):
         """对回到自己的widget进行设置"""
 
     def resizeEvent(self, a0: QResizeEvent) -> None:
-        if "_msgbox" in self.__dict__:
-            self._msgbox.resize(self.width(), self.height())
         self.notifymanager.update_geometry()

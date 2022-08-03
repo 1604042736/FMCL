@@ -43,7 +43,7 @@ ch.setFormatter(logformat)
 logapi.addHandler(ch)
 
 
-TAG_NAME = "1.5.2"  # 当前版本号
+TAG_NAME = "1.6"  # 当前版本号
 
 dmgr = None  # 下载管理
 
@@ -162,10 +162,6 @@ QFrame#f_panel_download{{
 }}
 QFrame#f_panel_download QPushButton:checked{{
     border-bottom:2px solid {BUTTON_CHECKED_BORDER_COLOR};
-}}
-QFrame#Dialog{{
-    border:1px solid rgb(0,0,0);
-    background-color:rgb(255,255,255);
 }}
 QPushButton#task_button{{
     text-align:left;

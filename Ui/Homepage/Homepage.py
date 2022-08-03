@@ -65,7 +65,7 @@ class Homepage(QFBNWidget, Ui_Homepage):
         self.resizeEvent(None)
 
     def separate_ui(self):
-        self.w_ui.show()
+        self.w_ui.show("separate")
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.f_panel.resize(self.panel_width, self.height())

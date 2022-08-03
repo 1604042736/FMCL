@@ -9,7 +9,7 @@ from Ui.VersionManager.IconSelector import IconSelector
 from Ui.VersionManager.ModItem import ModItem
 from Ui.VersionManager.ui_VersionManager import Ui_VersionManager
 import Globals as g
-from PyQt5.QtWidgets import QApplication, QListWidgetItem
+from PyQt5.QtWidgets import QApplication, QListWidgetItem, QWidget
 from PyQt5.QtCore import pyqtSignal, QSize
 from Core.Game import Game
 from QtFBN.QFBNMessageBox import QFBNMessageBox
@@ -85,10 +85,8 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
             Game(self.name).del_game()
             self.GameDeleted.emit()
             self.close(True)
-        msgbox = QFBNMessageBox(
-            QApplication.activeWindow(), tr("删除"), tr("确定删除")+"?")
-        msgbox.Ok.connect(ok)
-        msgbox.show()
+        msgbox = QFBNMessageBox.info(self, tr("删除"), tr("确定删除")+"?", ok)
+        msgbox.show("original")
 
     def reinstall_game(self):
         g.dmgr.add_task(f"{tr('下载')} {self.name}", Game(
@@ -115,16 +113,12 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
             self.lw_mods.setItemWidget(item, widget)
 
     def change_icon(self):
-        def ok(icon=""):  # 因为连接了两个参数不同的Signal
-            if icon:
-                self.icon = icon
-                self.l_icon.setPixmap(QPixmap(self.icon))
-                self.save()
+        def ok(icon):
+            self.icon = icon
+            self.l_icon.setPixmap(QPixmap(self.icon))
+            self.save()
             self.IconChanged.emit()
 
-        iconselector = IconSelector()
+        iconselector = IconSelector(self)
         iconselector.Selected.connect(ok)
-        msgbox = QFBNMessageBox(
-            QApplication.activeWindow(), "", "", iconselector)
-        msgbox.Ok.connect(ok)
-        msgbox.show()
+        iconselector.show("original")

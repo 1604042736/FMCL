@@ -26,10 +26,9 @@ class User(QFBNWidget, Ui_User):
         self.pb_add.clicked.connect(self.add_user)
 
     def add_user(self):
-        newuser = NewUser()
+        newuser = NewUser(self)
         newuser.CreateUser.connect(self.create_user)
-        msgbox = QFBNMessageBox(QApplication.activeWindow(), "", "", newuser)
-        msgbox.show()
+        newuser.show("original")
 
     def set_users(self):
         def add_item(i):
@@ -62,10 +61,8 @@ class User(QFBNWidget, Ui_User):
                 g.cur_user = None
             self.set_users()
             self.CurUserChanged.emit()
-        msgbox = QFBNMessageBox(
-            QApplication.activeWindow(), tr("删除"), tr("确认删除")+"?")
-        msgbox.Ok.connect(ok)
-        msgbox.show()
+        msgbox = QFBNMessageBox.info(self, tr("删除"), tr("确认删除")+"?", ok)
+        msgbox.show("original")
 
     def create_user(self, info):
         g.users.append(info)

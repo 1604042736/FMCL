@@ -50,7 +50,5 @@ class ModItem(QWidget):
         def ok():
             Mod(name=self.name, path=self.path).del_mod()
             self.ModDeleted.emit(self.name)
-        msgbox = QFBNMessageBox(
-            QApplication.activeWindow(), tr("删除"), tr("确定删除")+"?")
-        msgbox.Ok.connect(ok)
-        msgbox.show()
+        msgbox = QFBNMessageBox.info(self, tr("删除"), tr("确定删除")+"?", ok)
+        msgbox.show("original")

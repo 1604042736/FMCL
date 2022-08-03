@@ -1,11 +1,11 @@
-from QtFBN.QFBNWidget import QFBNWidget
+from QtFBN.QFBNDialog import QFBNDialog
 from Translate import tr
 from Ui.VersionManager.ui_IconSelector import Ui_IconSelector
 from PyQt5.QtGui import QResizeEvent, QIcon
 from PyQt5.QtWidgets import QTableWidgetItem, QFileDialog
 from PyQt5.QtCore import pyqtSignal
 
-class IconSelector(QFBNWidget, Ui_IconSelector):
+class IconSelector(QFBNDialog, Ui_IconSelector):
     UNIT_WIDTH = 80
     Selected = pyqtSignal(str)
 
@@ -57,6 +57,7 @@ class IconSelector(QFBNWidget, Ui_IconSelector):
     def resizeEvent(self, a0: QResizeEvent) -> None:
         self.max_col_count = int(self.width()/self.UNIT_WIDTH)
         self.set_default()
+        super().resizeEvent(a0)
 
     def selected(self):
         if self.tw_default.currentItem():

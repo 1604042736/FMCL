@@ -1,10 +1,10 @@
-from QtFBN.QFBNWidget import QFBNWidget
+from QtFBN.QFBNDialog import QFBNDialog
 from Translate import tr
 from Ui.User.ui_NewUser import Ui_NewUser
 from PyQt5.QtCore import pyqtSignal
 
 
-class NewUser(QFBNWidget, Ui_NewUser):
+class NewUser(QFBNDialog, Ui_NewUser):
     CreateUser = pyqtSignal(dict)
 
     def __init__(self, parent=None) -> None:
