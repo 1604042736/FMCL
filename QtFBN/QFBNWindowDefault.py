@@ -21,10 +21,11 @@ class QFBNWindowDefault(QFBNWindowBasic):
             "bottom-left": False,
             "bottom-right": False
         }
+        self.setMouseTracking(True)
 
     def show(self) -> None:
-        self.set_all_mousetrack(self)
-        return super().show()
+        # self.set_all_mousetrack(self.title)
+        super().show()
 
     def set_all_mousetrack(self, w):
         '''将所有控件设置为鼠标跟踪'''

@@ -1,3 +1,4 @@
+import traceback
 from PyQt5.QtWidgets import QWidget, QFrame, QPushButton, QLabel
 import qtawesome as qta
 from PyQt5.QtCore import QSize, Qt
@@ -90,9 +91,12 @@ class QFBNWindowBasic(QWidget):
 
     def remove_right_widget(self, widget: QWidget) -> None:
         """删除右边的控件"""
-        self.right_widgets.remove(widget)
-        widget.hide()
-        self.resize_title_widgets()
+        try:
+            self.right_widgets.remove(widget)
+            widget.hide()
+            self.resize_title_widgets()
+        except:
+            pass
 
     def add_left_widget(self, widget: QWidget, index: int = -1, set_icon_size=True) -> None:
         """添加左边的控件"""
@@ -109,9 +113,12 @@ class QFBNWindowBasic(QWidget):
 
     def remove_left_widget(self, widget: QWidget) -> None:
         """删除左边的控件"""
-        self.left_widgets.remove(widget)
-        widget.hide()
-        self.resize_title_widgets()
+        try:
+            self.left_widgets.remove(widget)
+            widget.hide()
+            self.resize_title_widgets()
+        except:
+            pass
 
     def set_title(self) -> None:
         """设置标题栏"""
@@ -143,8 +150,8 @@ class QFBNWindowBasic(QWidget):
             self.title_button_width, self.title_height)
         self.pb_backtomanager.setObjectName('pb_backtomanager')
         self.pb_backtomanager.setIcon(qta.icon('msc.reply'))
-        self.pb_backtomanager.setToolTip("回到主窗口")
-        if g.manager != None:
+        self.pb_backtomanager.setToolTip("回到原位置")
+        if g.manager != None or self.target.parent_ != None:
             self.add_right_widget(self.pb_backtomanager)
         else:
             self.pb_backtomanager.hide()
@@ -154,9 +161,8 @@ class QFBNWindowBasic(QWidget):
                             self.title_height)
         self.pb_home.setObjectName('pb_home')
         self.pb_home.setIcon(qta.icon('msc.window'))
-        self.pb_home.clicked.connect(lambda: g.manager.reshow())
-        self.pb_home.setToolTip("显示主窗口")
-        if self.target is not g.manager and g.manager != None:
+        self.pb_home.setToolTip("显示原位置")
+        if (self.target is not g.manager and g.manager != None) or self.target.parent_ != None:
             self.add_right_widget(self.pb_home)
         else:
             self.pb_home.hide()
@@ -170,6 +176,21 @@ class QFBNWindowBasic(QWidget):
         self.pb_min.clicked.connect(self.showMinimized)
 
         self.pb_backtomanager.clicked.connect(self.back_to_manager)
+        self.pb_home.clicked.connect(self.show_home)
+
+    def show_home(self):
+        if self.target.parent_ != None:
+            try:
+                if not self.target.parent_.isVisible():
+                    if self.target.parent_.win != None:
+                        self.target.parent_.show()
+                    else:
+                        g.manager.reshow()
+                self.target.parent_.activateWindow()
+            except:
+                print(traceback.format_exc())
+        elif g.manager != None:
+            g.manager.reshow()
 
     def change_show_state(self) -> None:
         """改变显示状态"""

@@ -1,3 +1,4 @@
+import traceback
 from QtFBN.QFBNWidget import QFBNWidget
 from PyQt5.QtWidgets import QStackedWidget, QPushButton
 import QtFBN as g
@@ -46,9 +47,12 @@ class QFBNWindowManager(QStackedWidget, QFBNWidget):
         self.release_widget(widget)
 
     def separate_window(self) -> None:
-        widget = self.currentWidget()
-        self.release_widget(widget)
-        widget.show("separate")
+        try:
+            widget = self.currentWidget()
+            self.release_widget(widget)
+            widget.show("separate")
+        except:
+            print(traceback.format_exc())
 
     def on_any_win_ready(self, win: QFBNWidget) -> None:
         """当任何一个窗口准备好后"""

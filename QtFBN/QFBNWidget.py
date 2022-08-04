@@ -1,9 +1,9 @@
 from typing import Literal
-from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtWidgets import QApplication, QWidget, QTableWidget
 import QtFBN as g
 from QtFBN.QFBNNotifyManager import QFBNNotifyManager
 from QtFBN.QFBNWindow import QFBNWindow
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QResizeEvent, QMouseEvent
 
 
@@ -20,6 +20,8 @@ class QFBNWidget(QWidget):
         self.notifymanager = QFBNNotifyManager(self)
         self.notifymanager.hide()
 
+        self.setMouseTracking(True)
+
     def notify(self, title, msg):
         widget = QApplication.activeWindow()
         if widget:
@@ -32,7 +34,7 @@ class QFBNWidget(QWidget):
             timer.start(10)
 
     def show(self, mode: Literal["default", "separate", "original"] = "default") -> None:
-        self.set_all_mousetrack(self)
+        # self.set_all_mousetrack(self)
         if(mode == "default"
             and g.manager != None
             and self is not g.manager
@@ -64,6 +66,7 @@ class QFBNWidget(QWidget):
             g.manager.release_widget(self)
         if self.win != None:
             self.win.close()
+        self.win = None
         return super().close()
 
     def on_win_ready(self) -> None:
@@ -86,22 +89,25 @@ class QFBNWidget(QWidget):
         children = w.findChildren(QWidget)
         for child in children:
             child.setMouseTracking(True)
-            child.mouseMoveEvent = self.mouseMoveEvent
-            child.mousePressEvent = lambda a, child=child.mousePressEvent: self.mousePressEvent(
+            child.mouseMoveEvent = lambda a, child=child.mouseMoveEvent: self._mouseMoveEvent(
                 a, child)
-            child.mouseReleaseEvent = lambda a, child=child.mouseReleaseEvent: self.mouseReleaseEvent(
+            child.mousePressEvent = lambda a, child=child.mousePressEvent: self._mousePressEvent(
+                a, child)
+            child.mouseReleaseEvent = lambda a, child=child.mouseReleaseEvent: self._mouseReleaseEvent(
                 a, child)
             self.set_all_mousetrack(child)
 
-    def mouseMoveEvent(self, a0: QMouseEvent) -> None:
+    def _mouseMoveEvent(self, a0: QMouseEvent, child_event=None) -> None:
+        if child_event != None:
+            child_event(a0)
         self.parent().mouseMoveEvent(a0)
 
-    def mousePressEvent(self, a0: QMouseEvent, child_event=None) -> None:
+    def _mousePressEvent(self, a0: QMouseEvent, child_event=None) -> None:
         if child_event != None:
             child_event(a0)
         self.parent().mousePressEvent(a0)
 
-    def mouseReleaseEvent(self, a0: QMouseEvent, child_event=None) -> None:
+    def _mouseReleaseEvent(self, a0: QMouseEvent, child_event=None) -> None:
         if child_event != None:
             child_event(a0)
         self.parent().mouseReleaseEvent(a0)

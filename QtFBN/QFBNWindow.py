@@ -8,3 +8,4 @@ if system == 'Windows':
 else:
     from QtFBN.QFBNWindowDefault import QFBNWindowDefault
     QFBNWindow = QFBNWindowDefault
+print(QFBNWindow)

@@ -42,7 +42,8 @@ class MainWindow(QFBNWindowManager):
         def ok():
             g.dmgr.add_task(f"{tr('安装新版本')} {new_version}",
                             self.update_, "update", tuple())
-        msgbox = QFBNMessageBox.info(self, f"{tr('有新版本')} {new_version}", tr("确定更新吗")+"?",ok)
+        msgbox = QFBNMessageBox.info(
+            self, f"{tr('有新版本')} {new_version}", tr("确定更新吗")+"?", ok)
         msgbox.show("original")
 
     def on_win_ready(self) -> None:
@@ -67,9 +68,10 @@ class MainWindow(QFBNWindowManager):
         self.pb_desktop.setToolTip(tr("显示桌面"))
         self.win.add_right_widget(self.pb_desktop)
 
-        self.page_map = {
-            self.pb_homepage: self.homepage
-        }
+        if 'page_map' not in self.__dict__:
+            self.page_map = {
+                self.pb_homepage: self.homepage
+            }
 
         self.more_button = QPushButton(self.win.title)
         self.more_button.setIcon(qta.icon("ri.more-fill"))
@@ -169,11 +171,14 @@ QPushButton:hover{{
         width = self.win.width()
         self.exceed_index = []
         for i, w in enumerate(self.task_buttons):
-            left_width += w.width()
-            w.show()
-            if left_width >= width-right_width-wintitle_width-self.MOREBUTTON_WIDTH:
-                self.exceed_index.append(i)
-                w.hide()
+            try:
+                left_width += w.width()
+                w.show()
+                if left_width >= width-right_width-wintitle_width-self.MOREBUTTON_WIDTH:
+                    self.exceed_index.append(i)
+                    w.hide()
+            except RuntimeError:
+                pass
         if self.exceed_index:
             self.more_button.show()
             self.win.add_left_widget(self.more_button)
