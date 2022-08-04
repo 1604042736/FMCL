@@ -2,7 +2,6 @@
 # pyrcc5 Resources.qrc -o __init__.py
 
 import os
-from Ui.Desktop.Desktop import Desktop
 from Ui.MainWindow import MainWindow
 from PyQt5.QtWidgets import QApplication
 import sys
