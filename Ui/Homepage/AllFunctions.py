@@ -7,6 +7,8 @@ from PyQt5.QtWidgets import QTableWidgetItem, QTableWidget, QAbstractItemView
 import qtawesome as qta
 from PyQt5.QtGui import QResizeEvent
 
+from Ui.News.News import News
+
 
 class AllFunctions(QTableWidget, QFBNWidget):
     UNIT_WIDTH = 64
@@ -18,7 +20,8 @@ class AllFunctions(QTableWidget, QFBNWidget):
         self.functions = {
             tr("下载Minecraft"): Minecraft,
             tr("下载Mod"): Mods,
-            tr("更多"): More
+            tr("更多"): More,
+            tr("新闻"): News
         }
         self.row_count = 1
         self.col_count = 1

@@ -34,6 +34,7 @@ pip install -r requirements.txt
 - 支持Mod的搜索与下载
 - 支持更改主题颜色
 - 支持多种语言
+- 支持浏览新闻
 
 ## 命令行参数
 

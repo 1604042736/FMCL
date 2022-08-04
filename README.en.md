@@ -32,6 +32,7 @@ Then run `Main.py` directly
 - Support Mods' search and download
 - Support change theme color
 - Support more languages
+- Support view news
 
 ## Command line parameters
 

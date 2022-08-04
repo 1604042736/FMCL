@@ -5,7 +5,10 @@ from PyQt5.QtGui import QMouseEvent
 
 
 class QFBNWindowDefault(QFBNWindowBasic):
-    """适用所有系统的QFBNWindow"""
+    """
+    适用所有系统的QFBNWindow
+    不支持调整窗口大小
+    """
 
     def __init__(self, target) -> None:
         super().__init__(target)

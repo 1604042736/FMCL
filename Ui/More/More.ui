@@ -33,27 +33,6 @@
       <string>鸣谢</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-      <item row="0" column="2">
-       <widget class="QPushButton" name="pb_openbangurl">
-        <property name="text">
-         <string>打开网址</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>bangbang93: 提供镜像源</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>huanghongxun: 提供技术帮助(HMCL)</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="2">
        <widget class="QPushButton" name="pb_openhmclurl">
         <property name="text">
@@ -73,6 +52,41 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>bangbang93: 提供镜像源</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>huanghongxun: 提供技术帮助(HMCL)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="pb_openbangurl">
+        <property name="text">
+         <string>打开网址</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>我的世界中文站: 提供新闻</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QPushButton" name="pb_openmczwurl">
+        <property name="text">
+         <string>打开网址</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

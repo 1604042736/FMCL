@@ -43,6 +43,10 @@ class More(QFBNWidget, Ui_More):
         webbrowser.open("https://github.com/huanghongxun/HMCL")
 
     @pyqtSlot(bool)
+    def on_pb_openmczwurl_clicked(self, _):
+        webbrowser.open("https://www.minecraftzw.com")
+
+    @pyqtSlot(bool)
     def on_pb_checkupdate_clicked(self, _):
         self.update_ = Update(g.TAG_NAME)
         self.update_.HasNewVersion.connect(self.has_update)

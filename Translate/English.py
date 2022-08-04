@@ -71,5 +71,7 @@ translate = {
     "huanghongxun: 提供技术帮助(HMCL)": "huanghongxun: provide technical assistance (HMCL)",
     "模组细节": "Mod detail",
     "没有新版本": "No new version",
-    "这是最新版本": "This is the latest version"
+    "这是最新版本": "This is the latest version",
+    "新闻": "News",
+    "新闻详情": "News Detail"
 }
