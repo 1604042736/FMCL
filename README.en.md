@@ -51,6 +51,7 @@ Core                        ->Core code(Has nothing to do with UI code)
     Launcher.py             ->Launching game related operations
     Mod.py                  ->Mod related operations
     Update.py               ->Update related operations
+    News.py                 ->News related operations
 QtFBN                       ->Window framework written by myself
     QFBNDialog.py           ->Dialog
     QFBNNotifyManager.py    ->Notify Manager
@@ -74,6 +75,10 @@ Ui                          ->UI
     DownloadManager         ->Download Manager UI
         ...
     Homepage                ->Homepage
+        ...
+    More                    ->More UI
+        ...
+    News                    ->News UI
         ...
     Setting                 ->Setting UI
         ...

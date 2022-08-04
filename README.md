@@ -52,6 +52,7 @@ Core                        ->核心代码(与界面无关的代码)
     Launcher.py             ->启动游戏的操作
     Mod.py                  ->与Mod有关的操作
     Update.py               ->与更新有关的操作
+    News.py                 ->与新闻有关的操作
 QtFBN                       ->自己写的窗口框架
     QFBNDialog.py           ->对话框
     QFBNNotifyManager.py    ->通知管理
@@ -75,6 +76,10 @@ Ui                          ->界面
     DownloadManager         ->下载管理界面
         ...
     Homepage                ->主页
+        ...
+    More                    ->更多
+        ...
+    News                    ->新闻
         ...
     Setting                 ->设置界面
         ...
