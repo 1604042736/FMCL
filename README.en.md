@@ -6,12 +6,6 @@
 
 `FMCL`(`Functional Minecraft Launcher`) is a Minecraft Launcher
 
-## Support Systems
-
-- `Windows`
-
-We will support more systems in the future
-
 ## Project Usage
 
 First install required modules

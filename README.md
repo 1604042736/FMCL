@@ -8,12 +8,6 @@
 
 `FMCL`(`Functional Minecraft Launcher`)是一个MC启动器
 
-## 支持的操作系统
-
-- `Windows`
-
-未来会支持更多的系统
-
 ## 项目使用
 
 首先安装所需的模块

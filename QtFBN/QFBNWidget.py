@@ -4,7 +4,7 @@ import QtFBN as g
 from QtFBN.QFBNNotifyManager import QFBNNotifyManager
 from QtFBN.QFBNWindow import QFBNWindow
 from PyQt5.QtCore import QTimer
-from PyQt5.QtGui import QResizeEvent
+from PyQt5.QtGui import QResizeEvent, QMouseEvent
 
 
 class QFBNWidget(QWidget):
@@ -32,6 +32,7 @@ class QFBNWidget(QWidget):
             timer.start(10)
 
     def show(self, mode: Literal["default", "separate", "original"] = "default") -> None:
+        self.set_all_mousetrack(self)
         if(mode == "default"
             and g.manager != None
             and self is not g.manager
@@ -79,3 +80,28 @@ class QFBNWidget(QWidget):
 
     def resizeEvent(self, a0: QResizeEvent) -> None:
         self.notifymanager.update_geometry()
+
+    def set_all_mousetrack(self, w):
+        '''将所有控件设置为鼠标跟踪'''
+        children = w.findChildren(QWidget)
+        for child in children:
+            child.setMouseTracking(True)
+            child.mouseMoveEvent = self.mouseMoveEvent
+            child.mousePressEvent = lambda a, child=child.mousePressEvent: self.mousePressEvent(
+                a, child)
+            child.mouseReleaseEvent = lambda a, child=child.mouseReleaseEvent: self.mouseReleaseEvent(
+                a, child)
+            self.set_all_mousetrack(child)
+
+    def mouseMoveEvent(self, a0: QMouseEvent) -> None:
+        self.parent().mouseMoveEvent(a0)
+
+    def mousePressEvent(self, a0: QMouseEvent, child_event=None) -> None:
+        if child_event != None:
+            child_event(a0)
+        self.parent().mousePressEvent(a0)
+
+    def mouseReleaseEvent(self, a0: QMouseEvent, child_event=None) -> None:
+        if child_event != None:
+            child_event(a0)
+        self.parent().mouseReleaseEvent(a0)
