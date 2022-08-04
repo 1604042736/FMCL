@@ -106,6 +106,8 @@ class QFBNDialog(QFBNWidget):
         if not isinstance(self.parentWidget(), QFBNWindow):
             self._default_size = [self.width(), self.height()]
 
+        self._cover.setMouseTracking(True)
+
     def widget_to_self(self, w) -> None:
         if self.parent_widget_to_self != None:
             self.parent_widget_to_self(w)

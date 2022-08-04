@@ -60,7 +60,7 @@ class QFBNWindowDefault(QFBNWindowBasic):
             self.flags["left"] = True
         elif x >= self.width()-self.RIGHT_DISTANCE:  # 右
             self.flags["right"] = True
-        elif self.left_width < a0.x() < self.width()-self.right_width and 0 <= a0.y() <= self.title_height:
+        elif self.left_width < x < self.width()-self.right_width and y <= self.title_height:
             self.flags["move"] = True
         elif child_event != None:
             child_event(a0)
