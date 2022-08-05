@@ -9,30 +9,39 @@ from PyQt5.QtCore import pyqtSignal, QSize
 from Ui.News.NewsInfo import NewsInfo
 
 
-class News(QListWidget, QFBNWidget):
-    _NewsOut = pyqtSignal()
+class News(QFBNWidget):
+    _NewsOut = pyqtSignal(list)
     icon_exp = 'qta.icon("fa.newspaper-o")'
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setWindowTitle(tr("新闻"))
         self.setWindowIcon(eval(self.icon_exp))
+        self.page = 1
+
+        self.lw_news = QListWidget(self)
+        self.lw_news.verticalScrollBar().valueChanged.connect(self.get_more_news)
 
         self._NewsOut.connect(self.set_news)
-        self.news = []
-        self.get_news()
+        self.get_news(self.page)
+
+    def resizeEvent(self, a0: QResizeEvent) -> None:
+        self.lw_news.setGeometry(0, 0, self.width(), self.height())
 
     @g.run_as_thread
-    def get_news(self):
-        self.news = News_().get_news()
-        self._NewsOut.emit()
+    def get_news(self, page=1):
+        news = News_().get_news(page)
+        self._NewsOut.emit(news)
 
-    def set_news(self):
-        self.clear()
+    def get_more_news(self, num):
+        if self.lw_news.verticalScrollBar().maximum() == num:
+            self.page += 1
+            self.get_news(self.page)
 
-        for i in self.news:
+    def set_news(self, news):
+        for i in news:
             item = QListWidgetItem()
-            item.setSizeHint(QSize(256, 128))
+            item.setSizeHint(QSize(256, i["img_height"]))
             widget = NewsInfo(i)
-            self.addItem(item)
-            self.setItemWidget(item, widget)
+            self.lw_news.addItem(item)
+            self.lw_news.setItemWidget(item, widget)
