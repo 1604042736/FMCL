@@ -27,6 +27,7 @@ class MainWindow(QFBNWindowManager):
         self.homepage = Homepage()
         self.desktop = Desktop()
         self.task_buttons = []
+        self.page_map = {}
 
     def ready(self) -> None:
         self.desktop.show()
@@ -48,13 +49,6 @@ class MainWindow(QFBNWindowManager):
 
     def on_win_ready(self) -> None:
         super().on_win_ready()
-        self.pb_homepage = QPushButton(self.win.title)
-        self.pb_homepage.resize(
-            self.win.title_button_width, self.win.title_height)
-        self.pb_homepage.setIcon(QIcon(":/Image/icon.png"))
-        self.pb_homepage.clicked.connect(self.change_page)
-        self.pb_homepage.setObjectName("pb_homepage")
-        self.win.add_left_widget(self.pb_homepage, 0)
 
         self.win.remove_left_widget(self.pb_back)
 
@@ -68,10 +62,7 @@ class MainWindow(QFBNWindowManager):
         self.pb_desktop.setToolTip(tr("显示桌面"))
         self.win.add_right_widget(self.pb_desktop)
 
-        if 'page_map' not in self.__dict__:
-            self.page_map = {
-                self.pb_homepage: self.homepage
-            }
+        self.add_task_button(self.homepage)
 
         self.more_button = QPushButton(self.win.title)
         self.more_button.setIcon(qta.icon("ri.more-fill"))
@@ -79,6 +70,40 @@ class MainWindow(QFBNWindowManager):
             self.MOREBUTTON_WIDTH, self.win.title_height)
         self.more_button.hide()
         self.more_button.clicked.connect(self.show_exceed_menu)
+
+        for key in tuple(self.page_map.keys()):
+            try:
+                key.objectName()  # 判断key是否被销毁
+            except RuntimeError:
+                self.add_task_button(self.page_map.pop(key))
+        self.set_title_widget_state()
+
+    def add_task_button(self, widget):
+        for _, val in self.page_map.items():
+            if val is widget:
+                return
+        if isinstance(widget, Homepage):
+            self.pb_homepage = QPushButton(self.win.title)
+            self.pb_homepage.resize(
+                self.win.title_button_width, self.win.title_height)
+            self.pb_homepage.setIcon(QIcon(":/Image/icon.png"))
+            self.pb_homepage.clicked.connect(self.change_page)
+            self.pb_homepage.setObjectName("pb_homepage")
+            self.win.add_left_widget(self.pb_homepage, 0)
+            self.page_map[self.pb_homepage] = widget
+            return
+        button = QPushButton(self.win.title)
+        button.resize(self.TASKBUTTON_WIDTH,
+                      self.win.title_height)
+        button.clicked.connect(self.change_page)
+        button.setText(widget.windowTitle())
+        button.setObjectName("task_button")
+        button.setIcon(widget.windowIcon())
+        button.setToolTip(button.text())
+        button.show()
+        self.win.add_left_widget(button, len(self.task_buttons)+1)
+        self.page_map[button] = widget
+        self.task_buttons.append(button)
 
     def show_exceed_menu(self):
         """显示超出部分(以菜单的形式)"""
@@ -95,10 +120,13 @@ class MainWindow(QFBNWindowManager):
     def change_page(self, _=None, sender=None):
         if not sender:
             sender = self.sender()
-        if self.currentWidget() == self.page_map[sender]:
-            self.setCurrentWidget(self.desktop)
-            return
-        self.setCurrentWidget(self.page_map[sender])
+        try:
+            if self.currentWidget() == self.page_map[sender]:
+                self.setCurrentWidget(self.desktop)
+                return
+            self.setCurrentWidget(self.page_map[sender])
+        except KeyError:
+            pass
 
     def catch_widget(self, widget) -> None:
         if not widget.__class__ in self.ignore_widget:
@@ -106,18 +134,7 @@ class MainWindow(QFBNWindowManager):
                 if val is widget:
                     break
             else:
-                button = QPushButton(self.win.title)
-                button.resize(self.TASKBUTTON_WIDTH,
-                              self.win.title_height)
-                button.clicked.connect(self.change_page)
-                button.setText(widget.windowTitle())
-                button.setObjectName("task_button")
-                button.setIcon(widget.windowIcon())
-                button.setToolTip(button.text())
-                button.show()
-                self.win.add_left_widget(button, len(self.task_buttons)+1)
-                self.page_map[button] = widget
-                self.task_buttons.append(button)
+                self.add_task_button(widget)
         self.adjust_titlewidgets()
         return super().catch_widget(widget)
 
@@ -134,9 +151,11 @@ class MainWindow(QFBNWindowManager):
 
     def set_title_widget_state(self):
         super().set_title_widget_state()
-        for key, val in self.page_map.items():
+        for key in tuple(self.page_map.keys()):
+            val = self.page_map[key]
             if val == self.currentWidget():
-                key.setStyleSheet(f"background-color:{g.BUTTON_HOVER_COLOR};")
+                key.setStyleSheet(
+                    f"background-color:{g.BUTTON_HOVER_COLOR};")
             else:
                 key.setStyleSheet(f"""
 QPushButton{{
@@ -178,7 +197,7 @@ QPushButton:hover{{
                     self.exceed_index.append(i)
                     w.hide()
             except RuntimeError:
-                pass
+                self.task_buttons.remove(w)
         if self.exceed_index:
             self.more_button.show()
             self.win.add_left_widget(self.more_button)

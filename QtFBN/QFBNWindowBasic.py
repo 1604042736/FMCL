@@ -50,6 +50,7 @@ class QFBNWindowBasic(QWidget):
         self.set_windowstyle()
 
         self.setWindowTitle(self.target.windowTitle())
+        self.setWindowIcon(self.target.windowIcon())
         QWidget.show(self.target)
 
     def set_windowstyle(self) -> None:
@@ -218,6 +219,7 @@ class QFBNWindowBasic(QWidget):
 
     def back_to_manager(self) -> None:
         """重新回到manager"""
+        self.show_home()
         if self.target.parent_ == None:  # 回到manager
             self.target.show()
         else:  # 回到原来的widget中去

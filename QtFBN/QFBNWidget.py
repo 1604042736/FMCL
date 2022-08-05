@@ -67,7 +67,11 @@ class QFBNWidget(QWidget):
         if self.win != None:
             self.win.close()
         self.win = None
-        return super().close()
+        try:
+            # self.win.close()可能会导致self被close引发错误
+            return super().close()
+        except RuntimeError:
+            pass
 
     def on_win_ready(self) -> None:
         """QFBNWindow准备好了"""
