@@ -29,6 +29,12 @@ def main():
         img.putpixel((i, 7), color)
         img.putpixel((i, 8), color)
     img.save(path)
+    path = "../Resources/Icon/FMCL.ico"
+    try:
+        os.makedirs(os.path.dirname(path))
+    except:
+        pass
+    img.save(path)
 
 
 if __name__ == '__main__':

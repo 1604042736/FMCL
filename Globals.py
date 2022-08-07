@@ -43,7 +43,7 @@ ch.setFormatter(logformat)
 logapi.addHandler(ch)
 
 
-TAG_NAME = "1.7.1"  # 当前版本号
+TAG_NAME = "1.8"  # 当前版本号
 
 dmgr = None  # 下载管理
 
@@ -68,24 +68,24 @@ maxmem = 1024
 minmem = 256
 background_image = ""
 theme = "rgba(255,255,255,255)"
-language = "Chinese"
+language = "简体中文"
 
 try:
     config = json.load(open("FMCL/config.json", encoding="utf-8"))
-    cur_gamepath = config["cur_gamepath"]
-    all_gamepath = config["all_gamepath"]
-    cur_version = config["cur_version"]
-    users = config["users"]
-    if config["cur_user_index"] != -1:
-        cur_user = users[config["cur_user_index"]]
-    java_path = config["java_path"]
-    width = int(config["width"])
-    height = int(config["height"])
-    maxmen = int(config["maxmem"])
-    minmem = int(config["minmem"])
-    background_image = config["background_image"]
-    theme = config["theme"]
-    language = config["language"]
+    cur_gamepath = config.get("cur_gamepath", cur_gamepath)
+    all_gamepath = config.get("all_gamepath", all_gamepath)
+    cur_version = config.get("cur_version", cur_version)
+    users = config.get("users", users)
+    if config.get("cur_user_index", -1) != -1:
+        cur_user = users[config.get("cur_user_index", -1)]
+    java_path = config.get("java_path", java_path)
+    width = int(config.get("width", width))
+    height = int(config.get("height", height))
+    maxmen = int(config.get("maxmem", maxmem))
+    minmem = int(config.get("minmem", minmem))
+    background_image = config.get("background_image", background_image)
+    theme = config.get("theme", theme)
+    language = config.get("language", language)
 except Exception as e:
     print(e)
 

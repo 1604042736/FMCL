@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 from typing import TextIO
 import zipapp
@@ -49,9 +50,39 @@ class ReleaseBuilder(TextIO):
                               main='Main:main',
                               filter=pack_filter)
 
+    @call_build
+    def build_exe(self):
+        """生成exe文件"""
+        icon_dir = os.path.abspath("../Resources/Icon/FMCL.ico")
+        file = "../Main.py"
+        name = f'FMCL_{self.version}'
+        distpath = self.release_path
+        workpath = self.release_path+'/build'
+        arg = ' '.join([
+            "pyinstaller",
+            "-F",
+            file,
+            "-w",
+            "-i",
+            icon_dir,
+            "--specpath",
+            self.release_path,
+            "-n",
+            name,
+            "--distpath",
+            distpath,
+            "--workpath",
+            workpath
+        ])
+        print(f"执行 {arg}")
+        os.system(arg)
+        os.remove(f"{self.release_path}/{name}.spec")
+        shutil.rmtree(workpath)
+
     def build(self):
         """生成"""
         self.build_pyz()
+        self.build_exe()
 
     def write(self, text):
         self.stdout.write(f"{' '*4*self.indent}{text}")

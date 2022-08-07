@@ -1,16 +1,22 @@
 import json
 import os
+import sys
 import requests
 from Core import CoreBase
 from PyQt5.QtCore import pyqtSignal
 from Core.Download import download
 from PyQt5.QtWidgets import qApp
 import Globals as g
+import platform
 
 
 class Update(CoreBase):
     HasNewVersion = pyqtSignal(str)
     NoNewVersion = pyqtSignal()
+
+    system_postfix = {
+        "Windows": "exe"
+    }
 
     def __init__(self, tag_name) -> None:
         super().__init__()
@@ -36,9 +42,16 @@ class Update(CoreBase):
         """更新"""
         self.get_info()
 
-        old_name = f"FMCL_{self.tag_name}.pyzw"
-        name = f'FMCL_{self.info["tag_name"]}.pyzw'
-        url = self.info["assets"][0]["browser_download_url"]
+        old_name = sys.argv[0]
+        system = platform.system()
+        name = f'FMCL_{self.info["tag_name"]}.{self.system_postfix.get(system,"pyzw")}'
+
+        url = self.info["assets"][0]["browser_download_url"]  # 默认pyzw的下载地址
+        for i in self.info["assets"]:
+            if i["name"].endswith('.'+self.system_postfix.get(system, "pyzw")):
+                url = i["browser_download_url"]
+                break
+
         download(url, name, self)
-        os.popen(f"start {name} --updated {old_name}")
+        os.popen(f'start "{name}" --updated "{old_name}"')
         qApp.quit()
