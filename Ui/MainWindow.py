@@ -11,7 +11,7 @@ import qtawesome as qta
 from Ui.DownloadManager.DownloadManager import DownloadManager
 import QtFBN as gg
 from PyQt5.QtGui import QResizeEvent, QIcon
-from PyQt5.QtCore import QPoint
+from PyQt5.QtCore import QPoint, Qt
 
 
 class MainWindow(QFBNWindowManager):
@@ -100,10 +100,36 @@ class MainWindow(QFBNWindowManager):
         button.setObjectName("task_button")
         button.setIcon(widget.windowIcon())
         button.setToolTip(button.text())
+        button.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        button.customContextMenuRequested.connect(self.show_menu)
         button.show()
         self.win.add_left_widget(button, len(self.task_buttons)+1)
         self.page_map[button] = widget
         self.task_buttons.append(button)
+
+    def show_menu(self):
+        """显示标题栏按钮的右键菜单"""
+        def new_instance(widget):
+            try:
+                widget.__class__().show()
+            except Exception as e:
+                self.notify(tr("错误"), e)
+        button = self.sender()
+        widget = self.page_map[button]
+        menu = QMenu(self.win)
+
+        a_close = QAction(tr("关闭"), self.win)
+        a_close.setIcon(qta.icon("mdi6.close"))
+        a_close.triggered.connect(widget.close)
+        menu.addAction(a_close)
+
+        a_new = QAction(widget.__class__.__name__, self.win)
+        a_new.setIcon(widget.windowIcon())
+        a_new.triggered.connect(lambda: new_instance(widget))
+        menu.addAction(a_new)
+
+        menu.exec_(QPoint(self.win.x()+button.x(),
+                   self.win.y()+button.y()+self.win.title_height))
 
     def show_exceed_menu(self):
         """显示超出部分(以菜单的形式)"""

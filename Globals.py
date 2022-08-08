@@ -43,7 +43,7 @@ ch.setFormatter(logformat)
 logapi.addHandler(ch)
 
 
-TAG_NAME = "1.8"  # 当前版本号
+TAG_NAME = "1.8.1"  # 当前版本号
 
 dmgr = None  # 下载管理
 
@@ -185,7 +185,6 @@ QListWidget::Item:selected{{
 QLabel#l_notice{{
     background-color:rgb(0,255,0);
     color:rgb(255,255,255);
-    font-size:13px;
 }}
 QTableWidget{{
     border:none;

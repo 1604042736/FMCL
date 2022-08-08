@@ -73,5 +73,6 @@ translate = {
     "没有新版本": "No new version",
     "这是最新版本": "This is the latest version",
     "新闻": "News",
-    "新闻详情": "News Detail"
+    "新闻详情": "News Detail",
+    "关闭": "Close"
 }

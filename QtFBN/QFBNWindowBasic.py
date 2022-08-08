@@ -228,12 +228,10 @@ class QFBNWindowBasic(QWidget):
             self.target.parent_.widget_to_self(self.target)
             self.close()
 
-    def notify(self, title, msg):
-        self.target.notify(title, msg)
-
     def resizeEvent(self, a0) -> None:
         self.target.resize(self.width(), self.height()-self.title_height)
         self.target.move(0, self.title_height)
         self.title.resize(self.width(), self.title_height)
         self.resize_title_widgets()
+        self.target.notifymanager.update_geometry()
         super().resizeEvent(a0)

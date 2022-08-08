@@ -32,18 +32,19 @@ class DownloadManager(QFBNWidget, Ui_DownloadManager):
         widget.start()  # 防止任务执行太快
 
     def task_finished(self, task_id):
-        self.notify(tr("任务结束"), self.lw_tasks.itemWidget(
-            self.lw_tasks.item(task_id)).name)
+        name = self.lw_tasks.itemWidget(
+            self.lw_tasks.item(task_id)).name
         self.lw_tasks.takeItem(task_id)
         self.task_num = self.lw_tasks.count()
         if self.task_num == 0:
             self.NoTask.emit()
             self.close()
+        self.notify(tr("任务结束"), name)
 
     def task_error(self, msg, task_id):
-        self.notify(tr("错误"), msg)
         self.lw_tasks.takeItem(task_id)
         self.task_num = self.lw_tasks.count()
         if self.task_num == 0:
             self.NoTask.emit()
             self.close()
+        self.notify(tr("错误"), msg)

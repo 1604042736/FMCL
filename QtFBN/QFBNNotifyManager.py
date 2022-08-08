@@ -22,11 +22,12 @@ class QFBNNotifyManager(QWidget):
         """新通知"""
         text = f"{title}:{msg}"
         label = QLabel(self)
-        label.setText(text)
         font = label.font()
         font.setPointSize(13)
         fontm = QFontMetrics(font)
+        label.setFont(font)
         label.setObjectName("l_notice")
+        label.setText(text)
         label.resize(fontm.width(text), fontm.height())
 
         timer = self.startTimer(self.wait_time)
