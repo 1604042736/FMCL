@@ -5,6 +5,7 @@ from Ui.DownloadManager.TaskInfo import TaskInfo
 from Ui.DownloadManager.ui_DownloadManager import Ui_DownloadManager
 from PyQt5.QtWidgets import QListWidgetItem
 from PyQt5.QtCore import QSize, pyqtSignal
+import Globals as g
 
 
 class DownloadManager(QFBNWidget, Ui_DownloadManager):
@@ -40,6 +41,7 @@ class DownloadManager(QFBNWidget, Ui_DownloadManager):
             self.NoTask.emit()
             self.close()
         self.notify(tr("任务结束"), name)
+        g.logapi.info(f"任务结束:{name}")
 
     def task_error(self, msg, task_id):
         self.lw_tasks.takeItem(task_id)
@@ -48,3 +50,4 @@ class DownloadManager(QFBNWidget, Ui_DownloadManager):
             self.NoTask.emit()
             self.close()
         self.notify(tr("错误"), msg)
+        g.logapi.info(f"错误:{msg}")

@@ -16,12 +16,14 @@ class StdLog:
             os.makedirs("FMCL")
         except:
             pass
-        self.logfile = open("./FMCL/latest.log", mode='w', encoding='utf-8')
+        open("./FMCL/latest.log", mode='w', encoding='utf-8').write("")
 
     def write(self, msg):
         if self.__console__:
             self.__console__.write(msg)
-        self.logfile.write(msg)
+        # 每次重新打开追加可以防止因程序崩溃导致日志无法正常导出
+        with open("./FMCL/latest.log", mode='a', encoding='utf-8') as file:
+            file.write(msg)
 
     def flush(self):
         if self.__console__:

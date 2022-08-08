@@ -66,7 +66,7 @@ class User(QFBNWidget, Ui_User):
 
     def create_user(self, info):
         g.users.append(info)
-        self.set_users()
         if not g.cur_user:
             g.cur_user = info
+        self.set_users()
         self.CurUserChanged.emit()

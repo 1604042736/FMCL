@@ -28,3 +28,4 @@ class IntSetting(QWidget):
 
     def save(self) -> tuple:
         setattr(g, self.id, self.sb_val.value())
+        g.save()

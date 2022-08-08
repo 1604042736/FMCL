@@ -81,13 +81,16 @@ class Desktop(QTableWidget, QFBNWidget):
             menu.exec_(QCursor.pos())
 
     def launch_game(self, version):
-        g.dmgr.add_task(tr("启动")+version, Launch(
-            version), "launch", (g.java_path,
-                                 g.cur_user["name"],
-                                 g.width,
-                                 g.height,
-                                 g.maxmem,
-                                 g.minmem))
+        if g.cur_user != None:
+            g.dmgr.add_task(tr("启动")+version, Launch(
+                version), "launch", (g.java_path,
+                                     g.cur_user["name"],
+                                     g.width,
+                                     g.height,
+                                     g.maxmem,
+                                     g.minmem))
+        else:
+            self.notify(tr("错误"), tr("未选择用户"))
 
     def open_version_manager(self, name):
         if name:

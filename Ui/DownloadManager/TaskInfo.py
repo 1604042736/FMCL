@@ -29,7 +29,7 @@ class TaskInfo(QWidget):
 
         self.pb_cancel = QPushButton(self)
         self.pb_cancel.setText(tr("取消"))
-        self.pb_cancel.clicked.connect(lambda: self.Finished.emit(self.id))
+        self.pb_cancel.clicked.connect(self.finish)
 
         self.hbox.addWidget(self.l_name)
         self.hbox.addWidget(self.pbr_progress)
@@ -39,8 +39,8 @@ class TaskInfo(QWidget):
 
         self.task = Task(ins, func, args)
         self.task.Progress.connect(self.progress)
-        self.task.Finished.connect(lambda: self.Finished.emit(self.id))
-        self.task.Error.connect(lambda a: self.Error.emit(a, self.id))
+        self.task.Finished.connect(self.finish)
+        self.task.Error.connect(self.error)
 
         self.cur_progress = (0, 1)
 
@@ -61,3 +61,15 @@ class TaskInfo(QWidget):
             self.pbr_progress.setValue(int(cur/total*100))
         except ValueError as e:
             print(e)
+
+    def finish(self):
+        try:
+            self.Finished.emit(self.id)
+        except RuntimeError:
+            pass
+
+    def error(self):
+        try:
+            self.Error.emit(self.id)
+        except RuntimeError:
+            pass

@@ -35,3 +35,4 @@ class ColorSetting(QWidget):
             self.l_color.setStyleSheet(f"background-color:{self.val}")
             setattr(g, self.id, self.val)
             g.set_theme()
+            g.save()

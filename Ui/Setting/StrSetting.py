@@ -27,3 +27,4 @@ class StrSetting(QWidget):
 
     def save(self) -> tuple:
         setattr(g, self.id, self.le_val.text())
+        g.save()

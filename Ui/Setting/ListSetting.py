@@ -74,3 +74,4 @@ class ListSetting(QWidget):
             self.cb_val.removeItem(self.cb_val.currentIndex())
         msgbox = QFBNMessageBox.info(self, tr("删除"), tr("确认删除")+"?", ok)
         msgbox.show("original")
+        g.save()

@@ -28,3 +28,4 @@ class SelectSetting(QWidget):
 
     def save(self):
         setattr(g, self.id, self.cb_val.currentText())
+        g.save()
