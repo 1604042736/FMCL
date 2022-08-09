@@ -71,6 +71,7 @@ minmem = 256
 background_image = ""
 theme = "rgba(255,255,255,255)"
 language = "简体中文"
+max_thread_count = 64
 
 try:
     config = json.load(open("FMCL/config.json", encoding="utf-8"))
@@ -88,6 +89,7 @@ try:
     background_image = config.get("background_image", background_image)
     theme = config.get("theme", theme)
     language = config.get("language", language)
+    max_thread_count = int(config.get("max_thread_count", max_thread_count))
 except Exception as e:
     print(e)
 
@@ -118,7 +120,8 @@ def save():
         "minmem": minmem,
         "background_image": background_image,
         "theme": theme,
-        "language": language
+        "language": language,
+        "max_thread_count": max_thread_count
     }
     if cur_user in users:
         config["cur_user_index"] = users.index(cur_user)

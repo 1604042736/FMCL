@@ -12,7 +12,7 @@ class Download(CoreBase):
         super().__init__()
         self.url = url
         self.path = path
-        self.thread_count = 64  # 启用线程数
+        self.thread_count = g.max_thread_count  # 启用线程数
         self.download_bytes = {}  # 保存下载的bytes
         self.finished_thread = 0  # 完成的线程
         self.max_try_time = 100  # 最大尝试次数

@@ -31,7 +31,8 @@ class Setting(QFBNWidget, Ui_Setting):
             tr("Java路径"): [g.java_path, "java_path"],
             tr("背景图片"): [g.background_image, "background_image"],
             tr("主题"): [g.theme, "theme"],
-            tr("语言"): [all_languages, "language"]
+            tr("语言"): [all_languages, "language"],
+            tr("下载的最大线程数"): [g.max_thread_count, "max_thread_count"]
         }
         for key, val in config.items():
             item = QListWidgetItem()

@@ -75,5 +75,6 @@ translate = {
     "新闻": "News",
     "新闻详情": "News Detail",
     "关闭": "Close",
-    "刷新": "Refresh"
+    "刷新": "Refresh",
+    "下载的最大线程数": "Maximum number of threads downloaded"
 }
