@@ -4,7 +4,7 @@ from Core.Launch import Launch
 from QtFBN.QFBNWidget import QFBNWidget
 import Globals as g
 from PyQt5.QtWidgets import QTableWidgetItem, QMenu, QAction, QTableWidget, QAbstractItemView
-from PyQt5.QtGui import QCursor, QIcon, QResizeEvent
+from PyQt5.QtGui import QCursor, QIcon, QResizeEvent, QMouseEvent
 from Ui.VersionManager.VersionManager import VersionManager
 from PyQt5.QtCore import Qt
 from Translate import tr
@@ -66,9 +66,9 @@ class Desktop(QTableWidget, QFBNWidget):
 
     def show_menu(self):
         item = self.currentItem()
+        menu = QMenu(self)
         if item:
             text = item.text()
-            menu = QMenu(self)
             a_launch = QAction(tr("启动")+f'"{text}"', self)
             a_launch.triggered.connect(lambda: self.launch_game(text))
             a_launch.setIcon(qta.icon("fa.power-off"))
@@ -78,7 +78,11 @@ class Desktop(QTableWidget, QFBNWidget):
             a_manage.setIcon(qta.icon("msc.versions"))
             menu.addAction(a_launch)
             menu.addAction(a_manage)
-            menu.exec_(QCursor.pos())
+        else:
+            a_refresh = QAction(tr("刷新"), self)
+            a_refresh.triggered.connect(self.set_versions)
+            menu.addAction(a_refresh)
+        menu.exec_(QCursor.pos())
 
     def launch_game(self, version):
         if g.cur_user != None:
@@ -102,3 +106,16 @@ class Desktop(QTableWidget, QFBNWidget):
     def resizeEvent(self, a0: QResizeEvent) -> None:
         self.max_row_count = int(self.height()/self.UNIT_HEIGHT)
         self.set_versions()
+
+    def deselect(self, e: QMouseEvent):
+        """取消选中"""
+        point = e.pos()
+        index = self.indexAt(point)
+        # 判断该单元格是否是空单元格
+        if (self.item(index.row(), index.column()) == None):
+            # 取消选中
+            self.setCurrentItem(None)
+
+    def mousePressEvent(self, e: QMouseEvent) -> None:
+        self.deselect(e)
+        return super().mousePressEvent(e)

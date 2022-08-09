@@ -74,5 +74,6 @@ translate = {
     "这是最新版本": "This is the latest version",
     "新闻": "News",
     "新闻详情": "News Detail",
-    "关闭": "Close"
+    "关闭": "Close",
+    "刷新": "Refresh"
 }
