@@ -7,7 +7,7 @@ import platform
 import sys
 from Core import CoreBase
 import Globals as g
-from Core.Download import download
+from Core.Download import download, download_list
 
 
 class Launch(CoreBase):
@@ -134,7 +134,8 @@ class Launch(CoreBase):
 
         self.Finished.emit()
 
-    def analysis_assets(self, sep=False):
+    @download_list(check=True)
+    def analysis_assets(self):
         '''解析所有asset'''
         url = self.config['assetIndex']['url']
         name = self.config['assetIndex']['id']+'.json'
@@ -143,17 +144,21 @@ class Launch(CoreBase):
         indexes_file = os.path.join(indexes_path, name)
         download(url, indexes_file, self, True)
         indexes = json.load(open(indexes_file))
+
+        downloads = []
         for _, val in indexes['objects'].items():
-            self.analysis_asset(val)
+            downloads.append(self.analysis_asset(val))
+        return downloads
 
     def analysis_asset(self, val):
         '''解析asset'''
+        # g.logapi.info(f"解析asset:{val}")
         try:
             objects_path = os.path.join(self.asset_path, 'objects')
             hash = val['hash']
             object_url = f'http://resources.download.minecraft.net/{hash[:2]}/{hash}'
             object_path = os.path.join(objects_path, f'{hash[:2]}/{hash}')
-            download(object_url, object_path, self, True)
+            return (object_url, object_path, self)
         except Exception as e:
             print(e)
 

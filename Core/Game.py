@@ -2,7 +2,7 @@ import shutil
 import requests
 import json
 from Core import CoreBase
-from Core.Download import download
+from Core.Download import download, download_list
 import Globals as g
 import os
 from zipfile import *
@@ -255,7 +255,7 @@ class Game(CoreBase):
             url = lib['downloads']['artifact']['url']
             self.class_path[lib["name"]] = path
             if url:  # 下载
-                download(url, path, self, True)
+                return (url, path, self)
             else:  # 解压
                 path = lib['downloads']['artifact']['path']
                 jarpath = 'maven/'+path
@@ -270,7 +270,7 @@ class Game(CoreBase):
             name = lib["name"]
             path = self.name_to_path(name)
             url = lib["url"]+path
-            download(url, f"{g.cur_gamepath}/libraries/{path}", self, True)
+            return (url, f"{g.cur_gamepath}/libraries/{path}", self)
 
     def name_to_path(self, name):
         """将name转换成path"""
@@ -282,14 +282,20 @@ class Game(CoreBase):
         '''删除游戏'''
         shutil.rmtree(self.game_path)
 
+    @download_list(check=True)
+    def analysis_libraries(self, libraries):
+        downloads = []
+        for i in libraries:
+            downloads.append(self.analysis_library(i))
+        return downloads
+
     def install_fabric(self):
         """安装Fabric"""
         name = f"fabric-loader-{self.fabric_version}-{self.version}"
 
         r = requests.get(
             f"https://meta.fabricmc.net/v2/versions/loader/{self.version}/{self.fabric_version}/profile/json")
-        for i in json.loads(r.content)["libraries"]:
-            self.analysis_library(i)
+        self.analysis_libraries(json.loads(r.content)["libraries"])
 
         zip = ZipFile(self.game_path+"/profile.zip")
         loader_config = json.loads(zip.read(name+"/"+name+".json"))
