@@ -9,6 +9,8 @@ from PyQt5.QtWidgets import qApp
 import Globals as g
 import platform
 
+from Translate import tr
+
 
 class Update(CoreBase):
     HasNewVersion = pyqtSignal(str)
@@ -31,7 +33,11 @@ class Update(CoreBase):
     def check(self):
         """检查"""
         g.logapi.info("检查更新")
-        self.get_info()
+        try:
+            self.get_info()
+        except requests.exceptions.SSLError:
+            self.Error.emit(tr("网络错误,无法获取更新"))
+            return
 
         if self.info["tag_name"] != self.tag_name:
             self.HasNewVersion.emit(self.info["tag_name"])
@@ -40,7 +46,11 @@ class Update(CoreBase):
 
     def update(self):
         """更新"""
-        self.get_info()
+        try:
+            self.get_info()
+        except requests.exceptions.SSLError:
+            self.Error.emit(tr("网络错误,无法获取更新"))
+            return
 
         old_name = sys.argv[0]
         system = platform.system()

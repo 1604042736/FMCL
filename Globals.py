@@ -45,7 +45,7 @@ ch.setFormatter(logformat)
 logapi.addHandler(ch)
 
 
-TAG_NAME = "1.9.1"  # 当前版本号
+TAG_NAME = "1.9.2"  # 当前版本号
 
 dmgr = None  # 下载管理
 

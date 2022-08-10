@@ -20,11 +20,14 @@ class Task(QThread):
         self.ins.Error.connect(lambda a: self.Error.emit(a))
 
     def run(self):
-        getattr(self.ins, self.func)(*self.args)
-        # download不连接Finished信号会导致执行完后无法及时更新
-        # 连接Finished信号会导致一个任务如果调用了多次download
-        # 每次download结束都会发出Finished并传到Task.Finished
-        # 造成DownloadManager错误的删除任务
-        # 所以Task.Finished得在任务执行完后发出
-        # 而不是与ins.Finished连接
-        self.Finished.emit()
+        try:
+            getattr(self.ins, self.func)(*self.args)
+            # download不连接Finished信号会导致执行完后无法及时更新
+            # 连接Finished信号会导致一个任务如果调用了多次download
+            # 每次download结束都会发出Finished并传到Task.Finished
+            # 造成DownloadManager错误的删除任务
+            # 所以Task.Finished得在任务执行完后发出
+            # 而不是与ins.Finished连接
+            self.Finished.emit()
+        except Exception as e:
+            self.Error.emit(e)

@@ -24,6 +24,7 @@ class MainWindow(QFBNWindowManager):
         self.setWindowTitle("Functional Minecraft Launcher")
         self.update_ = Update(g.TAG_NAME)
         self.update_.HasNewVersion.connect(self.has_update)
+        self.update_.Error.connect(lambda a: self.notify(tr("错误"), a))
         self.homepage = Homepage()
         self.desktop = Desktop()
         self.task_buttons = []
@@ -128,8 +129,8 @@ class MainWindow(QFBNWindowManager):
         a_new.triggered.connect(lambda: new_instance(widget))
         menu.addAction(a_new)
 
-        menu.exec_(QPoint(self.win.x()+button.x(),
-                   self.win.y()+button.y()+self.win.title_height))
+        menu.exec_(QPoint(self.win.x()+button.x()+self.win.y_shift,
+                   self.win.y()+button.y()+self.win.title_height+self.win.y_shift))
 
     def show_exceed_menu(self):
         """显示超出部分(以菜单的形式)"""
@@ -140,8 +141,8 @@ class MainWindow(QFBNWindowManager):
                 lambda _, button=self.task_buttons[i]: self.change_page(sender=button))
             action.setIcon(self.page_map[self.task_buttons[i]].windowIcon())
             menu.addAction(action)
-        menu.exec_(QPoint(self.win.x()+self.more_button.x(),
-                   self.win.y()+self.more_button.y()+self.win.title_height))
+        menu.exec_(QPoint(self.win.x()+self.more_button.x()+self.win.y_shift,
+                   self.win.y()+self.more_button.y()+self.win.title_height+self.win.y_shift))
 
     def change_page(self, _=None, sender=None):
         if not sender:

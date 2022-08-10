@@ -1,4 +1,5 @@
 import shutil
+from typing import Callable
 import requests
 import json
 from Core import CoreBase
@@ -8,46 +9,62 @@ import os
 from zipfile import *
 
 
+def keep_trying(func: Callable):
+    """一直尝试"""
+    def wrap(*args):
+        while True:
+            try:
+                return func(*args)
+            except:
+                g.logapi.info(f"重新尝试:{func.__name__}{args}")
+    return wrap
+
+
 class Game(CoreBase):
+    @keep_trying
     def get_versions(self) -> list:
         '''获取游戏版本'''
         url = 'http://launchermeta.mojang.com/mc/game/version_manifest.json'
-        r = requests.get(url)
+        r = requests.get(url, timeout=5)
         versions = []
         for version in json.loads(r.content)['versions']:
             versions.append(version['id'])
         return versions
 
+    @keep_trying
     def get_forge(self, version) -> list:
         '''获取forge版本'''
         url = f'https://bmclapi2.bangbang93.com/forge/minecraft/{version}'
-        r = requests.get(url)
+        r = requests.get(url, timeout=5)
         forges = []
         for forge in json.loads(r.content):
             forges.append(forge['version'])
         return forges
 
+    @keep_trying
     def get_fabric(self, version) -> list:
         url = f"https://meta.fabricmc.net/v1/versions/loader/{version}"
-        r = requests.get(url)
+        r = requests.get(url, timeout=5)
         fabrics = []
         for fabric in json.loads(r.content):
             fabrics.append(fabric["loader"]["version"])
         return fabrics
 
+    @keep_trying
     def get_optifine(self, version) -> list:
         '''获取optifine版本'''
         url = f'https://bmclapi2.bangbang93.com/optifine/{version}'
-        r = requests.get(url)
+        r = requests.get(url, timeout=5)
         optifines = []
         for optifine in json.loads(r.content):
             optifines.append(optifine['type'] + ' ' + optifine['patch'])
         return optifines
 
+    @keep_trying
     def get_liteloader(self, version) -> list:
         '''获取liteloader版本'''
         url = f'https://bmclapi2.bangbang93.com/liteloader/list?mcversion={version}'
-        r = requests.get(url)
+        r = requests.get(url, timeout=5)
         liteloaders = []
         try:
             liteloaders.append(json.loads(r.content)['version'])

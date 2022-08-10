@@ -51,10 +51,14 @@ class Download(CoreBase):
         file_size = int(requests.head(
             self.url, headers=headers).headers['Content-Length'])
         g.logapi.info(f"{self.url}大小:{file_size}")
-        if file_size < self.min_filesize:
-            self.start_without_thread()
-            return
 
+        if file_size < self.min_filesize:  # 小文件不用多线程下载
+            self.start_without_thread()
+        else:
+            self.start_with_thread(file_size)
+
+    def start_with_thread(self, file_size):
+        """多线程下载"""
         # 获取各部分长度
         ranges = []
         start_bytes = -1
@@ -65,7 +69,7 @@ class Download(CoreBase):
             ranges.append((start_bytes+1, end_bytes))
             start_bytes = end_bytes
 
-        # 多线程下载
+        # 开始下载
         thread_list = []
         for i in range(self.thread_count):
             t = threading.Thread(
@@ -90,8 +94,13 @@ class Download(CoreBase):
             while try_time != self.max_try_time:
                 try:
                     rsp = requests.get(self.url, stream=True, timeout=5)
+                    # 再判断一次
+                    # 对于某些网站用requests.head获取Content-Length不一定正确
+                    if int(rsp.headers["Content-Length"]) >= self.min_filesize:
+                        self.start_with_thread(
+                            int(rsp.headers["Content-Length"]))
                     offset = 0
-                    for chunk in rsp.iter_content(chunk_size=1024):
+                    for chunk in rsp.iter_content(chunk_size=10240):
                         if not chunk:
                             break
                         fileobj.write(chunk)  # 写入文件
@@ -158,5 +167,6 @@ def download_list(check=False):
                 thread_list.append(t)
             while count[0] != count[1]:
                 downloads[0][2].Progress.emit(count[0], count[1])
+                time.sleep(1)  # 频繁发送信号会让界面卡死
         return wrap
     return download

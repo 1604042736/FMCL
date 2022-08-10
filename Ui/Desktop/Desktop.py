@@ -71,7 +71,7 @@ class Desktop(QTableWidget, QFBNWidget):
             text = item.text()
             a_launch = QAction(tr("启动")+f'"{text}"', self)
             a_launch.triggered.connect(lambda: self.launch_game(text))
-            a_launch.setIcon(qta.icon("fa.power-off"))
+            a_launch.setIcon(qta.icon("mdi6.rocket-launch-outline"))
             a_manage = QAction(tr("管理")+f'"{text}"', self)
             a_manage.triggered.connect(
                 lambda: self.open_version_manager(text))

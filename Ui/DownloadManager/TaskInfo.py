@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QProgressBar, QPushButton
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QProgressBar, QPushButton, QListWidgetItem
 from PyQt5.QtCore import pyqtSignal, QTimer
 from Core import CoreBase
 from Translate import tr
@@ -7,16 +7,16 @@ from Ui.DownloadManager.Task import Task
 
 
 class TaskInfo(QWidget):
-    Finished = pyqtSignal(int)
-    Error = pyqtSignal(str, int)
+    Finished = pyqtSignal(QListWidgetItem)
+    Error = pyqtSignal(str, QListWidgetItem)
 
-    def __init__(self, name, ins: CoreBase, func, args, id, parent=None):
+    def __init__(self, name, ins: CoreBase, func, args, item, parent=None):
         super().__init__(parent)
         self.name = name  # 任务名称
         self.ins = ins  # 类的实例
         self.func = func  # 函数
         self.args = args  # 参数
-        self.id = id
+        self.item = item
 
         self.hbox = QHBoxLayout()
 
@@ -64,12 +64,12 @@ class TaskInfo(QWidget):
 
     def finish(self):
         try:
-            self.Finished.emit(self.id)
+            self.Finished.emit(self.item)
         except RuntimeError:
             pass
 
-    def error(self):
+    def error(self, msg):
         try:
-            self.Error.emit(self.id)
+            self.Error.emit(msg, self.item)
         except RuntimeError:
             pass

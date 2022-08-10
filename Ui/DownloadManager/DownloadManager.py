@@ -22,29 +22,31 @@ class DownloadManager(QFBNWidget, Ui_DownloadManager):
         """添加一个任务"""
         item = QListWidgetItem()
         item.setSizeHint(QSize(256, 64))
-        widget = TaskInfo(name, ins, func, args, self.lw_tasks.count())
+        widget = TaskInfo(name, ins, func, args, item)
         widget.Finished.connect(self.task_finished)
         widget.Error.connect(self.task_error)
         self.lw_tasks.addItem(item)
         self.lw_tasks.setItemWidget(item, widget)
+        widget.start()
         self.task_num += 1
         self.HasTask.emit()
         self.show()
-        widget.start()  # 防止任务执行太快
 
-    def task_finished(self, task_id):
-        name = self.lw_tasks.itemWidget(
-            self.lw_tasks.item(task_id)).name
-        self.lw_tasks.takeItem(task_id)
-        self.task_num = self.lw_tasks.count()
-        if self.task_num == 0:
-            self.NoTask.emit()
-            self.close()
-        self.notify(tr("任务结束"), name)
-        g.logapi.info(f"任务结束:{name}")
+    def task_finished(self, item):
+        taskinfo = self.lw_tasks.itemWidget(item)
+        # 如果发生错误发出Error信号就会导致taskinfo为None
+        if taskinfo != None:
+            name = taskinfo.name
+            self.lw_tasks.takeItem(self.lw_tasks.row(item))
+            self.task_num = self.lw_tasks.count()
+            if self.task_num == 0:
+                self.NoTask.emit()
+                self.close()
+            self.notify(tr("任务结束"), name)
+            g.logapi.info(f"任务结束:{name}")
 
-    def task_error(self, msg, task_id):
-        self.lw_tasks.takeItem(task_id)
+    def task_error(self, msg, item):
+        self.lw_tasks.takeItem(self.lw_tasks.row(item))
         self.task_num = self.lw_tasks.count()
         if self.task_num == 0:
             self.NoTask.emit()

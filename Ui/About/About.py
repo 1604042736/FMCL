@@ -79,6 +79,7 @@ class About(QFBNWidget, Ui_About):
         self.update_ = Update(g.TAG_NAME)
         self.update_.HasNewVersion.connect(self.has_update)
         self.update_.NoNewVersion.connect(self.no_update)
+        self.update_.Error.connect(lambda a: self.notify(tr("错误"), a))
         self.check_update()
 
     @pyqtSlot(bool)
