@@ -2,7 +2,7 @@ from QtFBN.QFBNWidget import QFBNWidget
 from Translate import tr
 from Ui.Downloader.Minecraft import Minecraft
 from Ui.Downloader.Mods import Mods
-from Ui.More.More import More
+from Ui.About.About import About
 from PyQt5.QtWidgets import QTableWidgetItem, QTableWidget, QAbstractItemView
 import qtawesome as qta
 from PyQt5.QtGui import QResizeEvent
@@ -20,7 +20,7 @@ class AllFunctions(QTableWidget, QFBNWidget):
         self.functions = {
             tr("下载Minecraft"): Minecraft,
             tr("下载Mod"): Mods,
-            tr("更多"): More,
+            tr("关于"): About,
             tr("新闻"): News
         }
         self.row_count = 1
