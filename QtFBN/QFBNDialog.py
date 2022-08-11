@@ -2,7 +2,7 @@ from QtFBN.QFBNWidget import QFBNWidget
 from PyQt5.QtWidgets import QWidget, QPushButton, QFrame, QLabel
 from PyQt5.QtGui import QResizeEvent, QPaintEvent, QPainter, QColor, QPen
 import qtawesome as qta
-from PyQt5.QtCore import QSize, Qt
+from PyQt5.QtCore import QSize, Qt, QTimer
 
 from QtFBN.QFBNWindow import QFBNWindow
 from QtFBN.QFBNWindowManager import QFBNWindowManager
@@ -64,7 +64,16 @@ class QFBNDialog(QFBNWidget):
             parent.widget_to_self = self.widget_to_self
 
         self._f_title.raise_()
-        self.raise_()
+
+        # 防止各种操作导致没有在最上层
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.raise_)
+        self.timer.start(1)
+
+    def raise_(self) -> None:
+        self._cover.raise_()
+        self._f_title.raise_()
+        return super().raise_()
 
     def recovery(self):
         """恢复"""

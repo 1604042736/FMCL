@@ -173,6 +173,8 @@ class MainWindow(QFBNWindowManager):
                     self.task_buttons.remove(key)
                     self.page_map.pop(key)
                     break
+        if not isinstance(widget, Desktop):
+            self.setCurrentWidget(self.desktop)
         self.adjust_titlewidgets()
         super().release_widget(widget)
 

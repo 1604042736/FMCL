@@ -45,7 +45,7 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>528</y>
+      <y>483</y>
       <width>45</width>
       <height>45</height>
      </rect>
@@ -64,7 +64,7 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>573</y>
+      <y>528</y>
       <width>45</width>
       <height>45</height>
      </rect>
@@ -96,6 +96,19 @@
     </property>
     <property name="autoExclusive">
      <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_software">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>573</y>
+      <width>45</width>
+      <height>45</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>

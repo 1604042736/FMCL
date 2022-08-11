@@ -79,5 +79,10 @@ translate = {
     "下载的最大线程数": "Maximum number of threads downloaded",
     "依赖": "Third-party libraries",
     "关于Qt": "About Qt",
-    "网络错误,无法获取更新": "Network error, unable to get updates"
+    "网络错误,无法获取更新": "Network error, unable to get updates",
+    "软件": "Software",
+    "休眠": "Dormancy",
+    "退出": "Quit",
+    "重启": "Restart",
+    "反馈问题": "Feedback"
 }

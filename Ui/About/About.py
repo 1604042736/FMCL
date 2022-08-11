@@ -37,6 +37,7 @@ class About(QFBNWidget, Ui_About):
         self.groupBox_3.setTitle(tr("依赖"))
         self.pb_openpythonurl.setText(tr("打开网址"))
         self.pb_aboutqt.setText(tr("关于Qt"))
+        self.pb_feedback.setText(tr("反馈问题"))
 
         self.setWindowIcon(eval(self.icon_exp))
 
@@ -89,6 +90,10 @@ class About(QFBNWidget, Ui_About):
     @pyqtSlot(bool)
     def on_pb_aboutqt_clicked(self, _):
         QMessageBox.aboutQt(self, tr("关于Qt"))
+
+    @pyqtSlot(bool)
+    def on_pb_feedback_clicked(self, _):
+        webbrowser.open("https://github.com/1604042736/FMCL/issues")
 
     @g.run_as_thread
     def check_update(self):

@@ -1,11 +1,13 @@
+import os
+import sys
 from QtFBN.QFBNWidget import QFBNWidget
 from Translate import tr
 from Ui.Homepage.AllFunctions import AllFunctions
 from Ui.Homepage.ui_Homepage import Ui_Homepage
 from PyQt5.QtGui import QResizeEvent
 import qtawesome as qta
-from PyQt5.QtCore import QSize
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtCore import QSize, QPoint
+from PyQt5.QtWidgets import QWidget, QMenu, QAction, qApp
 from Ui.Setting.Setting import Setting
 from Ui.User.User import User
 import Globals as g
@@ -25,6 +27,7 @@ class Homepage(QFBNWidget, Ui_Homepage):
 
         self.panel_buttons = [[self.pb_detail, "top"],
                               [self.pb_allfunc, "top", tr("所有应用")],
+                              [self.pb_software, "bottom", tr("软件")],
                               [self.pb_setting, "bottom", tr("设置")],
                               [self.pb_user, "bottom", tr("未选择用户")]]  # 面板上的按钮
         if g.cur_user:
@@ -45,6 +48,9 @@ class Homepage(QFBNWidget, Ui_Homepage):
 
         self.pb_setting.setIcon(qta.icon("ri.settings-5-line"))
         self.pb_setting.clicked.connect(lambda: Setting().show())
+
+        self.pb_software.setIcon(qta.icon("mdi.power"))
+        self.pb_software.clicked.connect(self.show_power_menu)
 
         self.panel_state = "simple"  # 面板状态
 
@@ -107,3 +113,35 @@ class Homepage(QFBNWidget, Ui_Homepage):
             self.panel_buttons[self.PB_USER_INDEX][2] = g.cur_user["name"]
         else:
             self.panel_buttons[self.PB_USER_INDEX][2] = tr("未选择用户")
+
+    def show_power_menu(self):
+        menu = QMenu(self)
+
+        a_quit = QAction(self, text=tr("退出"))
+        a_quit.triggered.connect(qApp.quit)
+        a_quit.setIcon(qta.icon("mdi.power"))
+
+        a_dormancy = QAction(self, text=tr("休眠"))
+        a_dormancy.triggered.connect(self.dormancy)
+        a_dormancy.setIcon(qta.icon("mdi.clock-time-three-outline"))
+
+        a_restart = QAction(self, text=tr("重启"))
+        a_restart.triggered.connect(self.restart)
+        a_restart.setIcon(qta.icon("msc.debug-restart"))
+
+        # menu.addAction(a_dormancy)
+        menu.addAction(a_quit)
+        menu.addAction(a_restart)
+
+        global_pos = self.pb_software.mapToGlobal(QPoint(0, 0))
+        menu.exec_(QPoint(global_pos.x(),
+                          global_pos.y() - menu.sizeHint().height()))
+
+    def restart(self):
+        print(f'start {sys.argv[0]}')
+        os.popen(f'start {sys.argv[0]}')
+        qApp.quit()
+
+    def dormancy(self):
+        """休眠"""
+        qApp.quit()
