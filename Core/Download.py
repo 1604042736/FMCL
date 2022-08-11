@@ -80,6 +80,7 @@ class Download(CoreBase):
 
         while self.thread_count != self.finished_thread:
             self.Progress.emit(self.finished_thread, self.thread_count)
+            time.sleep(1)  # 频繁发送信号会让界面卡死
 
         # 合并
         with open(self.path, 'wb')as file:
