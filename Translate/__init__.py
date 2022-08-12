@@ -1,5 +1,5 @@
 import Globals as g
-from importlib import import_module
+import Translate.English as English
 
 all_languages = ("简体中文", "English")
 language_map = {
@@ -8,8 +8,8 @@ language_map = {
 }
 language = language_map[g.language]
 
-if language != "Chinese":
-    lang = import_module(f"Translate.{language}")
+if language == "English":
+    lang = English
 
 
 def tr(text) -> str:

@@ -6,6 +6,7 @@ from Ui.About.About import About
 from PyQt5.QtWidgets import QTableWidgetItem, QTableWidget, QAbstractItemView
 import qtawesome as qta
 from PyQt5.QtGui import QResizeEvent
+from Ui.Help.Help import Help
 
 from Ui.News.News import News
 
@@ -21,7 +22,8 @@ class AllFunctions(QTableWidget, QFBNWidget):
             tr("下载Minecraft"): Minecraft,
             tr("下载Mod"): Mods,
             tr("关于"): About,
-            tr("新闻"): News
+            tr("新闻"): News,
+            tr("帮助"): Help
         }
         self.row_count = 1
         self.col_count = 1
