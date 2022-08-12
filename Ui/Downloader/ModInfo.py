@@ -18,6 +18,10 @@ class ModInfo(QWidget):
         self.l_icon = QLabel(self)
 
         self.l_title = QLabel(self, text=self.info['title'])
+        font = self.l_title.font()
+        font.setBold(True)
+        self.l_title.setFont(font)
+
         self.l_describe = QLabel(self, text=self.info['description'])
         self.l_describe.setWordWrap(True)
         self.l_describe.setAlignment(Qt.AlignTop)

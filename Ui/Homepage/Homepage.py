@@ -49,8 +49,8 @@ class Homepage(QFBNWidget, Ui_Homepage):
         self.pb_setting.setIcon(qta.icon("ri.settings-5-line"))
         self.pb_setting.clicked.connect(lambda: Setting().show())
 
-        self.pb_software.setIcon(qta.icon("mdi.power"))
-        self.pb_software.clicked.connect(self.show_power_menu)
+        self.pb_software.setIcon(qta.icon("mdi.application"))
+        self.pb_software.clicked.connect(self.show_software_menu)
 
         self.panel_state = "simple"  # 面板状态
 
@@ -114,7 +114,7 @@ class Homepage(QFBNWidget, Ui_Homepage):
         else:
             self.panel_buttons[self.PB_USER_INDEX][2] = tr("未选择用户")
 
-    def show_power_menu(self):
+    def show_software_menu(self):
         menu = QMenu(self)
 
         a_quit = QAction(self, text=tr("退出"))

@@ -1,4 +1,5 @@
 from Core.Update import Update
+from QtFBN.QFBNDialog import QFBNDialog
 from QtFBN.QFBNWidget import QFBNWidget
 from QtFBN.QFBNWindowManager import QFBNWindowManager
 from Translate import tr
@@ -173,10 +174,10 @@ class MainWindow(QFBNWindowManager):
                     self.task_buttons.remove(key)
                     self.page_map.pop(key)
                     break
-        if not isinstance(widget, Desktop):
-            self.setCurrentWidget(self.desktop)
         self.adjust_titlewidgets()
         super().release_widget(widget)
+        if isinstance(self.currentWidget(), Homepage):
+            self.setCurrentWidget(self.desktop)
 
     def set_title_widget_state(self):
         super().set_title_widget_state()
