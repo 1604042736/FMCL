@@ -30,7 +30,7 @@ class Download(CoreBase):
         try_time = 0
         while try_time != self.max_try_time:
             try:
-                r = requests.get(self.url, headers=headers, timeout=5)
+                r = requests.get(self.url, headers=headers, timeout=5,verify=False)
                 self.download_bytes[byte_range[0]] = r.content
                 self.finished_thread += 1
                 break
@@ -94,7 +94,7 @@ class Download(CoreBase):
             try_time = 0
             while try_time != self.max_try_time:
                 try:
-                    rsp = requests.get(self.url, stream=True, timeout=5)
+                    rsp = requests.get(self.url, stream=True, timeout=5,verify=False)
                     # 再判断一次
                     # 对于某些网站用requests.head获取Content-Length不一定正确
                     if int(rsp.headers["Content-Length"]) >= self.min_filesize:

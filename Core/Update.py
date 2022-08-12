@@ -27,7 +27,7 @@ class Update(CoreBase):
     def get_info(self):
         if "info" not in self.__dict__:
             url = "https://api.github.com/repos/1604042736/FMCL/releases/latest"
-            r = requests.get(url)
+            r = requests.get(url, verify=False)
             self.info = json.loads(r.content)
 
     def check(self):
