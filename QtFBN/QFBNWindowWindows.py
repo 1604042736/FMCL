@@ -10,8 +10,6 @@ import qtawesome as qta
 class QFBNWindowWindows(QFBNWindowBasic):
     """适用于Windows系统的QFBNWindow"""
 
-    y_shift = 0  # 偏移,最大化后不能用原来的坐标
-
     def set_windowstyle(self) -> None:
         """设置窗口样式"""
         super().set_windowstyle()

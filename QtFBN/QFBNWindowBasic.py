@@ -21,6 +21,7 @@ class QFBNWindowBasic(QWidget):
     left_width = 0  # 标题栏靠左控件的宽度
     right_width = 0  # 标题栏靠右控件的宽度
     title_button_width = 45  # 标题栏按钮宽度
+    y_shift = 0
 
     def __init__(self, target) -> None:
         super().__init__()
