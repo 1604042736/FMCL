@@ -33,6 +33,7 @@ Then run `Main.py` directly
 - Support change theme color
 - Support more languages
 - Support view news
+- Support version isolate and specific setting
 
 ## Command line parameters
 

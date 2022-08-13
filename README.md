@@ -35,6 +35,7 @@ pip install -r requirements.txt
 - 支持更改主题颜色
 - 支持多种语言
 - 支持浏览新闻
+- 支持版本隔离和特定设置
 
 ## 命令行参数
 
