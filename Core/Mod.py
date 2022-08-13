@@ -53,7 +53,7 @@ class Mod(CoreBase):
         '''下载模组文件'''
         download(self.info["url"], self.path, self)
 
-    def get_mods(self) -> list:
+    def get_mods(self) -> tuple[list,int,int]:
         """获取文件夹下的mod"""
         try:
             os.makedirs(self.path)
