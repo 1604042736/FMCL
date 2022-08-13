@@ -60,14 +60,19 @@ class Mod(CoreBase):
         except:
             pass
         result = []
+        allmod = 0
+        enablemod = 0
         for i in os.listdir(self.path):
             if self.is_mod(i):
+                allmod += 1
+                if ".disabled" not in i:
+                    enablemod += 1
                 result.append(i)
-        return result
+        return result, enablemod, allmod
 
     def is_mod(self, name) -> bool:
         """判断是否是mod"""
-        return "jar" in name or "disabled" in name
+        return ".jar" in name or ".disabled" in name
 
     def endisable_mod(self) -> tuple:
         """启用或禁用mod"""

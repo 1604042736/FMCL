@@ -179,7 +179,9 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
             item = self.gl_modlist.itemAt(0)
             self.gl_modlist.removeItem(item)
             item.widget().deleteLater()
-        for i, val in enumerate(Mod(path=self.mods_path).get_mods()):
+        modlist,enablemod,allmod=Mod(path=self.mods_path).get_mods()
+        self.gb_modmanage.setText(f'{tr("Mod管理")}({enablemod}/{allmod})')
+        for i, val in enumerate(modlist):
             widget = ModItem(val, self.mods_path)
             widget.ModEnDisAble.connect(self.set_mods)
             widget.ModDeleted.connect(self.set_mods)
