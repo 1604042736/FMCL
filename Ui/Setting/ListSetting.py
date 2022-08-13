@@ -3,16 +3,14 @@ import qtawesome as qta
 import Globals as g
 from QtFBN.QFBNMessageBox import QFBNMessageBox
 from Translate import tr
+from .SettingItem import SettingItem
 
 
-class ListSetting(QWidget):
+class ListSetting(SettingItem):
     """类型为列表的设置"""
 
-    def __init__(self, id, name, val, relation_id="", add_type="input", parent=None) -> None:
-        super().__init__(parent)
-        self.id = id
-        self.name = name
-        self.val = val
+    def __init__(self, id, name, val, relation_id="", add_type="input", do_after_save=None, target=g, parent=None) -> None:
+        super().__init__(id, name, val, do_after_save, target, parent)
         self.add_type = add_type  # 添加的时侯的方式
         self.relation_id = relation_id  # 关联的id
 
@@ -47,9 +45,10 @@ class ListSetting(QWidget):
         l.remove(cur)
         l.insert(0, cur)
 
-        setattr(g, self.id, l)
+        setattr(self.target, self.id, l)
         if self.relation_id:
-            setattr(g, self.relation_id, l[0])
+            setattr(self.target, self.relation_id, l[0])
+        super().save()
 
     def get_all_text(self) -> list:
         l = []
@@ -74,4 +73,3 @@ class ListSetting(QWidget):
             self.cb_val.removeItem(self.cb_val.currentIndex())
         msgbox = QFBNMessageBox.info(self, tr("删除"), tr("确认删除")+"?", ok)
         msgbox.show("original")
-        g.save()

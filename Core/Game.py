@@ -72,7 +72,7 @@ class Game(CoreBase):
             pass
         return liteloaders
 
-    def __init__(self, name="", version="", forge_version="", fabric_version="", optifine_version="") -> None:
+    def __init__(self, name="", version="", forge_version="", fabric_version="", optifine_version="", isolate=False) -> None:
         super().__init__()
         self.name = name
         self.version = version
@@ -83,6 +83,9 @@ class Game(CoreBase):
         self.lib_path = os.path.join(g.cur_gamepath, f'libraries')
         self.version_path = os.path.join(g.cur_gamepath, 'versions')
         self.game_path = os.path.join(self.version_path, self.name)
+        self.isolate = isolate
+        if self.isolate:
+            self.lib_path = os.path.join(self.game_path, "libraries")
 
     def download_version(self):
         '''下载版本'''
@@ -95,7 +98,9 @@ class Game(CoreBase):
             "version": self.version,
             "forge_version": self.forge_version,
             "fabric_version": self.fabric_version,
-            "optifine_version": self.optifine_version
+            "optifine_version": self.optifine_version,
+            "isolate": self.isolate,
+            "specific_setting": False
         }
         try:
             os.makedirs(f'{self.game_path}/FMCL')
@@ -380,7 +385,9 @@ class Game(CoreBase):
             "version": "",
             "forge_version": "",
             "fabric_version": "",
-            "optifine_version": ""
+            "optifine_version": "",
+            "isolate": self.isolate,
+            "specific_setting":False
         }
         try:
             if "arguments" in config:
@@ -461,4 +468,6 @@ class Game(CoreBase):
                 and "forge_version" in info
                 and "fabric_version" in info
                 and "optifine_version" in info
-                and "icon" in info)
+                and "icon" in info
+                and "isolate" in info
+                and "specific_setting" in info)

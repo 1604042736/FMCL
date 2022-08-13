@@ -1,15 +1,16 @@
-from http.client import OK
 import os
 import json
 from Core.Game import Game
 from Core.Mod import Mod
 from QtFBN.QFBNWidget import QFBNWidget
 from Translate import tr
+from ..Setting.BoolSetting import BoolSetting
+from ..Setting.IntSetting import IntSetting
 from Ui.VersionManager.IconSelector import IconSelector
 from Ui.VersionManager.ModItem import ModItem
 from Ui.VersionManager.ui_VersionManager import Ui_VersionManager
 import Globals as g
-from PyQt5.QtWidgets import QApplication, QListWidgetItem, QWidget
+from PyQt5.QtWidgets import QListWidgetItem
 from PyQt5.QtCore import pyqtSignal, QSize
 from Core.Game import Game
 from QtFBN.QFBNMessageBox import QFBNMessageBox
@@ -38,12 +39,17 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
         self.pb_changeicon.setText(tr("更改图标"))
         self.groupBox_2.setTitle(tr("Mod管理"))
         self.pb_openmodfoder.setText(tr("打开mod文件夹"))
+        self.groupBox_3.setTitle(tr("设置"))
 
         self.version_path = os.path.join(g.cur_gamepath, "versions")
         self.game_path = os.path.join(self.version_path, name)
-        self.mods_path = g.cur_gamepath+"\\mods"
 
         self.config = Game(name).get_info()
+
+        if self.config["isolate"]:
+            self.mods_path = g.cur_gamepath+"\\mods"
+        else:
+            pass
 
         self.name = self.config["name"]
         self.version = self.config["version"]
@@ -51,6 +57,24 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
         self.fabric_version = self.config["fabric_version"]
         self.optifine_version = self.config["optifine_version"]
         self.icon = self.config["icon"]
+        self.isolate = self.config["isolate"]
+        self.specific_setting = self.config["specific_setting"]
+
+        if self.specific_setting:
+            self.set_specific_setting()
+
+        if self.isolate:
+            self.mods_path = self.game_path+"\\mods"
+        else:
+            self.mods_path = g.cur_gamepath+"\\mods"
+
+        self.isolate_setting = BoolSetting(
+            "isolate", tr("版本隔离"), self.isolate, self.save, self)
+        self.gridLayout_5.addWidget(self.isolate_setting, 0, 0, 1, 1)
+
+        self.specific_setting_setting = BoolSetting(
+            "specific_setting", tr("特定设置"), self.specific_setting, self.save, self)
+        self.gridLayout_5.addWidget(self.specific_setting_setting, 0, 1, 1, 1)
 
         self.le_name.setText(self.name)
         self.l_version.setText(self.version)
@@ -69,11 +93,56 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
 
         self.set_mods()
 
+    def set_specific_setting(self):
+        self.gamewidth = self.config.get("width", g.width)
+        self.gamewidth_setting = IntSetting("width", tr(
+            "游戏窗口宽度"), self.gamewidth, self.save, self)
+        self.gridLayout_5.addWidget(self.gamewidth_setting, 1, 0, 1, 1)
+
+        self.gameheight = self.config.get("height", g.height)
+        self.gameheight_setting = IntSetting("height", tr(
+            "游戏窗口高度"), self.gameheight, self.save, self)
+        self.gridLayout_5.addWidget(self.gameheight_setting, 2, 0, 1, 1)
+
+        self.maxmem = self.config.get("maxmem", g.maxmem)
+        self.maxmem_setting = IntSetting("maxmem", tr(
+            "最大内存"), self.maxmem, self.save, self)
+        self.gridLayout_5.addWidget(self.maxmem_setting, 3, 0, 1, 1)
+
+        self.minmem = self.config.get("minmem", g.minmem)
+        self.minmem_setting = IntSetting("minmem", tr(
+            "最小内存"), self.minmem, self.save, self)
+        self.gridLayout_5.addWidget(self.minmem_setting, 4, 0, 1, 1)
+
+    def unset_specific_setting(self):
+        try:
+            self.gridLayout_5.removeWidget(self.gamewidth_setting)
+            self.gridLayout_5.removeWidget(self.gameheight_setting)
+            self.gridLayout_5.removeWidget(self.maxmem_setting)
+            self.gridLayout_5.removeWidget(self.minmem_setting)
+        except:
+            pass
+
     def save(self):
         for key in self.config:
-            self.config[key] = getattr(self, key)
-            json.dump(self.config, open(
-                self.game_path+"/FMCL/config.json", "w"))
+            if key in self.__dict__:
+                self.config[key] = getattr(self, key)
+        if self.specific_setting:
+            self.set_specific_setting()
+            for key in ("gamewidth", "gameheight", "maxmem", "minmem"):
+                if key in self.__dict__:
+                    self.config[key] = getattr(self, key)
+        else:
+            self.unset_specific_setting()
+
+        if self.isolate:
+            self.mods_path = self.game_path+"\\mods"
+        else:
+            self.mods_path = g.cur_gamepath+"\\mods"
+        self.set_mods()
+
+        json.dump(self.config, open(
+            self.game_path+"/FMCL/config.json", "w"))
 
     def close(self, called_del=False) -> bool:
         if not called_del:

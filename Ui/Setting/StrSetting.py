@@ -1,15 +1,13 @@
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QLineEdit
 import Globals as g
+from .SettingItem import SettingItem
 
 
-class StrSetting(QWidget):
+class StrSetting(SettingItem):
     """类型为字符串的设置"""
 
-    def __init__(self, id, name, val, parent=None) -> None:
-        super().__init__(parent)
-        self.id = id
-        self.name = name
-        self.val = val
+    def __init__(self, id, name, val, do_after_save=None, target=g, parent=None) -> None:
+        super().__init__(id, name, val, do_after_save, target, parent)
 
         self.hbox = QHBoxLayout()
 
@@ -27,4 +25,4 @@ class StrSetting(QWidget):
 
     def save(self) -> tuple:
         setattr(g, self.id, self.le_val.text())
-        g.save()
+        super().save()

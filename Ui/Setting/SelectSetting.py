@@ -1,15 +1,13 @@
 from PyQt5.QtWidgets import QWidget, QLabel, QComboBox, QHBoxLayout
 import Globals as g
+from .SettingItem import SettingItem
 
 
-class SelectSetting(QWidget):
+class SelectSetting(SettingItem):
     """类型为tuple的设置"""
 
-    def __init__(self, id, name, val, parent=None) -> None:
-        super().__init__(parent)
-        self.id = id
-        self.name = name
-        self.val = val
+    def __init__(self, id, name, val, do_after_save=None, target=g, parent=None) -> None:
+        super().__init__(id, name, val, do_after_save, target, parent)
 
         self.hbox = QHBoxLayout()
 
@@ -28,4 +26,4 @@ class SelectSetting(QWidget):
 
     def save(self):
         setattr(g, self.id, self.cb_val.currentText())
-        g.save()
+        super().save()

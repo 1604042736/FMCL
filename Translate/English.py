@@ -85,5 +85,7 @@ translate = {
     "退出": "Quit",
     "重启": "Restart",
     "反馈问题": "Feedback",
-    "帮助": "Help"
+    "帮助": "Help",
+    "版本隔离": "Version isolate",
+    "特定设置": "Specific setting"
 }

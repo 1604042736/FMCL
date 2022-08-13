@@ -6,6 +6,7 @@ from zipfile import ZipFile
 import platform
 import sys
 from Core import CoreBase
+from .Game import Game
 import Globals as g
 from Core.Download import download, download_list
 
@@ -47,6 +48,11 @@ class Launch(CoreBase):
         self.config = json.load(
             open(os.path.join(self.path, f'{name}.json')))  # json文件
 
+        self.version_config = Game(name).get_info()
+        if self.version_config["isolate"]:
+            self.lib_path = os.path.abspath(
+                os.path.join(self.path, 'libraries'))
+
         self.name = name
         self.classpath = []  # -cp后的参数
         self.cp_memory = {}  # classpath记忆
@@ -67,7 +73,7 @@ class Launch(CoreBase):
         self.classpath.append(os.path.join(self.path, f'{self.name}.jar'))
 
         # jvm参数必须放在游戏参数前!!!
-        args = f'cd "{os.path.abspath(g.config["cur_gamepath"])}" & start {javapath} '
+        args = f'cd "{os.path.abspath(g.cur_gamepath)}" & start {javapath} '
         args += f'-XX:+UseG1GC '
         args += f'-XX:-UseAdaptiveSizePolicy '
         args += f'-XX:-OmitStackTraceInFastThrow '
@@ -92,8 +98,12 @@ class Launch(CoreBase):
                             if isinstance(i['value'], str):
                                 args += i['value']+' '
 
-        args += f'-Xmn{minmem}m '
-        args += f'-Xmx{maxmem}m '
+        if self.version_config["specific_setting"]:
+            args += f'-Xmn{self.version_config.get("minmem",minmem)}m '
+            args += f'-Xmx{self.version_config.get("maxmem",maxmem)}m '
+        else:
+            args += f'-Xmn{minmem}m '
+            args += f'-Xmx{maxmem}m '
         args += f'{self.config["mainClass"]} '
 
         if "arguments" in self.config:
@@ -112,8 +122,14 @@ class Launch(CoreBase):
 
         args = args.replace('${auth_player_name}', playername)
         args = args.replace('${version_name}', self.config["id"])
-        args = args.replace('${game_directory}',
-                            f'"{os.path.abspath(g.config["cur_gamepath"])}"')
+
+        if self.version_config["isolate"]:
+            args = args.replace('${game_directory}', f'"{self.path}"')
+
+        else:
+            args = args.replace('${game_directory}',
+                                f'"{os.path.abspath(g.cur_gamepath)}"')
+
         args = args.replace('${assets_root}', f'"{self.asset_path}"')
         args = args.replace('${assets_index_name}',
                             self.config["assetIndex"]["id"])
@@ -122,8 +138,16 @@ class Launch(CoreBase):
                             '000000000000300C95C489********86')
         args = args.replace('${user_type}', 'Legacy')
         args = args.replace('${version_type}', 'FMCL')
-        args = args.replace('${resolution_width}', str(width))
-        args = args.replace('${resolution_height}', str(height))
+
+        if self.version_config["specific_setting"]:
+            args = args.replace('${resolution_width}',
+                                str(self.version_config.get("gamewidth", width)))
+            args = args.replace('${resolution_height}',
+                                str(self.version_config.get("gameheight", height)))
+        else:
+            args = args.replace('${resolution_width}', str(width))
+            args = args.replace('${resolution_height}', str(height))
+
         args = args.replace('${natives_directory}', f'"{self.native_path}"')
         args = args.replace('${launcher_name}', 'FMCL')
         args = args.replace('${launcher_version}', '1')

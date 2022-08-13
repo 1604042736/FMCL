@@ -38,16 +38,18 @@ class Setting(QFBNWidget, Ui_Setting):
             item = QListWidgetItem()
             item.setSizeHint(QSize(256, 64))
             if isinstance(val[0], str) and "rgb" in val[0]:
-                widget = ColorSetting(val[1], key, val[0])
+                widget = ColorSetting(
+                    val[1], key, val[0], do_after_save=lambda: g.set_theme() or g.save())
             elif isinstance(val[0], str):
-                widget = StrSetting(val[1], key, val[0])
+                widget = StrSetting(val[1], key, val[0], do_after_save=g.save)
             elif isinstance(val[0], list):
                 widget = ListSetting(
-                    val[1], key, val[0], "cur_gamepath", "file")
+                    val[1], key, val[0], "cur_gamepath", "file", do_after_save=g.save)
             elif isinstance(val[0], int):
-                widget = IntSetting(val[1], key, val[0])
+                widget = IntSetting(val[1], key, val[0], do_after_save=g.save)
             elif isinstance(val[0], tuple):
-                widget = SelectSetting(val[1], key, val[0])
+                widget = SelectSetting(
+                    val[1], key, val[0], do_after_save=g.save)
             else:
                 continue
 

@@ -55,6 +55,10 @@ class Mod(CoreBase):
 
     def get_mods(self) -> list:
         """获取文件夹下的mod"""
+        try:
+            os.makedirs(self.path)
+        except:
+            pass
         result = []
         for i in os.listdir(self.path):
             if self.is_mod(i):

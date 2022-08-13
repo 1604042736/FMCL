@@ -5,6 +5,7 @@ import Globals as g
 from PyQt5.QtWidgets import QComboBox
 import qtawesome as qta
 from Translate import tr
+from ..Setting.BoolSetting import BoolSetting
 
 
 class Minecraft(QFBNWidget, Ui_Minecraft):
@@ -15,6 +16,11 @@ class Minecraft(QFBNWidget, Ui_Minecraft):
         self.setupUi(self)
 
         self.setWindowIcon(eval(self.icon_exp))
+
+        self.isolate = False
+        self.isolate_setting = BoolSetting(
+            "isolate", tr("版本隔离"), self.isolate, target=self)
+        self.gridLayout_2.addWidget(self.isolate_setting, 1, 0, 1, 1)
 
         self.set_version()
 
@@ -46,4 +52,4 @@ class Minecraft(QFBNWidget, Ui_Minecraft):
         fabric_version = self.cb_fabric.currentText()
         optifine_version = self.cb_optifine.currentText()
         g.dmgr.add_task(tr("下载")+name, Game(
-            name, version, forge_version, fabric_version, optifine_version), "download_version", tuple())
+            name, version, forge_version, fabric_version, optifine_version, self.isolate), "download_version", tuple())
