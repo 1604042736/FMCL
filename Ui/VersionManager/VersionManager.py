@@ -175,15 +175,15 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
         if not (self.forge_version or self.fabric_version):
             self.gb_modmanage.hide()
             return
-        self.lw_mods.clear()
-        for i in Mod(path=self.mods_path).get_mods():
-            item = QListWidgetItem()
-            item.setSizeHint(QSize(256, 64))
-            widget = ModItem(i, self.mods_path)
+        while self.gl_modlist.count():
+            item = self.gl_modlist.itemAt(0)
+            self.gl_modlist.removeItem(item)
+            item.widget().deleteLater()
+        for i, val in enumerate(Mod(path=self.mods_path).get_mods()):
+            widget = ModItem(val, self.mods_path)
             widget.ModEnDisAble.connect(self.set_mods)
             widget.ModDeleted.connect(self.set_mods)
-            self.lw_mods.addItem(item)
-            self.lw_mods.setItemWidget(item, widget)
+            self.gl_modlist.addWidget(widget, i, 0, 1, 1)
 
     def change_icon(self):
         def ok(icon):

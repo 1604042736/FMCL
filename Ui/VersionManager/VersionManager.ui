@@ -31,24 +31,11 @@
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="2" column="0">
         <widget class="QGroupBox" name="gb_modmanage">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>375</height>
-          </size>
-         </property>
          <property name="title">
           <string>Mod管理</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
-          <item row="1" column="1">
-           <widget class="QPushButton" name="pb_openmodfoder">
-            <property name="text">
-             <string>打开mod文件夹</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
+          <item row="0" column="1">
            <spacer name="horizontalSpacer">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -61,8 +48,15 @@
             </property>
            </spacer>
           </item>
-          <item row="0" column="0" colspan="2">
-           <widget class="QListWidget" name="lw_mods"/>
+          <item row="0" column="0">
+           <widget class="QPushButton" name="pb_openmodfoder">
+            <property name="text">
+             <string>打开mod文件夹</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <layout class="QGridLayout" name="gl_modlist"/>
           </item>
          </layout>
         </widget>
