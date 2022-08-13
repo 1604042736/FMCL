@@ -30,7 +30,8 @@ class Download(CoreBase):
         try_time = 0
         while try_time != self.max_try_time:
             try:
-                r = requests.get(self.url, headers=headers, timeout=5,verify=False)
+                r = requests.get(self.url, headers=headers,
+                                 timeout=5, verify=False)
                 self.download_bytes[byte_range[0]] = r.content
                 self.finished_thread += 1
                 break
@@ -48,8 +49,11 @@ class Download(CoreBase):
         headers = {
             "Accept-Encoding": "identity"
         }
-        file_size = int(requests.head(
-            self.url, headers=headers).headers['Content-Length'])
+        try:
+            file_size = int(requests.head(
+                self.url, headers=headers, verify=False).headers['Content-Length'])
+        except KeyError:
+            file_size = 0
         g.logapi.info(f"{self.url}大小:{file_size}")
 
         if file_size < self.min_filesize:  # 小文件不用多线程下载
@@ -94,7 +98,8 @@ class Download(CoreBase):
             try_time = 0
             while try_time != self.max_try_time:
                 try:
-                    rsp = requests.get(self.url, stream=True, timeout=5,verify=False)
+                    rsp = requests.get(self.url, stream=True,
+                                       timeout=5, verify=False)
                     # 再判断一次
                     # 对于某些网站用requests.head获取Content-Length不一定正确
                     if int(rsp.headers["Content-Length"]) >= self.min_filesize:

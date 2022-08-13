@@ -30,4 +30,4 @@ class Task(QThread):
             # 而不是与ins.Finished连接
             self.Finished.emit()
         except Exception as e:
-            self.Error.emit(e)
+            self.Error.emit(str(e))
