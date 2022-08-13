@@ -37,7 +37,7 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
         self.label.setText(tr("名称"))
         self.label_3.setText(tr("Forge版本"))
         self.pb_changeicon.setText(tr("更改图标"))
-        self.groupBox_2.setTitle(tr("Mod管理"))
+        self.gb_modmanage.setTitle(tr("Mod管理"))
         self.pb_openmodfoder.setText(tr("打开mod文件夹"))
         self.groupBox_3.setTitle(tr("设置"))
 
@@ -120,6 +120,10 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
             self.gridLayout_5.removeWidget(self.gameheight_setting)
             self.gridLayout_5.removeWidget(self.maxmem_setting)
             self.gridLayout_5.removeWidget(self.minmem_setting)
+            self.gamewidth_setting.hide()
+            self.gameheight_setting.hide()
+            self.maxmem_setting.hide()
+            self.minmem_setting.hide()
         except:
             pass
 
@@ -169,7 +173,7 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
 
     def set_mods(self):
         if not (self.forge_version or self.fabric_version):
-            self.notify("Mod", tr("该版本不可用Mod"))
+            self.gb_modmanage.hide()
             return
         self.lw_mods.clear()
         for i in Mod(path=self.mods_path).get_mods():
