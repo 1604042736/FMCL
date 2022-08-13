@@ -102,17 +102,17 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
         self.gameheight = self.config.get("height", g.height)
         self.gameheight_setting = IntSetting("height", tr(
             "游戏窗口高度"), self.gameheight, self.save, self)
-        self.gridLayout_5.addWidget(self.gameheight_setting, 2, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.gameheight_setting, 1, 1, 1, 1)
 
         self.maxmem = self.config.get("maxmem", g.maxmem)
         self.maxmem_setting = IntSetting("maxmem", tr(
             "最大内存"), self.maxmem, self.save, self)
-        self.gridLayout_5.addWidget(self.maxmem_setting, 3, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.maxmem_setting, 2, 0, 1, 1)
 
         self.minmem = self.config.get("minmem", g.minmem)
         self.minmem_setting = IntSetting("minmem", tr(
             "最小内存"), self.minmem, self.save, self)
-        self.gridLayout_5.addWidget(self.minmem_setting, 4, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.minmem_setting, 2, 1, 1, 1)
 
     def unset_specific_setting(self):
         try:
