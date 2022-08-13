@@ -32,8 +32,6 @@ class MainWindow(QFBNWindowManager):
         self.page_map = {}
 
     def ready(self) -> None:
-        self.desktop.show()
-        self.homepage.show()
         self.setCurrentWidget(self.desktop)
         self.check_update()
 
@@ -150,7 +148,7 @@ class MainWindow(QFBNWindowManager):
             sender = self.sender()
         try:
             if self.currentWidget() == self.page_map[sender]:
-                self.setCurrentWidget(self.desktop)
+                self.removeWidget(self.currentWidget())
                 return
             self.setCurrentWidget(self.page_map[sender])
         except KeyError:
@@ -181,6 +179,8 @@ class MainWindow(QFBNWindowManager):
 
     def set_title_widget_state(self):
         super().set_title_widget_state()
+        if self.currentWidget() != self.homepage:
+            self.removeWidget(self.homepage)
         for key in tuple(self.page_map.keys()):
             val = self.page_map[key]
             if val == self.currentWidget():
@@ -196,6 +196,12 @@ QPushButton:hover{{
 }}""")
 
     def setCurrentWidget(self, w) -> None:
+        if isinstance(w, Desktop):
+            while self.count():
+                self.removeWidget(self.currentWidget())
+        else:
+            # 配合后面的代码相当于把w放在QStackedWidget的最后
+            self.removeWidget(w)
         # 没有的话就添加
         if self.indexOf(w) == -1:
             self.addWidget(w)
