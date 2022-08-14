@@ -1,5 +1,6 @@
+import traceback
 from PyQt5.QtCore import pyqtSignal, QThread
-
+import sys
 from Core import CoreBase
 
 
@@ -14,6 +15,7 @@ class Task(QThread):
         self.ins = ins
         self.func = func
         self.args = args
+        self.running = True
 
         self.ins.Progress.connect(
             lambda cur, total: self.Progress.emit(cur, total))
@@ -21,13 +23,16 @@ class Task(QThread):
 
     def run(self):
         try:
-            getattr(self.ins, self.func)(*self.args)
-            # download不连接Finished信号会导致执行完后无法及时更新
-            # 连接Finished信号会导致一个任务如果调用了多次download
-            # 每次download结束都会发出Finished并传到Task.Finished
-            # 造成DownloadManager错误的删除任务
-            # 所以Task.Finished得在任务执行完后发出
-            # 而不是与ins.Finished连接
+            sys.settrace(self.tracer)
+            getattr(self.ins, self.func)(self.args)
+            sys.settrace(None)
             self.Finished.emit()
-        except Exception as e:
+        except BaseException as e:
+            sys.settrace(None)
             self.Error.emit(str(e))
+
+    def tracer(self, frame, event, arg=None):
+        """跟踪目标函数执行,并随时结束"""
+        if not self.running:
+            raise SystemExit()
+        return self.tracer

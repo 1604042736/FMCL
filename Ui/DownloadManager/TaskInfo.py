@@ -64,12 +64,14 @@ class TaskInfo(QWidget):
 
     def finish(self):
         try:
+            self.task.running = False
             self.Finished.emit(self.item)
-        except RuntimeError:
+        except:
             pass
 
     def error(self, msg):
         try:
+            self.task.running = False
             self.Error.emit(msg, self.item)
-        except RuntimeError:
+        except:
             pass
