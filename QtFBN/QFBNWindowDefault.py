@@ -1,5 +1,5 @@
 from QtFBN.QFBNWindowBasic import QFBNWindowBasic
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QObject, QEvent
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QMouseEvent
 
@@ -25,54 +25,42 @@ class QFBNWindowDefault(QFBNWindowBasic):
             "bottom-right": False
         }
         self.setMouseTracking(True)
+        self.installEventFilter(self)
+        self.set_all_children(self)  # 针对已经添加进去的子控件
 
-    def show(self) -> None:
-        # self.set_all_mousetrack(self.title)
-        super().show()
-
-    def set_all_mousetrack(self, w):
-        '''将所有控件设置为鼠标跟踪'''
+    def set_all_children(self, w):
+        '''将所有子控件进行设置'''
         children = w.findChildren(QWidget)
         for child in children:
             child.setMouseTracking(True)
-            child.mouseMoveEvent = self.mouseMoveEvent
-            # 直接赋值会导致子控件部分功能无法使用
-            # 比如按钮无法点击
-            child.mousePressEvent = lambda a, child=child.mousePressEvent: self.mousePressEvent(
-                a, child)
-            child.mouseReleaseEvent = lambda a, child=child.mouseReleaseEvent: self.mouseReleaseEvent(
-                a, child)
-            self.set_all_mousetrack(child)
+            child.installEventFilter(self)
 
-    def mousePressEvent(self, a0: QMouseEvent, child_event=None) -> None:
+    def mousePressEvent(self, a0: QMouseEvent) -> None:
         x = a0.globalX()-self.x()
         y = a0.globalY()-self.y()
 
-        if x <= self.LEFT_DISTANCE and y <= self.TOP_DISTANCE:  # 左上角
-            self.flags["top-left"] = True
-        elif x >= self.width()-self.RIGHT_DISTANCE and y >= self.height()-self.BOTTOM_DISTANCE:  # 右下角
-            self.flags["bottom-right"] = True
-        elif x >= self.width()-self.RIGHT_DISTANCE and y <= self.TOP_DISTANCE:  # 右上角
-            self.flags["top-right"] = True
-        elif x <= self.LEFT_DISTANCE and y >= self.height()-self.BOTTOM_DISTANCE:  # 左下角
-            self.flags["bottom-left"] = True
-        elif y <= self.TOP_DISTANCE:  # 上
-            self.flags["top"] = True
-        elif y >= self.height()-self.BOTTOM_DISTANCE:  # 下
-            self.flags["bottom"] = True
-        elif x <= self.LEFT_DISTANCE:  # 左
-            self.flags["left"] = True
-        elif x >= self.width()-self.RIGHT_DISTANCE:  # 右
-            self.flags["right"] = True
-        elif self.left_width < x < self.width()-self.right_width and y <= self.title_height:
-            self.flags["move"] = True
-        elif child_event != None:
-            child_event(a0)
+        if a0.button() == Qt.LeftButton:
+            if x <= self.LEFT_DISTANCE and y <= self.TOP_DISTANCE:  # 左上角
+                self.flags["top-left"] = True
+            elif x >= self.width()-self.RIGHT_DISTANCE and y >= self.height()-self.BOTTOM_DISTANCE:  # 右下角
+                self.flags["bottom-right"] = True
+            elif x >= self.width()-self.RIGHT_DISTANCE and y <= self.TOP_DISTANCE:  # 右上角
+                self.flags["top-right"] = True
+            elif x <= self.LEFT_DISTANCE and y >= self.height()-self.BOTTOM_DISTANCE:  # 左下角
+                self.flags["bottom-left"] = True
+            elif y <= self.TOP_DISTANCE:  # 上
+                self.flags["top"] = True
+            elif y >= self.height()-self.BOTTOM_DISTANCE:  # 下
+                self.flags["bottom"] = True
+            elif x <= self.LEFT_DISTANCE:  # 左
+                self.flags["left"] = True
+            elif x >= self.width()-self.RIGHT_DISTANCE:  # 右
+                self.flags["right"] = True
+            elif self.left_width < x < self.width()-self.right_width and y <= self.title_height:
+                self.flags["move"] = True
         self.mousepos = [a0.globalX(), a0.globalY()]
 
-    def mouseReleaseEvent(self, a0: QMouseEvent, child_event=None) -> None:
-        if child_event != None:
-            child_event(a0)
+    def mouseReleaseEvent(self, a0: QMouseEvent) -> None:
         for key in self.flags:
             self.flags[key] = False
 
@@ -88,6 +76,7 @@ class QFBNWindowDefault(QFBNWindowBasic):
         x = a0.globalX()-self.x()
         y = a0.globalY()-self.y()
 
+        # 移动的时侯位置符合要求或鼠标已经按下就设置对应的光标
         if x <= self.LEFT_DISTANCE and y <= self.TOP_DISTANCE or self.flags["top-left"]:
             self.setCursor(Qt.SizeFDiagCursor)
         elif x >= self.width()-self.RIGHT_DISTANCE and y >= self.height()-self.BOTTOM_DISTANCE or self.flags["bottom-right"]:
@@ -146,3 +135,19 @@ class QFBNWindowDefault(QFBNWindowBasic):
             self.move(x-self.width(), self.y())
         elif self.flags["move"]:
             self.move(self.x()+dx, self.y()+dy)
+
+    def eventFilter(self, a0: QObject, a1: QEvent) -> bool:
+        if a1.type() == QEvent.ChildAdded:
+            a0.setMouseTracking(True)
+            a0.installEventFilter(self)
+            self.set_all_children(a0)
+        elif a1.type() == QEvent.MouseMove:
+            self.mouseMoveEvent(a1)
+        elif a1.type() == QEvent.MouseButtonPress:
+            self.mousePressEvent(a1)
+            # 如果处于某种状态(比如开始朝某个方向拖动以改变窗口大小)就不让子控件处理点击事件
+            if any([val for _, val in self.flags.items()]):
+                return True
+        elif a1.type() == QEvent.MouseButtonRelease:
+            self.mouseReleaseEvent(a1)
+        return super().eventFilter(a0, a1)
