@@ -6,7 +6,7 @@ from Ui.Homepage.AllFunctions import AllFunctions
 from Ui.Homepage.ui_Homepage import Ui_Homepage
 from PyQt5.QtGui import QResizeEvent
 import qtawesome as qta
-from PyQt5.QtCore import QSize, QPoint
+from PyQt5.QtCore import QSize, QPoint, QObject, QEvent
 from PyQt5.QtWidgets import QWidget, QMenu, QAction, qApp
 from Ui.Setting.Setting import Setting
 from Ui.User.User import User
@@ -53,6 +53,7 @@ class Homepage(QFBNWidget, Ui_Homepage):
         self.pb_software.clicked.connect(self.show_software_menu)
 
         self.panel_state = "simple"  # 面板状态
+        self.f_panel.installEventFilter(self)
 
     def widget_to_self(self, w):
         if self.w_ui == w:
@@ -75,8 +76,8 @@ class Homepage(QFBNWidget, Ui_Homepage):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.f_panel.resize(self.panel_width, self.height())
-        self.w_ui.move(self.panel_width, 0)
-        self.w_ui.resize(self.width()-self.panel_width, self.height())
+        self.w_ui.move(self.default_panel_width, 0)
+        self.w_ui.resize(self.width()-self.default_panel_width, self.height())
 
         top_height = 0
         bottom_height = 0
@@ -91,6 +92,7 @@ class Homepage(QFBNWidget, Ui_Homepage):
                 bottom_height += i[0].height()
                 i[0].resize(self.panel_width, self.panel_button_height)
                 i[0].move(0, self.height()-bottom_height)
+        self.f_panel.raise_()
 
     def show_panel_detail(self):
         """显示面板细节"""
@@ -145,3 +147,13 @@ class Homepage(QFBNWidget, Ui_Homepage):
     def dormancy(self):
         """休眠"""
         qApp.quit()
+
+    def eventFilter(self, a0: QObject, a1: QEvent) -> bool:
+        if a0 == self.f_panel:
+            if a1.type() == QEvent.Enter:
+                self.panel_state = "simple"
+                self.show_panel_detail()
+            elif a1.type() == QEvent.Leave:
+                self.panel_state = 'detail'
+                self.show_panel_detail()
+        return super().eventFilter(a0, a1)
