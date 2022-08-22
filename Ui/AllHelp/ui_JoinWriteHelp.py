@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\Ui\Help\AllHelp\JoinWriteHelp.ui'
+# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\Ui\AllHelp\JoinWriteHelp.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -40,6 +40,9 @@ class Ui_JoinWriteHelp(object):
         self.label_6 = QtWidgets.QLabel(self.groupBox_2)
         self.label_6.setObjectName("label_6")
         self.gridLayout_4.addWidget(self.label_6, 2, 0, 1, 1)
+        self.label_7 = QtWidgets.QLabel(self.groupBox_2)
+        self.label_7.setObjectName("label_7")
+        self.gridLayout_4.addWidget(self.label_7, 3, 0, 1, 1)
         self.gridLayout_2.addWidget(self.groupBox_2, 2, 0, 1, 1)
         self.groupBox = QtWidgets.QGroupBox(self.scrollAreaWidgetContents)
         self.groupBox.setObjectName("groupBox")
@@ -76,6 +79,7 @@ class Ui_JoinWriteHelp(object):
         self.label_2.setText(_translate("JoinWriteHelp", "尽量在Ui/Help/AllHelp里编写新的界面，如果要将界面展示到帮助界面中，请将对应的模块添加到Ui/Help/AllHelp/__init__.py中的allhelp变量中"))
         self.label_3.setText(_translate("JoinWriteHelp", "编写的界面模块必须包含config字典变量，其含有\"type\",\"title\",\"description\",\"mainclass\"键"))
         self.label_6.setText(_translate("JoinWriteHelp", "界面中所用的资源需放到Resources文件中，写入Resources/Resources.qrc文件，并将该资源文件生成到__init__.py"))
+        self.label_7.setText(_translate("JoinWriteHelp", "其余的可以参考现有的文件"))
         self.groupBox.setTitle(_translate("JoinWriteHelp", "如何参与"))
         self.label.setText(_translate("JoinWriteHelp", "首先注册并登录一个Github账号，然后通过“关于”界面中的“打开源码网址”进入FMCL存储库，点击页面又上角Fork建立分支"))
         self.groupBox_3.setTitle(_translate("JoinWriteHelp", "概述"))

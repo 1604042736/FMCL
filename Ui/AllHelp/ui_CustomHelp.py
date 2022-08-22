@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\Ui\Help\AllHelp\CustomHelp.ui'
+# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\Ui\AllHelp\CustomHelp.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -43,15 +43,6 @@ class Ui_CustomHelp(object):
         self.label.setObjectName("label")
         self.gridLayout_2.addWidget(self.label, 0, 0, 1, 2)
         self.gridLayout_4.addWidget(self.groupBox, 0, 0, 1, 1)
-        self.groupBox_2 = QtWidgets.QGroupBox(self.scrollAreaWidgetContents)
-        self.groupBox_2.setObjectName("groupBox_2")
-        self.gridLayout_3 = QtWidgets.QGridLayout(self.groupBox_2)
-        self.gridLayout_3.setObjectName("gridLayout_3")
-        self.label_2 = QtWidgets.QLabel(self.groupBox_2)
-        self.label_2.setWordWrap(True)
-        self.label_2.setObjectName("label_2")
-        self.gridLayout_3.addWidget(self.label_2, 0, 0, 1, 1)
-        self.gridLayout_4.addWidget(self.groupBox_2, 1, 0, 1, 1)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout.addWidget(self.scrollArea, 1, 0, 1, 1)
 
@@ -65,5 +56,3 @@ class Ui_CustomHelp(object):
         self.groupBox.setTitle(_translate("CustomHelp", "做法"))
         self.pb_lookup.setText(_translate("CustomHelp", "查看编写规范"))
         self.label.setText(_translate("CustomHelp", "将自定义的帮助界面放入FMCL/Help中即可，编写规范与下面帮助中的编写规范相同"))
-        self.groupBox_2.setTitle(_translate("CustomHelp", "注意事项"))
-        self.label_2.setText(_translate("CustomHelp", "请为FMCL,Help文件夹创建__init__.py,学过python应该不陌生"))
