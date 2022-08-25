@@ -50,7 +50,6 @@ TAG_NAME = "1.11.1"  # 当前版本号
 dmgr = None  # 下载管理
 
 cur_gamepath = ".minecraft"
-cur_version = ""
 all_gamepath = [".minecraft"]
 
 # 格式:
@@ -64,6 +63,8 @@ users = []
 cur_user = None
 
 java_path = "javaw"
+gamewidth = 1000
+gameheight = 618
 width = 1000
 height = 618
 maxmem = 1024
@@ -77,13 +78,14 @@ try:
     config = json.load(open("FMCL/config.json", encoding="utf-8"))
     cur_gamepath = config.get("cur_gamepath", cur_gamepath)
     all_gamepath = config.get("all_gamepath", all_gamepath)
-    cur_version = config.get("cur_version", cur_version)
     users = config.get("users", users)
     if config.get("cur_user_index", -1) != -1:
         cur_user = users[config.get("cur_user_index", -1)]
     java_path = config.get("java_path", java_path)
-    width = int(config.get("width", width))
-    height = int(config.get("height", height))
+    gamewidth = int(config.get("gamewidth", gamewidth))
+    gameheight = int(config.get("gameheight", gameheight))
+    g.winwidth = int(config.get("width", g.winwidth))
+    g.winheight = int(config.get("height", g.winheight))
     maxmen = int(config.get("maxmem", maxmem))
     minmem = int(config.get("minmem", minmem))
     background_image = config.get("background_image", background_image)
@@ -111,17 +113,18 @@ def save():
     config = {
         "cur_gamepath": cur_gamepath,
         "all_gamepath": all_gamepath,
-        "cur_version": cur_version,
         "users": users,
         "java_path": java_path,
-        "width": width,
-        "height": height,
+        "gamewidth": gamewidth,
+        "gameheight": gameheight,
         "maxmem": maxmem,
         "minmem": minmem,
         "background_image": background_image,
         "theme": theme,
         "language": language,
-        "max_thread_count": max_thread_count
+        "max_thread_count": max_thread_count,
+        "width": g.winwidth,
+        "height": g.winheight
     }
     if cur_user in users:
         config["cur_user_index"] = users.index(cur_user)

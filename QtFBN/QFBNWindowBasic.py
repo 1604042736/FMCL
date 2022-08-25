@@ -28,7 +28,7 @@ class QFBNWindowBasic(QWidget):
         self.title_button_icon_size = QSize(20, 20)
 
         self.target = target
-        self.resize(1000, 618)
+        self.resize(g.winwidth, g.winheight)
 
         self.right_widgets: list[QWidget] = []  # 标题栏靠右的控件
         self.left_widgets: list[QWidget] = []  # 标题栏靠左的控件
@@ -230,6 +230,10 @@ class QFBNWindowBasic(QWidget):
             self.close()
 
     def resizeEvent(self, a0) -> None:
+        if not self.isMaximized():
+            g.winwidth = self.width()
+            g.winheight = self.height()
+
         self.target.resize(self.width(), self.height()-self.title_height)
         self.target.move(0, self.title_height)
         self.title.resize(self.width(), self.title_height)

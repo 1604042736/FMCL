@@ -11,6 +11,9 @@ import qtawesome as qta
 
 manager = None  # 一个软件至多有一个QFBNWindowManager
 
+# 窗口默认大小
+winwidth = 1000
+winheight = 618
 # 以下下内容非必要(on_any_win_ready必要)
 
 
