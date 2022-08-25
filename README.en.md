@@ -34,6 +34,8 @@ Then run `Main.py` directly
 - Support more languages
 - Support view news
 - Support version isolate and specific setting
+- Support custom function
+- Support custom translation
 
 ## Command line parameters
 
