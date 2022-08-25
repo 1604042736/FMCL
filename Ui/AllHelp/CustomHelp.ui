@@ -48,7 +48,7 @@
           <item row="1" column="0">
            <widget class="QPushButton" name="pb_lookup">
             <property name="text">
-             <string>查看编写规范</string>
+             <string>查看&quot;编写规范&quot;</string>
             </property>
            </widget>
           </item>
@@ -68,7 +68,7 @@
           <item row="0" column="0" colspan="2">
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>将自定义的帮助界面放入FMCL/Help中即可，编写规范与下面帮助中的编写规范相同</string>
+             <string>将自定义的帮助界面放入FMCL/Help中即可，编写规范与下面帮助中的&quot;编写规范&quot;相同</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>

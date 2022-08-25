@@ -54,5 +54,5 @@ class Ui_CustomHelp(object):
         CustomHelp.setWindowTitle(_translate("CustomHelp", "自定义帮助"))
         self.label_3.setText(_translate("CustomHelp", "该界面还需完善"))
         self.groupBox.setTitle(_translate("CustomHelp", "做法"))
-        self.pb_lookup.setText(_translate("CustomHelp", "查看编写规范"))
-        self.label.setText(_translate("CustomHelp", "将自定义的帮助界面放入FMCL/Help中即可，编写规范与下面帮助中的编写规范相同"))
+        self.pb_lookup.setText(_translate("CustomHelp", "查看\"编写规范\""))
+        self.label.setText(_translate("CustomHelp", "将自定义的帮助界面放入FMCL/Help中即可，编写规范与下面帮助中的\"编写规范\"相同"))
