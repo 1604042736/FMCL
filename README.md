@@ -68,6 +68,7 @@ Scripts                     ->一些脚本
     IconMaker.py            ->制作图标
     ReleaseBuilder.py       ->构建一个发行版本
 Translate                   ->翻译
+    Chinese.py              ->中文
     English.py              ->英语
 Ui                          ->界面
     About                   ->关于界面

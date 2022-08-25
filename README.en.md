@@ -67,6 +67,7 @@ Scripts                     ->Some scripts
     IconMaker.py            ->Make icon
     ReleaseBuilder.py       ->Build a release version
 Translate                   ->Translate
+    Chinese.py              ->Chinese
     English.py              ->English
 Ui                          ->UI
     About                   ->About UI
