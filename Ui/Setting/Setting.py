@@ -24,8 +24,8 @@ class Setting(QFBNWidget, Ui_Setting):
         self.lw_settings.clear()
         config = {
             tr("游戏路径"): [g.all_gamepath, "all_gamepath"],
-            tr("游戏窗口宽度"): [g.width, "width"],
-            tr("游戏窗口高度"): [g.height, "height"],
+            tr("游戏窗口宽度"): [g.gamewidth, "gamewidth"],
+            tr("游戏窗口高度"): [g.gameheight, "gameheight"],
             tr("最大内存"): [g.maxmem, "maxmem"],
             tr("最小内存"): [g.minmem, "minmem"],
             tr("Java路径"): [g.java_path, "java_path"],

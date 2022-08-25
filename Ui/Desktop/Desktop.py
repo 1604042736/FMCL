@@ -95,8 +95,8 @@ class Desktop(QFBNWidget):  # 直接继承QTableWidget会出现鼠标移动事�
             g.dmgr.add_task(tr("启动")+version, Launch(
                 version), "launch", (g.java_path,
                                      g.cur_user["name"],
-                                     g.width,
-                                     g.height,
+                                     g.gamewidth,
+                                     g.gameheight,
                                      g.maxmem,
                                      g.minmem))
         else:

@@ -62,8 +62,8 @@ class Launch(CoreBase):
 
     def launch(self, javapath='javaw',
                playername='Player',
-               width=1000,
-               height=618,
+               gamewidth=1000,
+               gameheight=618,
                maxmem=1024,
                minmem=256):
         '''启动'''
@@ -141,12 +141,12 @@ class Launch(CoreBase):
 
         if self.version_config["specific_setting"]:
             args = args.replace('${resolution_width}',
-                                str(self.version_config.get("gamewidth", width)))
+                                str(self.version_config.get("gamewidth", gamewidth)))
             args = args.replace('${resolution_height}',
-                                str(self.version_config.get("gameheight", height)))
+                                str(self.version_config.get("gameheight", gameheight)))
         else:
-            args = args.replace('${resolution_width}', str(width))
-            args = args.replace('${resolution_height}', str(height))
+            args = args.replace('${resolution_width}', str(gamewidth))
+            args = args.replace('${resolution_height}', str(gameheight))
 
         args = args.replace('${natives_directory}', f'"{self.native_path}"')
         args = args.replace('${launcher_name}', 'FMCL')

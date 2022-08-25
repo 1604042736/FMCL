@@ -94,12 +94,12 @@ class VersionManager(QFBNWidget, Ui_VersionManager):
         self.set_mods()
 
     def set_specific_setting(self):
-        self.gamewidth = self.config.get("width", g.width)
+        self.gamewidth = self.config.get("width", g.gamewidth)
         self.gamewidth_setting = IntSetting("width", tr(
             "游戏窗口宽度"), self.gamewidth, self.save, self)
         self.gridLayout_5.addWidget(self.gamewidth_setting, 1, 0, 1, 1)
 
-        self.gameheight = self.config.get("height", g.height)
+        self.gameheight = self.config.get("height", g.gameheight)
         self.gameheight_setting = IntSetting("height", tr(
             "游戏窗口高度"), self.gameheight, self.save, self)
         self.gridLayout_5.addWidget(self.gameheight_setting, 1, 1, 1, 1)
