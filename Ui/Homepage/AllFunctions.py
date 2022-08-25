@@ -1,3 +1,5 @@
+from importlib import import_module
+import os
 from QtFBN.QFBNWidget import QFBNWidget
 from Translate import tr
 from Ui.Downloader.Minecraft import Minecraft
@@ -25,6 +27,8 @@ class AllFunctions(QTableWidget, QFBNWidget):
             tr("新闻"): News,
             tr("帮助"): Help
         }
+        self.get_functions()
+
         self.row_count = 1
         self.col_count = 1
         self.max_col_count = 16
@@ -44,6 +48,25 @@ class AllFunctions(QTableWidget, QFBNWidget):
 
         self.set_functions()
         self.cellClicked.connect(self.launch_function)
+
+    def get_functions(self):
+        """从FMCL/Function中获取功能"""
+        try:
+            for i in os.listdir("FMCL/Function"):
+                if i != "__init__.py" and i.endswith(".py"):
+                    module = import_module(
+                        f"FMCL.Function.{os.path.splitext(i)[0]}")
+                    config = module.config
+                    self.functions[config["name"]] = getattr(
+                        module, config["mainclass"])
+            if not os.path.exists("FMCL/__init__.py"):
+                with open("FMCL/__init__.py", "w", encoding='utf-8'):
+                    pass
+            if not os.path.exists("FMCL/Function/__init__.py"):
+                with open("FMCL/Function/__init__.py", "w", encoding='utf-8'):
+                    pass
+        except:
+            pass
 
     def set_functions(self):
         self.clear()
