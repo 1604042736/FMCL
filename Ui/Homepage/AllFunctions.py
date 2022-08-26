@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QListWidgetItem, QListWidget, QListView
 import qtawesome as qta
 from PyQt5.QtGui import QResizeEvent
 from Ui.Help.Help import Help
-
+from PyQt5.QtCore import QSize
 from Ui.News.News import News
 
 
@@ -30,6 +30,7 @@ class AllFunctions(QListWidget, QFBNWidget):
 
         self.setMovement(QListView.Static)
         self.setViewMode(QListView.IconMode)
+        self.setWordWrap(True)
 
         self.set_functions()
         self.itemClicked.connect(self.launch_function)
@@ -57,9 +58,11 @@ class AllFunctions(QListWidget, QFBNWidget):
         self.clear()
         for key, val in self.functions.items():
             item = QListWidgetItem()
+            item.setSizeHint(QSize(80, 80))
             item.setText(key)
             if "icon_exp" in val.__dict__:
                 item.setIcon(eval(val.icon_exp))
+            item.setToolTip(key)
             self.addItem(item)
 
     def launch_function(self, item):

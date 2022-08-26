@@ -6,7 +6,7 @@ import Globals as g
 from PyQt5.QtWidgets import QMenu, QAction, QListWidget, QListView, QListWidgetItem
 from PyQt5.QtGui import QCursor, QIcon, QResizeEvent
 from Ui.VersionManager.VersionManager import VersionManager
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize
 from Translate import tr
 import qtawesome as qta
 
@@ -15,6 +15,7 @@ class Desktop(QFBNWidget):  # 直接继承QTableWidget会出现鼠标移动事�
 
     blankrightmenu = {}  # 在空白位置的右键菜单拓展
     itemrightmenu = {}  # 对单元格的右键菜单拓展
+    itemsize = (80, 80)  # 单元格的大小
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
@@ -39,8 +40,10 @@ class Desktop(QFBNWidget):  # 直接继承QTableWidget会出现鼠标移动事�
             os.makedirs(self.version_path)
         for i in os.listdir(self.version_path):
             item = QListWidgetItem()
+            item.setSizeHint(QSize(*self.itemsize))
             item.setText(i)
             item.setIcon(QIcon(Game(i).get_info()["icon"]))
+            item.setToolTip(i)
             self.w_versions.addItem(item)
 
     def show_menu(self, text=""):
