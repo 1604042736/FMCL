@@ -13,6 +13,9 @@ import qtawesome as qta
 
 class Desktop(QFBNWidget):  # 直接继承QTableWidget会出现鼠标移动事件无法正常捕获的问题
 
+    blankrightmenu = {}  # 在空白位置的右键菜单拓展
+    itemrightmenu = {}  # 对单元格的右键菜单拓展
+
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setWindowTitle(tr("桌面"))
@@ -55,10 +58,26 @@ class Desktop(QFBNWidget):  # 直接继承QTableWidget会出现鼠标移动事�
             a_manage.setIcon(qta.icon("msc.versions"))
             menu.addAction(a_launch)
             menu.addAction(a_manage)
+            for key, val in self.itemrightmenu.items():
+                action = QAction(key, self)
+                if not isinstance(val, tuple):
+                    action.triggered.connect(lambda f=val: f(text))
+                else:
+                    action.setIcon(eval(val[0]))
+                    action.triggered.connect(lambda f=val[1]: f(text))
+                menu.addAction(action)
         else:
             a_refresh = QAction(tr("刷新"), self)
             a_refresh.triggered.connect(self.set_versions)
             menu.addAction(a_refresh)
+            for key, val in self.blankrightmenu.items():
+                action = QAction(key, self)
+                if not isinstance(val, tuple):
+                    action.triggered.connect(val)
+                else:
+                    action.setIcon(eval(val[0]))
+                    action.triggered.connect(val[1])
+                menu.addAction(action)
         menu.exec_(QCursor.pos())
 
     def launch_game(self, version):

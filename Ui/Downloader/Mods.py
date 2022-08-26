@@ -1,6 +1,7 @@
 from Core.Mod import Mod
 from QtFBN.QFBNWidget import QFBNWidget
 from Translate import tr
+from Ui.Desktop.Desktop import Desktop
 from Ui.Downloader.ModInfo import ModInfo
 from Ui.Downloader.ui_Mods import Ui_Mods
 from PyQt5.QtWidgets import QListWidgetItem
@@ -48,3 +49,6 @@ class Mods(QFBNWidget, Ui_Mods):
             widget = ModInfo(i)
             self.lw_result.addItem(item)
             self.lw_result.setItemWidget(item, widget)
+
+
+Desktop.blankrightmenu[tr("下载Mod")] = (Mods.icon_exp, lambda: Mods().show())

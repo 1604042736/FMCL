@@ -1,5 +1,6 @@
 from Core.Game import Game
 from QtFBN.QFBNWidget import QFBNWidget
+from Ui.Desktop.Desktop import Desktop
 from Ui.Downloader.ui_Minecraft import Ui_Minecraft
 import Globals as g
 from PyQt5.QtWidgets import QComboBox
@@ -53,3 +54,7 @@ class Minecraft(QFBNWidget, Ui_Minecraft):
         optifine_version = self.cb_optifine.currentText()
         g.dmgr.add_task(tr("下载")+name, Game(
             name, version, forge_version, fabric_version, optifine_version, self.isolate), "download_version", tuple())
+
+
+Desktop.blankrightmenu[tr("下载Minecraft")] = (
+    Minecraft.icon_exp, lambda: Minecraft().show())
