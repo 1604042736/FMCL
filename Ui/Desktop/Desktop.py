@@ -3,8 +3,8 @@ from Core.Game import Game
 from Core.Launch import Launch
 from QtFBN.QFBNWidget import QFBNWidget
 import Globals as g
-from PyQt5.QtWidgets import QTableWidgetItem, QMenu, QAction, QTableWidget, QAbstractItemView
-from PyQt5.QtGui import QCursor, QIcon, QResizeEvent, QMouseEvent
+from PyQt5.QtWidgets import QMenu, QAction, QListWidget, QListView, QListWidgetItem
+from PyQt5.QtGui import QCursor, QIcon, QResizeEvent
 from Ui.VersionManager.VersionManager import VersionManager
 from PyQt5.QtCore import Qt
 from Translate import tr
@@ -12,66 +12,37 @@ import qtawesome as qta
 
 
 class Desktop(QFBNWidget):  # 直接继承QTableWidget会出现鼠标移动事件无法正常捕获的问题
-    UNIT_HEIGHT = 64
 
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.setWindowTitle(tr("桌面"))
-        self.tablewidget = QTableWidget(self)
-        self.row_count = 1
-        self.col_count = 1
-        self.max_row_count = 8
+        self.w_versions = QListWidget(self)
 
-        self.tablewidget.horizontalHeader().setVisible(False)
-        self.tablewidget.horizontalHeader().setDefaultSectionSize(self.UNIT_HEIGHT)
-        self.tablewidget.horizontalHeader().setHighlightSections(False)
-        self.tablewidget.horizontalHeader().setMinimumSectionSize(self.UNIT_HEIGHT)
-        self.tablewidget.verticalHeader().setVisible(False)
-        self.tablewidget.verticalHeader().setDefaultSectionSize(self.UNIT_HEIGHT)
-        self.tablewidget.verticalHeader().setHighlightSections(False)
-        self.tablewidget.verticalHeader().setMinimumSectionSize(self.UNIT_HEIGHT)
-
-        self.tablewidget.setSelectionMode(
-            QAbstractItemView.SelectionMode.NoSelection)
-        self.tablewidget.setDragDropMode(
-            QAbstractItemView.DragDropMode.NoDragDrop)
-        self.tablewidget.setContextMenuPolicy(
-            Qt.ContextMenuPolicy.CustomContextMenu)
-        self.tablewidget.setEditTriggers(
-            QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.w_versions.setMovement(QListView.Static)
+        self.w_versions.setViewMode(QListView.IconMode)
+        self.w_versions.setFlow(QListView.TopToBottom)
+        self.w_versions.setWordWrap(True)
 
         self.setObjectName("Desktop")
-        self.tablewidget.mousePressEvent = self.mousePressEvent
-        self.tablewidget.customContextMenuRequested.connect(self.show_menu)
+        self.w_versions.setContextMenuPolicy(
+            Qt.ContextMenuPolicy.CustomContextMenu)
+        self.w_versions.customContextMenuRequested.connect(self.show_menu)
         self.set_versions()
 
     def set_versions(self):
-        self.tablewidget.clear()
+        self.w_versions.clear()
         self.version_path = g.cur_gamepath+"/versions"
         if not os.path.exists(self.version_path):
             os.makedirs(self.version_path)
-        self.row_count = 1
-        self.col_count = 1
-        j = 0
         for i in os.listdir(self.version_path):
-            if j == self.max_row_count:
-                j = 0
-                self.col_count += 1
-            elif j == self.row_count:
-                self.row_count += 1
-
-            self.tablewidget.setRowCount(self.row_count)
-            self.tablewidget.setColumnCount(self.col_count)
-
-            item = QTableWidgetItem()
-            item.setToolTip(i)
+            item = QListWidgetItem()
             item.setText(i)
             item.setIcon(QIcon(Game(i).get_info()["icon"]))
-            self.tablewidget.setItem(j, self.col_count-1, item)
-            j += 1
+            self.w_versions.addItem(item)
 
-    def show_menu(self):
-        item = self.tablewidget.currentItem()
+    def show_menu(self, text=""):
+        item = self.w_versions.itemAt(
+            self.w_versions.mapFromGlobal(QCursor.pos()))
         menu = QMenu(self)
         if item:
             text = item.text()
@@ -110,18 +81,5 @@ class Desktop(QFBNWidget):  # 直接继承QTableWidget会出现鼠标移动事�
             versionmanager.show()
 
     def resizeEvent(self, a0: QResizeEvent) -> None:
-        self.tablewidget.resize(self.width(), self.height())
-        self.max_row_count = int(self.height()/self.UNIT_HEIGHT)
+        self.w_versions.resize(self.width(), self.height())
         self.set_versions()
-
-    def deselect(self, e: QMouseEvent):
-        """取消选中"""
-        point = e.pos()
-        index = self.tablewidget.indexAt(point)
-        # 如果是空单元格就相当于self.tablewidget.setCurrentItem(None)
-        self.tablewidget.setCurrentItem(
-            self.tablewidget.item(index.row(), index.column()))
-
-    def mousePressEvent(self, e: QMouseEvent) -> None:
-        self.deselect(e)
-        return super().mousePressEvent(e)

@@ -14,6 +14,13 @@
    <string>图标选择</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="2" column="0">
+    <widget class="QPushButton" name="pb_ok">
+     <property name="text">
+      <string>确定</string>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="1" colspan="2">
     <widget class="QPushButton" name="pb_custom">
      <property name="text">
@@ -28,51 +35,23 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0" colspan="3">
-    <widget class="QTableWidget" name="tw_default">
-     <property name="editTriggers">
-      <set>QAbstractItemView::NoEditTriggers</set>
-     </property>
-     <property name="selectionMode">
-      <enum>QAbstractItemView::NoSelection</enum>
-     </property>
-     <property name="textElideMode">
-      <enum>Qt::ElideNone</enum>
-     </property>
-     <attribute name="horizontalHeaderVisible">
-      <bool>false</bool>
-     </attribute>
-     <attribute name="horizontalHeaderMinimumSectionSize">
-      <number>80</number>
-     </attribute>
-     <attribute name="horizontalHeaderDefaultSectionSize">
-      <number>80</number>
-     </attribute>
-     <attribute name="horizontalHeaderHighlightSections">
-      <bool>false</bool>
-     </attribute>
-     <attribute name="verticalHeaderVisible">
-      <bool>false</bool>
-     </attribute>
-     <attribute name="verticalHeaderMinimumSectionSize">
-      <number>80</number>
-     </attribute>
-     <attribute name="verticalHeaderDefaultSectionSize">
-      <number>80</number>
-     </attribute>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QPushButton" name="pb_ok">
-     <property name="text">
-      <string>确定</string>
-     </property>
-    </widget>
-   </item>
    <item row="2" column="1" colspan="2">
     <widget class="QPushButton" name="pb_cancel">
      <property name="text">
       <string>取消</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="3">
+    <widget class="QListWidget" name="lw_default">
+     <property name="movement">
+      <enum>QListView::Static</enum>
+     </property>
+     <property name="viewMode">
+      <enum>QListView::IconMode</enum>
+     </property>
+     <property name="selectionRectVisible">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

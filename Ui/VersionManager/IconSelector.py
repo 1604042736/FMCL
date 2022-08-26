@@ -2,8 +2,9 @@ from QtFBN.QFBNDialog import QFBNDialog
 from Translate import tr
 from Ui.VersionManager.ui_IconSelector import Ui_IconSelector
 from PyQt5.QtGui import QResizeEvent, QIcon
-from PyQt5.QtWidgets import QTableWidgetItem, QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QListWidgetItem
 from PyQt5.QtCore import pyqtSignal
+
 
 class IconSelector(QFBNDialog, Ui_IconSelector):
     UNIT_WIDTH = 80
@@ -18,10 +19,6 @@ class IconSelector(QFBNDialog, Ui_IconSelector):
         self.pb_ok.setText(tr("确定"))
         self.pb_cancel.setText(tr("取消"))
 
-        self.row_count = 1
-        self.col_count = 1
-        self.max_col_count = 16
-
         self.pb_ok.clicked.connect(self.selected)
         self.pb_ok.clicked.connect(self.close)
         self.pb_cancel.clicked.connect(self.close)
@@ -31,23 +28,12 @@ class IconSelector(QFBNDialog, Ui_IconSelector):
     def set_default(self):
         default_icons = ["bookshelf.png", "chest.png", "command.png", "craft_table.png", "fabric.png",
                          "forge.png", "furnace.png", "grass.png"]
-        self.tw_default.clear()
-        self.row_count = 1
-        self.col_count = 1
-        j = 0
+        self.lw_default.clear()
         for i in default_icons:
-            if j == self.max_col_count:
-                j = 0
-                self.row_count += 1
-            elif j == self.col_count:
-                self.col_count += 1
-            self.tw_default.setRowCount(self.row_count)
-            self.tw_default.setColumnCount(self.col_count)
-            item = QTableWidgetItem()
+            item = QListWidgetItem()
             item.setText(i)
             item.setIcon(QIcon(f":/Image/{i}"))
-            self.tw_default.setItem(self.row_count-1, j, item)
-            j += 1
+            self.lw_default.addItem(item)
 
     def set_custom(self):
         path = QFileDialog.getOpenFileName(self, tr('选择图标'), ".")[0]
@@ -60,11 +46,12 @@ class IconSelector(QFBNDialog, Ui_IconSelector):
         super().resizeEvent(a0)
 
     def selected(self):
-        if self.tw_default.currentItem():
-            default_icon = f":/Image/{self.tw_default.currentItem().text()}"
+        if self.lw_default.currentItem():
+            default_icon = f":/Image/{self.lw_default.currentItem().text()}"
         else:
             default_icon = ""
         custom_icon = self.le_custom.text()
+        # 优先选择custom_icon
         if custom_icon:
             self.Selected.emit(custom_icon)
         elif default_icon:
