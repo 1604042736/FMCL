@@ -1,5 +1,5 @@
 import traceback
-from PyQt5.QtWidgets import QWidget, QFrame, QPushButton, QLabel
+from PyQt5.QtWidgets import QWidget, QFrame, QPushButton, QLabel, QDesktopWidget
 import qtawesome as qta
 from PyQt5.QtCore import QSize, Qt
 import QtFBN as g
@@ -231,8 +231,11 @@ class QFBNWindowBasic(QWidget):
 
     def resizeEvent(self, a0) -> None:
         if not self.isMaximized():
-            g.winwidth = self.width()
-            g.winheight = self.height()
+            width = QDesktopWidget().availableGeometry().width()
+            height = QDesktopWidget().availableGeometry().height()
+            if not (self.width() >= width and self.height() >= height):  # 另一种判断是否是最大化的方法(针对Windows系统)
+                g.winwidth = self.width()
+                g.winheight = self.height()
 
         self.target.resize(self.width(), self.height()-self.title_height)
         self.target.move(0, self.title_height)
