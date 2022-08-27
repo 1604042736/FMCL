@@ -76,8 +76,13 @@ class Homepage(QFBNWidget, Ui_Homepage):
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         self.f_panel.resize(self.panel_width, self.height())
-        self.w_ui.move(self.default_panel_width, 0)
-        self.w_ui.resize(self.width()-self.default_panel_width, self.height())
+        try:
+            if not self.w_ui.win.isVisible():  # 如果w_ui没独立出去
+                self.w_ui.move(self.default_panel_width, 0)
+                self.w_ui.resize(
+                    self.width()-self.default_panel_width, self.height())
+        except:
+            pass
 
         top_height = 0
         bottom_height = 0
