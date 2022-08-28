@@ -19,6 +19,7 @@ Then run `Main.py` directly
 ## Note
 
 - Non `Windows`users do not need to install`win32gui`和`pywin32`
+- Due to network reasons, some users may need to manually download updates
 
 ## APP Functions
 

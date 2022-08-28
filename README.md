@@ -21,6 +21,7 @@ pip install -r requirements.txt
 ## 注意事项
 
 - 非`Windows`用户无需安装`win32gui`和`pywin32`
+- 由于网络原因,部分用户可能需要手动下载更新
 
 ## 软件功能
 
