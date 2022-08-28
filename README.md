@@ -42,7 +42,7 @@ pip install -r requirements.txt
 ## 命令行参数
 
 - `--updated filename` 会删除`filename`,一般在更新时删除旧的版本
-- `--only module` 导入`module`并显示其中的Ui,默认类名和文件名相同,且一个文件只有一个类
+- `--only module [arg1,arg2,...]` 导入`module`并显示其中的Ui,`arg1,arg2,...`将会作为初始化参数传入Ui的初始化函数中,默认类名和文件名相同,且一个文件只有一个类
 
 ## 项目结构
 

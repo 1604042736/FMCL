@@ -30,7 +30,12 @@ def main():
         name = sys.argv[i+1]
         g.logapi.info(f"单独打开:{name}")
         module = import_module(f"Ui.{name}")
-        widget = getattr(module, name.split('.')[-1])()
+        args = []
+        for j in range(i+2, len(sys.argv)):
+            if sys.argv[j].startswith("--"):
+                break
+            args.append(sys.argv[j])
+        widget = getattr(module, name.split('.')[-1])(*args)
         widget.show()
     else:
         mainwindow = MainWindow()

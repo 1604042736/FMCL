@@ -41,7 +41,7 @@ Then run `Main.py` directly
 
 - `--updated filename` will delete `filename`. Generally, the old version will be deleted when updating
 
-- `--only module` import `module` and display UI in it. The default class name is the same as the file name, and there is only one class in a file
+- `--only module [arg1,arg2,...]` import `module` and display UI in it.`arg1,arg2,...` will be passed into UI's initialization function as initialization parameters. The default class name is the same as the file name, and there is only one class in a file
 
 ## Project Structure
 
