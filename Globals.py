@@ -206,8 +206,10 @@ QScrollArea{{
 """
     qApp.setStyleSheet(APP_QSS)
 
-
+_on_any_win_ready=g.on_any_win_ready
 def on_any_win_ready(win) -> None:
+    _on_any_win_ready(win)
+    
     win.pb_dmgr = QPushButton(win.win.title)
     win.pb_dmgr.resize(win.win.title_button_width,
                        win.win.title_height)
