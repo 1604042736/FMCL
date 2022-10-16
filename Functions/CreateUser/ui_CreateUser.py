@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\Ui\CreateUser\CreateUser.ui'
+# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\Functions\CreateUser\CreateUser.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -20,7 +20,7 @@ class Ui_CreateUser(object):
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
         self.f_panel = QtWidgets.QFrame(CreateUser)
-        self.f_panel.setMaximumSize(QtCore.QSize(80, 16777215))
+        self.f_panel.setMaximumSize(QtCore.QSize(128, 16777215))
         self.f_panel.setStyleSheet("QPushButton{\n"
 "    border:none;\n"
 "}\n"

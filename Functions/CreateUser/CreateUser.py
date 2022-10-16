@@ -3,7 +3,6 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget
 
 from .Microsoft import Microsoft
-
 from .Offline import Offline
 from .ui_CreateUser import Ui_CreateUser
 

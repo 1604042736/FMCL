@@ -1,5 +1,6 @@
-from .SettingItem import SettingItem
 from PyQt5.QtWidgets import QCheckBox
+
+from .SettingItem import SettingItem
 
 
 class BoolSettingItem(SettingItem):

@@ -1,13 +1,13 @@
-from .SettingItem import SettingItem
-from PyQt5.QtWidgets import (QLabel)
 from PyQt5.QtGui import QMouseEvent
+from PyQt5.QtWidgets import QLabel
+
 from ..SettingWidgets import SettingWidget
+from .SettingItem import SettingItem
 
 
 class ListSettingItem(SettingItem):
     def __init__(self, id: str, setting: dict) -> None:
         super().__init__(id, setting)
-        self.resize(self.width(), 64)
 
         font = self.l_name.font()
         font.setBold(True)

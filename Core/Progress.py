@@ -1,7 +1,11 @@
 import threading
-from PyQt5.QtWidgets import QListWidget, QGridLayout, QWidget, QLabel, QProgressBar, QListWidgetItem
-from PyQt5.QtCore import QSize, QThread, pyqtSignal, QTimer
+
 import qtawesome as qta
+from PyQt5.QtCore import QCoreApplication, QSize, QThread, QTimer, pyqtSignal
+from PyQt5.QtWidgets import (QGridLayout, QLabel, QListWidget, QListWidgetItem,
+                             QProgressBar, QWidget)
+
+_translate = QCoreApplication.translate
 
 
 class Progress(QListWidget):
@@ -18,7 +22,7 @@ class Progress(QListWidget):
         if self.__new_count > 1:
             return
         super().__init__()
-        self.setWindowTitle("进度")
+        self.setWindowTitle(_translate("Progress", "进度"))
         self.setWindowIcon(qta.icon("mdi.progress-download"))
 
     def add(self, func):

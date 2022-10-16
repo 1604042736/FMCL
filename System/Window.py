@@ -111,6 +111,7 @@ class Window(FramelessWindow):
     @pyqtSlot(bool)
     def on_pb_restore_clicked(self, _):
         from .Application import Application
+
         # 先使用parent有的方法
         if qApp.sendEvent(self.client_parent, RestoreWidgetEvent(self.client)):
             if isinstance(self.client_parent, QStackedWidget):  # 特殊

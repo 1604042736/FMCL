@@ -2,8 +2,8 @@ import qtawesome as qta
 from PyQt5.QtCore import QObject, QTimer, pyqtSlot
 from PyQt5.QtGui import QCloseEvent, QShowEvent
 from PyQt5.QtWidgets import QTreeWidgetItem, QWidget
-
 from System.Application import Application
+
 from .ui_TaskManger import Ui_TaskManager
 
 

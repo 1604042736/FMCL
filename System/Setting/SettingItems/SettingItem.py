@@ -4,11 +4,11 @@ from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget
 class SettingItem(QWidget):
     def __new__(cls, id, setting):
         if cls == SettingItem:
+            from .BoolSettingItem import BoolSettingItem
             from .DictSettingItem import DictSettingItem
             from .IntSettingItem import IntSettingItem
             from .ListSettingItem import ListSettingItem
             from .StrSettingItem import StrSettingItem
-            from .BoolSettingItem import BoolSettingItem
             value = setting["value"]
             if isinstance(value, dict):
                 return DictSettingItem(id, setting)
@@ -25,7 +25,7 @@ class SettingItem(QWidget):
 
     def __init__(self, id: str, setting: dict) -> None:
         super().__init__()
-        self.resize(self.width(), 32)
+        self.resize(self.width(), 64)
         self.setting = setting
         self.id = id
 

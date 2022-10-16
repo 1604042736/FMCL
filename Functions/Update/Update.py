@@ -1,7 +1,6 @@
 import json
 import os
 import sys
-import time
 import webbrowser
 
 import multitasking

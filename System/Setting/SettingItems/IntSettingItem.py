@@ -1,5 +1,6 @@
-from .SettingItem import SettingItem
 from PyQt5.QtWidgets import QSpinBox
+
+from .SettingItem import SettingItem
 
 
 class IntSettingItem(SettingItem):

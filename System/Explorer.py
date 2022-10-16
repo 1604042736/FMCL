@@ -1,5 +1,5 @@
 import qtawesome as qta
-from PyQt5.QtCore import QObject, QPoint, Qt
+from PyQt5.QtCore import QCoreApplication, QObject, QPoint, Qt
 from PyQt5.QtGui import QCursor, QShowEvent
 from PyQt5.QtWidgets import (QAction, QMenu, QPushButton, QStackedWidget,
                              QWidget, qApp)
@@ -11,13 +11,15 @@ from .Events import *
 from .Start import Start
 from .TaskManager import TaskManager
 
+_translate = QCoreApplication.translate
+
 
 class Explorer(QStackedWidget):
     """管理软件中出现的窗口(模拟QStackedWidget)"""
 
     def __init__(self):
         super().__init__()
-        self.resize(W_EXPLORER,H_EXPLORER)
+        self.resize(W_EXPLORER, H_EXPLORER)
         self.caught_widgets: dict[QWidget, QPushButton] = {}  # 被捕获的QWidget
         self.fixed_widgets: dict[QPushButton, type] = {}  # 固定的QWidget
         self.currentChanged.connect(self.__currentChanged)
@@ -177,7 +179,7 @@ class Explorer(QStackedWidget):
             if button == sender:
                 menu = QMenu(self)
                 a_close = QAction(self)
-                a_close.setText("关闭")
+                a_close.setText(_translate("Explorer", "关闭"))
                 a_close.setIcon(qta.icon("mdi6.close"))
                 a_close.triggered.connect(widget.close)
                 menu.addAction(a_close)
@@ -187,12 +189,12 @@ class Explorer(QStackedWidget):
     def showTitleMenu(self):
         menu = QMenu(self)
 
-        a_showdesktop = QAction("显示桌面", self)
+        a_showdesktop = QAction(_translate("Explorer", "显示桌面"), self)
         a_showdesktop.setIcon(qta.icon("ph.desktop"))
         a_showdesktop.triggered.connect(self.showDesktop)
         menu.addAction(a_showdesktop)
 
-        a_showtaskmanager = QAction("任务管理器", self)
+        a_showtaskmanager = QAction(_translate("TaskManager", "任务管理器"), self)
         a_showtaskmanager.setIcon(qta.icon("fa.tasks"))
         a_showtaskmanager.triggered.connect(lambda: TaskManager().show())
         menu.addAction(a_showtaskmanager)

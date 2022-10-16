@@ -3,7 +3,7 @@ import sys
 from typing import Literal
 
 import qtawesome as qta
-from PyQt5.QtCore import QEvent, QObject, QPoint, QSize, Qt
+from PyQt5.QtCore import QCoreApplication, QEvent, QObject, QPoint, QSize, Qt
 from PyQt5.QtGui import QResizeEvent
 from PyQt5.QtWidgets import (QAction, QFrame, QListView, QListWidget,
                              QListWidgetItem, QMenu, QPushButton, QSizePolicy,
@@ -12,7 +12,10 @@ from PyQt5.QtWidgets import (QAction, QFrame, QListView, QListWidget,
 
 from .Constants import *
 from .Events import *
+from .Setting import Setting
 from .TaskManager import TaskManager
+
+_translate = QCoreApplication.translate
 
 
 class StartUi(QStackedWidget):
@@ -23,12 +26,25 @@ class StartUi(QStackedWidget):
         return super().addWidget(w)
 
 
+def getDefaultPanelButtons():
+    pb_setting = QPushButton()
+    pb_setting.setText(_translate("Setting", "设置"))
+    pb_setting.setIcon(qta.icon("ri.settings-5-line"))
+    pb_setting.resize(W_PANEL, H_PANELBUTTON)
+    pb_setting.setStyleSheet(S_D_PANELBUTTON)
+    pb_setting.setIconSize(pb_setting.size())
+    pb_setting.clicked.connect(lambda: Setting().show())
+    return [(pb_setting,)]
+
+
 class Start(QWidget):
     """开始界面"""
+
     func_getters: list = [
-        lambda:[("任务管理器", qta.icon("fa.tasks"), lambda: TaskManager().show())]
+        lambda:[(_translate("TaskManager", "任务管理器"), qta.icon(
+            "fa.tasks"), lambda: TaskManager().show())]
     ]  # 功能
-    panel_getters: list = []  # 面板控件
+    panel_getters: list = [getDefaultPanelButtons]  # 面板控件
 
     __instance = None
     __new_count = 0
@@ -43,7 +59,7 @@ class Start(QWidget):
         if self.__new_count > 1:
             return
         super().__init__()
-        self.setWindowTitle("开始界面")
+        self.setWindowTitle(_translate("Start", "开始界面"))
         # 面板
         self.f_panel = QFrame(self)
         self.f_panel.move(0, 0)
@@ -61,7 +77,7 @@ class Start(QWidget):
         self.vbox_panel.addSpacerItem(self.si_separate)
 
         self.pb_software = QPushButton()
-        self.pb_software.setText("软件")
+        self.pb_software.setText(_translate("Start", "软件"))
         self.pb_software.resize(W_PANEL, H_PANELBUTTON)
         self.pb_software.setStyleSheet(S_D_PANELBUTTON)
         self.pb_software.setIcon(qta.icon("mdi.application"))
@@ -70,7 +86,7 @@ class Start(QWidget):
         self.addPanelWidget(self.pb_software)
 
         self.pb_expand = QPushButton()
-        self.pb_expand.setText("展开")
+        self.pb_expand.setText(_translate("Start", "展开"))
         self.pb_expand.resize(W_PANEL, H_PANELBUTTON)
         self.pb_expand.setStyleSheet(S_D_PANELBUTTON)
         self.pb_expand.setIconSize(self.pb_expand.size())
@@ -82,7 +98,7 @@ class Start(QWidget):
         self.ui.move(W_PANEL, 0)
 
         self.pb_allfunc = QPushButton()
-        self.pb_allfunc.setText("所有应用")
+        self.pb_allfunc.setText(_translate("AllFunctions", "所有应用"))
         self.pb_allfunc.resize(W_PANEL, H_PANELBUTTON)
         self.pb_allfunc.setStyleSheet(S_D_PANELBUTTON)
         self.pb_allfunc.setIconSize(self.pb_allfunc.size())
@@ -125,11 +141,11 @@ class Start(QWidget):
     def showSoftwareMenu(self):
         menu = QMenu(self)
 
-        a_quit = QAction(self, text="退出")
+        a_quit = QAction(self, text=_translate("Start", "退出"))
         a_quit.triggered.connect(qApp.quit)
         a_quit.setIcon(qta.icon("mdi.power"))
 
-        a_restart = QAction(self, text="重启")
+        a_restart = QAction(self, text=_translate("Start", "重启"))
         a_restart.triggered.connect(self.restart)
         a_restart.setIcon(qta.icon("msc.debug-restart"))
 
@@ -187,7 +203,7 @@ class AllFunctions(QListWidget):
         self.setResizeMode(QListView.ResizeMode.Adjust)
         self.setWordWrap(True)
         self.setStyleSheet("QListWidget{border:none;}")
-        self.setWindowTitle("所有应用")
+        self.setWindowTitle(_translate("AllFunctions", "所有应用"))
         self.setWindowIcon(qta.icon("mdi.format-list-checkbox"))
 
         self.itemClicked.connect(self.launchFunc)

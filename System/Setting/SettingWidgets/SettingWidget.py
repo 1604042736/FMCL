@@ -1,8 +1,9 @@
 import qtawesome as qta
+from PyQt5.QtCore import QCoreApplication, QEvent
 from PyQt5.QtWidgets import QWidget
-import qtawesome as qta
-from PyQt5.QtCore import QEvent
 from System.Constants import *
+
+_translate = QCoreApplication.translate
 
 
 class SettingWidget(QWidget):
@@ -35,9 +36,9 @@ class SettingWidget(QWidget):
         self.setWindowIcon(qta.icon("ri.settings-5-line"))
         name = id.split("#")[-1].split("/")[-1]
         if name:
-            self.window_title = f"设置: {name}"
+            self.window_title = f"{_translate('Setting','设置')}: {name}"
         else:
-            self.window_title = f"设置"
+            self.window_title = _translate('Setting', '设置')
         self.setWindowTitle(self.window_title)
 
     def refresh(self):

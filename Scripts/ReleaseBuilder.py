@@ -1,8 +1,8 @@
 import os
 import shutil
 import sys
-from typing import TextIO
 import zipapp
+from typing import TextIO
 
 
 class ReleaseBuilder(TextIO):

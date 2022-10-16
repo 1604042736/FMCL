@@ -1,7 +1,10 @@
+from PyQt5.QtCore import QCoreApplication, pyqtSlot
+from PyQt5.QtWidgets import QFileDialog, QInputDialog, QMessageBox
+
 from .SettingWidget import SettingWidget
 from .ui_ListSettingWidget import Ui_ListSettingWidget
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import (QFileDialog, QInputDialog, QMessageBox)
+
+_translate = QCoreApplication.translate
 
 
 class ListSettingWidget(SettingWidget, Ui_ListSettingWidget):
@@ -25,15 +28,18 @@ class ListSettingWidget(SettingWidget, Ui_ListSettingWidget):
         add = self.setting.get("add", "input")
         item = ""
         if add == "input":
-            item = QInputDialog.getText(self, "输入", "")
+            item = QInputDialog.getText(
+                self, _translate("ListSettingWidget", "输入"), "")
             if not item[1]:
                 item = ""
             else:
                 item = item[0]
         elif add == "file":
-            item = QFileDialog.getOpenFileName(self, "选择文件")
+            item = QFileDialog.getOpenFileName(
+                self, _translate("ListSettingWidget", "选择文件"))
         elif add == "directory":
-            item = QFileDialog.getExistingDirectory(self, "选择目录")
+            item = QFileDialog.getExistingDirectory(
+                self, _translate("ListSettingWidget", "选择目录"))
         else:
             add()
         if item:
@@ -44,7 +50,8 @@ class ListSettingWidget(SettingWidget, Ui_ListSettingWidget):
     def on_pb_delete_clicked(self, _):
         min_count = self.setting.get("min_count", 0)
         if self.lw_values.count() <= min_count:
-            QMessageBox.warning(self, "错误", f"至少有{min_count}个")
+            QMessageBox.warning(self, _translate(
+                "ListSettingWidget", "错误"), f"至少有{min_count}个")
         else:
             item = self.lw_values.currentItem()
             if item:
@@ -54,7 +61,8 @@ class ListSettingWidget(SettingWidget, Ui_ListSettingWidget):
                 if delete_callback:
                     delete_callback(item.text())
             else:
-                QMessageBox.warning(self, "错误", "未选中")
+                QMessageBox.warning(self, _translate(
+                    "ListSettingWidget", "错误"), _translate("ListSettingWidget", "未选中"))
 
     @pyqtSlot(bool)
     def on_pb_promote_clicked(self, _):
@@ -69,7 +77,8 @@ class ListSettingWidget(SettingWidget, Ui_ListSettingWidget):
                                                                   1] = self.setting["value"][row-1], self.setting["value"][row]
                 self.lw_values.setCurrentItem(item)
         else:
-            QMessageBox.warning(self, "错误", "未选中")
+            QMessageBox.warning(self, _translate(
+                "ListSettingWidget", "错误"), _translate("ListSettingWidget", "未选中"))
 
     @pyqtSlot(bool)
     def on_pb_promote_top_clicked(self, _):
@@ -82,4 +91,5 @@ class ListSettingWidget(SettingWidget, Ui_ListSettingWidget):
             self.setting["value"].insert(0, item.text())
             self.lw_values.setCurrentItem(item)
         else:
-            QMessageBox.warning(self, "错误", "未选中")
+            QMessageBox.warning(self, _translate(
+                "ListSettingWidget", "错误"), _translate("ListSettingWidget", "未选中"))

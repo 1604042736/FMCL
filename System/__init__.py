@@ -1,6 +1,6 @@
 from .Application import Application
-from .Events import TitleWidgetEvent, RestoreWidgetEvent
-from .Explorer import Explorer
-from .Start import Start
-from .Setting import Setting
 from .Desktop import Desktop
+from .Events import RestoreWidgetEvent, TitleWidgetEvent
+from .Explorer import Explorer
+from .Setting import Setting
+from .Start import Start

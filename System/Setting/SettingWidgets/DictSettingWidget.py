@@ -1,7 +1,8 @@
-from .SettingWidget import SettingWidget
-from PyQt5.QtWidgets import QListWidget, QListWidgetItem
 from PyQt5.QtGui import QResizeEvent
+from PyQt5.QtWidgets import QListWidget, QListWidgetItem
+
 from ..SettingItems import SettingItem
+from .SettingWidget import SettingWidget
 
 
 class DictSettingWidget(SettingWidget):

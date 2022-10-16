@@ -1,13 +1,12 @@
-import minecraft_launcher_lib as mll
 import multitasking
 import qtawesome as qta
+import requests
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QResizeEvent
 from PyQt5.QtWidgets import QWidget
 
 from .NewsInfo import NewsInfo
 from .ui_News import Ui_News
-import requests
 
 
 class News(QWidget, Ui_News):

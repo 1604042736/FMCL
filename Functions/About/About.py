@@ -3,10 +3,12 @@ import webbrowser
 
 import qtawesome as qta
 from Globals import Globals
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QLabel, QWidget, QPushButton
+from PyQt5.QtCore import QCoreApplication, pyqtSlot
+from PyQt5.QtWidgets import QLabel, QPushButton, QWidget
 
 from .ui_About import Ui_About
+
+_translate = QCoreApplication.translate
 
 REQUESTMENTS = f"""Python=={sys.version}
 minecraft_launcher_lib==5.2
@@ -17,9 +19,6 @@ PyQt5_Frameless_Window==0.1.0
 QtAwesome==1.1.1
 requests==2.27.1"""
 
-THINKS = (("bangbang93: 提供镜像源", "https://bmclapidoc.bangbang93.com"),
-          ("huanghongxun: 提供技术帮助(HMCL)", "https://github.com/huanghongxun/HMCL"))
-
 
 class About(QWidget, Ui_About):
     def __init__(self):
@@ -29,6 +28,9 @@ class About(QWidget, Ui_About):
 
         self.pb_fmcl.setText(
             f"Functional Minecraft Launcher[v{Globals.TAG_NAME}]")
+
+        THINKS = ((_translate("About", "bangbang93: 提供镜像源"), "https://bmclapidoc.bangbang93.com"),
+                  (_translate("About", "huanghongxun: 提供技术帮助(HMCL)"), "https://github.com/huanghongxun/HMCL"))
 
         for i in REQUESTMENTS.split("\n"):
             name, version = i.split("==")

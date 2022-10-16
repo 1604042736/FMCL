@@ -1,5 +1,6 @@
-from .SettingItem import SettingItem
 from PyQt5.QtWidgets import QLineEdit
+
+from .SettingItem import SettingItem
 
 
 class StrSettingItem(SettingItem):
@@ -12,5 +13,5 @@ class StrSettingItem(SettingItem):
         self.cur_layout.addWidget(self.w_value, 0, 1)
 
     def sync(self):
-        self.setting["value"]=self.w_value.text()
+        self.setting["value"] = self.w_value.text()
         return super().sync()

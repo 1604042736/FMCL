@@ -1,4 +1,4 @@
-from .User import User
+from .Download import Download
 from .Game import Game
 from .Progress import Progress
-from .Download import Download
+from .User import User

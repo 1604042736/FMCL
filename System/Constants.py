@@ -1,5 +1,3 @@
-from PyQt5.QtCore import QObject, QEvent
-
 W_D_TITLEBUTTON = 46  # 标题栏按钮的默认宽度
 H_D_TITLEBUTTON = 32  # 标题栏按钮的默认高度
 

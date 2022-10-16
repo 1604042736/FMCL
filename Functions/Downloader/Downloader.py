@@ -1,8 +1,9 @@
-from PyQt5.QtWidgets import QWidget, QListWidgetItem
-from .ui_Downloader import Ui_Downloader
 import qtawesome as qta
 from Core import Game
 from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QListWidgetItem, QWidget
+
+from .ui_Downloader import Ui_Downloader
 
 
 class Downloader(QWidget, Ui_Downloader):

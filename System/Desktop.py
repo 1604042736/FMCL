@@ -1,9 +1,11 @@
-from PyQt5.QtCore import QSize, Qt, QEvent
+from PyQt5.QtCore import QCoreApplication, QEvent, QSize, Qt
 from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import (QAction, QListView, QListWidget, QListWidgetItem,
                              QMenu)
 
 from .Constants import *
+
+_translate = QCoreApplication.translate
 
 
 class Desktop(QListWidget):
@@ -22,7 +24,7 @@ class Desktop(QListWidget):
         if self.__new_count > 1:
             return
         super().__init__()
-        self.setWindowTitle("桌面")
+        self.setWindowTitle(_translate("Desktop", "桌面"))
 
         self.setMovement(QListView.Movement.Static)
         self.setViewMode(QListView.ViewMode.IconMode)
@@ -41,7 +43,7 @@ class Desktop(QListWidget):
         item = self.itemAt(self.mapFromGlobal(QCursor.pos()))
         menu = QMenu(self)
 
-        a_refresh = QAction("刷新", self)
+        a_refresh = QAction(_translate("Desktop", "刷新"), self)
         a_refresh.triggered.connect(self.refresh)
         menu.addAction(a_refresh)
 

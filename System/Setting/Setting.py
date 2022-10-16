@@ -1,9 +1,10 @@
 import json
 import os
-from PyQt5.QtWidgets import qApp
-from PyQt5.QtCore import QObject, QTimer, pyqtSignal
 
-from .SettingWidgets import SettingWidget, DictSettingWidget
+from PyQt5.QtCore import QObject, QTimer
+from PyQt5.QtWidgets import qApp
+
+from .SettingWidgets import DictSettingWidget, SettingWidget
 
 
 class Setting(QObject):
@@ -50,6 +51,8 @@ class Setting(QObject):
                 a[key] = val
             elif isinstance(val, dict):
                 self.merge(a[key], val)
+            elif key == "name" or key == "description":  # 确保翻译
+                a[key] = val
 
     def get(self, id: str):
         """获得一个设置项的值"""

@@ -4,15 +4,19 @@ import os
 import sys
 
 import qtawesome as qta
+from PyQt5.QtCore import QCoreApplication, QTranslator
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QAction, QPushButton
 
+import Languages as _
 import Resources as _
 from Core import Game, Progress, User
 from Functions import About, CreateUser, Downloader, GameManager, News, Update
 from System import Application, Desktop, Explorer, Setting, Start
 from System.Constants import *
 from System.TaskManager import TaskManager
+
+_translate = QCoreApplication.translate
 
 single = {
     "Setting": Setting,
@@ -25,54 +29,60 @@ single = {
     "GameManager": GameManager
 }
 
-default_setting = {
-    "launcher": {
-        "name": "启动器",
-        "description": "对启动器的一些属性的设置",
-        "value": {
-            "width": {
-                "name": "启动器宽度",
-                "value": 1000
-            },
-            "height": {
-                "name": "启动器高度",
-                "value": 618
+
+def getDefaultSetting():
+    return {
+        "launcher": {
+            "name": _translate("FMCLSetting", "启动器"),
+            "description": _translate("FMCLSetting", "对启动器的一些属性的设置"),
+            "value": {
+                "width": {
+                    "name": _translate("FMCLSetting", "启动器宽度"),
+                    "value": 1000
+                },
+                "height": {
+                    "name": _translate("FMCLSetting", "启动器高度"),
+                    "value": 618
+                },
+                "language": {
+                    "name": _translate("FMCLSetting", "语言"),
+                    "value": ":/zh_CN.qm"
+                }
             }
-        }
-    },
-    "game": {
-        "name": "游戏",
-        "description": "与游戏有关的一些设置",
-        "value": {
-            "directories": {
-                "name": "游戏目录",
-                "add": "directory",
-                "min_count": 1,
-                "description": "游戏目录",
-                "value": [".minecraft"]
-            },
-            "java_path": {
-                "name": "Java路径",
-                "value": "javaw"
-            },
-            "width": {
-                "name": "游戏窗口宽度",
-                "value": 1000
-            },
-            "height": {
-                "name": "游戏窗口宽度",
-                "value": 618
+        },
+        "game": {
+            "name": _translate("FMCLSetting", "游戏"),
+            "description": _translate("FMCLSetting", "与游戏有关的一些设置"),
+            "value": {
+                "directories": {
+                    "name": _translate("FMCLSetting", "游戏目录"),
+                    "add": "directory",
+                    "min_count": 1,
+                    "description": _translate("FMCLSetting", "游戏目录"),
+                    "value": [".minecraft"]
+                },
+                "java_path": {
+                    "name": _translate("FMCLSetting", "Java路径"),
+                    "value": "javaw"
+                },
+                "width": {
+                    "name": _translate("FMCLSetting", "游戏窗口宽度"),
+                    "value": 1000
+                },
+                "height": {
+                    "name": _translate("FMCLSetting", "游戏窗口宽度"),
+                    "value": 618
+                }
             }
+        },
+        "users": {
+            "name": _translate("FMCLSetting", "用户"),
+            "description": _translate("FMCLSetting", "用户设置"),
+            "add": lambda: CreateUser().show(),
+            "delete": User.delete_user,
+            "value": User.get_all_users()
         }
-    },
-    "users": {
-        "name": "用户",
-        "description": "用户设置",
-        "add": lambda: CreateUser().show(),
-        "delete": User.delete_user,
-        "value": User.get_all_users()
     }
-}
 
 
 class StdLog:
@@ -96,16 +106,8 @@ class StdLog:
 
 
 def getPanelButtons():
-    pb_setting = QPushButton()
-    pb_setting.setText("设置")
-    pb_setting.setIcon(qta.icon("ri.settings-5-line"))
-    pb_setting.resize(W_PANEL, H_PANELBUTTON)
-    pb_setting.setStyleSheet(S_D_PANELBUTTON)
-    pb_setting.setIconSize(pb_setting.size())
-    pb_setting.clicked.connect(lambda: Setting().show())
-
     pb_user = QPushButton()
-    pb_user.setText("未选择用户")
+    pb_user.setText(_translate("FMCL", "未选择用户"))
     pb_user.setIcon(qta.icon("ph.user-circle"))
     pb_user.resize(W_PANEL, H_PANELBUTTON)
     pb_user.setStyleSheet(S_D_PANELBUTTON)
@@ -115,8 +117,7 @@ def getPanelButtons():
     if username:
         pb_user.setText(username["username"])
 
-    return [(pb_setting,),
-            (pb_user,)]
+    return [(pb_user,)]
 
 
 def getVersions():
@@ -127,11 +128,11 @@ def getVersions():
         if os.path.exists(directory+"/versions"):
             for i in os.listdir(directory+"/versions"):
                 a_launch = QAction()
-                a_launch.setText("启动")
+                a_launch.setText(_translate("FMCL", "启动"))
                 a_launch.triggered.connect(lambda _, v=i: Game(v).launch())
 
                 a_manager = QAction()
-                a_manager.setText("管理")
+                a_manager.setText(_translate("FMCL", "管理"))
                 a_manager.triggered.connect(
                     lambda _, v=i: GameManager(v).show())
                 result.append(
@@ -160,23 +161,29 @@ def main():
     if args.update and os.path.exists(args.update):
         os.remove(args.update)
 
-    Setting().addSetting(default_setting)
+    setting = Setting()
+    setting.addSetting(getDefaultSetting())  # 翻译之前
+    translateor = QTranslator()
+    translateor.load(setting.get("launcher/language"))
+    app.installTranslator(translateor)
+    setting.addSetting(getDefaultSetting())  # 翻译过后
 
     if args.single != None:
         single[args.single](*args.args).show()
     else:
         Start.func_getters.append(
-            lambda: [("设置", qta.icon("ri.settings-5-line"), lambda:Setting().show()),
-                     ("创建用户", qta.icon("ph.user-circle-plus"),
+            lambda: [(_translate("Setting", "设置"), qta.icon("ri.settings-5-line"), lambda:Setting().show()),
+                     (_translate("CreateUser", "创建用户"), qta.icon("ph.user-circle-plus"),
                       lambda:CreateUser().show()),
-                     ("下载器", qta.icon("ph.download-simple"),
+                     (_translate("Downloader", "下载器"), qta.icon("ph.download-simple"),
                       lambda:Downloader().show()),
-                     ("进度", qta.icon("mdi.progress-download"),
+                     (_translate("Progress", "进度"), qta.icon("mdi.progress-download"),
                       lambda:Progress().show()),
-                     ("新闻", qta.icon("fa.newspaper-o"), lambda:News().show()),
-                     ("关于", qta.icon("mdi.information-outline"),
+                     (_translate("News", "新闻"), qta.icon(
+                         "fa.newspaper-o"), lambda:News().show()),
+                     (_translate("About", "关于"), qta.icon("mdi.information-outline"),
                       lambda:About().show()),
-                     ("更新", qta.icon("mdi6.update"), lambda:Update().show())])
+                     (_translate("Update", "更新"), qta.icon("mdi6.update"), lambda:Update().show())])
         Start.panel_getters.append(getPanelButtons)
         Desktop.item_getters.append(getVersions)
 

@@ -33,7 +33,7 @@
     <widget class="QFrame" name="f_panel">
      <property name="maximumSize">
       <size>
-       <width>80</width>
+       <width>128</width>
        <height>16777215</height>
       </size>
      </property>

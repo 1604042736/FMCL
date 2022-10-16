@@ -1,9 +1,9 @@
+import qtawesome as qta
+from Core.User import User
+from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget
 
-from Core.User import User
 from .ui_Offline import Ui_Offline
-import qtawesome as qta
-from PyQt5.QtCore import pyqtSlot
 
 
 class Offline(QWidget, Ui_Offline):

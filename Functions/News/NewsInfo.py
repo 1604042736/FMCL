@@ -1,10 +1,12 @@
 import webbrowser
-from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout
-from PyQt5.QtGui import QImage, QPixmap, QResizeEvent, QFont, QFontMetrics
-from .ui_NewsInfo import Ui_NewsInfo
-from Globals import Globals
-from PyQt5.QtCore import Qt, QEvent
+
 import multitasking
+from Globals import Globals
+from PyQt5.QtCore import QEvent, Qt
+from PyQt5.QtGui import QFont, QFontMetrics, QImage, QPixmap, QResizeEvent
+from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget
+
+from .ui_NewsInfo import Ui_NewsInfo
 
 
 class NewsInfo(QWidget, Ui_NewsInfo):

@@ -4,13 +4,15 @@ import os
 import shutil
 
 import minecraft_launcher_lib as mll
-import Resources as _
 from Globals import Globals
+from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QIcon, QPixmap
 from System.Setting import Setting
 
 from .Progress import Progress
 from .User import User
+
+_translate = QCoreApplication.translate
 
 
 class Game:
@@ -42,15 +44,15 @@ class Game:
 
         self.DEFAULT_SETTING = {
             "specific": {
-                "name": "特定设置",
+                "name": _translate("GameSetting", "特定设置"),
                 "value": False
             },
             "isolation": {
-                "name": "版本隔离",
+                "name": _translate("GameSetting", "版本隔离"),
                 "value": False
             },
             "logo": {
-                "name": "游戏图标",
+                "name": _translate("GameSetting", "游戏图标"),
                 "value": ""
             }
         }

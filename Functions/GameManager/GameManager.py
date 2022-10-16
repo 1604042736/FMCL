@@ -1,17 +1,15 @@
 import qtawesome as qta
 from Core import Game
-from PyQt5.QtCore import QEvent, Qt, pyqtSlot
+from PyQt5.QtCore import QCoreApplication, QEvent, Qt, pyqtSlot
 from PyQt5.QtWidgets import QCheckBox, QLabel, QMessageBox, QWidget
 
 from .ui_GameManager import Ui_GameManager
 
+_translate = QCoreApplication.translate
+
 
 class GameManager(QWidget, Ui_GameManager):
-    __info_translate = {
-        "version": "版本",
-        "forge_version": "Forge版本",
-        "fabric_version": "Fabric版本"
-    }
+
     __instances = {}
     __new_count = {}
 
@@ -28,6 +26,12 @@ class GameManager(QWidget, Ui_GameManager):
         super().__init__()
         self.setupUi(self)
         self.setWindowIcon(qta.icon("mdi6.minecraft"))
+        self. __info_translate = {
+            "version": _translate("GameManager", "版本"),
+            "forge_version": _translate("GameManager", "Forge版本"),
+            "fabric_version": _translate("GameManager", "Fabric版本")
+        }
+
         self.name = name
         self.game = Game(name)
         self.info = self.game.get_info()
@@ -102,8 +106,10 @@ class GameManager(QWidget, Ui_GameManager):
 
     @pyqtSlot(bool)
     def on_pb_delete_clicked(self, _):
-        reply = QMessageBox.warning(
-            self, "删除", "确定删除?", QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        reply = QMessageBox.warning(self,
+                                    _translate("GameSetting", "删除"),
+                                    _translate("GameSetting", "确定删除?"),
+                                    QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
         if reply == QMessageBox.StandardButton.Yes:
             self.game.delete()
             self.close()
