@@ -79,7 +79,7 @@ class Game:
             else:
                 str_command += i+' '
         logging.info(str_command)
-        #os.popen(f"cd {self.directory}&start {str_command}")
+        os.popen(f"cd {self.directory}&start {str_command}")
 
     def install_forge(self, forge_version, callback):
         mll.forge.install_forge_version(
