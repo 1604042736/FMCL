@@ -81,6 +81,7 @@ class StdLog:
     def __init__(self) -> None:
         if not os.path.exists("FMCL"):
             os.makedirs("FMCL")
+        open("./FMCL/latest.log", mode='w', encoding='utf-8').write("")
 
     def write(self, msg):
         if self.__console__:

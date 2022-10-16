@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QWidget
 
 from .NewsInfo import NewsInfo
 from .ui_News import Ui_News
+import requests
 
 
 class News(QWidget, Ui_News):
@@ -27,8 +28,15 @@ class News(QWidget, Ui_News):
 
     @multitasking.task
     def getNews(self):
-        self.__NewsGot.emit(mll.utils.get_minecraft_news(
-            self.page_size)["article_grid"])
+        parameters = {
+            "pageSize": self.page_size
+        }
+        header = {
+            "user-agent": "FMCL"
+        }
+        r = requests.get("https://www.minecraft.net/content/minecraft-net/_jcr_content.articles.grid",
+                         params=parameters, headers=header).json()
+        self.__NewsGot.emit(r["article_grid"])
 
     def getMoreNews(self, num):
         if self.scrollArea.verticalScrollBar().maximum() == num:
