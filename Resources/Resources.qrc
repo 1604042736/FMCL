@@ -9,5 +9,6 @@
     <file>Image/forge.png</file>
     <file>Image/furnace.png</file>
     <file>Image/grass.png</file>
+    <file>Icon/FMCL.ico</file>
   </qresource>
 </RCC>

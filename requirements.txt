@@ -1,7 +1,7 @@
-beautifulsoup4==4.11.1
+minecraft_launcher_lib==5.2
+multitasking==0.0.11
 Pillow==9.2.0
 PyQt5==5.15.7
-pywin32==303
+PyQt5_Frameless_Window==0.1.0
 QtAwesome==1.1.1
 requests==2.27.1
-win32gui==221.6

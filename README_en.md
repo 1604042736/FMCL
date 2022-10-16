@@ -7,12 +7,12 @@
 
 [English](README_en.md) | 中文
 
-## 介绍
+## Introduction
 
-FMCL (Functional Minecraft Launcher) 是一个跨平台的MC启动器
+FMCL (Functional Minecraft Launcher) is a cross-platform Minecraft Launcher
 
-## 功能
+## Functions
 
-- 游戏的安装与运行(包括Forge,Fabric)
-- 游戏的管理(包括Mod管理)
-- 获取新闻
+- Installation and launch of games (include Forge, Fabric)
+- Game management (include Mod management)
+- Get news
