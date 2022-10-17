@@ -40,7 +40,7 @@ class Game:
 
     def __init__(self, name: str) -> None:
         self.name = name
-        self.directory = Setting().get("game/directories")[0]
+        self.directory = Setting().get("game.directories")[0]
 
         self.DEFAULT_SETTING = {
             "specific": {
@@ -64,8 +64,8 @@ class Game:
         options["launcherVersion"] = Globals.TAG_NAME
         options["gameDirectory"] = self.directory
         options["customResolution"] = True
-        options["resolutionWidth"] = str(Setting().get("game/width"))
-        options["resolutionHeight"] = str(Setting().get("game/height"))
+        options["resolutionWidth"] = str(Setting().get("game.width"))
+        options["resolutionHeight"] = str(Setting().get("game.height"))
         options["executablePath"] = "javaw"
         self.generate_setting()
         if self.setting.get("isolation"):

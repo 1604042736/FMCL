@@ -70,7 +70,7 @@ def getDefaultSetting():
                 "language": {
                     "name": _translate("FMCLSetting", "语言"),
                     "description": _translate("FMCLSetting", "建议使用专用编辑器设置此项"),
-                    "custom_editor": LanguageChooser().show,
+                    "custom_editor": lambda: LanguageChooser().show(),
                     "value": ":/zh_CN.qm"
                 }
             }
@@ -127,7 +127,7 @@ def getPanelButtons():
 
 def getVersions():
     result = []
-    directories = Setting().get("game/directories")
+    directories = Setting().get("game.directories")
     if directories:
         directory = directories[0]
         if os.path.exists(directory+"/versions"):
@@ -169,7 +169,7 @@ def main():
     setting = Setting()
     setting.addSetting(getDefaultSetting())  # 翻译之前
     translateor = QTranslator()
-    translateor.load(setting.get("launcher/language"))
+    translateor.load(setting.get("launcher.language"))
     app.installTranslator(translateor)
     setting.addSetting(getDefaultSetting())  # 翻译过后
 

@@ -20,7 +20,7 @@ class LanguageChooser(QWidget, Ui_LanguageChooser):
 
     def refresh(self):
         self.lw_languages.clear()
-        cur_lang = Setting().get("launcher/language")
+        cur_lang = Setting().get("launcher.language")
 
         for key, val in self.languages.items():
             item = QListWidgetItem()
@@ -35,5 +35,5 @@ class LanguageChooser(QWidget, Ui_LanguageChooser):
         lang = self.lw_languages.currentItem().text()
         for key, val in self.languages.items():
             if val == lang:
-                Setting().set_value("launcher/language", key)
+                Setting().set_value("launcher.language", key)
                 break

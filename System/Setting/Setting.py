@@ -12,6 +12,8 @@ class Setting(QObject):
     __new_count = {}
 
     def __new__(cls, setting_path: str = None):
+        if setting_path == None:
+            setting_path = f"{qApp.applicationName()}/setting.json"
         if setting_path not in cls.__instances:
             cls.__instances[setting_path] = super().__new__(cls)
             cls.__new_count[setting_path] = 0
@@ -19,14 +21,12 @@ class Setting(QObject):
         return cls.__instances[setting_path]
 
     def __init__(self, setting_path: str = None):
+        if setting_path == None:
+            setting_path = f"{qApp.applicationName()}/setting.json"
         if self.__new_count[setting_path] > 1:
             return
         super().__init__()
-        if not setting_path:
-            self.SETTING_PATH = f"{qApp.applicationName()}/setting.json"
-        else:
-            self.SETTING_PATH = setting_path
-
+        self.SETTING_PATH = setting_path
         self.id_prefix = self.SETTING_PATH+"#"
 
         self.setting = {}
@@ -54,7 +54,7 @@ class Setting(QObject):
         """获得一个设置项的值"""
         id = id.replace(self.id_prefix, "")
         a = self.setting
-        for i in id.split("/"):
+        for i in id.split("."):
             if i:
                 a = a[i]["value"]
         return a
@@ -63,7 +63,7 @@ class Setting(QObject):
         """获得一个设置项"""
         id = id.replace(self.id_prefix, "")
         a = self.setting
-        keys = id.split("/")
+        keys = id.split(".")
         for i, val in enumerate(keys):
             if val:
                 if i == len(keys)-1:
@@ -75,7 +75,7 @@ class Setting(QObject):
     def set_value(self, id: str, value):
         id = id.replace(self.id_prefix, "")
         a = self.setting
-        keys = id.split("/")
+        keys = id.split(".")
         for i, val in enumerate(keys):
             if val:
                 if i == len(keys)-1:
