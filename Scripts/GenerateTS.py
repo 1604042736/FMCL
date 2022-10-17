@@ -1,4 +1,5 @@
 import os
+import re
 
 
 def getUiFiles(path: str) -> list:
@@ -8,8 +9,17 @@ def getUiFiles(path: str) -> list:
         if os.path.isdir(filepath):
             result.extend(getUiFiles(filepath))
         elif filename.endswith(".py"):
-            if "_translate" in open(filepath, encoding="utf-8").read():
+            content = open(filepath, encoding="utf-8").read()
+            if "_translate" in content:
                 result.append(filepath)
+            else:
+                chinese = re.finditer(r'[^"]"[\u4e00-\u9fa5]+"', content)
+                for i in chinese:
+                    print(f'警告:"{filepath}"中可能存在的未翻译内容:')
+                    for index, code in enumerate(content.split("\n")):
+                        if i.group() in code:
+                            print(f"{index}|\t{code.strip()}")
+                            break
     return result
 
 

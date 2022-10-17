@@ -35,7 +35,7 @@ QLabel{
     background-color:rgba(0,0,0,128);
 }
 """)
-        font = QFont("微软雅黑", 10)
+        font = QFont('微软雅黑', 10)
         font.setBold(True)
         self.l_title.setFont(font)
         self.l_title.setWordWrap(True)

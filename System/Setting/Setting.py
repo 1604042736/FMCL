@@ -76,6 +76,21 @@ class Setting(QObject):
                     a = a[val]["value"]
         return a
 
+    def set_value(self, id: str, value):
+        id = id.replace(self.id_prefix, "")
+        a = self.setting
+        keys = id.split("/")
+        for i, val in enumerate(keys):
+            if val:
+                if i == len(keys)-1:
+                    a = a[val]
+                else:
+                    a = a[val]["value"]
+        a["value"] = value
+        self.sync()
+        if "callback" in a:
+            a["callback"]()
+
     def show(self, id: str = ""):
         self.get_widget(id).show()
 

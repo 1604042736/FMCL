@@ -1,4 +1,7 @@
-from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget
+from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtWidgets import QGridLayout, QLabel, QPushButton, QWidget
+
+_translate = QCoreApplication.translate
 
 
 class SettingItem(QWidget):
@@ -34,7 +37,16 @@ class SettingItem(QWidget):
         self.l_name = QLabel(self)
         self.l_name.setText(self.setting["name"])
 
+        self.setToolTip(setting.get("description", ""))
+
         self.cur_layout.addWidget(self.l_name)
+
+        if "custom_editor" in setting:
+            self.pb_custom_editor = QPushButton(self)
+            self.pb_custom_editor.setText(_translate("SettingItem", "使用专用编辑器"))
+            self.pb_custom_editor.clicked.connect(
+                self.setting["custom_editor"])
+            self.cur_layout.addWidget(self.pb_custom_editor)
 
     def sync(self):
         from ..Setting import Setting

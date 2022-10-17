@@ -53,6 +53,7 @@ class Game:
             },
             "logo": {
                 "name": _translate("GameSetting", "游戏图标"),
+                "description": _translate("GameSetting", "除非您知道自己在干什么,否则不要手动更改此设置"),
                 "value": ""
             }
         }

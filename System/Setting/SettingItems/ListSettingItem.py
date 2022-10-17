@@ -14,10 +14,6 @@ class ListSettingItem(SettingItem):
         font.setPixelSize(16)
         self.l_name.setFont(font)
 
-        self.l_description = QLabel(self)
-        self.l_description.setText(setting["description"])
-        self.cur_layout.addWidget(self.l_description)
-
     def mousePressEvent(self, a0: QMouseEvent) -> None:
         SettingWidget(self.id, self.setting["value"]).show()
         return super().mousePressEvent(a0)

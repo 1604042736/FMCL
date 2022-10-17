@@ -11,7 +11,8 @@ from PyQt5.QtWidgets import QAction, QPushButton
 import Languages as _
 import Resources as _
 from Core import Game, Progress, User
-from Functions import About, CreateUser, Downloader, GameManager, News, Update
+from Functions import (About, CreateUser, Downloader, GameManager,
+                       LanguageChooser, News, Update)
 from System import Application, Desktop, Explorer, Setting, Start
 from System.Constants import *
 from System.TaskManager import TaskManager
@@ -26,7 +27,8 @@ single = {
     "News": News,
     "About": About,
     "Update": Update,
-    "GameManager": GameManager
+    "GameManager": GameManager,
+    "LanguageChooser": LanguageChooser
 }
 
 
@@ -46,6 +48,8 @@ def getDefaultSetting():
                 },
                 "language": {
                     "name": _translate("FMCLSetting", "语言"),
+                    "description": _translate("FMCLSetting", "建议使用专用编辑器设置此项"),
+                    "custom_editor": LanguageChooser().show,
                     "value": ":/zh_CN.qm"
                 }
             }

@@ -3,6 +3,7 @@ from Core import Game
 from PyQt5.QtCore import QCoreApplication, QEvent, Qt, pyqtSlot
 from PyQt5.QtWidgets import QCheckBox, QLabel, QMessageBox, QWidget
 
+from .LogoChooser import LogoChooser
 from .ui_GameManager import Ui_GameManager
 
 _translate = QCoreApplication.translate
@@ -35,6 +36,7 @@ class GameManager(QWidget, Ui_GameManager):
         self.name = name
         self.game = Game(name)
         self.info = self.game.get_info()
+        self.__mods: dict[str, tuple(QCheckBox, QLabel)] = {}
 
         self.pb_opendirectory.clicked.connect(self.game.open_directory)
         self.gl_mods.setAlignment(Qt.AlignmentFlag.AlignLeft)
@@ -51,8 +53,6 @@ class GameManager(QWidget, Ui_GameManager):
 
         self.le_name.textEdited.connect(self.__rename)
         self.refresh()
-        self.setLogo()
-        self.setMods()
 
     def setLogo(self):
         pixmap = self.game.get_pixmap()
@@ -60,43 +60,53 @@ class GameManager(QWidget, Ui_GameManager):
             self.l_logo.setPixmap(pixmap.scaled(64, 64))
 
     def refresh(self):
-        for i in self.gb_setting.findChildren(QWidget):
-            self.gl_setting.removeWidget(i)
-            i.deleteLater()
-
         self.game.DEFAULT_SETTING["isolation"]["callback"] = self.setMods
         self.game.DEFAULT_SETTING["logo"]["callback"] = self.setLogo
 
         self.game.generate_setting()
 
         setting_widget = self.game.setting.get_widget()
+        setting_widget.refresh()
         for i in range(setting_widget.lw_value.count()):
             item = setting_widget.lw_value.item(i)
             widget = setting_widget.lw_value.itemWidget(item)
             self.gl_setting.addWidget(widget)
 
+        self.setLogo()
+        self.setMods()
+
     def setMods(self):
         if not (self.info["forge_version"] or self.info["fabric_version"]):
             return
+        mods = self.game.get_mod()
 
-        for i in self.gb_mods.findChildren(QWidget):
-            self.gl_mods.removeWidget(i)
-            i.deleteLater()
+        for _, val in enumerate(self.game.get_mod()):
+            if val[1] not in self.__mods:
+                checkbox = QCheckBox()
+                checkbox.setCheckState(val[0])
+                checkbox.stateChanged.connect(
+                    lambda _, v=val[1], c=checkbox: self.game.setModEnabled(v, c.checkState()))
 
-        self.mods = self.game.get_mod()
-        for i, val in enumerate(self.mods):
-            checkbox = QCheckBox()
-            checkbox.setCheckState(val[0])
-            checkbox.stateChanged.connect(
-                lambda _, v=val[1], c=checkbox: self.game.setModEnabled(v, c.checkState()))
-            label = QLabel()
-            label.setText(val[1])
-            self.gl_mods.addWidget(checkbox, i, 0)
-            self.gl_mods.addWidget(label, i, 1)
+                label = QLabel()
+                label.setText(val[1])
+                # Spacer的存在会使它们两个一行排列
+                self.gl_mods.addWidget(checkbox)
+                self.gl_mods.addWidget(label)
+                self.__mods[val[1]] = (checkbox, label)
+
+        for key in tuple(self.__mods.keys()):  # 移除没有的mod
+            if key not in mods:
+                checkbox, label = self.__mods[key]
+                self.gl_mods.removeWidget(checkbox)
+                self.gl_mods.removeWidget(label)
+                checkbox.deleteLater()
+                label.deleteLater()
+                self.__mods.pop(key)
+                break
 
     def event(self, a0: QEvent) -> bool:
         if a0.type() == QEvent.Type.Show:
-            self.setMods()
+            self.refresh()
         return super().event(a0)
 
     def __rename(self):
@@ -116,3 +126,7 @@ class GameManager(QWidget, Ui_GameManager):
         if reply == QMessageBox.StandardButton.Yes:
             self.game.delete()
             self.close()
+
+    @pyqtSlot(bool)
+    def on_pb_changelogo_clicked(self, _):
+        LogoChooser(self.game).show()
