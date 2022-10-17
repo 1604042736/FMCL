@@ -25,7 +25,7 @@ class DictSettingWidget(SettingWidget):
         self.min_height = 0
         for key, val in self.value.items():
             item = QListWidgetItem()
-            widget = SettingItem(self.id+"/"+key, val)
+            widget = SettingItem(self.id+"."+key, val)
             item.setSizeHint(widget.size())
             self.min_height += widget.height()
             self.lw_value.addItem(item)

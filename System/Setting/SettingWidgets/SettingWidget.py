@@ -42,7 +42,7 @@ class SettingWidget(QWidget):
         self.setWindowTitle(self.window_title)
 
     def refresh(self):
-        pass
+        self.sync()
 
     def sync(self):
         from ..Setting import Setting
