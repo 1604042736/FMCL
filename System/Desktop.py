@@ -64,6 +64,7 @@ class Desktop(QListWidget):
                 item.setSizeHint(QSize(80, 80))
                 item.setText(text)
                 item.setIcon(icon)
+                item.setToolTip(text)
                 self.addItem(item)
                 self.item_action.append((item, actions))
 

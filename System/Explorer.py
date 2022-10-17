@@ -83,6 +83,7 @@ class Explorer(QStackedWidget):
         button.setText(widget.windowTitle())
         button.setIcon(widget.windowIcon())
         button.setStyleSheet(S_D_TASKBUTTON)
+        button.setToolTip(widget.windowTitle())
         button.clicked.connect(self.taskButtonClicked)
         button.setContextMenuPolicy(
             Qt.ContextMenuPolicy.CustomContextMenu)

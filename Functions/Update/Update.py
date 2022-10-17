@@ -15,6 +15,7 @@ from .ui_Update import Ui_Update
 
 class Update(QWidget, Ui_Update):
     hadNewVersion = pyqtSignal()
+    checkError = pyqtSignal(str)
 
     if sys.platform == "win32":
         system_postfix = "exe"
@@ -39,20 +40,25 @@ class Update(QWidget, Ui_Update):
         self.info = {}
         self.has_newversion = False
         self.hadNewVersion.connect(self.prepare)
+        self.checkError.connect(self.te_changelog.setText)
         self.check()
 
     @multitasking.task
     def check(self):
-        url = "https://api.github.com/repos/1604042736/FMCL/releases/latest"
-        r = Globals.request_keep_get(url)
-        self.info = json.loads(r.content)
+        try:
+            url = "https://api.github.com/repos/1604042736/FMCL/releases/latest"
+            r = Globals.request_keep_get(url)
+            self.info = json.loads(r.content)
 
-        if self.info["tag_name"] != Globals.TAG_NAME:
-            self.has_newversion = True
-            self.hadNewVersion.emit()
+            if self.info["tag_name"] != Globals.TAG_NAME:
+                self.has_newversion = True
+                self.hadNewVersion.emit()
 
-        while self.isHidden() and self.has_newversion:
-            self.hadNewVersion.emit()
+            while self.isHidden() and self.has_newversion:
+                self.hadNewVersion.emit()
+        except Exception as e:
+            self.pb_check.setEnabled(True)
+            self.checkError.emit(str(e))
 
     def prepare(self):
         self.pb_handupdate.setEnabled(True)
@@ -83,6 +89,7 @@ class Update(QWidget, Ui_Update):
     @pyqtSlot(bool)
     def on_pb_check_clicked(self, _):
         self.has_newversion = False
+        self.te_changelog.setText("")
         self.pb_handupdate.setEnabled(False)
         self.pb_update.setEnabled(False)
         self.pb_check.setEnabled(False)

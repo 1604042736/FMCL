@@ -19,7 +19,7 @@ class Window(FramelessWindow):
     def __init__(self, client: QWidget):
         super().__init__()
         # 用来分离标题栏左右控件
-        self.si_separate = QSpacerItem(40, 20,
+        self.si_separate = QSpacerItem(0, 0,
                                        QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.titleBar.hBoxLayout.insertSpacerItem(0, self.si_separate)
 

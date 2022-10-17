@@ -76,6 +76,9 @@ class GameManager(QWidget, Ui_GameManager):
             self.gl_setting.addWidget(widget)
 
     def setMods(self):
+        if not (self.info["forge_version"] or self.info["fabric_version"]):
+            return
+
         for i in self.gb_mods.findChildren(QWidget):
             self.gl_mods.removeWidget(i)
             i.deleteLater()

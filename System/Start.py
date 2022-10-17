@@ -72,7 +72,7 @@ class Start(QWidget):
         self.vbox_panel.setSpacing(0)
         self.vbox_panel.setContentsMargins(0, 0, 0, 0)
         # 分离上下面板
-        self.si_separate = QSpacerItem(40, 20,
+        self.si_separate = QSpacerItem(0, 0,
                                        QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         self.vbox_panel.addSpacerItem(self.si_separate)
 
@@ -206,15 +206,19 @@ class AllFunctions(QListWidget):
         self.setWindowTitle(_translate("AllFunctions", "所有应用"))
         self.setWindowIcon(qta.icon("mdi.format-list-checkbox"))
 
+        self.refresh()
         self.itemClicked.connect(self.launchFunc)
-        self.item_action = []
 
+    def refresh(self):
+        self.clear()
+        self.item_action = []
         for getter in Start.func_getters:
             for text, icon, action in getter():
                 item = QListWidgetItem()
                 item.setSizeHint(QSize(80, 80))
                 item.setText(text)
                 item.setIcon(icon)
+                item.setToolTip(text)
                 self.addItem(item)
                 self.item_action.append((item, action))
 

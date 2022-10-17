@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QEvent, QObject
+from PyQt5.QtCore import QEvent, QObject, Qt
 from PyQt5.QtWidgets import QApplication, QDialog, QWidget
 
 from .Events import *
@@ -8,6 +8,7 @@ from .Window import Window
 class Application(QApplication):
 
     __windows: list = []  # 存储产生的Window
+    __tooltips: list = []
     tasks: set[QObject] = set()
 
     def notify(self, a0: QObject, a1: QEvent) -> bool:
@@ -19,12 +20,14 @@ class Application(QApplication):
 
         if (isinstance(a0, QWidget)
                 and not isinstance(a0, Window)
-                and not isinstance(a0, QDialog)):
+                and not isinstance(a0, QDialog)
+                and a0.windowType() != Qt.WindowType.ToolTip):
             if a1.type() == QEvent.Type.Show:
                 if a0.parent() == None:
                     self.sendEvent(self, WidgetCaughtEvent(a0))
                     if a0.parent() == None:  # 使用默认方法
                         self.showWidget(a0)
+
         return super().notify(a0, a1)
 
     @staticmethod

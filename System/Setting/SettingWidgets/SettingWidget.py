@@ -34,7 +34,7 @@ class SettingWidget(QWidget):
 
         self.resize(W_SETTING, H_SETTING)
         self.setWindowIcon(qta.icon("ri.settings-5-line"))
-        name = id.split("#")[-1].split("/")[-1]
+        name = id.split("#")[-1]
         if name:
             self.window_title = f"{_translate('Setting','设置')}: {name}"
         else:
