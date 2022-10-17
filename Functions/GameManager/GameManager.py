@@ -3,7 +3,7 @@ from Core import Game
 from PyQt5.QtCore import QCoreApplication, QEvent, Qt, pyqtSlot
 from PyQt5.QtWidgets import QCheckBox, QLabel, QMessageBox, QWidget
 
-from .LogoChooser import LogoChooser
+from ..LogoChooser import LogoChooser
 from .ui_GameManager import Ui_GameManager
 
 _translate = QCoreApplication.translate
@@ -129,4 +129,4 @@ class GameManager(QWidget, Ui_GameManager):
 
     @pyqtSlot(bool)
     def on_pb_changelogo_clicked(self, _):
-        LogoChooser(self.game).show()
+        LogoChooser(self.game.name).show()

@@ -1,7 +1,7 @@
 import json
 import os
 
-from PyQt5.QtCore import QObject, QTimer
+from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import qApp
 
 from .SettingWidgets import DictSettingWidget, SettingWidget
@@ -32,10 +32,6 @@ class Setting(QObject):
         self.setting = {}
         if os.path.exists(self.SETTING_PATH):
             self.setting = json.load(open(self.SETTING_PATH, encoding="utf-8"))
-
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.sync)
-        self.timer.start(1000)
 
     def addSetting(self, setting: dict):
         """

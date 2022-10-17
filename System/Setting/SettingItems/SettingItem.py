@@ -50,6 +50,6 @@ class SettingItem(QWidget):
 
     def sync(self):
         from ..Setting import Setting
-        Setting().sync()
+        Setting(self.id.split("#")[0]).sync()
         if "callback" in self.setting:
             self.setting["callback"]()

@@ -24,20 +24,21 @@ class LogoChooser(QWidget, Ui_LogoChooser):
     __instances = {}
     __new_count = {}
 
-    def __new__(cls, game):
-        if game not in cls.__instances:
-            cls.__instances[game] = super().__new__(cls)
-            cls.__new_count[game] = 0
-        return cls.__instances[game]
+    def __new__(cls, name):
+        if name not in cls.__instances:
+            cls.__instances[name] = super().__new__(cls)
+            cls.__new_count[name] = 0
+        return cls.__instances[name]
 
-    def __init__(self, game: Game):
-        if self.__new_count[game] > 1:
+    def __init__(self, name: str):
+        if self.__new_count[name] > 1:
             return
         super().__init__()
         self.setupUi(self)
         self.setWindowIcon(qta.icon("ph.image"))
 
-        self.game = game
+        self.game = Game(name)
+        self.game.generate_setting()
         if self.game.setting.get("logo") not in self.logos:
             self.logos.append(self.game.setting.get("logo"))
 

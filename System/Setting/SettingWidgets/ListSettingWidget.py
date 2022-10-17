@@ -45,6 +45,7 @@ class ListSettingWidget(SettingWidget, Ui_ListSettingWidget):
         if item:
             self.lw_values.addItem(item)
             self.setting["value"].append(item)
+            self.sync()
 
     @pyqtSlot(bool)
     def on_pb_delete_clicked(self, _):
@@ -60,6 +61,7 @@ class ListSettingWidget(SettingWidget, Ui_ListSettingWidget):
                 delete_callback = self.setting.get("delete", None)
                 if delete_callback:
                     delete_callback(item.text())
+                self.sync()
             else:
                 QMessageBox.warning(self, _translate(
                     "ListSettingWidget", "错误"), _translate("ListSettingWidget", "未选中"))
@@ -76,6 +78,7 @@ class ListSettingWidget(SettingWidget, Ui_ListSettingWidget):
                 self.setting["value"][row], self.setting["value"][row -
                                                                   1] = self.setting["value"][row-1], self.setting["value"][row]
                 self.lw_values.setCurrentItem(item)
+                self.sync()
         else:
             QMessageBox.warning(self, _translate(
                 "ListSettingWidget", "错误"), _translate("ListSettingWidget", "未选中"))
@@ -90,6 +93,7 @@ class ListSettingWidget(SettingWidget, Ui_ListSettingWidget):
             self.setting["value"].remove(item.text())
             self.setting["value"].insert(0, item.text())
             self.lw_values.setCurrentItem(item)
+            self.sync()
         else:
             QMessageBox.warning(self, _translate(
                 "ListSettingWidget", "错误"), _translate("ListSettingWidget", "未选中"))

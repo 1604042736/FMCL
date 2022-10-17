@@ -12,7 +12,7 @@ import Languages as _
 import Resources as _
 from Core import Game, Progress, User
 from Functions import (About, CreateUser, Downloader, GameManager,
-                       LanguageChooser, News, Update)
+                       LanguageChooser, LogoChooser, News, Update)
 from System import Application, Desktop, Explorer, Setting, Start
 from System.Constants import *
 from System.TaskManager import TaskManager
@@ -28,8 +28,29 @@ single = {
     "About": About,
     "Update": Update,
     "GameManager": GameManager,
-    "LanguageChooser": LanguageChooser
+    "LanguageChooser": LanguageChooser,
+    "LogoChooser": LogoChooser
 }
+
+
+class StdLog:
+    __console__ = sys.stdout
+
+    def __init__(self) -> None:
+        if not os.path.exists("FMCL"):
+            os.makedirs("FMCL")
+        open("./FMCL/latest.log", mode='w', encoding='utf-8').write("")
+
+    def write(self, msg):
+        if self.__console__:
+            self.__console__.write(msg)
+        # 每次重新打开追加可以防止因程序崩溃导致日志无法正常导出
+        with open("./FMCL/latest.log", mode='a', encoding='utf-8') as file:
+            file.write(msg)
+
+    def flush(self):
+        if self.__console__:
+            self.__console__.flush()
 
 
 def getDefaultSetting():
@@ -87,26 +108,6 @@ def getDefaultSetting():
             "value": User.get_all_users()
         }
     }
-
-
-class StdLog:
-    __console__ = sys.stdout
-
-    def __init__(self) -> None:
-        if not os.path.exists("FMCL"):
-            os.makedirs("FMCL")
-        open("./FMCL/latest.log", mode='w', encoding='utf-8').write("")
-
-    def write(self, msg):
-        if self.__console__:
-            self.__console__.write(msg)
-        # 每次重新打开追加可以防止因程序崩溃导致日志无法正常导出
-        with open("./FMCL/latest.log", mode='a', encoding='utf-8') as file:
-            file.write(msg)
-
-    def flush(self):
-        if self.__console__:
-            self.__console__.flush()
 
 
 def getPanelButtons():

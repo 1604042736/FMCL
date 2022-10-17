@@ -44,6 +44,12 @@ class SettingWidget(QWidget):
     def refresh(self):
         pass
 
+    def sync(self):
+        from ..Setting import Setting
+        Setting(self.id.split("#")[0]).sync()
+        if "callback" in self.setting:
+            self.setting["callback"]()
+
     def event(self, a0: QEvent) -> bool:
         if a0.type() == QEvent.Type.Show:
             self.refresh()
