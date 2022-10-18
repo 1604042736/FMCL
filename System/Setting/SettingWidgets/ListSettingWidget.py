@@ -1,27 +1,24 @@
 from PyQt5.QtCore import QCoreApplication, pyqtSlot
-from PyQt5.QtWidgets import QFileDialog, QInputDialog, QMessageBox
+from PyQt5.QtWidgets import QFileDialog, QInputDialog, QMessageBox, QWidget
 
-from .SettingWidget import SettingWidget
 from .ui_ListSettingWidget import Ui_ListSettingWidget
 
 _translate = QCoreApplication.translate
 
 
-class ListSettingWidget(SettingWidget, Ui_ListSettingWidget):
+class ListSettingWidget(QWidget, Ui_ListSettingWidget):
     def __init__(self, id, value):
-        if SettingWidget.new_count[id] > 1:
-            return
         from ..Setting import Setting
-        super().__init__(id, value)
+        super().__init__()
         self.setupUi(self)
-        self.setWindowTitle(self.window_title)
-        self.setting = Setting().get_setting(id)
+        self.id = id
+        self.value = value
+        self.setting = Setting(self.id.split("#")[0]).get_setting(id)
         self.refresh()
 
     def refresh(self):
         self.lw_values.clear()
         self.lw_values.addItems(self.value)
-        return super().refresh()
 
     @pyqtSlot(bool)
     def on_pb_add_clicked(self, _):
@@ -97,3 +94,9 @@ class ListSettingWidget(SettingWidget, Ui_ListSettingWidget):
         else:
             QMessageBox.warning(self, _translate(
                 "ListSettingWidget", "错误"), _translate("ListSettingWidget", "未选中"))
+
+    def sync(self):
+        from ..Setting import Setting
+        Setting(self.id.split("#")[0]).sync()
+        if "callback" in self.setting:
+                self.setting["callback"]()

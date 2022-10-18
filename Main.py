@@ -103,9 +103,14 @@ def getDefaultSetting():
         "users": {
             "name": _translate("FMCLSetting", "用户"),
             "description": _translate("FMCLSetting", "用户设置"),
-            "add": lambda: CreateUser().show(),
-            "delete": User.delete_user,
-            "value": User.get_all_users()
+            "value": {
+                "all": {
+                    "name": _translate("FMCLSetting", "所有用户"),
+                    "add": lambda: CreateUser().show(),
+                    "delete": User.delete_user,
+                    "value": User.get_all_users(),
+                }
+            },
         }
     }
 

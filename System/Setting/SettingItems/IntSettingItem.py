@@ -12,8 +12,12 @@ class IntSettingItem(SettingItem):
         self.w_value.setValue(self.setting["value"])
         self.w_value.valueChanged.connect(self.sync)
 
-        self.cur_layout.addWidget(self.w_value, 0, 1)
+        self.cur_layout.addWidget(self.w_value)
 
     def sync(self):
         self.setting["value"]=self.w_value.value()
         return super().sync()
+
+    def refresh(self):
+        self.w_value.setValue(self.setting["value"])
+        return super().refresh()

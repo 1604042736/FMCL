@@ -4,7 +4,7 @@ import os
 from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import qApp
 
-from .SettingWidgets import DictSettingWidget, SettingWidget
+from .SettingWidgets import SettingWidget
 
 
 class Setting(QObject):
@@ -28,6 +28,7 @@ class Setting(QObject):
         super().__init__()
         self.SETTING_PATH = setting_path
         self.id_prefix = self.SETTING_PATH+"#"
+        self.settingwidget = None
 
         self.setting = {}
         if os.path.exists(self.SETTING_PATH):
@@ -87,14 +88,13 @@ class Setting(QObject):
         if "callback" in a:
             a["callback"]()
 
-    def show(self, id: str = ""):
-        self.get_widget(id).show()
+    def show(self, id=""):
+        self.get_widget().show(id)
 
-    def get_widget(self, id: str = ""):
-        if id:
-            return SettingWidget(self.id_prefix+id, self.get(id))
-        else:
-            return DictSettingWidget(self.id_prefix+id, self.setting)
+    def get_widget(self):
+        if self.settingwidget == None:
+            self.settingwidget = SettingWidget(self.id_prefix, self.setting)
+        return self.settingwidget
 
     def filter(self, a: dict) -> dict:
         """过滤字典中没必要的值"""

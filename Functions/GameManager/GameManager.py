@@ -66,11 +66,11 @@ class GameManager(QWidget, Ui_GameManager):
         self.game.generate_setting()
 
         setting_widget = self.game.setting.get_widget()
-        setting_widget.refresh()
-        for i in range(setting_widget.lw_value.count()):
-            item = setting_widget.lw_value.item(i)
-            widget = setting_widget.lw_value.itemWidget(item)
-            self.gl_setting.addWidget(widget)
+        # setting_widget.refresh()
+        # for i in range(setting_widget.lw_value.count()):
+        #    item = setting_widget.lw_value.item(i)
+        #    widget = setting_widget.lw_value.itemWidget(item)
+        self.gl_setting.addWidget(setting_widget)
 
         self.setLogo()
         self.setMods()
@@ -80,7 +80,7 @@ class GameManager(QWidget, Ui_GameManager):
             return
         mods = self.game.get_mod()
 
-        for _, val in enumerate(self.game.get_mod()):
+        for _, val in enumerate(mods):
             if val[1] not in self.__mods:
                 checkbox = QCheckBox()
                 checkbox.setCheckState(val[0])
@@ -94,15 +94,16 @@ class GameManager(QWidget, Ui_GameManager):
                 self.gl_mods.addWidget(label)
                 self.__mods[val[1]] = (checkbox, label)
 
+        mods_ = [i[1] for i in mods]
+
         for key in tuple(self.__mods.keys()):  # 移除没有的mod
-            if key not in mods:
+            if key not in mods_:
                 checkbox, label = self.__mods[key]
                 self.gl_mods.removeWidget(checkbox)
                 self.gl_mods.removeWidget(label)
                 checkbox.deleteLater()
                 label.deleteLater()
                 self.__mods.pop(key)
-                break
 
     def event(self, a0: QEvent) -> bool:
         if a0.type() == QEvent.Type.Show:

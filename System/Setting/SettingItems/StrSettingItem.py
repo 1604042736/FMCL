@@ -10,8 +10,12 @@ class StrSettingItem(SettingItem):
         self.w_value.setText(self.setting["value"])
         self.w_value.textChanged.connect(self.sync)
 
-        self.cur_layout.addWidget(self.w_value, 0, 1)
+        self.cur_layout.addWidget(self.w_value)
 
     def sync(self):
         self.setting["value"] = self.w_value.text()
         return super().sync()
+
+    def refresh(self):
+        self.w_value.setText(self.setting["value"])
+        return super().refresh()
