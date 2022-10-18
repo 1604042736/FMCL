@@ -1,6 +1,6 @@
 import qtawesome as qta
 from Core import Game
-from PyQt5.QtCore import QCoreApplication, QEvent, Qt, pyqtSlot
+from PyQt5.QtCore import QCoreApplication, Qt, pyqtSlot
 from PyQt5.QtWidgets import QCheckBox, QLabel, QMessageBox, QWidget
 
 from ..LogoChooser import LogoChooser
@@ -51,29 +51,27 @@ class GameManager(QWidget, Ui_GameManager):
         if not (self.info["forge_version"] or self.info["fabric_version"]):
             self.gb_mods.hide()
 
-        self.le_name.textEdited.connect(self.__rename)
-        self.refresh()
+        self.le_name.editingFinished.connect(self.__rename)
+
+        self.setSetting()
+        self.setLogo()
+        self.setMods()
 
     def setLogo(self):
         pixmap = self.game.get_pixmap()
         if not pixmap.isNull():
             self.l_logo.setPixmap(pixmap.scaled(64, 64))
 
-    def refresh(self):
-        self.game.DEFAULT_SETTING["isolation"]["callback"] = self.setMods
-        self.game.DEFAULT_SETTING["logo"]["callback"] = self.setLogo
-
+    def setSetting(self):
+        self.game.DEFAULT_SETTING_ATTR["logo"]["setting_item"] = lambda: LogoChooser(
+            self.game.name)
         self.game.generate_setting()
-
-        setting_widget = self.game.setting.get_widget()
-        # setting_widget.refresh()
-        # for i in range(setting_widget.lw_value.count()):
-        #    item = setting_widget.lw_value.item(i)
-        #    widget = setting_widget.lw_value.itemWidget(item)
+        setting_widget = self.game.setting.getWidget()
         self.gl_setting.addWidget(setting_widget)
 
-        self.setLogo()
+    def refresh(self):
         self.setMods()
+        self.setLogo()
 
     def setMods(self):
         if not (self.info["forge_version"] or self.info["fabric_version"]):
@@ -105,18 +103,13 @@ class GameManager(QWidget, Ui_GameManager):
                 label.deleteLater()
                 self.__mods.pop(key)
 
-    def event(self, a0: QEvent) -> bool:
-        if a0.type() == QEvent.Type.Show:
-            self.refresh()
-        return super().event(a0)
-
     def __rename(self):
         new_name = self.le_name.text()
         self.game.rename(new_name)
         if hasattr(self.game, "setting"):
             self.game.setting.deleteLater()
         self.game = Game(new_name)
-        self.refresh()
+        self.setSetting()
 
     @pyqtSlot(bool)
     def on_pb_delete_clicked(self, _):
@@ -129,5 +122,6 @@ class GameManager(QWidget, Ui_GameManager):
             self.close()
 
     @pyqtSlot(bool)
-    def on_pb_changelogo_clicked(self, _):
-        LogoChooser(self.game.name).show()
+    def on_pb_refresh_clicked(self, _):
+        self.setMods()
+        self.setLogo()

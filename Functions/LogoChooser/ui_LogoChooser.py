@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\Functions\GameManager\LogoChooser.ui'
+# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\Functions\LogoChooser\LogoChooser.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -19,21 +19,14 @@ class Ui_LogoChooser(object):
         self.gridLayout.setObjectName("gridLayout")
         self.pb_add = QtWidgets.QPushButton(LogoChooser)
         self.pb_add.setObjectName("pb_add")
-        self.gridLayout.addWidget(self.pb_add, 1, 1, 1, 1)
-        self.pb_ok = QtWidgets.QPushButton(LogoChooser)
-        self.pb_ok.setObjectName("pb_ok")
-        self.gridLayout.addWidget(self.pb_ok, 1, 2, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem, 1, 0, 1, 1)
-        self.lw_logos = QtWidgets.QListWidget(LogoChooser)
-        self.lw_logos.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
-        self.lw_logos.setIconSize(QtCore.QSize(100, 100))
-        self.lw_logos.setMovement(QtWidgets.QListView.Static)
-        self.lw_logos.setResizeMode(QtWidgets.QListView.Adjust)
-        self.lw_logos.setViewMode(QtWidgets.QListView.IconMode)
-        self.lw_logos.setWordWrap(True)
-        self.lw_logos.setObjectName("lw_logos")
-        self.gridLayout.addWidget(self.lw_logos, 0, 0, 1, 3)
+        self.gridLayout.addWidget(self.pb_add, 0, 2, 1, 1)
+        self.cb_logo = QtWidgets.QComboBox(LogoChooser)
+        self.cb_logo.setObjectName("cb_logo")
+        self.gridLayout.addWidget(self.cb_logo, 0, 1, 1, 1)
+        self.l_logo = QtWidgets.QLabel(LogoChooser)
+        self.l_logo.setText("")
+        self.l_logo.setObjectName("l_logo")
+        self.gridLayout.addWidget(self.l_logo, 0, 0, 1, 1)
 
         self.retranslateUi(LogoChooser)
         QtCore.QMetaObject.connectSlotsByName(LogoChooser)
@@ -42,4 +35,3 @@ class Ui_LogoChooser(object):
         _translate = QtCore.QCoreApplication.translate
         LogoChooser.setWindowTitle(_translate("LogoChooser", "Logo选择"))
         self.pb_add.setText(_translate("LogoChooser", "添加"))
-        self.pb_ok.setText(_translate("LogoChooser", "确定"))

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>LanguageChooser</class>
- <widget class="QWidget" name="LanguageChooser">
+ <class>ListSettingItem</class>
+ <widget class="QWidget" name="ListSettingItem">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,11 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>语言选择</string>
+   <string/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="QComboBox" name="cb_lang"/>
+    <widget class="QListWidget" name="lw_values"/>
    </item>
   </layout>
  </widget>

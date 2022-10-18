@@ -17,14 +17,9 @@ class Ui_LanguageChooser(object):
         LanguageChooser.resize(1000, 618)
         self.gridLayout = QtWidgets.QGridLayout(LanguageChooser)
         self.gridLayout.setObjectName("gridLayout")
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout.addItem(spacerItem, 1, 0, 1, 1)
-        self.lw_languages = QtWidgets.QListWidget(LanguageChooser)
-        self.lw_languages.setObjectName("lw_languages")
-        self.gridLayout.addWidget(self.lw_languages, 0, 0, 1, 2)
-        self.pb_ok = QtWidgets.QPushButton(LanguageChooser)
-        self.pb_ok.setObjectName("pb_ok")
-        self.gridLayout.addWidget(self.pb_ok, 1, 1, 1, 1)
+        self.cb_lang = QtWidgets.QComboBox(LanguageChooser)
+        self.cb_lang.setObjectName("cb_lang")
+        self.gridLayout.addWidget(self.cb_lang, 0, 0, 1, 1)
 
         self.retranslateUi(LanguageChooser)
         QtCore.QMetaObject.connectSlotsByName(LanguageChooser)
@@ -32,4 +27,3 @@ class Ui_LanguageChooser(object):
     def retranslateUi(self, LanguageChooser):
         _translate = QtCore.QCoreApplication.translate
         LanguageChooser.setWindowTitle(_translate("LanguageChooser", "语言选择"))
-        self.pb_ok.setText(_translate("LanguageChooser", "确定"))

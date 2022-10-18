@@ -19,21 +19,16 @@ class LanguageChooser(QWidget, Ui_LanguageChooser):
         self.refresh()
 
     def refresh(self):
-        self.lw_languages.clear()
+        self.cb_lang.clear()
         cur_lang = Setting().get("launcher.language")
-
+        self.cb_lang.addItem(self.languages[cur_lang])
         for key, val in self.languages.items():
-            item = QListWidgetItem()
-            item.setText(val)
-            self.lw_languages.addItem(item)
+            if key != cur_lang:
+                self.cb_lang.addItem(val)
 
-            if key == cur_lang:
-                self.lw_languages.setCurrentItem(item)
-
-    @pyqtSlot(bool)
-    def on_pb_ok_clicked(self, _):
-        lang = self.lw_languages.currentItem().text()
+    @pyqtSlot(str)
+    def on_cb_lang_currentTextChanged(self, lang):
         for key, val in self.languages.items():
             if val == lang:
-                Setting().set_value("launcher.language", key)
+                Setting().set("launcher.language", key)
                 break

@@ -1,1 +1,0 @@
-from .SettingWidget import SettingWidget

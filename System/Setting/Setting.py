@@ -3,8 +3,9 @@ import os
 
 from PyQt5.QtCore import QObject
 from PyQt5.QtWidgets import qApp
+from System.Setting.SettingItems.SettingItem import SettingItem
 
-from .SettingWidgets import SettingWidget
+from .SettingWidget import SettingWidget
 
 
 class Setting(QObject):
@@ -20,26 +21,36 @@ class Setting(QObject):
         cls.__new_count[setting_path] += 1
         return cls.__instances[setting_path]
 
-    def __init__(self, setting_path: str = None):
+    def __init__(self, setting_path: str = None) -> None:
         if setting_path == None:
             setting_path = f"{qApp.applicationName()}/setting.json"
         if self.__new_count[setting_path] > 1:
             return
         super().__init__()
-        self.SETTING_PATH = setting_path
-        self.id_prefix = self.SETTING_PATH+"#"
-        self.settingwidget = None
-
+        self.setting_path = setting_path
         self.setting = {}
-        if os.path.exists(self.SETTING_PATH):
-            self.setting = json.load(open(self.SETTING_PATH, encoding="utf-8"))
+        self.setting_attr = {}
+        if os.path.exists(self.setting_path):
+            self.setting = json.load(open(self.setting_path, encoding="utf-8"))
 
-    def addSetting(self, setting: dict):
-        """
-        添加新的设置(默认)
-        我们会将它与原有设置合并以保证结构相同
-        """
-        self.merge(self.setting, setting)
+        self.setting_widget = None
+
+    def addSetting(self, default_setting: dict):
+        """添加默认设置"""
+        # 注意合并顺序，防止覆盖已有设置
+        self.setting = default_setting | self.setting
+
+        # 设置默认属性
+        for id in default_setting:
+            self.setting_attr[id] = {
+                "name": id,
+                "description": "",
+                "setting_item": lambda id=id: SettingItem(id, self)
+            }
+
+    def addSettingAttr(self, attr: dict):
+        """添加设置属性"""
+        self.merge(self.setting_attr, attr)
 
     def merge(self, a: dict, b: dict):
         """合并a和b"""
@@ -48,70 +59,34 @@ class Setting(QObject):
                 a[key] = val
             elif isinstance(val, dict):
                 self.merge(a[key], val)
-            elif key == "name" or key == "description":  # 确保翻译
+            else:
                 a[key] = val
 
-    def get(self, id: str):
-        """获得一个设置项的值"""
-        id = id.replace(self.id_prefix, "")
-        a = self.setting
-        for i in id.split("."):
-            if i:
-                a = a[i]["value"]
-        return a
+    def get(self, id: str, default=None):
+        """获取设置项"""
+        return self.setting.get(id, default)
 
-    def get_setting(self, id: str):
-        """获得一个设置项"""
-        id = id.replace(self.id_prefix, "")
-        a = self.setting
-        keys = id.split(".")
-        for i, val in enumerate(keys):
-            if val:
-                if i == len(keys)-1:
-                    a = a[val]
-                else:
-                    a = a[val]["value"]
-        return a
+    def getAttr(self, id: str, attr: str, default=None):
+        """获取设置项的属性"""
+        return self.setting_attr[id].get(attr, default)
 
-    def set_value(self, id: str, value):
-        id = id.replace(self.id_prefix, "")
-        a = self.setting
-        keys = id.split(".")
-        for i, val in enumerate(keys):
-            if val:
-                if i == len(keys)-1:
-                    a = a[val]
-                else:
-                    a = a[val]["value"]
-        a["value"] = value
-        self.sync()
-        if "callback" in a:
-            a["callback"]()
+    def set(self, id: str, val):
+        self.setting[id] = val
 
-    def show(self, id=""):
-        self.get_widget().show(id)
+    def show(self, id: str = ""):
+        self.getWidget().show(id)
 
-    def get_widget(self):
-        if self.settingwidget == None:
-            self.settingwidget = SettingWidget(self.id_prefix, self.setting)
-        return self.settingwidget
-
-    def filter(self, a: dict) -> dict:
-        """过滤字典中没必要的值"""
-        result = {}
-        for key, val in a.items():
-            if isinstance(val, dict):
-                result[key] = self.filter(val)
-            elif (isinstance(val, int)
-                  or isinstance(val, str)
-                  or isinstance(val, bool)
-                  or isinstance(val, list)):
-                result[key] = val
-        return result
+    def getWidget(self):
+        if self.setting_widget == None:
+            self.setting_widget = SettingWidget(self)
+        return self.setting_widget
 
     def sync(self):
-        new_setting = self.filter(self.setting)
-        if not os.path.exists(os.path.dirname(self.SETTING_PATH)):
-            os.makedirs(os.path.dirname(self.SETTING_PATH))
-        json.dump(new_setting,
-                  open(self.SETTING_PATH, mode="w", encoding="utf-8"))
+        if not os.path.exists(os.path.dirname(self.setting_path)):
+            os.makedirs(os.path.dirname(self.setting_path))
+        json.dump(self.setting, open(
+            self.setting_path, mode="w", encoding="utf-8"))
+
+    def refresh(self):
+        if self.setting_widget != None:
+            self.setting_widget.refresh()

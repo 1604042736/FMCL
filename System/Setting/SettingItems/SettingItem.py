@@ -11,44 +11,26 @@ class SettingItem(QWidget):
             from .IntSettingItem import IntSettingItem
             from .ListSettingItem import ListSettingItem
             from .StrSettingItem import StrSettingItem
-            value = setting["value"]
+            value = setting.get(id)
             if isinstance(value, bool):
                 return BoolSettingItem(id, setting)
             elif isinstance(value, int):
                 return IntSettingItem(id, setting)
-            elif isinstance(value, list):
-                return ListSettingItem(id, setting)
             elif isinstance(value, str):
                 return StrSettingItem(id, setting)
+            elif isinstance(value, list):
+                return ListSettingItem(id, setting)
 
         return super().__new__(cls)
 
-    def __init__(self, id: str, setting: dict) -> None:
+    def __init__(self, id: str, setting) -> None:
         super().__init__()
-        self.setting = setting
         self.id = id
-
-        self.cur_layout = QGridLayout(self)
-
-        self.l_name = QLabel(self)
-        self.l_name.setText(self.setting["name"])
-
-        self.setToolTip(setting.get("description", ""))
-
-        self.cur_layout.addWidget(self.l_name)
-
-        if "custom_editor" in setting:
-            self.pb_custom_editor = QPushButton(self)
-            self.pb_custom_editor.setText(_translate("SettingItem", "使用专用编辑器"))
-            self.pb_custom_editor.clicked.connect(
-                self.setting["custom_editor"])
-            self.cur_layout.addWidget(self.pb_custom_editor)
+        self.setting = setting
+        self._layout = QGridLayout(self)
 
     def sync(self):
-        from ..Setting import Setting
-        Setting(self.id.split("#")[0]).sync()
-        if "callback" in self.setting:
-            self.setting["callback"]()
+        self.setting.sync()
 
     def refresh(self):
         pass

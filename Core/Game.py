@@ -42,20 +42,21 @@ class Game:
         self.name = name
         self.directory = Setting().get("game.directories")[0]
 
-        self.DEFAULT_SETTING = {
+        self.DEFAULT_SETTING_ATTR = {
             "specific": {
                 "name": _translate("GameSetting", "特定设置"),
-                "value": False
             },
             "isolation": {
                 "name": _translate("GameSetting", "版本隔离"),
-                "value": False
             },
             "logo": {
                 "name": _translate("GameSetting", "游戏图标"),
-                "description": _translate("GameSetting", "除非您知道自己在干什么,否则不要手动更改此设置"),
-                "value": ""
             }
+        }
+        self.DEFAULT_SETTING = {
+            "specific": False,
+            "isolation": False,
+            "logo": ""
         }
 
     def launch(self):
@@ -116,6 +117,8 @@ class Game:
                   f"{self.directory}/versions/{new_name}")
 
     def get_info(self) -> dict:
+        if hasattr(self, "info"):
+            return self.info
         info = {
             "version": "",
             "forge_version": "",
@@ -149,6 +152,7 @@ class Game:
             info["version"] = config["clientVersion"]
         else:
             info["version"] = config["id"]
+        self.info = info
         return info
 
     def get_mod(self) -> list:
@@ -183,15 +187,16 @@ class Game:
         if not hasattr(self, "setting"):
             info = self.get_info()
             if info["fabric_version"]:
-                self.DEFAULT_SETTING["logo"]["value"] = ":/Image/fabric.png"
+                self.DEFAULT_SETTING["logo"] = ":/Image/fabric.png"
             elif info["forge_version"]:
-                self.DEFAULT_SETTING["logo"]["value"] = ":/Image/forge.png"
+                self.DEFAULT_SETTING["logo"] = ":/Image/forge.png"
             else:
-                self.DEFAULT_SETTING["logo"]["value"] = ":/Image/grass.png"
+                self.DEFAULT_SETTING["logo"] = ":/Image/grass.png"
 
             self.setting = Setting(os.path.join(
                 self.directory, "versions", self.name, "FMCL", "setting.json"))
             self.setting.addSetting(self.DEFAULT_SETTING)
+            self.setting.addSettingAttr(self.DEFAULT_SETTING_ATTR)
 
     def delete(self):
         shutil.rmtree(os.path.join(self.directory, "versions", self.name))

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\System\Setting\SettingWidgets\SettingWidget.ui'
+# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\System\Setting\SettingWidget.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -19,17 +19,14 @@ class Ui_SettingWidget(object):
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
-        self.tw_setting = QtWidgets.QTreeWidget(SettingWidget)
-        self.tw_setting.setMaximumSize(QtCore.QSize(200, 16777215))
-        self.tw_setting.setObjectName("tw_setting")
-        self.tw_setting.headerItem().setText(0, "1")
-        self.tw_setting.header().setVisible(False)
-        self.gridLayout.addWidget(self.tw_setting, 0, 0, 1, 1)
+        self.pb_refresh = QtWidgets.QPushButton(SettingWidget)
+        self.pb_refresh.setObjectName("pb_refresh")
+        self.gridLayout.addWidget(self.pb_refresh, 0, 0, 1, 1)
         self.sa_setting = QtWidgets.QScrollArea(SettingWidget)
         self.sa_setting.setWidgetResizable(True)
         self.sa_setting.setObjectName("sa_setting")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 798, 616))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 798, 593))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -43,7 +40,13 @@ class Ui_SettingWidget(object):
         spacerItem = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.gridLayout_2.addItem(spacerItem, 1, 0, 1, 1)
         self.sa_setting.setWidget(self.scrollAreaWidgetContents)
-        self.gridLayout.addWidget(self.sa_setting, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.sa_setting, 1, 1, 1, 1)
+        self.tw_setting = QtWidgets.QTreeWidget(SettingWidget)
+        self.tw_setting.setMaximumSize(QtCore.QSize(200, 16777215))
+        self.tw_setting.setObjectName("tw_setting")
+        self.tw_setting.headerItem().setText(0, "1")
+        self.tw_setting.header().setVisible(False)
+        self.gridLayout.addWidget(self.tw_setting, 1, 0, 1, 1)
 
         self.retranslateUi(SettingWidget)
         QtCore.QMetaObject.connectSlotsByName(SettingWidget)
@@ -51,3 +54,4 @@ class Ui_SettingWidget(object):
     def retranslateUi(self, SettingWidget):
         _translate = QtCore.QCoreApplication.translate
         SettingWidget.setWindowTitle(_translate("SettingWidget", "设置"))
+        self.pb_refresh.setText(_translate("SettingWidget", "刷新"))

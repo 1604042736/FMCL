@@ -53,66 +53,46 @@ class StdLog:
             self.__console__.flush()
 
 
-def getDefaultSetting():
+def getSettingAttr():
     return {
         "launcher": {
             "name": _translate("FMCLSetting", "启动器"),
-            "description": _translate("FMCLSetting", "对启动器的一些属性的设置"),
-            "value": {
-                "width": {
-                    "name": _translate("FMCLSetting", "启动器宽度"),
-                    "value": 1000
-                },
-                "height": {
-                    "name": _translate("FMCLSetting", "启动器高度"),
-                    "value": 618
-                },
-                "language": {
-                    "name": _translate("FMCLSetting", "语言"),
-                    "description": _translate("FMCLSetting", "建议使用专用编辑器设置此项"),
-                    "custom_editor": lambda: LanguageChooser().show(),
-                    "value": ":/zh_CN.qm"
-                }
-            }
+        },
+        "launcher.width": {
+            "name": _translate("FMCLSetting", "启动器宽度"),
+        },
+        "launcher.height": {
+            "name": _translate("FMCLSetting", "启动器高度"),
+        },
+        "launcher.language": {
+            "name": _translate("FMCLSetting", "语言"),
+            "setting_item": lambda: LanguageChooser()
         },
         "game": {
             "name": _translate("FMCLSetting", "游戏"),
-            "description": _translate("FMCLSetting", "与游戏有关的一些设置"),
-            "value": {
-                "directories": {
-                    "name": _translate("FMCLSetting", "游戏目录"),
-                    "add": "directory",
-                    "min_count": 1,
-                    "description": _translate("FMCLSetting", "游戏目录"),
-                    "value": [".minecraft"]
-                },
-                "java_path": {
-                    "name": _translate("FMCLSetting", "Java路径"),
-                    "value": "javaw"
-                },
-                "width": {
-                    "name": _translate("FMCLSetting", "游戏窗口宽度"),
-                    "value": 1000
-                },
-                "height": {
-                    "name": _translate("FMCLSetting", "游戏窗口宽度"),
-                    "value": 618
-                }
-            }
+        },
+        "game.directories": {
+            "name": _translate("FMCLSetting", "游戏目录"),
+            "method": "directory",
+            "atleast": 1
         },
         "users": {
             "name": _translate("FMCLSetting", "用户"),
-            "description": _translate("FMCLSetting", "用户设置"),
-            "value": {
-                "all": {
-                    "name": _translate("FMCLSetting", "所有用户"),
-                    "add": lambda: CreateUser().show(),
-                    "delete": User.delete_user,
-                    "value": User.get_all_users(),
-                }
-            },
+        },
+        "users.all": {
+            "name": _translate("FMCLSetting", "所有用户"),
+            "method": lambda: CreateUser().show()
         }
     }
+
+
+DEFAULT_SETTING = {
+    "launcher.width": 1000,
+    "launcher.height": 618,
+    "launcher.language": ":/zh_CN.qm",
+    "game.directories": [".minecraft"],
+    "users.all": User.get_all_users(),
+}
 
 
 def getPanelButtons():
@@ -172,11 +152,11 @@ def main():
         os.remove(args.update)
 
     setting = Setting()
-    setting.addSetting(getDefaultSetting())  # 翻译之前
+    setting.addSetting(DEFAULT_SETTING)  # 翻译之前
     translateor = QTranslator()
     translateor.load(setting.get("launcher.language"))
     app.installTranslator(translateor)
-    setting.addSetting(getDefaultSetting())  # 翻译过后
+    setting.addSettingAttr(getSettingAttr())
 
     if args.single != None:
         single[args.single](*args.args).show()

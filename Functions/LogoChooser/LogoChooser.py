@@ -45,21 +45,18 @@ class LogoChooser(QWidget, Ui_LogoChooser):
         self.refresh()
 
     def refresh(self):
-        self.lw_logos.clear()
+        self.cb_logo.clear()
+        cur_logo = self.game.setting.get("logo")
+        self.cb_logo.addItem(cur_logo)
 
         for i in self.logos:
-            item = QListWidgetItem()
-            item.setIcon(QIcon(i))
-            item.setText(i)
-            item.setToolTip(i)
-            self.lw_logos.addItem(item)
+            if i != cur_logo:
+                self.cb_logo.addItem(i)
 
-            if i == self.game.setting.get("logo"):
-                self.lw_logos.setCurrentItem(item)
-
-    @pyqtSlot(bool)
-    def on_pb_ok_clicked(self, _):
-        self.game.setting.set_value("logo", self.lw_logos.currentItem().text())
+    @pyqtSlot(str)
+    def on_cb_logo_currentTextChanged(self, text):
+        self.game.setting.set("logo", text)
+        self.l_logo.setPixmap(self.game.get_pixmap().scaled(32, 32))
 
     @pyqtSlot(bool)
     def on_pb_add_clicked(self, _):
