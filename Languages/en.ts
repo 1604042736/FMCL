@@ -4,7 +4,7 @@
 <context>
     <name>About</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="184"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="164"/>
         <source>关于</source>
         <translation>About</translation>
     </message>
@@ -50,7 +50,7 @@
 <context>
     <name>CreateUser</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="184"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="164"/>
         <source>创建用户</source>
         <translation>Create User</translation>
     </message>
@@ -81,7 +81,7 @@
 <context>
     <name>Downloader</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="184"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="164"/>
         <source>下载器</source>
         <translation>Downloader</translation>
     </message>
@@ -122,17 +122,17 @@
 <context>
     <name>FMCL</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="120"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="100"/>
         <source>未选择用户</source>
         <translation>No user selected</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="141"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="121"/>
         <source>启动</source>
         <translation>Launch</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="145"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="125"/>
         <source>管理</source>
         <translation>Manage</translation>
     </message>
@@ -145,67 +145,37 @@
         <translation>Launcher</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="60"/>
-        <source>对启动器的一些属性的设置</source>
-        <translation>Settings to launcher</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="63"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="62"/>
         <source>启动器宽度</source>
         <translation>Width of the launcher</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="67"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="65"/>
         <source>启动器高度</source>
         <translation>Height of the launcher</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="71"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="68"/>
         <source>语言</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="79"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="72"/>
         <source>游戏</source>
         <translation>Game</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="80"/>
-        <source>与游戏有关的一些设置</source>
-        <translation>Settings to game</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="86"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="75"/>
         <source>游戏目录</source>
         <translation>Game directories</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="90"/>
-        <source>Java路径</source>
-        <translation>Java path</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="98"/>
-        <source>游戏窗口宽度</source>
-        <translation>Width of game window</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="104"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="80"/>
         <source>用户</source>
         <translation>User</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="105"/>
-        <source>用户设置</source>
-        <translation>User setting</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="72"/>
-        <source>建议使用专用编辑器设置此项</source>
-        <translation>It is recommended to use a dedicated editor to set this</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="108"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="83"/>
         <source>所有用户</source>
         <translation>All users</translation>
     </message>
@@ -213,32 +183,32 @@
 <context>
     <name>GameManager</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="75"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="77"/>
         <source>游戏管理</source>
         <translation>Game Manager</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="76"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="79"/>
         <source>Mod</source>
         <translation>Mod</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="77"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="81"/>
         <source>概况</source>
         <translation>Overview</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="78"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="83"/>
         <source>打开文件夹</source>
         <translation>Open Directory</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="79"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="82"/>
         <source>删除</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="81"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="80"/>
         <source>设置</source>
         <translation>Setting</translation>
     </message>
@@ -258,9 +228,9 @@
         <translation>Fabric version</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="80"/>
-        <source>更改图标</source>
-        <translation>Change logo</translation>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="78"/>
+        <source>刷新</source>
+        <translation>Refresh</translation>
     </message>
 </context>
 <context>
@@ -271,118 +241,63 @@
         <translation>Specific settings</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Core/Game.py" line="51"/>
+        <location filename="../../../../������/PCG/FMCL/Core/Game.py" line="50"/>
         <source>版本隔离</source>
         <translation>Version isolation</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Core/Game.py" line="55"/>
+        <location filename="../../../../������/PCG/FMCL/Core/Game.py" line="53"/>
         <source>游戏图标</source>
         <translation>Game logo</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/GameManager.py" line="123"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/GameManager.py" line="116"/>
         <source>删除</source>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/GameManager.py" line="123"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/GameManager.py" line="116"/>
         <source>确定删除?</source>
         <translation>Confirm delete?</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Core/Game.py" line="56"/>
-        <source>除非您知道自己在干什么,否则不要手动更改此设置</source>
-        <translation>Do not change this setting manually unless you know what you are doing</translation>
     </message>
 </context>
 <context>
     <name>LanguageChooser</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/LanguageChooser/ui_LanguageChooser.py" line="34"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/LanguageChooser/ui_LanguageChooser.py" line="29"/>
         <source>语言选择</source>
         <translation>Language Chooser</translation>
     </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/LanguageChooser/ui_LanguageChooser.py" line="35"/>
-        <source>确定</source>
-        <translation>Ok</translation>
-    </message>
 </context>
 <context>
-    <name>ListSettingWidget</name>
+    <name>ListSettingItem</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingWidgets/ui_ListSettingWidget.py" line="43"/>
-        <source>设置</source>
-        <translation>Setting</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingWidgets/ui_ListSettingWidget.py" line="44"/>
+        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingItems/ListSettingItem.py" line="34"/>
         <source>添加</source>
         <translation>Add</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingWidgets/ui_ListSettingWidget.py" line="45"/>
-        <source>提升</source>
-        <translation>Promote</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingWidgets/ui_ListSettingWidget.py" line="46"/>
+        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingItems/ListSettingItem.py" line="53"/>
         <source>删除</source>
         <translation>Delete</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingWidgets/ui_ListSettingWidget.py" line="47"/>
-        <source>提至最高</source>
-        <translation>Promote to top</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingWidgets/ListSettingWidget.py" line="28"/>
-        <source>输入</source>
-        <translation>Input</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingWidgets/ListSettingWidget.py" line="35"/>
-        <source>选择文件</source>
-        <translation>Choose file</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingWidgets/ListSettingWidget.py" line="38"/>
-        <source>选择目录</source>
-        <translation>Choose directory</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingWidgets/ListSettingWidget.py" line="95"/>
-        <source>错误</source>
-        <translation>Error</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingWidgets/ListSettingWidget.py" line="95"/>
-        <source>未选中</source>
-        <translation>Unselected</translation>
     </message>
 </context>
 <context>
     <name>LogoChooser</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/LogoChooser/LogoChooser.py" line="66"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/LogoChooser/LogoChooser.py" line="63"/>
         <source>选择图标</source>
         <translation>Choose logo</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/LogoChooser/ui_LogoChooser.py" line="43"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/LogoChooser/ui_LogoChooser.py" line="36"/>
         <source>Logo选择</source>
         <translation>Logo Chooser</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/LogoChooser/ui_LogoChooser.py" line="44"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/LogoChooser/ui_LogoChooser.py" line="37"/>
         <source>添加</source>
         <translation>Add</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/LogoChooser/ui_LogoChooser.py" line="45"/>
-        <source>确定</source>
-        <translation>Ok</translation>
     </message>
 </context>
 <context>
@@ -396,7 +311,7 @@
 <context>
     <name>News</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="184"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="164"/>
         <source>新闻</source>
         <translation>News</translation>
     </message>
@@ -430,7 +345,7 @@
 <context>
     <name>Progress</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="184"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="164"/>
         <source>进度</source>
         <translation>Progress</translation>
     </message>
@@ -444,19 +359,16 @@
     </message>
 </context>
 <context>
-    <name>SettingItem</name>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingItems/SettingItem.py" line="42"/>
-        <source>使用专用编辑器</source>
-        <translation>Using a dedicated editor</translation>
-    </message>
-</context>
-<context>
     <name>SettingWidget</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingWidgets/ui_SettingWidget.py" line="53"/>
+        <location filename="../../../../������/PCG/FMCL/System/Setting/ui_SettingWidget.py" line="56"/>
         <source>设置</source>
         <translation>Setting</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/System/Setting/ui_SettingWidget.py" line="57"/>
+        <source>刷新</source>
+        <translation>Refresh</translation>
     </message>
 </context>
 <context>
@@ -503,7 +415,7 @@
 <context>
     <name>Update</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="184"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="164"/>
         <source>更新</source>
         <translation>Update</translation>
     </message>

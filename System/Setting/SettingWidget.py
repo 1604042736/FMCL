@@ -1,14 +1,9 @@
-from typing import Text
-
 import qtawesome as qta
-from PyQt5.QtCore import QCoreApplication, QEvent, pyqtSlot
+from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QLabel, QTreeWidgetItem, QWidget
 from System.Constants import *
 
-from .SettingItems import SettingItem
 from .ui_SettingWidget import Ui_SettingWidget
-
-_translate = QCoreApplication.translate
 
 
 class SettingWidget(QWidget, Ui_SettingWidget):

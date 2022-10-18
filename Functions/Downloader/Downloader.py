@@ -1,3 +1,4 @@
+import multitasking
 import qtawesome as qta
 from Core import Game
 from PyQt5.QtCore import pyqtSlot
@@ -14,20 +15,26 @@ class Downloader(QWidget, Ui_Downloader):
         self.setVersions()
         self.setFabric()
 
+    @multitasking.task
     def setVersions(self):
         self.lw_minecraft.clear()
         self.lw_minecraft.addItems(Game.get_versions())
         self.lw_minecraft.setCurrentRow(0)
 
+    @multitasking.task
     def setFabric(self):
         self.lw_fabric.clear()
         self.lw_fabric.addItems(Game.get_fabric())
 
+    @multitasking.task
+    def setForge(self, version):
+        self.lw_forge.clear()
+        self.lw_forge.addItems(Game.get_forge(version))
+
     @pyqtSlot(QListWidgetItem, QListWidgetItem)
     def on_lw_minecraft_currentItemChanged(self, current, previous):
         version = current.text()
-        self.lw_forge.clear()
-        self.lw_forge.addItems(Game.get_forge(version))
+        self.setForge(version)
 
     @pyqtSlot(bool)
     def on_pb_install_clicked(self, _):

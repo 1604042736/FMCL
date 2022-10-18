@@ -44,7 +44,6 @@ class Setting(QObject):
         for id in default_setting:
             self.setting_attr[id] = {
                 "name": id,
-                "description": "",
                 "setting_item": lambda id=id: SettingItem(id, self)
             }
 
@@ -72,6 +71,7 @@ class Setting(QObject):
 
     def set(self, id: str, val):
         self.setting[id] = val
+        self.sync()
 
     def show(self, id: str = ""):
         self.getWidget().show(id)

@@ -133,10 +133,12 @@ def getVersions():
 def main():
     parser = argparse.ArgumentParser(
         description="Functional Minecraft Launcher")
-    parser.add_argument("--single", choices=single.keys(), help="单独打开一个应用")
+    parser.add_argument("--sep", choices=single.keys(),
+                        help="Open a function separately")
     parser.add_argument("--args", nargs="+", default=[],
-                        help="传入应用的参数,与 --single 配合使用")
-    parser.add_argument("--update", help="更新完成，删除上一个版本文件")
+                        help="The parameter passed in to the function, used with --sep")
+    parser.add_argument("--update",
+                        help="Update completed, delete the previous version file")
     args = parser.parse_args()
 
     app = Application(sys.argv)
@@ -158,8 +160,8 @@ def main():
     app.installTranslator(translateor)
     setting.addSettingAttr(getSettingAttr())
 
-    if args.single != None:
-        single[args.single](*args.args).show()
+    if args.sep != None:
+        single[args.sep](*args.args).show()
     else:
         Start.func_getters.append(
             lambda: [(_translate("Setting", "设置"), qta.icon("ri.settings-5-line"), lambda:Setting().show()),
@@ -173,7 +175,9 @@ def main():
                          "fa.newspaper-o"), lambda:News().show()),
                      (_translate("About", "关于"), qta.icon("mdi.information-outline"),
                       lambda:About().show()),
-                     (_translate("Update", "更新"), qta.icon("mdi6.update"), lambda:Update().show())])
+                     (_translate("Update", "更新"), qta.icon(
+                         "mdi6.update"), lambda:Update().show()),
+                     (_translate("LanguageChooser", "语言选择"), qta.icon("fa.language"), lambda:LanguageChooser().show())])
         Start.panel_getters.append(getPanelButtons)
         Desktop.item_getters.append(getVersions)
 

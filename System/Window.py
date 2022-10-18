@@ -1,5 +1,6 @@
 from typing import Literal
 
+import multitasking
 import qtawesome as qta
 from PyQt5.QtCore import (QEvent, QMetaObject, QObject, QPoint, QSize, Qt,
                           pyqtSlot)
@@ -53,6 +54,8 @@ class Window(FramelessWindow):
         self.client = client
         self.client.setParent(self)
         self.client.move(0, self.titleBar.height())
+        self.client.windowIconChanged.connect(self.setWindowIcon)
+        self.client.windowTitleChanged.connect(self.setWindowTitle)
         self.client.installEventFilter(self)
         self.client.show()
 
@@ -130,19 +133,24 @@ class Window(FramelessWindow):
             elif a1.type() == QEvent.Type.ParentChange:
                 if a0.parent() != self:
                     self.close()
-            elif a1.type() not in (QEvent.Type.Paint,):
-                self.separable_widgets = list(
-                    self.findSeparableWidgets(self.client))
-                if self.separable_widgets:
-                    self.pb_sep.show()
-                else:
-                    self.pb_sep.hide()
-            elif a1.type() == QEvent.Type.WindowTitleChange:
-                self.setWindowTitle(a0.windowTitle())
-                self.repaint()
-            elif a1.type() == QEvent.Type.WindowIconChange:
-                self.setWindowIcon(a0.windowIcon())
+            elif a1.type() not in (QEvent.Type.ChildAdded,
+                                   QEvent.Type.ChildRemoved,
+                                   QEvent.Type.Show,
+                                   QEvent.Type.WindowActivate):
+                self.checkSeparableWidgets()
         return super().eventFilter(a0, a1)
+
+    @multitasking.task  # 防止影响性能
+    def checkSeparableWidgets(self):
+        try:
+            self.separable_widgets = list(
+                self.findSeparableWidgets(self.client))
+            if self.separable_widgets:
+                self.pb_sep.show()
+            else:
+                self.pb_sep.hide()
+        except RuntimeError:
+            pass
 
     def findSeparableWidgets(self, widget: QWidget) -> set[QWidget]:
         """查找可以分离的控件"""
@@ -157,7 +165,8 @@ class Window(FramelessWindow):
         children = widget.findChildren(QWidget)
         for child in children:
             # separable为True的QWidget可以分离
-            if hasattr(child, "separable") and child.separable:
+            # 并且是显示的
+            if child.isVisible() and hasattr(child, "separable") and child.separable:
                 result.add(child)
             result |= self.findSeparableWidgets(child)
         return result
