@@ -4,7 +4,7 @@
 <context>
     <name>About</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="165"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="166"/>
         <source>关于</source>
         <translation>About</translation>
     </message>
@@ -29,12 +29,12 @@
         <translation>Thinks to</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/About/About.py" line="31"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/About/About.py" line="32"/>
         <source>bangbang93: 提供镜像源</source>
         <translation>bangbang93: Provide image source</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/About/About.py" line="31"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/About/About.py" line="32"/>
         <source>huanghongxun: 提供技术帮助(HMCL)</source>
         <translation>huanghongxun: provide technical help (HMCL)</translation>
     </message>
@@ -50,7 +50,7 @@
 <context>
     <name>CreateUser</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="165"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="166"/>
         <source>创建用户</source>
         <translation>Create User</translation>
     </message>
@@ -81,7 +81,7 @@
 <context>
     <name>Downloader</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="165"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="166"/>
         <source>下载器</source>
         <translation>Downloader</translation>
     </message>
@@ -122,17 +122,17 @@
 <context>
     <name>FMCL</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="98"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="99"/>
         <source>未选择用户</source>
         <translation>No user selected</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="119"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="120"/>
         <source>启动</source>
         <translation>Launch</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="123"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="124"/>
         <source>管理</source>
         <translation>Manage</translation>
     </message>
@@ -140,37 +140,37 @@
 <context>
     <name>FMCLSetting</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="60"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="61"/>
         <source>启动器</source>
         <translation>Launcher</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="63"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="64"/>
         <source>启动器宽度</source>
         <translation>Width of the launcher</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="66"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="67"/>
         <source>启动器高度</source>
         <translation>Height of the launcher</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="69"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="70"/>
         <source>语言</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="73"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="74"/>
         <source>游戏</source>
         <translation>Game</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="76"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="77"/>
         <source>游戏目录</source>
         <translation>Game directories</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="81"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="82"/>
         <source>用户</source>
         <translation>User</translation>
     </message>
@@ -257,9 +257,27 @@
     </message>
 </context>
 <context>
+    <name>Help</name>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="166"/>
+        <source>帮助</source>
+        <translation>Help</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/Help/ui_Help.py" line="44"/>
+        <source>下一页</source>
+        <translation>Next page</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/Help/ui_Help.py" line="45"/>
+        <source>上一页</source>
+        <translation>Previous page</translation>
+    </message>
+</context>
+<context>
     <name>LanguageChooser</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="165"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="166"/>
         <source>语言选择</source>
         <translation>Language Chooser</translation>
     </message>
@@ -306,7 +324,7 @@
 <context>
     <name>News</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="165"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="166"/>
         <source>新闻</source>
         <translation>News</translation>
     </message>
@@ -338,9 +356,17 @@
     </message>
 </context>
 <context>
+    <name>Pages</name>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/Help/Pages/__init__.py" line="28"/>
+        <source>启动器</source>
+        <translation>Launcher</translation>
+    </message>
+</context>
+<context>
     <name>Progress</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="165"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="166"/>
         <source>进度</source>
         <translation>Progress</translation>
     </message>
@@ -410,7 +436,7 @@
 <context>
     <name>Update</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="165"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="166"/>
         <source>更新</source>
         <translation>Update</translation>
     </message>

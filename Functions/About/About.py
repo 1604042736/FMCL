@@ -15,6 +15,7 @@ multitasking==0.0.11
 Pillow==9.2.0
 PyQt5==5.15.7
 PyQt5_Frameless_Window==0.1.0
+PyQtWebEngine==5.15.6
 QtAwesome==1.1.1
 requests==2.27.1"""
 

@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="/">
+    <file>3rdparty/markdown.css</file>
+    <file>3rdparty/marked.js</file>
+    <file>index.html</file>
+  </qresource>
+</RCC>

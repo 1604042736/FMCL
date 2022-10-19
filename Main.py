@@ -12,7 +12,7 @@ from PyQt5.QtWidgets import QAction, QPushButton
 import Languages as _
 import Resources as _
 from Core import Game, Progress, User
-from Functions import (About, CreateUser, Downloader, GameManager,
+from Functions import (About, CreateUser, Downloader, GameManager, Help,
                        LanguageChooser, LogoChooser, News, Update)
 from System import Application, Desktop, Explorer, Setting, Start
 from System.Constants import *
@@ -30,7 +30,8 @@ single = {
     "Update": Update,
     "GameManager": GameManager,
     "LanguageChooser": LanguageChooser,
-    "LogoChooser": LogoChooser
+    "LogoChooser": LogoChooser,
+    "Help": Help
 }
 
 
@@ -176,7 +177,9 @@ def main():
                       lambda:About().show()),
                      (_translate("Update", "更新"), qta.icon(
                          "mdi6.update"), lambda:Update().show()),
-                     (_translate("LanguageChooser", "语言选择"), qta.icon("fa.language"), lambda:LanguageChooser().show())])
+                     (_translate("LanguageChooser", "语言选择"), qta.icon(
+                         "fa.language"), lambda:LanguageChooser().show()),
+                     (_translate("Help", "帮助"), qta.icon("mdi.help"), lambda:Help().show())])
         Start.panel_getters.append(getPanelButtons)
         Desktop.item_getters.append(getVersions)
 

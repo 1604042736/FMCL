@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="/">
+    <file>zh_CN/launcher/README.md</file>
+  </qresource>
+</RCC>

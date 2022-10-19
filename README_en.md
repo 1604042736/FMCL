@@ -24,6 +24,7 @@ You can do things below or more:
 - Add more functions
 - Fix Bugs
 - Translation
+- Improve Help
 
 ### Preparation
 

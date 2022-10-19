@@ -6,3 +6,4 @@ from .LanguageChooser import LanguageChooser
 from .LogoChooser import LogoChooser
 from .News import News
 from .Update import Update
+from .Help import Help
