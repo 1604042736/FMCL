@@ -133,10 +133,7 @@ class Window(FramelessWindow):
             elif a1.type() == QEvent.Type.ParentChange:
                 if a0.parent() != self:
                     self.close()
-            elif a1.type() not in (QEvent.Type.ChildAdded,
-                                   QEvent.Type.ChildRemoved,
-                                   QEvent.Type.Show,
-                                   QEvent.Type.WindowActivate):
+            elif a1.type() not in (QEvent.Type.Paint,):
                 self.checkSeparableWidgets()
         return super().eventFilter(a0, a1)
 

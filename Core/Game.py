@@ -4,9 +4,9 @@ import os
 import shutil
 
 import minecraft_launcher_lib as mll
-from Globals import Globals
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtWidgets import qApp
 from System.Setting import Setting
 
 from .Progress import Progress
@@ -62,7 +62,7 @@ class Game:
     def launch(self):
         options = User.get_cur_user()
         options["launcherName"] = "FMCL"
-        options["launcherVersion"] = Globals.TAG_NAME
+        options["launcherVersion"] = qApp.applicationVersion()
         options["gameDirectory"] = self.directory
         options["customResolution"] = True
         options["resolutionWidth"] = str(Setting().get("game.width"))

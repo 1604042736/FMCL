@@ -38,7 +38,7 @@ class User:
         json.dump(User.setting,
                   open("FMCL/users.json", mode="w", encoding="utf-8"))
 
-        value = Setting().get("users.all")
+        value = Setting().get("users")
         for i in User.setting:
             if i not in value:
                 value.append(i)
@@ -46,7 +46,7 @@ class User:
     @staticmethod
     def get_cur_user():
         """获取当前用户"""
-        value = Setting().get("users.all")
+        value = Setting().get("users")
         if value:
             return User.setting[value[0]]
         else:

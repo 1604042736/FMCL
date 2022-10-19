@@ -5,8 +5,7 @@ import webbrowser
 
 import multitasking
 import qtawesome as qta
-from Core import Download, Progress
-from Globals import Globals
+from Core import Download, Progress, Requests
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget, qApp
 
@@ -41,35 +40,38 @@ class Update(QWidget, Ui_Update):
         self.has_newversion = False
         self.hadNewVersion.connect(self.prepare)
         self.checkError.connect(self.te_changelog.setText)
+        self.tag_name = qApp.applicationVersion()
         self.check()
 
     @multitasking.task
     def check(self):
+        self.pb_handupdate.setEnabled(False)
+        self.pb_update.setEnabled(False)
+        self.pb_check.setEnabled(False)
         try:
             url = "https://api.github.com/repos/1604042736/FMCL/releases/latest"
-            r = Globals.request_keep_get(url)
+            r = Requests.get(url, try_time=-1, verify=False)
             self.info = json.loads(r.content)
 
-            if self.info["tag_name"] != Globals.TAG_NAME:
+            if self.info["tag_name"] != self.tag_name:
                 self.has_newversion = True
                 self.hadNewVersion.emit()
 
             while self.isHidden() and self.has_newversion:
                 self.hadNewVersion.emit()
         except Exception as e:
-            self.pb_check.setEnabled(True)
             self.checkError.emit(str(e))
+        self.pb_check.setEnabled(True)
 
     def prepare(self):
         self.pb_handupdate.setEnabled(True)
         self.pb_update.setEnabled(True)
-        self.pb_check.setEnabled(True)
         self.setWindowTitle(f"更新:{self.info['tag_name']}")
         self.te_changelog.setText(self.info["body"])
         self.show()
 
     def update_(self, callback):
-        old_name = f"FMCL_{Globals.TAG_NAME}.{self.system_postfix}"
+        old_name = f"FMCL_{self.tag_name}.{self.system_postfix}"
         name = f"FMCL_{self.info['tag_name']}.{self.system_postfix}"
         url = self.info["assets"][0]["browser_download_url"]  # 默认pyzw的下载地址
         for i in self.info["assets"]:
@@ -90,9 +92,6 @@ class Update(QWidget, Ui_Update):
     def on_pb_check_clicked(self, _):
         self.has_newversion = False
         self.te_changelog.setText("")
-        self.pb_handupdate.setEnabled(False)
-        self.pb_update.setEnabled(False)
-        self.pb_check.setEnabled(False)
         self.check()
 
     @pyqtSlot(bool)

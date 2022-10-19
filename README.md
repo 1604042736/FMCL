@@ -16,3 +16,19 @@ FMCL (Functional Minecraft Launcher) 是一个跨平台的MC启动器
 - 游戏的安装与运行(包括Forge,Fabric)
 - 游戏的管理(包括Mod管理)
 - 获取新闻
+
+## 贡献
+
+您可以做一下几件事或者更多:
+
+- 添加更多功能
+- 修复Bug
+- 翻译
+
+### 准备
+
+在根目录执行以下命令
+
+```shell
+pip install -r requirements.txt
+```

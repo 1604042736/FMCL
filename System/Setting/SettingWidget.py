@@ -34,9 +34,12 @@ class SettingWidget(QWidget, Ui_SettingWidget):
 
                 widget = QLabel()
                 widget.setText(text)
+                font = widget.font()
+                font.setBold((False, True)[i == 0])
+                font.setPixelSize(16-i)
+                widget.setFont(font)
                 self.gl_setting.addWidget(widget)
                 self.item_widget_id.append((item, widget, totalid))
-
             setting_item = self.setting.getAttr(id, "setting_item")()
             self.gl_setting.addWidget(setting_item)
             self.setting_items.append(setting_item)

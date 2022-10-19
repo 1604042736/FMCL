@@ -2,9 +2,8 @@ import sys
 import webbrowser
 
 import qtawesome as qta
-from Globals import Globals
 from PyQt5.QtCore import QCoreApplication, pyqtSlot
-from PyQt5.QtWidgets import QLabel, QPushButton, QWidget
+from PyQt5.QtWidgets import QLabel, QPushButton, QWidget, qApp
 
 from .ui_About import Ui_About
 
@@ -27,7 +26,7 @@ class About(QWidget, Ui_About):
         self.setWindowIcon(qta.icon("mdi.information-outline"))
 
         self.pb_fmcl.setText(
-            f"Functional Minecraft Launcher[v{Globals.TAG_NAME}]")
+            f"Functional Minecraft Launcher[v{qApp.applicationVersion()}]")
 
         THINKS = ((_translate("About", "bangbang93: 提供镜像源"), "https://bmclapidoc.bangbang93.com"),
                   (_translate("About", "huanghongxun: 提供技术帮助(HMCL)"), "https://github.com/huanghongxun/HMCL"))

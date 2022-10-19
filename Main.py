@@ -3,6 +3,7 @@ import logging
 import os
 import sys
 
+import multitasking
 import qtawesome as qta
 from PyQt5.QtCore import QCoreApplication, QTranslator
 from PyQt5.QtGui import QIcon
@@ -78,9 +79,6 @@ def getSettingAttr():
         },
         "users": {
             "name": _translate("FMCLSetting", "用户"),
-        },
-        "users.all": {
-            "name": _translate("FMCLSetting", "所有用户"),
             "method": lambda: CreateUser().show()
         }
     }
@@ -91,7 +89,7 @@ DEFAULT_SETTING = {
     "launcher.height": 618,
     "launcher.language": ":/zh_CN.qm",
     "game.directories": [".minecraft"],
-    "users.all": User.get_all_users(),
+    "users": User.get_all_users(),
 }
 
 
@@ -144,6 +142,7 @@ def main():
     app = Application(sys.argv)
     app.setApplicationName("FMCL")
     app.setWindowIcon(QIcon(":/Icon/FMCL.ico"))
+    app.setApplicationVersion("2.0")
 
     sys.stdout = sys.stderr = StdLog()
     logging.basicConfig(level=logging.DEBUG,
@@ -187,7 +186,8 @@ def main():
 
         Update()
 
-    sys.exit(app.exec())
+    app.exec()
+    multitasking.killall(None, None)
 
 
 if __name__ == "__main__":

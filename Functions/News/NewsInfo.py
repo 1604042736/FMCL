@@ -1,7 +1,7 @@
 import webbrowser
 
 import multitasking
-from Globals import Globals
+from Core import Requests
 from PyQt5.QtCore import QEvent, Qt
 from PyQt5.QtGui import QFont, QFontMetrics, QImage, QPixmap, QResizeEvent
 from PyQt5.QtWidgets import QGridLayout, QLabel, QWidget
@@ -63,7 +63,7 @@ QLabel{
     @multitasking.task
     def getImage(self):
         url = f'https://www.minecraft.net{self.info["default_tile"]["image"]["imageURL"]}'
-        r = Globals.request_keep_get(url)
+        r = Requests.get(url, try_time=-1, timeout=5)
         # TODO failed minimal tag size sanity
         pixmap = QPixmap.fromImage(QImage.fromData(r.content))
         self.l_image.setPixmap(pixmap.scaled(

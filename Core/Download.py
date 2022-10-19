@@ -1,7 +1,7 @@
 import os
 import time
 
-import requests
+from .Requests import Requests
 
 
 class Download:
@@ -25,7 +25,8 @@ class Download:
             try_time = 0
             while try_time != self.max_try_time:
                 try:
-                    rsp = requests.get(self.url, stream=True, timeout=5)
+                    rsp = Requests.get(self.url, stream=True,
+                                       timeout=5, verify=False)
                     offset = 0
                     self.callback.get("setMax", self.empty)(
                         int(rsp.headers['Content-Length']))

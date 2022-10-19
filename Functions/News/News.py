@@ -1,6 +1,6 @@
 import multitasking
 import qtawesome as qta
-import requests
+from Core import Requests
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QResizeEvent
 from PyQt5.QtWidgets import QWidget
@@ -30,11 +30,8 @@ class News(QWidget, Ui_News):
         parameters = {
             "pageSize": self.page_size
         }
-        header = {
-            "user-agent": "FMCL"
-        }
-        r = requests.get("https://www.minecraft.net/content/minecraft-net/_jcr_content.articles.grid",
-                         params=parameters, headers=header).json()
+        r = Requests.get("https://www.minecraft.net/content/minecraft-net/_jcr_content.articles.grid",
+                         params=parameters).json()
         self.__NewsGot.emit(r["article_grid"])
 
     def getMoreNews(self, num):

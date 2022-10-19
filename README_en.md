@@ -16,3 +16,19 @@ FMCL (Functional Minecraft Launcher) is a cross-platform Minecraft Launcher
 - Installation and launch of games (include Forge, Fabric)
 - Game management (include Mod management)
 - Get news
+
+## Contribution
+
+You can do things below or more:
+
+- Add more functions
+- Fix Bugs
+- Translation
+
+### Preparation
+
+Execute the following command at the root directory
+
+```shell
+pip install -r requirements.txt
+```
