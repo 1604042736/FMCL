@@ -142,7 +142,7 @@ def main():
     app = Application(sys.argv)
     app.setApplicationName("FMCL")
     app.setWindowIcon(QIcon(":/Icon/FMCL.ico"))
-    app.setApplicationVersion("2.0")
+    app.setApplicationVersion("2.0.1")
 
     sys.stdout = sys.stderr = StdLog()
     logging.basicConfig(level=logging.DEBUG,
