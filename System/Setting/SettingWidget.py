@@ -57,11 +57,15 @@ class SettingWidget(QWidget, Ui_SettingWidget):
                 self.sa_setting.verticalScrollBar().setValue(widget.pos().y())
                 break
 
-    def show(self, id="") -> None:
+    def turnTo(self, id):
         for _, widget, id_ in self.item_widget_id:
             if id_ == id:
                 self.sa_setting.verticalScrollBar().setValue(widget.pos().y())
                 break
+
+    def show(self, id="") -> None:
+        if id:
+            self.turnTo(id)
         return super().show()
 
     def refresh(self):

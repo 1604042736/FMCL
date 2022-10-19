@@ -4,7 +4,7 @@
 <context>
     <name>About</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="166"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
         <source>关于</source>
         <translation>关于</translation>
     </message>
@@ -50,7 +50,7 @@
 <context>
     <name>CreateUser</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="166"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
         <source>创建用户</source>
         <translation>创建用户</translation>
     </message>
@@ -81,7 +81,7 @@
 <context>
     <name>Downloader</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="166"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
         <source>下载器</source>
         <translation>下载器</translation>
     </message>
@@ -122,17 +122,17 @@
 <context>
     <name>FMCL</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="99"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="102"/>
         <source>未选择用户</source>
         <translation>未选择用户</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="120"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="123"/>
         <source>启动</source>
         <translation>启动</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="124"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="127"/>
         <source>管理</source>
         <translation>管理</translation>
     </message>
@@ -140,92 +140,105 @@
 <context>
     <name>FMCLSetting</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="61"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="64"/>
         <source>启动器</source>
         <translation>启动器</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="64"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="67"/>
         <source>启动器宽度</source>
         <translation>启动器宽度</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="67"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="70"/>
         <source>启动器高度</source>
         <translation>启动器高度</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="70"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="73"/>
         <source>语言</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="74"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="77"/>
         <source>游戏</source>
         <translation>游戏</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="77"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="80"/>
         <source>游戏目录</source>
         <translation>游戏目录</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="82"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="85"/>
         <source>用户</source>
         <translation>用户</translation>
     </message>
 </context>
 <context>
-    <name>GameManager</name>
+    <name>GameInfo</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="77"/>
-        <source>游戏管理</source>
-        <translation>游戏管理</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="79"/>
-        <source>Mod</source>
-        <translation>Mod</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="81"/>
-        <source>概况</source>
-        <translation>概况</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="83"/>
-        <source>打开文件夹</source>
-        <translation>打开文件夹</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="82"/>
-        <source>删除</source>
-        <translation>删除</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="80"/>
-        <source>设置</source>
-        <translation>设置</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/GameManager.py" line="31"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/GameInfo.py" line="19"/>
         <source>版本</source>
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/GameManager.py" line="32"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/GameInfo.py" line="20"/>
         <source>Forge版本</source>
         <translation>Forge版本</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/GameManager.py" line="33"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/GameInfo.py" line="21"/>
         <source>Fabric版本</source>
         <translation>Fabric版本</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="78"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GamInfo.py" line="73"/>
+        <source>删除</source>
+        <translation>删除</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/GameInfo.py" line="50"/>
+        <source>确定删除?</source>
+        <translation>确定删除?</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GamInfo.py" line="70"/>
+        <source>游戏信息</source>
+        <translation>游戏信息</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GamInfo.py" line="71"/>
         <source>刷新</source>
         <translation>刷新</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GamInfo.py" line="72"/>
+        <source>打开文件夹</source>
+        <translation>打开文件夹</translation>
+    </message>
+</context>
+<context>
+    <name>GameManager</name>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="76"/>
+        <source>游戏管理</source>
+        <translation>游戏管理</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="77"/>
+        <source>设置</source>
+        <translation>设置</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="78"/>
+        <source>信息</source>
+        <translation>信息</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/ui_GameManager.py" line="79"/>
+        <source>Mod管理</source>
+        <translation>Mod管理</translation>
     </message>
 </context>
 <context>
@@ -245,31 +258,21 @@
         <source>游戏图标</source>
         <translation>游戏图标</translation>
     </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/GameManager.py" line="116"/>
-        <source>删除</source>
-        <translation>删除</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameManager/GameManager.py" line="116"/>
-        <source>确定删除?</source>
-        <translation>确定删除?</translation>
-    </message>
 </context>
 <context>
     <name>Help</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="166"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
         <source>帮助</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/Help/ui_Help.py" line="44"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/Help/ui_Help.py" line="46"/>
         <source>下一页</source>
         <translation>下一页</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/Help/ui_Help.py" line="45"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/Help/ui_Help.py" line="47"/>
         <source>上一页</source>
         <translation>上一页</translation>
     </message>
@@ -277,7 +280,7 @@
 <context>
     <name>LanguageChooser</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="166"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
         <source>语言选择</source>
         <translation>语言选择</translation>
     </message>
@@ -322,9 +325,35 @@
     </message>
 </context>
 <context>
+    <name>ModItem</name>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ui_ModItem.py" line="39"/>
+        <source>Mod</source>
+        <translation>Mod</translation>
+    </message>
+</context>
+<context>
+    <name>ModManager</name>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ui_ModManager.py" line="38"/>
+        <source>Mod管理</source>
+        <translation>Mod管理</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ui_ModManager.py" line="39"/>
+        <source>刷新</source>
+        <translation>刷新</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ui_ModManager.py" line="40"/>
+        <source>打开Mod文件夹</source>
+        <translation>打开Mod文件夹</translation>
+    </message>
+</context>
+<context>
     <name>News</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="166"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
         <source>新闻</source>
         <translation>新闻</translation>
     </message>
@@ -366,7 +395,7 @@
 <context>
     <name>Progress</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="166"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
         <source>进度</source>
         <translation>进度</translation>
     </message>
@@ -436,7 +465,7 @@
 <context>
     <name>Update</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="166"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
         <source>更新</source>
         <translation>更新</translation>
     </message>

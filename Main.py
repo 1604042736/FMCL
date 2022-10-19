@@ -12,8 +12,9 @@ from PyQt5.QtWidgets import QAction, QPushButton
 import Languages as _
 import Resources as _
 from Core import Game, Progress, User
-from Functions import (About, CreateUser, Downloader, GameManager, Help,
-                       LanguageChooser, LogoChooser, News, Update)
+from Functions import (About, CreateUser, Downloader, GameInfo, GameManager,
+                       Help, LanguageChooser, LogoChooser, ModManager, News,
+                       Update)
 from System import Application, Desktop, Explorer, Setting, Start
 from System.Constants import *
 from System.TaskManager import TaskManager
@@ -31,7 +32,9 @@ single = {
     "GameManager": GameManager,
     "LanguageChooser": LanguageChooser,
     "LogoChooser": LogoChooser,
-    "Help": Help
+    "Help": Help,
+    "ModManager": ModManager,
+    "GameInfo": GameInfo
 }
 
 

@@ -155,33 +155,41 @@ class Game:
         self.info = info
         return info
 
-    def get_mod(self) -> list:
+    def get_mod_path(self):
         self.generate_setting()
         if self.setting.get("isolation"):
             path = os.path.join(self.directory, "versions", self.name, "mods")
         else:
             path = os.path.join(self.directory, "mods")
+        return path
+
+    def get_mods(self) -> list:
+        self.get_info()
+        if not(self.info["forge_version"] or self.info["fabric_version"]):
+            return []
+        path = self.get_mod_path()
         if not os.path.exists(path):
             return []
         result = []
         for i in os.listdir(path):
             if ".jar" in i:
                 if i.endswith(".disabled"):
-                    result.append((0, i.replace(".disabled", "")))
+                    result.append((False, i.replace(".disabled", "")))
                 elif i.endswith(".jar"):
-                    result.append((2, i))
+                    result.append((True, i))
         return result
 
     def open_directory(self):
         os.startfile(os.path.join(self.directory, "versions", self.name))
 
-    def setModEnabled(self, mod: str, state: int):
-        path = os.path.join(self.directory, "mods", mod)
-        disabled_path = os.path.join(self.directory, "mods", f"{mod}.disbaled")
-        if state == 0:
-            os.rename(path, disabled_path)
+    def setModEnabled(self, enabled: bool, name: str):
+        path = self.get_mod_path()
+        enabled_path = os.path.join(path, name)
+        disabled_path = os.path.join(path, f"{name}.disbaled")
+        if enabled:
+            os.rename(disabled_path, enabled_path)
         else:
-            os.rename(disabled_path, path)
+            os.rename(enabled_path, disabled_path)
 
     def generate_setting(self):
         if not hasattr(self, "setting"):

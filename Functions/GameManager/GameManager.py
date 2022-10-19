@@ -1,12 +1,12 @@
 import qtawesome as qta
 from Core import Game
-from PyQt5.QtCore import QCoreApplication, Qt, pyqtSlot
-from PyQt5.QtWidgets import QCheckBox, QLabel, QMessageBox, QWidget
+from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QWidget
 
+from ..GameInfo import GameInfo
 from ..LogoChooser import LogoChooser
+from ..ModManager import ModManager
 from .ui_GameManager import Ui_GameManager
-
-_translate = QCoreApplication.translate
 
 
 class GameManager(QWidget, Ui_GameManager):
@@ -27,101 +27,48 @@ class GameManager(QWidget, Ui_GameManager):
         super().__init__()
         self.setupUi(self)
         self.setWindowIcon(qta.icon("mdi6.minecraft"))
-        self. __info_translate = {
-            "version": _translate("GameManager", "版本"),
-            "forge_version": _translate("GameManager", "Forge版本"),
-            "fabric_version": _translate("GameManager", "Fabric版本")
-        }
-
         self.name = name
         self.game = Game(name)
-        self.info = self.game.get_info()
-        self.__mods: dict[str, tuple(QCheckBox, QLabel)] = {}
-
-        self.pb_opendirectory.clicked.connect(self.game.open_directory)
-        self.gl_mods.setAlignment(Qt.AlignmentFlag.AlignLeft)
-
-        self.le_name.setText(name)
-        for key, val in self.info.items():
-            if val:
-                label = QLabel()
-                label.setText(f"{self.__info_translate[key]}: {val}")
-                self.gl_summary.addWidget(label)
-
-        if not (self.info["forge_version"] or self.info["fabric_version"]):
-            self.gb_mods.hide()
-
-        self.le_name.editingFinished.connect(self.__rename)
-
-        self.setSetting()
-        self.setLogo()
-        self.setMods()
-
-    def setLogo(self):
-        pixmap = self.game.get_pixmap()
-        if not pixmap.isNull():
-            self.l_logo.setPixmap(pixmap.scaled(64, 64))
-
-    def setSetting(self):
-        self.game.DEFAULT_SETTING_ATTR["logo"]["setting_item"] = lambda: LogoChooser(
-            self.game.name)
-        self.game.generate_setting()
-        setting_widget = self.game.setting.getWidget()
-        self.gl_setting.addWidget(setting_widget)
+        self.refresh()
 
     def refresh(self):
-        self.setMods()
-        self.setLogo()
+        while self.sw_ui.count():
+            self.sw_ui.removeWidget(self.sw_ui.widget(0))
 
-    def setMods(self):
-        if not (self.info["forge_version"] or self.info["fabric_version"]):
-            return
-        mods = self.game.get_mod()
+        self.gameinfo = GameInfo(self.name)
+        self.gameinfo.gameNameChanged.connect(self.renamed)
 
-        for _, val in enumerate(mods):
-            if val[1] not in self.__mods:
-                checkbox = QCheckBox()
-                checkbox.setCheckState(val[0])
-                checkbox.stateChanged.connect(
-                    lambda _, v=val[1], c=checkbox: self.game.setModEnabled(v, c.checkState()))
+        self.game.DEFAULT_SETTING_ATTR["logo"]["setting_item"] = \
+            lambda: LogoChooser(self.name)
+        self.game.generate_setting()
+        self.gamesetting = self.game.setting.getWidget()
 
-                label = QLabel()
-                label.setText(val[1])
-                # Spacer的存在会使它们两个一行排列
-                self.gl_mods.addWidget(checkbox)
-                self.gl_mods.addWidget(label)
-                self.__mods[val[1]] = (checkbox, label)
+        self.modmanager = ModManager(self.name)
 
-        mods_ = [i[1] for i in mods]
+        self.pb_gameinfo.setChecked(True)
+        self.setUi(self.gameinfo)
 
-        for key in tuple(self.__mods.keys()):  # 移除没有的mod
-            if key not in mods_:
-                checkbox, label = self.__mods[key]
-                self.gl_mods.removeWidget(checkbox)
-                self.gl_mods.removeWidget(label)
-                checkbox.deleteLater()
-                label.deleteLater()
-                self.__mods.pop(key)
+    def renamed(self, name):
+        self.name = name
+        self.game = Game(name)
+        self.refresh()
 
-    def __rename(self):
-        new_name = self.le_name.text()
-        self.game.rename(new_name)
-        if hasattr(self.game, "setting"):
-            self.game.setting.deleteLater()
-        self.game = Game(new_name)
-        self.setSetting()
+    def setUi(self, widget: QWidget):
+        while self.sw_ui.count():
+            self.sw_ui.removeWidget(self.sw_ui.widget(0))
+        self.sw_ui.addWidget(widget)
 
     @pyqtSlot(bool)
-    def on_pb_delete_clicked(self, _):
-        reply = QMessageBox.warning(self,
-                                    _translate("GameSetting", "删除"),
-                                    _translate("GameSetting", "确定删除?"),
-                                    QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
-        if reply == QMessageBox.StandardButton.Yes:
-            self.game.delete()
-            self.close()
+    def on_pb_gameinfo_clicked(self, _):
+        self.pb_gameinfo.setChecked(True)
+        self.setUi(self.gameinfo)
 
     @pyqtSlot(bool)
-    def on_pb_refresh_clicked(self, _):
-        self.setMods()
-        self.setLogo()
+    def on_pb_gamesetting_clicked(self, _):
+        self.pb_gamesetting.setChecked(True)
+        self.setUi(self.gamesetting)
+
+    @pyqtSlot(bool)
+    def on_pb_modmanager_clicked(self, _):
+        self.pb_modmanager.setChecked(True)
+        self.setUi(self.modmanager)
