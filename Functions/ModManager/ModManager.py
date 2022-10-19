@@ -12,7 +12,7 @@ class ModManager(QWidget, Ui_ModManager):
     def __init__(self, name: str):
         super().__init__()
         self.setupUi(self)
-        self.setWindowIcon(qta.icon("fa5b.java"))
+        self.setWindowIcon(qta.icon("mdi.puzzle-outline"))
 
         self.game = Game(name)
         self.game.generate_setting()

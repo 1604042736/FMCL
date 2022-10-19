@@ -27,6 +27,9 @@ class GameManager(QWidget, Ui_GameManager):
         super().__init__()
         self.setupUi(self)
         self.setWindowIcon(qta.icon("mdi6.minecraft"))
+        self.pb_gameinfo.setIcon(qta.icon("mdi6.information-outline"))
+        self.pb_gamesetting.setIcon(qta.icon("ri.settings-5-line"))
+        self.pb_modmanager.setIcon(qta.icon("mdi.puzzle-outline"))
         self.name = name
         self.game = Game(name)
         self.refresh()
