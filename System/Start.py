@@ -227,3 +227,8 @@ class AllFunctions(QListWidget):
             if item == self.currentItem():
                 action()
                 break
+
+    def event(self, a0: QEvent) -> bool:
+        if a0.type() == QEvent.Type.Show:
+            self.refresh()
+        return super().event(a0)

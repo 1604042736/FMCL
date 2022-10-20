@@ -60,21 +60,23 @@ class Game:
         }
 
     def launch(self):
+        absdir = os.path.abspath(self.directory)
+        globalsetting = Setting()
+
         options = User.get_cur_user()
         options["launcherName"] = "FMCL"
         options["launcherVersion"] = qApp.applicationVersion()
-        options["gameDirectory"] = self.directory
+        options["gameDirectory"] = absdir
         options["customResolution"] = True
-        options["resolutionWidth"] = str(Setting().get("game.width"))
-        options["resolutionHeight"] = str(Setting().get("game.height"))
-        options["executablePath"] = "javaw"
+        options["resolutionWidth"] = str(globalsetting.get("game.width"))
+        options["resolutionHeight"] = str(globalsetting.get("game.height"))
+        options["executablePath"] = globalsetting.get("game.java_path")
         self.generate_setting()
         if self.setting.get("isolation"):
             options["gameDirectory"] = os.path.abspath(
                 os.path.join(self.directory, "versions", self.name))
 
-        command = mll.command.get_minecraft_command(
-            self.name, os.path.abspath(self.directory), options)
+        command = mll.command.get_minecraft_command(self.name, absdir, options)
 
         str_command = ""
         for i in command:
@@ -82,18 +84,21 @@ class Game:
                 str_command += '"'+i+'" '
             else:
                 str_command += i+' '
-        logging.info(str_command)
-        os.popen(f"cd {self.directory}&start {str_command}")
+        args = f"cd {self.directory}&start {str_command}"
+        logging.info(args)
+        os.popen(args)
 
     def install_forge(self, forge_version, callback):
         mll.forge.install_forge_version(
             forge_version, self.directory, callback)
-        Game(forge_version).rename(self.name)
+        version, forge = forge_version.split("-")
+        Game(f"{version}-forge-{forge}").rename(self.name)
 
     def install_fabric(self, version, fabric_version, callback):
         mll.fabric.install_fabric(
             version, self.directory, fabric_version, callback)
-        Game(version).rename(self.name)
+        fabric_minecraft_version = f"fabric-loader-{fabric_version}-{version}"
+        Game(fabric_minecraft_version).rename(self.name)
 
     def install_mc(self, version, callback):
         mll.install.install_minecraft_version(
@@ -109,6 +114,11 @@ class Game:
             Progress().add(lambda callback: self.install_mc(version, callback))
 
     def rename(self, new_name):
+        config = json.load(
+            open(f"{self.directory}/versions/{self.name}/{self.name}.json"))
+        config["id"] = new_name
+        json.dump(config,
+                  open(f"{self.directory}/versions/{self.name}/{self.name}.json", mode="w", encoding="utf-8"))
         os.rename(f"{self.directory}/versions/{self.name}/{self.name}.jar",
                   f"{self.directory}/versions/{self.name}/{new_name}.jar")
         os.rename(f"{self.directory}/versions/{self.name}/{self.name}.json",
@@ -150,6 +160,8 @@ class Game:
                 break
         if "clientVersion" in config:
             info["version"] = config["clientVersion"]
+        elif "inheritsFrom" in config:
+            info["version"] = config["inheritsFrom"]
         else:
             info["version"] = config["id"]
         self.info = info

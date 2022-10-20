@@ -4,7 +4,7 @@
 <context>
     <name>About</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
         <source>关于</source>
         <translation>关于</translation>
     </message>
@@ -50,7 +50,7 @@
 <context>
     <name>CreateUser</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
         <source>创建用户</source>
         <translation>创建用户</translation>
     </message>
@@ -81,7 +81,7 @@
 <context>
     <name>Downloader</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
         <source>下载器</source>
         <translation>下载器</translation>
     </message>
@@ -122,57 +122,80 @@
 <context>
     <name>FMCL</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="102"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="115"/>
         <source>未选择用户</source>
         <translation>未选择用户</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="123"/>
-        <source>启动</source>
-        <translation>启动</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="127"/>
-        <source>管理</source>
-        <translation>管理</translation>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="214"/>
+        <source>启动器发生了严重错误</source>
+        <translation>启动器发生了严重错误</translation>
     </message>
 </context>
 <context>
     <name>FMCLSetting</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="64"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="65"/>
         <source>启动器</source>
         <translation>启动器</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="67"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="68"/>
         <source>启动器宽度</source>
         <translation>启动器宽度</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="70"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="71"/>
         <source>启动器高度</source>
         <translation>启动器高度</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="73"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="74"/>
         <source>语言</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="77"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="78"/>
         <source>游戏</source>
         <translation>游戏</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="80"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="81"/>
         <source>游戏目录</source>
         <translation>游戏目录</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="85"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="95"/>
         <source>用户</source>
         <translation>用户</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="86"/>
+        <source>Java路径</source>
+        <translation>Java路径</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="89"/>
+        <source>游戏窗口宽度</source>
+        <translation>游戏窗口宽度</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="92"/>
+        <source>游戏窗口高度</source>
+        <translation>游戏窗口高度</translation>
+    </message>
+</context>
+<context>
+    <name>Game</name>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="136"/>
+        <source>启动</source>
+        <translation>启动</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="140"/>
+        <source>管理</source>
+        <translation>管理</translation>
     </message>
 </context>
 <context>
@@ -262,7 +285,7 @@
 <context>
     <name>Help</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
         <source>帮助</source>
         <translation>帮助</translation>
     </message>
@@ -280,7 +303,7 @@
 <context>
     <name>LanguageChooser</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
         <source>语言选择</source>
         <translation>语言选择</translation>
     </message>
@@ -353,7 +376,7 @@
 <context>
     <name>News</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
         <source>新闻</source>
         <translation>新闻</translation>
     </message>
@@ -395,7 +418,7 @@
 <context>
     <name>Progress</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
         <source>进度</source>
         <translation>进度</translation>
     </message>
@@ -465,7 +488,7 @@
 <context>
     <name>Update</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
         <source>更新</source>
         <translation>更新</translation>
     </message>

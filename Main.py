@@ -2,12 +2,13 @@ import argparse
 import logging
 import os
 import sys
+import traceback
 
 import multitasking
 import qtawesome as qta
 from PyQt5.QtCore import QCoreApplication, QTranslator
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QAction, QPushButton
+from PyQt5.QtWidgets import QAction, QMessageBox, QPushButton
 
 import Languages as _
 import Resources as _
@@ -81,6 +82,15 @@ def getSettingAttr():
             "method": "directory",
             "atleast": 1
         },
+        "game.java_path": {
+            "name": _translate("FMCLSetting", "Java路径"),
+        },
+        "game.width": {
+            "name": _translate("FMCLSetting", "游戏窗口宽度"),
+        },
+        "game.height": {
+            "name": _translate("FMCLSetting", "游戏窗口高度"),
+        },
         "users": {
             "name": _translate("FMCLSetting", "用户"),
             "method": lambda: CreateUser().show()
@@ -93,6 +103,9 @@ DEFAULT_SETTING = {
     "launcher.height": 618,
     "launcher.language": ":/zh_CN.qm",
     "game.directories": [".minecraft"],
+    "game.java_path": "javaw",
+    "game.width": 1000,
+    "game.height": 618,
     "users": User.get_all_users(),
 }
 
@@ -120,11 +133,11 @@ def getVersions():
         if os.path.exists(directory+"/versions"):
             for i in os.listdir(directory+"/versions"):
                 a_launch = QAction()
-                a_launch.setText(_translate("FMCL", "启动"))
+                a_launch.setText(_translate("Game", "启动"))
                 a_launch.triggered.connect(lambda _, v=i: Game(v).launch())
 
                 a_manager = QAction()
-                a_manager.setText(_translate("FMCL", "管理"))
+                a_manager.setText(_translate("Game", "管理"))
                 a_manager.triggered.connect(
                     lambda _, v=i: GameManager(v).show())
                 result.append(
@@ -194,6 +207,17 @@ def main():
 
     app.exec()
     multitasking.killall(None, None)
+
+
+def except_hook(*args):
+    sys.__excepthook__(*args)
+    QMessageBox.critical(None,
+                         _translate("FMCL", "启动器发生了严重错误"),
+                         "".join(traceback.format_exception(*args)))
+    exit()
+
+
+sys.excepthook = except_hook
 
 
 if __name__ == "__main__":

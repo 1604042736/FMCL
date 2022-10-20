@@ -4,7 +4,7 @@
 <context>
     <name>About</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
         <source>关于</source>
         <translation>About</translation>
     </message>
@@ -50,7 +50,7 @@
 <context>
     <name>CreateUser</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
         <source>创建用户</source>
         <translation>Create User</translation>
     </message>
@@ -81,7 +81,7 @@
 <context>
     <name>Downloader</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
         <source>下载器</source>
         <translation>Downloader</translation>
     </message>
@@ -122,57 +122,80 @@
 <context>
     <name>FMCL</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="102"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="115"/>
         <source>未选择用户</source>
         <translation>No user selected</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="123"/>
-        <source>启动</source>
-        <translation>Launch</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="127"/>
-        <source>管理</source>
-        <translation>Manage</translation>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="214"/>
+        <source>启动器发生了严重错误</source>
+        <translation>A fatal error has occurred on FMCL</translation>
     </message>
 </context>
 <context>
     <name>FMCLSetting</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="64"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="65"/>
         <source>启动器</source>
         <translation>Launcher</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="67"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="68"/>
         <source>启动器宽度</source>
         <translation>Width of the launcher</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="70"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="71"/>
         <source>启动器高度</source>
         <translation>Height of the launcher</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="73"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="74"/>
         <source>语言</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="77"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="78"/>
         <source>游戏</source>
         <translation>Game</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="80"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="81"/>
         <source>游戏目录</source>
         <translation>Game directories</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="85"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="95"/>
         <source>用户</source>
         <translation>User</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="86"/>
+        <source>Java路径</source>
+        <translation>Java path</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="89"/>
+        <source>游戏窗口宽度</source>
+        <translation>Game window width</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="92"/>
+        <source>游戏窗口高度</source>
+        <translation>Game window height</translation>
+    </message>
+</context>
+<context>
+    <name>Game</name>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="136"/>
+        <source>启动</source>
+        <translation>Launch</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="140"/>
+        <source>管理</source>
+        <translation>Manage</translation>
     </message>
 </context>
 <context>
@@ -262,7 +285,7 @@
 <context>
     <name>Help</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
         <source>帮助</source>
         <translation>Help</translation>
     </message>
@@ -280,7 +303,7 @@
 <context>
     <name>LanguageChooser</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
         <source>语言选择</source>
         <translation>Language Chooser</translation>
     </message>
@@ -353,7 +376,7 @@
 <context>
     <name>News</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
         <source>新闻</source>
         <translation>News</translation>
     </message>
@@ -395,7 +418,7 @@
 <context>
     <name>Progress</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
         <source>进度</source>
         <translation>Progress</translation>
     </message>
@@ -465,7 +488,7 @@
 <context>
     <name>Update</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="169"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
         <source>更新</source>
         <translation>Update</translation>
     </message>
