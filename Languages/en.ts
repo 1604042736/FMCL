@@ -4,7 +4,7 @@
 <context>
     <name>About</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="183"/>
         <source>关于</source>
         <translation>About</translation>
     </message>
@@ -50,7 +50,7 @@
 <context>
     <name>CreateUser</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="183"/>
         <source>创建用户</source>
         <translation>Create User</translation>
     </message>
@@ -79,34 +79,6 @@
     </message>
 </context>
 <context>
-    <name>Downloader</name>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
-        <source>下载器</source>
-        <translation>Downloader</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/Downloader/ui_Downloader.py" line="55"/>
-        <source>Forge</source>
-        <translation>Forge</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/Downloader/ui_Downloader.py" line="56"/>
-        <source>Fabric</source>
-        <translation>Fabric</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/Downloader/ui_Downloader.py" line="57"/>
-        <source>安装</source>
-        <translation>Install</translation>
-    </message>
-    <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/Downloader/ui_Downloader.py" line="58"/>
-        <source>Minecraft</source>
-        <translation>Minecraf</translation>
-    </message>
-</context>
-<context>
     <name>Explorer</name>
     <message>
         <location filename="../../../../������/PCG/FMCL/System/Explorer.py" line="193"/>
@@ -122,12 +94,12 @@
 <context>
     <name>FMCL</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="115"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="116"/>
         <source>未选择用户</source>
         <translation>No user selected</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="214"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="217"/>
         <source>启动器发生了严重错误</source>
         <translation>A fatal error has occurred on FMCL</translation>
     </message>
@@ -135,52 +107,52 @@
 <context>
     <name>FMCLSetting</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="65"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="66"/>
         <source>启动器</source>
         <translation>Launcher</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="68"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="69"/>
         <source>启动器宽度</source>
         <translation>Width of the launcher</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="71"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="72"/>
         <source>启动器高度</source>
         <translation>Height of the launcher</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="74"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="75"/>
         <source>语言</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="78"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="79"/>
         <source>游戏</source>
         <translation>Game</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="81"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="82"/>
         <source>游戏目录</source>
         <translation>Game directories</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="95"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="96"/>
         <source>用户</source>
         <translation>User</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="86"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="87"/>
         <source>Java路径</source>
         <translation>Java path</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="89"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="90"/>
         <source>游戏窗口宽度</source>
         <translation>Game window width</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="92"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="93"/>
         <source>游戏窗口高度</source>
         <translation>Game window height</translation>
     </message>
@@ -188,14 +160,42 @@
 <context>
     <name>Game</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="136"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="137"/>
         <source>启动</source>
         <translation>Launch</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="140"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="141"/>
         <source>管理</source>
         <translation>Manage</translation>
+    </message>
+</context>
+<context>
+    <name>GameDownloader</name>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="183"/>
+        <source>游戏下载器</source>
+        <translation>Game Downloader</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameDownloader/ui_GameDownloader.py" line="64"/>
+        <source>安装</source>
+        <translation>Install</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameDownloader/ui_GameDownloader.py" line="65"/>
+        <source>Minecraft</source>
+        <translation>Minecraf</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameDownloader/ui_GameDownloader.py" line="66"/>
+        <source>Forge</source>
+        <translation>Forge</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameDownloader/ui_GameDownloader.py" line="67"/>
+        <source>Fabric</source>
+        <translation>Fabric</translation>
     </message>
 </context>
 <context>
@@ -285,7 +285,7 @@
 <context>
     <name>Help</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="183"/>
         <source>帮助</source>
         <translation>Help</translation>
     </message>
@@ -303,7 +303,7 @@
 <context>
     <name>LanguageChooser</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="183"/>
         <source>语言选择</source>
         <translation>Language Chooser</translation>
     </message>
@@ -348,6 +348,75 @@
     </message>
 </context>
 <context>
+    <name>Mod</name>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Core/Mod.py" line="15"/>
+        <source>按匹配程度排序</source>
+        <translation>Sort by relevance</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Core/Mod.py" line="16"/>
+        <source>按下载量排序</source>
+        <translation>Sort by downloads</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Core/Mod.py" line="17"/>
+        <source>按关注者数量排序</source>
+        <translation>Sort by follows</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Core/Mod.py" line="18"/>
+        <source>按创建时间排序</source>
+        <translation>Sort by the newest mod created</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Core/Mod.py" line="19"/>
+        <source>按更新时间排序</source>
+        <translation>Sort by the newest mod updated</translation>
+    </message>
+</context>
+<context>
+    <name>ModDownloader</name>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/ModDownloader/ui_ModDownloader.py" line="83"/>
+        <source>下载</source>
+        <translation>Download</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="183"/>
+        <source>Mod下载器</source>
+        <translation>Mod Downloader</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/ModDownloader/ui_ModDownloader.py" line="79"/>
+        <source>排序</source>
+        <translation>Sort</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/ModDownloader/ui_ModDownloader.py" line="80"/>
+        <source>名称</source>
+        <translation>Name</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/ModDownloader/ui_ModDownloader.py" line="81"/>
+        <source>下载源</source>
+        <translation>Download Source</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/ModDownloader/ui_ModDownloader.py" line="82"/>
+        <source>搜索</source>
+        <translation>Search</translation>
+    </message>
+</context>
+<context>
+    <name>ModFound</name>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/ModDownloader/ui_ModFound.py" line="46"/>
+        <source>ModFound</source>
+        <translation>ModFound</translation>
+    </message>
+</context>
+<context>
     <name>ModItem</name>
     <message>
         <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ui_ModItem.py" line="39"/>
@@ -376,7 +445,7 @@
 <context>
     <name>News</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="183"/>
         <source>新闻</source>
         <translation>News</translation>
     </message>
@@ -418,7 +487,7 @@
 <context>
     <name>Progress</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="183"/>
         <source>进度</source>
         <translation>Progress</translation>
     </message>
@@ -488,7 +557,7 @@
 <context>
     <name>Update</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="182"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="183"/>
         <source>更新</source>
         <translation>Update</translation>
     </message>

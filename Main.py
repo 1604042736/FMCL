@@ -13,9 +13,9 @@ from PyQt5.QtWidgets import QAction, QMessageBox, QPushButton
 import Languages as _
 import Resources as _
 from Core import Game, Progress, User
-from Functions import (About, CreateUser, Downloader, GameInfo, GameManager,
-                       Help, LanguageChooser, LogoChooser, ModManager, News,
-                       Update)
+from Functions import (About, CreateUser, GameDownloader, GameInfo,
+                       GameManager, Help, LanguageChooser, LogoChooser,
+                       ModDownloader, ModManager, News, Update)
 from System import Application, Desktop, Explorer, Setting, Start
 from System.Constants import *
 from System.TaskManager import TaskManager
@@ -26,7 +26,7 @@ single = {
     "Setting": Setting,
     "TaskManager": TaskManager,
     "CreateUser": CreateUser,
-    "Downloader": Downloader,
+    "GameDownloader": GameDownloader,
     "News": News,
     "About": About,
     "Update": Update,
@@ -35,7 +35,8 @@ single = {
     "LogoChooser": LogoChooser,
     "Help": Help,
     "ModManager": ModManager,
-    "GameInfo": GameInfo
+    "GameInfo": GameInfo,
+    "ModDownloader": ModDownloader
 }
 
 
@@ -183,8 +184,8 @@ def main():
             lambda: [(_translate("Setting", "设置"), qta.icon("ri.settings-5-line"), lambda:Setting().show()),
                      (_translate("CreateUser", "创建用户"), qta.icon("ph.user-circle-plus"),
                       lambda:CreateUser().show()),
-                     (_translate("Downloader", "下载器"), qta.icon("ph.download-simple"),
-                      lambda:Downloader().show()),
+                     (_translate("GameDownloader", "游戏下载器"), qta.icon("ph.download-simple"),
+                      lambda:GameDownloader().show()),
                      (_translate("Progress", "进度"), qta.icon("mdi.progress-download"),
                       lambda:Progress().show()),
                      (_translate("News", "新闻"), qta.icon(
@@ -195,7 +196,9 @@ def main():
                          "mdi6.update"), lambda:Update().show()),
                      (_translate("LanguageChooser", "语言选择"), qta.icon(
                          "fa.language"), lambda:LanguageChooser().show()),
-                     (_translate("Help", "帮助"), qta.icon("mdi.help"), lambda:Help().show())])
+                     (_translate("Help", "帮助"), qta.icon(
+                         "mdi.help"), lambda:Help().show()),
+                     (_translate("ModDownloader", "Mod下载器"), qta.icon("mdi.puzzle-outline"), lambda:ModDownloader().show())])
         Start.panel_getters.append(getPanelButtons)
         Desktop.item_getters.append(getVersions)
 

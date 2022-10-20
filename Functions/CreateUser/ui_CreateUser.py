@@ -20,7 +20,7 @@ class Ui_CreateUser(object):
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
         self.f_panel = QtWidgets.QFrame(CreateUser)
-        self.f_panel.setMaximumSize(QtCore.QSize(128, 16777215))
+        self.f_panel.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.f_panel.setStyleSheet("QPushButton{\n"
 "    border:none;\n"
 "}\n"

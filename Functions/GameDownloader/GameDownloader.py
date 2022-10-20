@@ -4,10 +4,10 @@ from Core import Game
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QListWidgetItem, QWidget
 
-from .ui_Downloader import Ui_Downloader
+from .ui_GameDownloader import Ui_GameDownloader
 
 
-class Downloader(QWidget, Ui_Downloader):
+class GameDownloader(QWidget, Ui_GameDownloader):
     def __init__(self):
         super().__init__()
         self.setupUi(self)

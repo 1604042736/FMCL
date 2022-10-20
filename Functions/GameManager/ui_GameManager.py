@@ -20,7 +20,7 @@ class Ui_GameManager(object):
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
         self.f_panel = QtWidgets.QFrame(GameManager)
-        self.f_panel.setMinimumSize(QtCore.QSize(128, 0))
+        self.f_panel.setMinimumSize(QtCore.QSize(0, 0))
         self.f_panel.setStyleSheet("QPushButton{\n"
 "    border:none;\n"
 "}\n"
