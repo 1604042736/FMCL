@@ -99,7 +99,7 @@
         <translation>No user selected</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Main.py" line="217"/>
+        <location filename="../../../../������/PCG/FMCL/Main.py" line="219"/>
         <source>启动器发生了严重错误</source>
         <translation>A fatal error has occurred on FMCL</translation>
     </message>
@@ -267,17 +267,17 @@
 <context>
     <name>GameSetting</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Core/Game.py" line="47"/>
+        <location filename="../../../../������/PCG/FMCL/Core/Game.py" line="49"/>
         <source>特定设置</source>
         <translation>Specific settings</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Core/Game.py" line="50"/>
+        <location filename="../../../../������/PCG/FMCL/Core/Game.py" line="52"/>
         <source>版本隔离</source>
         <translation>Version isolation</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Core/Game.py" line="53"/>
+        <location filename="../../../../������/PCG/FMCL/Core/Game.py" line="55"/>
         <source>游戏图标</source>
         <translation>Game logo</translation>
     </message>
@@ -419,25 +419,35 @@
 <context>
     <name>ModItem</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ui_ModItem.py" line="39"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ui_ModItem.py" line="47"/>
         <source>Mod</source>
         <translation>Mod</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ModItem.py" line="37"/>
+        <source>版本</source>
+        <translation>Version</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ModItem.py" line="38"/>
+        <source>作者</source>
+        <translation>Authors</translation>
     </message>
 </context>
 <context>
     <name>ModManager</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ui_ModManager.py" line="38"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ui_ModManager.py" line="39"/>
         <source>Mod管理</source>
         <translation>Mod Manager</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ui_ModManager.py" line="39"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ui_ModManager.py" line="40"/>
         <source>刷新</source>
         <translation>Refresh</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ui_ModManager.py" line="40"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ui_ModManager.py" line="41"/>
         <source>打开Mod文件夹</source>
         <translation>Open mod directory</translation>
     </message>

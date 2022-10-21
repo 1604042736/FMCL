@@ -32,12 +32,12 @@ class Explorer(QStackedWidget):
         self.pb_start.clicked.connect(self.showStart)
 
         self.fixed_widgets[self.pb_start] = Start
+        self.showDesktop()
 
     def showEvent(self, a0: QShowEvent) -> None:
         for i, key in enumerate(self.fixed_widgets.keys()):
             qApp.sendEvent(self.window(),
                            TitleWidgetEvent("add", key, index=i))
-        self.showDesktop()
         for _, button in self.caught_widgets.items():  # 恢复
             qApp.sendEvent(self.window(),
                            TitleWidgetEvent("add", button, "right", -1))

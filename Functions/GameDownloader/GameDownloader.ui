@@ -44,12 +44,6 @@
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="5" column="0">
-        <widget class="QListWidget" name="lw_forge"/>
-       </item>
-       <item row="2" column="0">
-        <widget class="QListWidget" name="lw_minecraft"/>
-       </item>
        <item row="0" column="0">
         <widget class="QLineEdit" name="le_name">
          <property name="placeholderText">
@@ -85,7 +79,13 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
+       <item row="2" column="0" colspan="2">
+        <widget class="QListWidget" name="lw_minecraft"/>
+       </item>
+       <item row="5" column="0" colspan="2">
+        <widget class="QListWidget" name="lw_forge"/>
+       </item>
+       <item row="7" column="0" colspan="2">
         <widget class="QListWidget" name="lw_fabric"/>
        </item>
       </layout>

@@ -203,6 +203,8 @@ def main():
         Desktop.item_getters.append(getVersions)
 
         explorer = Explorer()
+        explorer.resize(setting.get("launcher.width"),
+                        setting.get("launcher.height"))
         explorer.setWindowTitle("Functional Minecraft Launcher")
         explorer.show()
 

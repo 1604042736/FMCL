@@ -26,22 +26,16 @@ class Mod:
             sort = "relevance"
         if self.downloadsource == "Modrinth":
             if not yield_:
-                return self.search_modrinth(name, sort)
+                return [i for i in self.search_modrinth_yield(name, sort)]
             else:
                 for i in self.search_modrinth_yield(name, sort):
                     yield i
 
     def search_modrinth_yield(self, name, sort):
         url = f"https://api.modrinth.com/v2/search?query={name}&index={sort}&limit=100"
-        r = Requests.get(url).json()
+        r = Requests.get(url, try_time=-1, timeout=5).json()
         for i in r["hits"]:
             yield self.get_modrinth_modinfo(i["project_id"])
-
-    def search_modrinth(self, name, sort):
-        result = []
-        for i in self.search_modrinth_yield(name, sort):
-            result.append(i)
-        return result
 
     def get_modrinth_modinfo(self, project_id):
         if project_id in Mod.project_cache:
@@ -55,13 +49,13 @@ class Mod:
             "dependencies": []
         }
         url = f"https://api.modrinth.com/v2/project/{project_id}"
-        r = Requests.get(url).json()
+        r = Requests.get(url, try_time=-1, timeout=5).json()
         result["icon_url"] = r["icon_url"]
         result["title"] = r["title"]
         result["description"] = r["description"]
 
         url = f"https://api.modrinth.com/v2/project/{project_id}/version"
-        r = Requests.get(url).json()
+        r = Requests.get(url, try_time=-1, timeout=5).json()
         dependencies_id = []
         for version in r:
             for file in version["files"]:

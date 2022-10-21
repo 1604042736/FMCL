@@ -18,5 +18,6 @@ class ModFound(QWidget, Ui_ModFound):
     @multitasking.task
     def setIcon(self):
         r = Requests.get(self.foundmod["icon_url"], try_time=-1, timeout=5)
-        pixmap = QPixmap.fromImage(QImage.fromData(r.content))
+        image = QImage.fromData(r.content)
+        pixmap = QPixmap.fromImage(image)
         self.l_icon.setPixmap(pixmap.scaled(64, 64))

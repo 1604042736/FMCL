@@ -22,7 +22,13 @@ class ModDownloader(QWidget, Ui_ModDownloader):
         self.cb_sort.addItems(self.mod.get_all_sortmethod())
         self.cb_downloadsource.currentTextChanged.connect(
             self.mod.set_downloadsource)
+        self.cb_downloadsource.currentTextChanged.connect(
+            self.setSort)
         self.__modFound.connect(self.addMod)
+
+    def setSort(self):
+        self.cb_sort.clear()
+        self.cb_sort.addItems(self.mod.get_all_sortmethod())
 
     @pyqtSlot(bool)
     def on_pb_search_clicked(self, _):

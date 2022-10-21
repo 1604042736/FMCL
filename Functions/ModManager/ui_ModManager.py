@@ -27,6 +27,7 @@ class Ui_ModManager(object):
         self.gridLayout.addWidget(self.pb_openmodir, 0, 1, 1, 1)
         self.lw_mods = QtWidgets.QListWidget(ModManager)
         self.lw_mods.setResizeMode(QtWidgets.QListView.Adjust)
+        self.lw_mods.setWordWrap(True)
         self.lw_mods.setObjectName("lw_mods")
         self.gridLayout.addWidget(self.lw_mods, 1, 0, 1, 3)
 

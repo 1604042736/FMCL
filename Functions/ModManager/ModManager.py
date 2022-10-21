@@ -24,8 +24,7 @@ class ModManager(QWidget, Ui_ModManager):
         mods = self.game.get_mods()
         for enabled, name in mods:
             item = QListWidgetItem()
-            widget = ModItem(enabled, name)
-            widget.modEnabledChanged.connect(self.game.setModEnabled)
+            widget = ModItem(self.game, enabled, name)
             item.setSizeHint(widget.size())
             self.lw_mods.addItem(item)
             self.lw_mods.setItemWidget(item, widget)

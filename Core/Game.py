@@ -2,8 +2,10 @@ import json
 import logging
 import os
 import shutil
+from zipfile import ZipFile
 
 import minecraft_launcher_lib as mll
+import toml
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import qApp
@@ -129,7 +131,7 @@ class Game:
     def get_info(self) -> dict:
         if hasattr(self, "info"):
             return self.info
-        info = {
+        self.info = info = {
             "version": "",
             "forge_version": "",
             "fabric_version": ""
@@ -164,7 +166,6 @@ class Game:
             info["version"] = config["inheritsFrom"]
         else:
             info["version"] = config["id"]
-        self.info = info
         return info
 
     def get_mod_path(self):
@@ -228,3 +229,51 @@ class Game:
     def get_icon(self):
         self.generate_setting()
         return QIcon(self.setting.get("logo"))
+
+    def get_mod_info(self, mod_name: str, enabled=True) -> list:
+        path = self.get_mod_path()
+        if not enabled:
+            mod_name = mod_name+".disabled"
+        mod_path = os.path.join(path, mod_name)
+
+        info = {
+            "name": "",
+            "description": "",
+            "version": "",
+            "authors": []
+        }
+
+        zipfile = ZipFile(mod_path)
+        for zipinfo in zipfile.filelist:
+            if "fabric.mod.json" == zipinfo.filename:
+                config = json.loads(zipfile.open("fabric.mod.json").read())
+                info["name"] = config["name"]
+                info["description"] = config.get("description", "")
+                info["version"] = config["version"]
+                for i in config.get("authors", [])+config.get("contributors", []):
+                    if isinstance(i, dict):
+                        info["authors"].append(i["name"])
+                    else:
+                        info["authors"].append(i)
+                break
+            elif "mods.toml" in zipinfo.filename:
+                config = toml.loads(zipfile.open(
+                    zipinfo.filename).read().decode("utf-8"))
+                info["name"] = config["mods"][0]["displayName"]
+                info["version"] = config["mods"][0]["version"]
+                info["description"] = config["mods"][0].get("description", "")
+                try:
+                    info["authors"] = [config["mods"][0]["authors"]]
+                except KeyError:
+                    info["authors"] = [config.get("authors", "")]
+
+                if "${file.jarVersion}" in info["version"]:
+                    MANIFESTMF = zipfile.open(
+                        "META-INF/MANIFEST.MF").read().decode("utf-8").split("\n")
+                    for i in MANIFESTMF:
+                        if "Implementation-Version" in i:
+                            info["version"] = info["version"].replace(
+                                "${file.jarVersion}", i.split(":")[-1].strip())
+                            break
+                break
+        return info
