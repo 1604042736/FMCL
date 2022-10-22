@@ -167,7 +167,7 @@ def main():
     app = Application(sys.argv)
     app.setApplicationName("FMCL")
     app.setWindowIcon(QIcon(":/Icon/FMCL.ico"))
-    app.setApplicationVersion("2.0.1")
+    app.setApplicationVersion("2.1")
 
     if args.update and os.path.exists(args.update):
         os.remove(args.update)
