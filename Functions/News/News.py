@@ -1,3 +1,4 @@
+import minecraft_launcher_lib as mll
 import multitasking
 import qtawesome as qta
 from Core import Requests
@@ -27,11 +28,7 @@ class News(QWidget, Ui_News):
 
     @multitasking.task
     def getNews(self):
-        parameters = {
-            "pageSize": self.page_size
-        }
-        r = Requests.get("https://www.minecraft.net/content/minecraft-net/_jcr_content.articles.grid",
-                         params=parameters).json()
+        r = mll.utils.get_minecraft_news(self.page_size)
         self.__NewsGot.emit(r["article_grid"])
 
     def getMoreNews(self, num):

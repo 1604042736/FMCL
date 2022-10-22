@@ -4,6 +4,8 @@ import sys
 import zipapp
 from typing import TextIO
 
+import minecraft_launcher_lib as mll
+
 
 class ReleaseBuilder(TextIO):
     """构建一个Release"""
@@ -72,7 +74,9 @@ class ReleaseBuilder(TextIO):
             "--distpath",
             distpath,
             "--workpath",
-            workpath
+            workpath,
+            "--add-data",
+            f"{mll.__path__[0]}\\version.txt;minecraft_launcher_lib"
         ])
         print(f"执行 {arg}")
         os.system(arg)
