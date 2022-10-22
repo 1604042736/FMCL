@@ -1,9 +1,11 @@
 import qtawesome as qta
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QListWidgetItem, QWidget
+from PyQt5.QtCore import QCoreApplication, pyqtSlot
+from PyQt5.QtWidgets import QFileDialog, QListWidgetItem, QWidget
 from System import Setting
 
 from .ui_LanguageChooser import Ui_LanguageChooser
+
+_translate = QCoreApplication.translate
 
 
 class LanguageChooser(QWidget, Ui_LanguageChooser):
@@ -32,3 +34,13 @@ class LanguageChooser(QWidget, Ui_LanguageChooser):
             if val == lang:
                 Setting().set("launcher.language", key)
                 break
+
+    @pyqtSlot(bool)
+    def on_pb_add_clicked(self, _):
+        filename = QFileDialog.getOpenFileName(self,
+                                               _translate(
+                                                   "LanguageChooser", "选择翻译文件"),
+                                               filter="Qt Translation Files (*.qm)")[0]
+        if filename:
+            self.languages[filename] = filename
+            self.refresh()

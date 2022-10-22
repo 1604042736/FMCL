@@ -307,6 +307,16 @@
         <source>语言选择</source>
         <translation>Language Chooser</translation>
     </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/LanguageChooser/LanguageChooser.py" line="40"/>
+        <source>选择翻译文件</source>
+        <translation>Choose Translation File</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/Functions/LanguageChooser/ui_LanguageChooser.py" line="33"/>
+        <source>添加</source>
+        <translation>Add</translation>
+    </message>
 </context>
 <context>
     <name>ListSettingItem</name>

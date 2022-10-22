@@ -20,6 +20,9 @@ class Ui_LanguageChooser(object):
         self.cb_lang = QtWidgets.QComboBox(LanguageChooser)
         self.cb_lang.setObjectName("cb_lang")
         self.gridLayout.addWidget(self.cb_lang, 0, 0, 1, 1)
+        self.pb_add = QtWidgets.QPushButton(LanguageChooser)
+        self.pb_add.setObjectName("pb_add")
+        self.gridLayout.addWidget(self.pb_add, 0, 1, 1, 1)
 
         self.retranslateUi(LanguageChooser)
         QtCore.QMetaObject.connectSlotsByName(LanguageChooser)
@@ -27,3 +30,4 @@ class Ui_LanguageChooser(object):
     def retranslateUi(self, LanguageChooser):
         _translate = QtCore.QCoreApplication.translate
         LanguageChooser.setWindowTitle(_translate("LanguageChooser", "语言选择"))
+        self.pb_add.setText(_translate("LanguageChooser", "添加"))
