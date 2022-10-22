@@ -7,7 +7,7 @@ import traceback
 import multitasking
 import qtawesome as qta
 from PyQt5.QtCore import QCoreApplication, QTranslator
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QCursor, QIcon
 from PyQt5.QtWidgets import QAction, QMessageBox, QPushButton
 
 import Languages as _
@@ -141,12 +141,19 @@ def getVersions():
                 a_manager.setText(_translate("Game", "管理"))
                 a_manager.triggered.connect(
                     lambda _, v=i: GameManager(v).show())
-                result.append(
-                    (i, Game(i).get_icon(), [a_launch, a_manager]))
+
+                result.append((i,
+                               Game(i).get_icon(),
+                               [a_launch, a_manager]))
     return result
 
 
 def main():
+    sys.stdout = sys.stderr = StdLog()
+    logging.basicConfig(level=logging.DEBUG,
+                        format='[%(asctime)s] [%(levelname)s]: %(message)s',
+                        datefmt='%Y-%m-%d,%H:%M:%S')
+
     parser = argparse.ArgumentParser(
         description="Functional Minecraft Launcher")
     parser.add_argument("--sep", choices=single.keys(),
@@ -162,16 +169,11 @@ def main():
     app.setWindowIcon(QIcon(":/Icon/FMCL.ico"))
     app.setApplicationVersion("2.0.1")
 
-    sys.stdout = sys.stderr = StdLog()
-    logging.basicConfig(level=logging.DEBUG,
-                        format='[%(asctime)s] [%(levelname)s]: %(message)s',
-                        datefmt='%Y-%m-%d,%H:%M:%S')
-
     if args.update and os.path.exists(args.update):
         os.remove(args.update)
 
     setting = Setting()
-    setting.addSetting(DEFAULT_SETTING)  # 翻译之前
+    setting.addSetting(DEFAULT_SETTING)
     translateor = QTranslator()
     translateor.load(setting.get("launcher.language"))
     app.installTranslator(translateor)

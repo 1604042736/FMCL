@@ -50,7 +50,7 @@ class Update(QWidget, Ui_Update):
         self.pb_check.setEnabled(False)
         try:
             url = "https://api.github.com/repos/1604042736/FMCL/releases/latest"
-            r = Requests.get(url, try_time=-1, verify=False)
+            r = Requests.get(url, try_time=-1, cache=False, verify=False)
             self.info = json.loads(r.content)
 
             if self.info["tag_name"] != self.tag_name:

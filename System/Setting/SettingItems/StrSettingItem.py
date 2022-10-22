@@ -16,5 +16,5 @@ class StrSettingItem(SettingItem):
         return super().sync()
 
     def refresh(self):
-        self.w_value.setValue(self.setting.get(self.id))
+        self.w_value.setText(self.setting.get(self.id))
         return super().refresh()
