@@ -10,7 +10,7 @@ def getIndexes():
     lang_file = Setting().get("launcher.language").replace("\\", "/")
     lang = lang_file.split("/")[-1].replace(".qm", "")
     default = {
-        "launcher": f":/zh_CN/launcher/README.md"
+        _translate("Pages", "启动器"): f":/zh_CN/launcher/README.md"
     }
 
     final = {}
@@ -21,9 +21,3 @@ def getIndexes():
         else:
             final[key] = val
     return final
-
-
-def getIndexesAttr():
-    return {
-        "launcher": _translate("Pages", "启动器")
-    }

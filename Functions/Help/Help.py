@@ -12,8 +12,9 @@ class Help(QWidget, Ui_Help):
         super().__init__()
         self.setupUi(self)
         self.setWindowIcon(qta.icon("mdi.help"))
+        self.splitter.setSizes([100, 500])
+
         self.indexes = getIndexes()
-        self.indexes_attr = getIndexesAttr()
         self.item_page = []
         self.items = {}
         for key, page in self.indexes.items():
@@ -27,7 +28,7 @@ class Help(QWidget, Ui_Help):
 
                 root = self.items.get(parent, None)
                 item = QTreeWidgetItem()
-                item.setText(0, self.indexes_attr.get(child, child))
+                item.setText(0, val)
                 self.addTreeItem(root, item)
                 self.items[child] = item
 

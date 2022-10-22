@@ -1,5 +1,9 @@
 <RCC>
   <qresource prefix="/">
     <file>zh_CN/launcher/README.md</file>
+    <file>Pictures/launcher.1.png</file>
+    <file>Pictures/launcher.2.png</file>
+    <file>Pictures/launcher.3.png</file>
+    <file>Pictures/launcher.4.png</file>
   </qresource>
 </RCC>
