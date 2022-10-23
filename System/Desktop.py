@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import (QAction, QListView, QListWidget, QListWidgetItem,
                              QMenu)
 
 from .Constants import *
+from .Setting import Setting
 
 _translate = QCoreApplication.translate
 
@@ -43,19 +44,32 @@ class Desktop(QListWidget):
         item = self.itemAt(self.mapFromGlobal(QCursor.pos()))
         menu = QMenu(self)
 
-        a_refresh = QAction(_translate("Desktop", "刷新"), self)
-        a_refresh.triggered.connect(self.refresh)
-        menu.addAction(a_refresh)
-
         if item:
             for _item, actions in self.item_action:
                 if item == _item:
                     menu.addActions(actions)
                     break
+        else:
+            a_refresh = QAction(_translate("Desktop", "刷新"), self)
+            a_refresh.triggered.connect(self.refresh)
+            menu.addAction(a_refresh)
+
+            a_changeimage = QAction(_translate("Desktop", "设置背景图片"), self)
+            a_changeimage.triggered.connect(
+                lambda: Setting().show("system.desktop.background_image"))
+            menu.addAction(a_changeimage)
 
         menu.exec(QCursor.pos())
 
     def refresh(self):
+        background_image = Setting().get(
+            "system.desktop.background_image").replace("\\", "/")
+        self.setStyleSheet(f"""
+QListWidget{{
+    border:none;
+    border-image:url("{background_image}")
+}}""")
+
         self.clear()
         self.item_action = []
         for getter in Desktop.item_getters:

@@ -1,11 +1,13 @@
 import json
 import os
 
-from PyQt5.QtCore import QObject
+from PyQt5.QtCore import QCoreApplication, QObject
 from PyQt5.QtWidgets import qApp
-from System.Setting.SettingItems.SettingItem import SettingItem
 
+from .SettingItems import SettingItem
 from .SettingWidget import SettingWidget
+
+_translate = QCoreApplication.translate
 
 
 class Setting(QObject):
@@ -22,8 +24,24 @@ class Setting(QObject):
         return cls.__instances[setting_path]
 
     def __init__(self, setting_path: str = None) -> None:
+        default_setting = {}
+        default_settingattr = {}
         if setting_path == None:
             setting_path = f"{qApp.applicationName()}/setting.json"
+            default_setting = {
+                "system.desktop.background_image": ""
+            }
+            default_settingattr = {
+                "system": {
+                    "name": _translate("System", "系统")
+                },
+                "system.desktop": {
+                    "name": _translate("System", "桌面")
+                },
+                "system.desktop.background_image": {
+                    "name": _translate("System", "背景图片")
+                }
+            }
         if self.__new_count[setting_path] > 1:
             return
         super().__init__()
@@ -34,6 +52,9 @@ class Setting(QObject):
             self.setting = json.load(open(self.setting_path, encoding="utf-8"))
 
         self.setting_widget = None
+
+        self.addSetting(default_setting)
+        self.addSettingAttr(default_settingattr)
 
     def addSetting(self, default_setting: dict):
         """添加默认设置"""

@@ -36,7 +36,7 @@ class SettingWidget(QWidget, Ui_SettingWidget):
                 widget.setText(text)
                 font = widget.font()
                 font.setBold((False, True)[i == 0])
-                font.setPixelSize(16-i)
+                font.setPixelSize(16-i*2)
                 widget.setFont(font)
                 self.gl_setting.addWidget(widget)
                 self.item_widget_id.append((item, widget, totalid))
