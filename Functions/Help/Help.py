@@ -20,8 +20,8 @@ class Help(QWidget, Ui_Help):
         for key, page in self.indexes.items():
             children = key.split(".")
             for i, val in enumerate(children):
-                child = ".".join(children[:i]) if i > 0 else val
-                parent = ".".join(children[:i-1]) if i-1 > 0 else "???"
+                child = ".".join(children[:i+1]) if i > 0 else val
+                parent = ".".join(children[:i]) if i > 0 else "???"
 
                 if child in self.items:
                     continue

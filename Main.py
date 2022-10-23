@@ -3,11 +3,12 @@ import logging
 import os
 import sys
 import traceback
+from importlib import import_module
 
 import multitasking
 import qtawesome as qta
 from PyQt5.QtCore import QCoreApplication, QTranslator
-from PyQt5.QtGui import QCursor, QIcon
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QAction, QMessageBox, QPushButton
 
 import Languages as _
@@ -148,6 +149,19 @@ def getVersions():
     return result
 
 
+def getExtFunctions():
+    result = []
+    ext_path = "FMCL/Functions"
+    if os.path.exists(ext_path):
+        for i in os.listdir(ext_path):
+            try:
+                module = import_module(f"FMCL.Functions.{i}")
+                result.append(module.__dict__["getFunctions"])
+            except Exception as e:
+                logging.error(f'无法加载功能"{i}": {e}')
+    return result
+
+
 def main():
     sys.stdout = sys.stderr = StdLog()
     logging.basicConfig(level=logging.DEBUG,
@@ -201,6 +215,8 @@ def main():
                      (_translate("Help", "帮助"), qta.icon(
                          "mdi.help"), lambda:Help().show()),
                      (_translate("ModDownloader", "Mod下载器"), qta.icon("mdi.puzzle-outline"), lambda:ModDownloader().show())])
+        Start.func_getters.extend(getExtFunctions())
+
         Start.panel_getters.append(getPanelButtons)
         Desktop.item_getters.append(getVersions)
 
