@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/">
+    <file>Icon/FMCL.ico</file>
     <file>Image/icon.png</file>
     <file>Image/bookshelf.png</file>
     <file>Image/chest.png</file>
@@ -9,6 +10,7 @@
     <file>Image/forge.png</file>
     <file>Image/furnace.png</file>
     <file>Image/grass.png</file>
-    <file>Icon/FMCL.ico</file>
+    <file>Image/bangbang93.jpg</file>
+    <file>Image/hmcl.png</file>
   </qresource>
 </RCC>

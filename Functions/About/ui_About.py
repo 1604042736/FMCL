@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\Ui\About\About.ui'
+# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\Functions\About\About.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -27,27 +27,30 @@ class Ui_About(object):
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.groupBox_2 = QtWidgets.QGroupBox(self.scrollAreaWidgetContents)
-        self.groupBox_2.setObjectName("groupBox_2")
-        self.gl_thirdparty = QtWidgets.QGridLayout(self.groupBox_2)
-        self.gl_thirdparty.setObjectName("gl_thirdparty")
-        self.gridLayout_2.addWidget(self.groupBox_2, 2, 0, 1, 1)
+        self.gb_3rdparty = QtWidgets.QGroupBox(self.scrollAreaWidgetContents)
+        self.gb_3rdparty.setObjectName("gb_3rdparty")
+        self.gl_3rdparty = QtWidgets.QGridLayout(self.gb_3rdparty)
+        self.gl_3rdparty.setContentsMargins(0, 0, 0, 0)
+        self.gl_3rdparty.setSpacing(0)
+        self.gl_3rdparty.setObjectName("gl_3rdparty")
+        self.gridLayout_2.addWidget(self.gb_3rdparty, 2, 0, 1, 1)
         spacerItem = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.gridLayout_2.addItem(spacerItem, 3, 0, 1, 1)
-        self.groupBox = QtWidgets.QGroupBox(self.scrollAreaWidgetContents)
-        self.groupBox.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.groupBox.setObjectName("groupBox")
-        self.gridLayout_3 = QtWidgets.QGridLayout(self.groupBox)
-        self.gridLayout_3.setObjectName("gridLayout_3")
-        self.pb_fmcl = QtWidgets.QPushButton(self.groupBox)
-        self.pb_fmcl.setObjectName("pb_fmcl")
-        self.gridLayout_3.addWidget(self.pb_fmcl, 0, 0, 1, 1)
-        self.gridLayout_2.addWidget(self.groupBox, 0, 0, 1, 1)
-        self.groupBox_3 = QtWidgets.QGroupBox(self.scrollAreaWidgetContents)
-        self.groupBox_3.setObjectName("groupBox_3")
-        self.gl_thinks = QtWidgets.QGridLayout(self.groupBox_3)
-        self.gl_thinks.setObjectName("gl_thinks")
-        self.gridLayout_2.addWidget(self.groupBox_3, 1, 0, 1, 1)
+        self.gb_launcher = QtWidgets.QGroupBox(self.scrollAreaWidgetContents)
+        self.gb_launcher.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.gb_launcher.setObjectName("gb_launcher")
+        self.gl_launcher = QtWidgets.QGridLayout(self.gb_launcher)
+        self.gl_launcher.setContentsMargins(0, 0, 0, 0)
+        self.gl_launcher.setSpacing(0)
+        self.gl_launcher.setObjectName("gl_launcher")
+        self.gridLayout_2.addWidget(self.gb_launcher, 0, 0, 1, 1)
+        self.gb_thanks = QtWidgets.QGroupBox(self.scrollAreaWidgetContents)
+        self.gb_thanks.setObjectName("gb_thanks")
+        self.gl_thanks = QtWidgets.QGridLayout(self.gb_thanks)
+        self.gl_thanks.setContentsMargins(0, 0, 0, 0)
+        self.gl_thanks.setSpacing(0)
+        self.gl_thanks.setObjectName("gl_thanks")
+        self.gridLayout_2.addWidget(self.gb_thanks, 1, 0, 1, 1)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout.addWidget(self.scrollArea, 0, 0, 1, 1)
 
@@ -57,7 +60,6 @@ class Ui_About(object):
     def retranslateUi(self, About):
         _translate = QtCore.QCoreApplication.translate
         About.setWindowTitle(_translate("About", "关于"))
-        self.groupBox_2.setTitle(_translate("About", "依赖"))
-        self.groupBox.setTitle(_translate("About", "启动器"))
-        self.pb_fmcl.setText(_translate("About", "Functional Minecraft Launcher"))
-        self.groupBox_3.setTitle(_translate("About", "鸣谢"))
+        self.gb_3rdparty.setTitle(_translate("About", "依赖"))
+        self.gb_launcher.setTitle(_translate("About", "启动器"))
+        self.gb_thanks.setTitle(_translate("About", "鸣谢"))

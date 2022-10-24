@@ -45,11 +45,27 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="2" column="0">
-        <widget class="QGroupBox" name="groupBox_2">
+        <widget class="QGroupBox" name="gb_3rdparty">
          <property name="title">
           <string>依赖</string>
          </property>
-         <layout class="QGridLayout" name="gl_thirdparty"/>
+         <layout class="QGridLayout" name="gl_3rdparty">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>0</number>
+          </property>
+         </layout>
         </widget>
        </item>
        <item row="3" column="0">
@@ -66,7 +82,7 @@
         </spacer>
        </item>
        <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="gb_launcher">
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -76,23 +92,47 @@
          <property name="title">
           <string>启动器</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0">
-           <widget class="QPushButton" name="pb_fmcl">
-            <property name="text">
-             <string>Functional Minecraft Launcher</string>
-            </property>
-           </widget>
-          </item>
+         <layout class="QGridLayout" name="gl_launcher">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>0</number>
+          </property>
          </layout>
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QGroupBox" name="groupBox_3">
+        <widget class="QGroupBox" name="gb_thanks">
          <property name="title">
           <string>鸣谢</string>
          </property>
-         <layout class="QGridLayout" name="gl_thinks"/>
+         <layout class="QGridLayout" name="gl_thanks">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <property name="spacing">
+           <number>0</number>
+          </property>
+         </layout>
         </widget>
        </item>
       </layout>
