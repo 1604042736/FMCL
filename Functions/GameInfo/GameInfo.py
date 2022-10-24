@@ -1,4 +1,3 @@
-
 import qtawesome as qta
 from Core import Game
 from PyQt5.QtCore import QCoreApplication, pyqtSignal, pyqtSlot

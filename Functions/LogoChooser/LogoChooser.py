@@ -1,8 +1,7 @@
 import qtawesome as qta
 from Core import Game
 from PyQt5.QtCore import QCoreApplication, pyqtSlot
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QFileDialog, QListWidgetItem, QWidget
+from PyQt5.QtWidgets import QFileDialog, QWidget
 
 from .ui_LogoChooser import Ui_LogoChooser
 

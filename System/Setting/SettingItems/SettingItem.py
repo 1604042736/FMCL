@@ -1,7 +1,4 @@
-from PyQt5.QtCore import QCoreApplication
-from PyQt5.QtWidgets import QGridLayout, QLabel, QPushButton, QWidget
-
-_translate = QCoreApplication.translate
+from PyQt5.QtWidgets import QGridLayout, QWidget
 
 
 class SettingItem(QWidget):

@@ -46,6 +46,9 @@ QPushButton:hover{
 }
 QPushButton:checked{
     border-left:2px solid black;
+}
+QFrame{
+	background-color:rgb(255,255,255);
 }</string>
      </property>
      <property name="frameShape">

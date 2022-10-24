@@ -1,3 +1,4 @@
+import qtawesome as qta
 from PyQt5.QtCore import QCoreApplication, QEvent, QSize, Qt
 from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import (QAction, QListView, QListWidget, QListWidgetItem,
@@ -51,6 +52,7 @@ class Desktop(QListWidget):
                     break
         else:
             a_refresh = QAction(_translate("Desktop", "刷新"), self)
+            a_refresh.setIcon(qta.icon("mdi.refresh"))
             a_refresh.triggered.connect(self.refresh)
             menu.addAction(a_refresh)
 

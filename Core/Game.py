@@ -176,9 +176,12 @@ class Game:
             path = os.path.join(self.directory, "mods")
         return path
 
-    def get_mods(self) -> list:
+    def mod_avaiable(self):
         self.get_info()
-        if not(self.info["forge_version"] or self.info["fabric_version"]):
+        return self.info["forge_version"] or self.info["fabric_version"]
+
+    def get_mods(self) -> list:
+        if not self.mod_avaiable():
             return []
         path = self.get_mod_path()
         if not os.path.exists(path):

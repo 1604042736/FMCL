@@ -1,4 +1,3 @@
-from Core import Requests
 from PyQt5.QtCore import QFile, QObject, QUrl, pyqtProperty
 from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtWebEngineWidgets import QWebEnginePage, QWebEngineView

@@ -1,7 +1,5 @@
-import threading
-
 import qtawesome as qta
-from PyQt5.QtCore import QCoreApplication, QSize, QThread, QTimer, pyqtSignal
+from PyQt5.QtCore import QCoreApplication, QSize, QThread, pyqtSignal
 from PyQt5.QtWidgets import (QGridLayout, QLabel, QListWidget, QListWidgetItem,
                              QProgressBar, QWidget)
 

@@ -1,6 +1,6 @@
 import qtawesome as qta
 from PyQt5.QtCore import QCoreApplication, pyqtSlot
-from PyQt5.QtWidgets import QFileDialog, QListWidgetItem, QWidget
+from PyQt5.QtWidgets import QFileDialog, QWidget
 from System import Setting
 
 from .ui_LanguageChooser import Ui_LanguageChooser

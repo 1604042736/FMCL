@@ -29,6 +29,9 @@ class Ui_GameManager(object):
 "}\n"
 "QPushButton:checked{\n"
 "    border-left:2px solid black;\n"
+"}\n"
+"QFrame{\n"
+"    background-color:rgb(255,255,255);\n"
 "}")
         self.f_panel.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.f_panel.setFrameShadow(QtWidgets.QFrame.Raised)

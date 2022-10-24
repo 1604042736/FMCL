@@ -136,10 +136,12 @@ def getVersions():
             for i in os.listdir(directory+"/versions"):
                 a_launch = QAction()
                 a_launch.setText(_translate("Game", "启动"))
+                a_launch.setIcon(qta.icon("mdi.rocket-launch-outline"))
                 a_launch.triggered.connect(lambda _, v=i: Game(v).launch())
 
                 a_manager = QAction()
                 a_manager.setText(_translate("Game", "管理"))
+                a_manager.setIcon(qta.icon("mdi6.minecraft"))
                 a_manager.triggered.connect(
                     lambda _, v=i: GameManager(v).show())
 

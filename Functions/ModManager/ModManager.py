@@ -20,6 +20,9 @@ class ModManager(QWidget, Ui_ModManager):
         self.refresh()
 
     def refresh(self):
+        if not self.game.mod_avaiable():
+            self.setEnabled(False)
+            return
         self.lw_mods.clear()
         mods = self.game.get_mods()
         for enabled, name in mods:

@@ -12,6 +12,8 @@ class SettingWidget(QWidget, Ui_SettingWidget):
         self.setupUi(self)
         self.resize(W_SETTING, H_SETTING)
         self.setWindowIcon(qta.icon("ri.settings-5-line"))
+        self.splitter.setSizes([100, 500])
+
         self.setting = setting
         self.items = {}
         self.item_widget_id = []
@@ -40,6 +42,7 @@ class SettingWidget(QWidget, Ui_SettingWidget):
                 widget.setFont(font)
                 self.gl_setting.addWidget(widget)
                 self.item_widget_id.append((item, widget, totalid))
+
             setting_item = self.setting.getAttr(id, "setting_item")()
             self.gl_setting.addWidget(setting_item)
             self.setting_items.append(setting_item)
