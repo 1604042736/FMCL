@@ -54,8 +54,9 @@ class LogoChooser(QWidget, Ui_LogoChooser):
 
     @pyqtSlot(str)
     def on_cb_logo_currentTextChanged(self, text):
-        self.game.setting.set("logo", text)
-        self.l_logo.setPixmap(self.game.get_pixmap().scaled(32, 32))
+        if text:  # clear时text为空
+            self.game.setting.set("logo", text)
+            self.l_logo.setPixmap(self.game.get_pixmap().scaled(32, 32))
 
     @pyqtSlot(bool)
     def on_pb_add_clicked(self, _):

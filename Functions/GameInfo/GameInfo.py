@@ -3,7 +3,7 @@ from Core import Game
 from PyQt5.QtCore import QCoreApplication, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QLabel, QMessageBox, QWidget
 
-from .ui_GamInfo import Ui_GameInfo
+from .ui_GameInfo import Ui_GameInfo
 
 _translate = QCoreApplication.translate
 

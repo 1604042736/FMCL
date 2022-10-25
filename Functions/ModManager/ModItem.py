@@ -1,3 +1,5 @@
+import logging
+
 import multitasking
 from Core import Game
 from PyQt5.QtCore import QCoreApplication, pyqtSlot
@@ -30,14 +32,17 @@ class ModItem(QWidget, Ui_ModItem):
 
     @multitasking.task
     def setInfo(self):
-        info = self.game.get_mod_info(self.modname, self.modenabled)
-        info_list = []
-        info_list.append(info["name"])
-        info_list.append(info["description"].replace("\n", ""))
-        info_list.append(_translate("ModItem", "版本")+": "+info["version"])
-        info_list.append(_translate("ModItem", "作者")+": " +
-                         ','.join(info["authors"]))
+        try:
+            info = self.game.get_mod_info(self.modname, self.modenabled)
+            info_list = []
+            info_list.append(info["name"])
+            info_list.append(info["description"].replace("\n", ""))
+            info_list.append(_translate("ModItem", "版本")+": "+info["version"])
+            info_list.append(_translate("ModItem", "作者")+": " +
+                             ','.join(info["authors"]))
 
-        text = ", ".join(info_list)
-        self.l_info.setText(text)
-        self.setToolTip(text)
+            text = ", ".join(info_list)
+            self.l_info.setText(text)
+            self.setToolTip(text)
+        except Exception as e:
+            logging.error(f'无法获取"{self.modname}"信息: {e}')
