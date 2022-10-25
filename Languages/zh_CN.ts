@@ -231,7 +231,7 @@
         <translation>Fabric版本</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GamInfo.py" line="73"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GameInfo.py" line="72"/>
         <source>删除</source>
         <translation>删除</translation>
     </message>
@@ -241,17 +241,17 @@
         <translation>确定删除?</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GamInfo.py" line="70"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GameInfo.py" line="70"/>
         <source>游戏信息</source>
         <translation>游戏信息</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GamInfo.py" line="71"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GameInfo.py" line="73"/>
         <source>刷新</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GamInfo.py" line="72"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GameInfo.py" line="71"/>
         <source>打开文件夹</source>
         <translation>打开文件夹</translation>
     </message>
@@ -341,9 +341,14 @@
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingItems/ListSettingItem.py" line="53"/>
+        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingItems/ListSettingItem.py" line="57"/>
         <source>删除</source>
         <translation>删除</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingItems/ListSettingItem.py" line="57"/>
+        <source>确定删除?</source>
+        <translation>确定删除?</translation>
     </message>
 </context>
 <context>

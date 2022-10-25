@@ -54,8 +54,13 @@ class ListSettingItem(SettingItem):
                                 _translate("ListSettingItem", "删除"),
                                 f'{_translate("ListSettingItem","至少有")}{atleast}')
         else:
-            self.setting.get(self.id).remove(text)
-            self.w_value.removeItem(self.w_value.currentIndex())
+            reply = QMessageBox.warning(self,
+                                        _translate("ListSettingItem", "删除"),
+                                        _translate("ListSettingItem", "确定删除?"),
+                                        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+            if reply == QMessageBox.StandardButton.Yes:
+                self.setting.get(self.id).remove(text)
+                self.w_value.removeItem(self.w_value.currentIndex())
 
     def promote_top(self, text):
         if text:

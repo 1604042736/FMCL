@@ -231,7 +231,7 @@
         <translation>Fabric version</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GamInfo.py" line="73"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GameInfo.py" line="72"/>
         <source>删除</source>
         <translation>Delete</translation>
     </message>
@@ -241,17 +241,17 @@
         <translation>Confirm delete?</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GamInfo.py" line="70"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GameInfo.py" line="70"/>
         <source>游戏信息</source>
         <translation>Game info</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GamInfo.py" line="71"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GameInfo.py" line="73"/>
         <source>刷新</source>
         <translation>Refresh</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GamInfo.py" line="72"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/GameInfo/ui_GameInfo.py" line="71"/>
         <source>打开文件夹</source>
         <translation>Open Directory</translation>
     </message>
@@ -341,9 +341,14 @@
         <translation>Add</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingItems/ListSettingItem.py" line="53"/>
+        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingItems/ListSettingItem.py" line="57"/>
         <source>删除</source>
         <translation>Delete</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingItems/ListSettingItem.py" line="57"/>
+        <source>确定删除?</source>
+        <translation>Confirm delete?</translation>
     </message>
 </context>
 <context>
