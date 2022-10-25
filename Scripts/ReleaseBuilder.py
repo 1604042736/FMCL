@@ -39,7 +39,7 @@ class ReleaseBuilder(TextIO):
         def pack_filter(path):
             """过滤函数"""
             path_str = str(path).replace('\\', '/')
-            if path_str.endswith('.py') and "scripts"not in path_str:
+            if path_str.endswith('.py') and "Scripts"not in path_str:
                 if os.path.isfile("../"+path_str):
                     print(f'打包"{path_str}"')
                 return True
