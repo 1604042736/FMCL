@@ -8,7 +8,6 @@ from .Window import Window
 class Application(QApplication):
 
     __windows: list = []  # 存储产生的Window
-    __tooltips: list = []
     tasks: set[QObject] = set()
 
     def notify(self, a0: QObject, a1: QEvent) -> bool:

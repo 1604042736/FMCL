@@ -29,7 +29,7 @@ class Window(FramelessWindow):
         self.pb_sep = QPushButton()
         self.pb_sep.resize(W_D_TITLEBUTTON, self.titleBar.height())
         self.pb_sep.setIcon(qta.icon("ph.arrow-square-out-light"))
-        self.pb_sep.setStyleSheet(S_D_TITLEBUTTON)
+        self.pb_sep.setStyleSheet(S_D_TITLEBUTTON())
         self.pb_sep.hide()
         self.pb_sep.clicked.connect(self.separateWidget)
         self.addTitleWidget(self.pb_sep, "right")
@@ -40,14 +40,14 @@ class Window(FramelessWindow):
             self.pb_restore.setObjectName("pb_restore")
             self.pb_restore.resize(W_D_TITLEBUTTON, self.titleBar.height())
             self.pb_restore.setIcon(qta.icon("msc.reply"))
-            self.pb_restore.setStyleSheet(S_D_TITLEBUTTON)
+            self.pb_restore.setStyleSheet(S_D_TITLEBUTTON())
             self.addTitleWidget(self.pb_restore, "right")
 
             self.pb_parent = QPushButton()
             self.pb_parent.setObjectName("pb_parent")
             self.pb_parent.resize(W_D_TITLEBUTTON, self.titleBar.height())
             self.pb_parent.setIcon(qta.icon("msc.window"))
-            self.pb_parent.setStyleSheet(S_D_TITLEBUTTON)
+            self.pb_parent.setStyleSheet(S_D_TITLEBUTTON())
             self.addTitleWidget(self.pb_parent, "right")
 
         # 客户区
@@ -66,6 +66,9 @@ class Window(FramelessWindow):
         self.move(int((QDesktopWidget().width()-self.width())/2),
                   int((QDesktopWidget().height()-self.height())/2))
 
+        self.titleBar.setObjectName("titleBar")
+        self.titleBar.setAttribute(Qt.WidgetAttribute.WA_StyledBackground)
+        self.titleBar.setStyleSheet(S_D_TITLE())
         self.titleBar.setContextMenuPolicy(
             Qt.ContextMenuPolicy.CustomContextMenu)
         self.titleBar.customContextMenuRequested.connect(self.showTitleMenu)

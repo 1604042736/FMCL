@@ -117,7 +117,7 @@ def getPanelButtons():
     pb_user.setText(_translate("FMCL", "未选择用户"))
     pb_user.setIcon(qta.icon("ph.user-circle"))
     pb_user.resize(W_PANEL, H_PANELBUTTON)
-    pb_user.setStyleSheet(S_D_PANELBUTTON)
+    pb_user.setStyleSheet(S_D_PANELBUTTON())
     pb_user.setIconSize(pb_user.size())
     pb_user.clicked.connect(lambda: Setting().show("users"))
     username = User.get_cur_user()

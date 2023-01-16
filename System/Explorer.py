@@ -27,7 +27,7 @@ class Explorer(QStackedWidget):
 
         self.pb_start = QPushButton()
         self.pb_start.resize(W_D_TITLEBUTTON, H_D_TITLEBUTTON)
-        self.pb_start.setStyleSheet(S_D_TASKBUTTON)
+        self.pb_start.setStyleSheet(S_D_TASKBUTTON())
         self.pb_start.setIcon(qApp.windowIcon())
         self.pb_start.clicked.connect(self.showStart)
 
@@ -82,7 +82,7 @@ class Explorer(QStackedWidget):
         button.resize(W_D_TASKBUTTON, H_D_TITLEBUTTON)
         button.setText(widget.windowTitle())
         button.setIcon(widget.windowIcon())
-        button.setStyleSheet(S_D_TASKBUTTON)
+        button.setStyleSheet(S_D_TASKBUTTON())
         button.setToolTip(widget.windowTitle())
         button.clicked.connect(self.taskButtonClicked)
         button.setContextMenuPolicy(
@@ -97,7 +97,7 @@ class Explorer(QStackedWidget):
         """添加固定的按钮"""
         button = QPushButton()
         button.resize(W_D_TITLEBUTTON, H_D_TITLEBUTTON)
-        button.setStyleSheet(S_D_TASKBUTTON)
+        button.setStyleSheet(S_D_TASKBUTTON())
         button.clicked.connect(self.fixedButtonClicked)
 
         self.fixed_widgets[button] = cls
@@ -105,9 +105,9 @@ class Explorer(QStackedWidget):
     def __currentChanged(self):
         for widget, button in self.caught_widgets.items():
             if widget == self.currentWidget():
-                button.setStyleSheet(S_S_TASKBUTTON)
+                button.setStyleSheet(S_S_TASKBUTTON())
             else:
-                button.setStyleSheet(S_D_TASKBUTTON)
+                button.setStyleSheet(S_D_TASKBUTTON())
 
         if not isinstance(self.currentWidget(), Start):
             for i in range(self.count()):

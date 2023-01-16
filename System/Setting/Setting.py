@@ -4,7 +4,7 @@ import os
 from PyQt5.QtCore import QCoreApplication, QObject
 from PyQt5.QtWidgets import qApp
 
-from .SettingItems import SettingItem
+from .SettingItems import SettingItem, ColorSettingItem
 from .SettingWidget import SettingWidget
 
 _translate = QCoreApplication.translate
@@ -29,7 +29,8 @@ class Setting(QObject):
         if setting_path == None:
             setting_path = f"{qApp.applicationName()}/setting.json"
             default_setting = {
-                "system.desktop.background_image": ""
+                "system.desktop.background_image": "",
+                "system.theme_color": "#ffffff"
             }
             default_settingattr = {
                 "system": {
@@ -40,6 +41,10 @@ class Setting(QObject):
                 },
                 "system.desktop.background_image": {
                     "name": _translate("System", "背景图片")
+                },
+                "system.theme_color": {
+                    "name": _translate("System", "主题颜色"),
+                    "setting_item": lambda: ColorSettingItem("system.theme_color", self)
                 }
             }
         if self.__new_count[setting_path] > 1:
