@@ -58,6 +58,14 @@
     </message>
 </context>
 <context>
+    <name>ColorSettingItem</name>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/System/Setting/SettingItems/ColorSettingItem.py" line="18"/>
+        <source>选择颜色</source>
+        <translation>选择颜色</translation>
+    </message>
+</context>
+<context>
     <name>CreateUser</name>
     <message>
         <location filename="../../../../������/PCG/FMCL/Main.py" line="201"/>
@@ -354,7 +362,7 @@
 <context>
     <name>LogoChooser</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/LogoChooser/LogoChooser.py" line="62"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/LogoChooser/LogoChooser.py" line="63"/>
         <source>选择图标</source>
         <translation>选择图标</translation>
     </message>
@@ -454,12 +462,12 @@
         <translation>Mod</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ModItem.py" line="37"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ModItem.py" line="40"/>
         <source>版本</source>
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ModItem.py" line="38"/>
+        <location filename="../../../../������/PCG/FMCL/Functions/ModManager/ModItem.py" line="41"/>
         <source>作者</source>
         <translation>作者</translation>
     </message>
@@ -602,19 +610,24 @@
 <context>
     <name>System</name>
     <message>
-        <location filename="../../../../������/PCG/FMCL/System/Setting/Setting.py" line="36"/>
+        <location filename="../../../../������/PCG/FMCL/System/Setting/Setting.py" line="37"/>
         <source>系统</source>
         <translation>系统</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/System/Setting/Setting.py" line="39"/>
+        <location filename="../../../../������/PCG/FMCL/System/Setting/Setting.py" line="40"/>
         <source>桌面</source>
         <translation>桌面</translation>
     </message>
     <message>
-        <location filename="../../../../������/PCG/FMCL/System/Setting/Setting.py" line="42"/>
+        <location filename="../../../../������/PCG/FMCL/System/Setting/Setting.py" line="43"/>
         <source>背景图片</source>
         <translation>背景图片</translation>
+    </message>
+    <message>
+        <location filename="../../../../������/PCG/FMCL/System/Setting/Setting.py" line="46"/>
+        <source>主题颜色</source>
+        <translation>主题颜色</translation>
     </message>
 </context>
 <context>
