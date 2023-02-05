@@ -61,18 +61,29 @@ class Game:
             "logo": ""
         }
 
+        globalsetting = Setting()
+        for key, val in globalsetting.setting.items():
+            if "game" in key:
+                self.DEFAULT_SETTING[key] = val
+        for key, val in globalsetting.setting_attr.items():
+            if "game" in key:
+                self.DEFAULT_SETTING_ATTR[key] = val
+
     def launch(self):
         absdir = os.path.abspath(self.directory)
-        globalsetting = Setting()
+        if self.setting.get("specific"):
+            setting = self.setting
+        else:
+            setting = Setting()
 
         options = User.get_cur_user()
         options["launcherName"] = "FMCL"
         options["launcherVersion"] = qApp.applicationVersion()
         options["gameDirectory"] = absdir
         options["customResolution"] = True
-        options["resolutionWidth"] = str(globalsetting.get("game.width"))
-        options["resolutionHeight"] = str(globalsetting.get("game.height"))
-        options["executablePath"] = globalsetting.get("game.java_path")
+        options["resolutionWidth"] = str(setting.get("game.width"))
+        options["resolutionHeight"] = str(setting.get("game.height"))
+        options["executablePath"] = setting.get("game.java_path")
         self.generate_setting()
         if self.setting.get("isolation"):
             options["gameDirectory"] = os.path.abspath(
