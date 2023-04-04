@@ -2,9 +2,10 @@ import logging
 import os
 import sys
 import traceback
+import webbrowser as _  # 打包exe需要
 
 import multitasking
-from PyQt5.QtCore import QCoreApplication, Qt
+import PyQt5.QtWebEngineWidgets as _  # 打包exe需要
 from PyQt5.QtWidgets import QMessageBox
 
 import Core as _  # 打包exe需要
@@ -43,8 +44,6 @@ def init():
 
 def main():
     init()
-    QCoreApplication.setAttribute(
-        Qt.ApplicationAttribute.AA_ShareOpenGLContexts)
     app = Kernel()
     logging.info(f"退出代码: {app.exec()}")
     Setting().sync()

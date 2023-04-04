@@ -87,9 +87,7 @@ zipfile_bytes=io.BytesIO({open('../FunctionPack.zip',mode='rb').read()})""")
             "--workpath",
             workpath,
             "--add-data",
-            f"{mll.__path__[0]}\\version.txt;minecraft_launcher_lib",
-            "--add-data",
-            f"{sys.path[3]}/webbrowser.py;."
+            f"{mll.__path__[0]}\\version.txt;minecraft_launcher_lib"
         ])
         print(f"执行 {arg}")
         os.system(arg)
