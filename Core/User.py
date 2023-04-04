@@ -2,7 +2,7 @@ import json
 import os
 
 import minecraft_launcher_lib as mll
-from System.Setting import Setting
+from Setting import Setting
 
 
 class User:

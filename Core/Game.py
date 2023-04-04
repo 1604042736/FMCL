@@ -9,7 +9,7 @@ import toml
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import qApp
-from System.Setting import Setting
+from Setting import Setting
 
 from .Progress import Progress
 from .User import User
@@ -46,13 +46,13 @@ class Game:
 
         self.DEFAULT_SETTING_ATTR = {
             "specific": {
-                "name": _translate("GameSetting", "特定设置"),
+                "name": ("GameSetting", "特定设置"),
             },
             "isolation": {
-                "name": _translate("GameSetting", "版本隔离"),
+                "name": ("GameSetting", "版本隔离"),
             },
             "logo": {
-                "name": _translate("GameSetting", "游戏图标"),
+                "name": ("GameSetting", "游戏图标"),
             }
         }
         self.DEFAULT_SETTING = {
@@ -62,14 +62,15 @@ class Game:
         }
 
         globalsetting = Setting()
-        for key, val in globalsetting.setting.items():
+        for key, val in globalsetting.items():
             if "game" in key:
                 self.DEFAULT_SETTING[key] = val
-        for key, val in globalsetting.setting_attr.items():
+        for key, val in globalsetting.attrs.items():
             if "game" in key:
                 self.DEFAULT_SETTING_ATTR[key] = val
 
     def launch(self):
+        self.generate_setting()
         absdir = os.path.abspath(self.directory)
         if self.setting.get("specific"):
             setting = self.setting
@@ -230,8 +231,8 @@ class Game:
 
             self.setting = Setting(os.path.join(
                 self.directory, "versions", self.name, "FMCL", "setting.json"))
-            self.setting.addSetting(self.DEFAULT_SETTING)
-            self.setting.addSettingAttr(self.DEFAULT_SETTING_ATTR)
+            self.setting.add(self.DEFAULT_SETTING)
+            self.setting.addAttr(self.DEFAULT_SETTING_ATTR)
 
     def delete(self):
         shutil.rmtree(os.path.join(self.directory, "versions", self.name))

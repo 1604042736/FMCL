@@ -1,6 +1,7 @@
 import os
 import shutil
 import sys
+import webbrowser
 import zipapp
 from typing import TextIO
 
@@ -34,12 +35,21 @@ class ReleaseBuilder(TextIO):
         return wrap
 
     @call_build
+    def build_functionpack(self):
+        """生成功能打包文件"""
+        shutil.make_archive("../FunctionPack", "zip", "../FMCL/Functions")
+        with open("../FunctionPack.py", mode="w")as file:
+            file.write(
+                f"""import io
+zipfile_bytes=io.BytesIO({open('../FunctionPack.zip',mode='rb').read()})""")
+
+    @call_build
     def build_pyz(self):
         """生成pyzw文件"""
         def pack_filter(path):
             """过滤函数"""
             path_str = str(path).replace('\\', '/')
-            if path_str.endswith('.py') and "Scripts"not in path_str:
+            if path_str.endswith('.py') and "Scripts"not in path_str and "FMCL"not in path_str:
                 if os.path.isfile("../"+path_str):
                     print(f'打包"{path_str}"')
                 return True
@@ -60,6 +70,7 @@ class ReleaseBuilder(TextIO):
         name = f'FMCL_{self.version}'
         distpath = self.release_path
         workpath = self.release_path+'/build'
+        print(sys.path)
         arg = ' '.join([
             "pyinstaller",
             "-F",
@@ -76,7 +87,9 @@ class ReleaseBuilder(TextIO):
             "--workpath",
             workpath,
             "--add-data",
-            f"{mll.__path__[0]}\\version.txt;minecraft_launcher_lib"
+            f"{mll.__path__[0]}\\version.txt;minecraft_launcher_lib",
+            "--add-data",
+            f"{sys.path[3]}/webbrowser.py;."
         ])
         print(f"执行 {arg}")
         os.system(arg)
@@ -85,6 +98,7 @@ class ReleaseBuilder(TextIO):
 
     def build(self):
         """生成"""
+        self.build_functionpack()
         self.build_pyz()
         self.build_exe()
 

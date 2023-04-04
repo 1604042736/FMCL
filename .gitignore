@@ -1,6 +1,11 @@
 __pycache__/
-FMCL/
 .minecraft/
 release/
 Pipfile
 Pipfile.lock
+FMCL/latest.log
+FMCL/settings.json
+FMCL/users.json
+FunctionPack.zip
+.vscode/
+FunctionPack.py
