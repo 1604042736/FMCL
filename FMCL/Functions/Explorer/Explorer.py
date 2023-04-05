@@ -42,6 +42,12 @@ QPushButton:hover{
         self.a_showdesktop.setIcon(qta.icon("ph.desktop"))
         self.a_showdesktop.triggered.connect(self.showDesktop)
 
+        self.a_taskmanager = QAction(self)
+        self.a_taskmanager.setText(_translate("Explorer", "任务管理器"))
+        self.a_taskmanager.setIcon(qta.icon("fa.tasks"))
+        self.a_taskmanager.triggered.connect(
+            lambda: Kernel.execFunction("TaskManager"))
+
         self.showDesktop()
 
     def showEvent(self, a0: QShowEvent) -> None:
@@ -53,6 +59,7 @@ QPushButton:hover{
                            AddToTitleEvent(button, "right", -1))
 
         qApp.sendEvent(self, AddToTitleMenuEvent(self.a_showdesktop))
+        qApp.sendEvent(self, AddToTitleMenuEvent(self.a_taskmanager))
         return super().showEvent(a0)
 
     def isFixedWidget(self, widget: QWidget):

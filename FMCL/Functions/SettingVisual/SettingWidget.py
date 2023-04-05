@@ -1,8 +1,10 @@
 import qtawesome as qta
+from FMCL.Functions.LanguageChooser import LanguageChooser
+from Kernel import Kernel
 from PyQt5.QtCore import QCoreApplication, pyqtSlot
 from PyQt5.QtWidgets import QLabel, QTreeWidgetItem, QWidget
 from Setting import Setting
-from FMCL.Functions.LanguageChooser import LanguageChooser
+
 from .SettingItems import SettingItem
 from .ui_SettingWidget import Ui_SettingWidget
 
@@ -10,7 +12,20 @@ _translate = QCoreApplication.translate
 
 
 class SettingWidget(QWidget, Ui_SettingWidget):
+    instances = {}
+    new_count = {}
+
+    def __new__(cls, setting: Setting):
+        if setting.setting_path not in SettingWidget.instances:
+            SettingWidget.instances[setting.setting_path] = super().__new__(
+                cls)
+            SettingWidget.new_count[setting.setting_path] = 0
+        SettingWidget.new_count[setting.setting_path] += 1
+        return SettingWidget.instances[setting.setting_path]
+
     def __init__(self, setting: Setting):
+        if SettingWidget.new_count[setting.setting_path] > 1:
+            return
         super().__init__()
         self.setupUi(self)
         self.resize(1000, 618)
@@ -47,7 +62,11 @@ class SettingWidget(QWidget, Ui_SettingWidget):
                 self.gl_setting.addWidget(widget)
                 self.item_widget_id.append((item, widget, totalid))
 
-            if id == "launcher.language":
+            if id == "users":
+                self.setting.attrs[id]["method"] = lambda: Kernel.execFunction(
+                    "CreateUser")
+
+            if id == "launcher.language":  # TODO 更好的方式
                 setting_item = LanguageChooser()
             else:
                 setting_item = self.setting.getAttr(

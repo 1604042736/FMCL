@@ -1,10 +1,13 @@
 import qtawesome as qta
+from Events import *
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QTreeWidgetItem, QWidget
+from PyQt5.QtWidgets import QAction, QTreeWidgetItem, QWidget, qApp
 
 from .Page import Page
 from .Pages import *
 from .ui_Help import Ui_Help
+
+_translate = QCoreApplication.translate
 
 
 class Help(QWidget, Ui_Help):
@@ -50,6 +53,8 @@ class Help(QWidget, Ui_Help):
 
     @pyqtSlot(int)
     def on_sw_pages_currentChanged(self, _):
+        self.l_index.setText(
+            f"{self.sw_pages.currentIndex()+1}/{self.sw_pages.count()}")
         if self.sw_pages.currentIndex() == self.sw_pages.count()-1:
             self.pb_next.setEnabled(False)
         else:
@@ -67,3 +72,15 @@ class Help(QWidget, Ui_Help):
     @pyqtSlot(bool)
     def on_pb_next_clicked(self, _):
         self.sw_pages.setCurrentIndex(self.sw_pages.currentIndex()+1)
+
+    @pyqtSlot(bool)
+    def on_pb_separate_clicked(self, _):
+        widget = self.sw_pages.currentWidget()
+        if widget == None:
+            return
+        qApp.sendEvent(self, SeparateWidgetEvent(widget, self.size()))
+        a_back = QAction(widget)
+        a_back.setText(_translate("Help", "合并"))
+        a_back.setIcon(qta.icon("msc.reply"))
+        a_back.triggered.connect(lambda: self.sw_pages.addWidget(widget))
+        qApp.sendEvent(widget, AddToTitleMenuEvent(a_back))

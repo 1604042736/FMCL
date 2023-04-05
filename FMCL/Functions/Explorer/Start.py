@@ -1,3 +1,4 @@
+from Kernel import Kernel
 import os
 import sys
 from typing import *
@@ -8,6 +9,7 @@ from PyQt5.QtGui import QResizeEvent
 from PyQt5.QtWidgets import (QAction, QFrame, QMenu, QPushButton, QSizePolicy,
                              QSpacerItem, QStackedWidget, QVBoxLayout, QWidget,
                              qApp)
+from Setting import Setting
 
 from .AllFunctions import AllFunctions
 
@@ -127,6 +129,23 @@ QPushButton:checked{
         self.addPanelWidget(self.pb_allfunc, index=-1)
         self.changeUi(self.pb_allfunc, AllFunctions)
 
+        self.pb_user = QPushButton()
+        self.pb_user.resize(46, 46)
+        self.pb_user.setStyleSheet("""
+QPushButton{
+    border: none;
+    text-align: left;
+}
+QPushButton:hover{
+    background-color: rgb(200,200,200);
+}
+""")
+        self.pb_user.setIconSize(self.pb_user.size())
+        self.pb_user.setIcon(qta.icon("ph.user-circle"))
+        self.pb_user.clicked.connect(
+            lambda: Kernel.execFunction("SettingVisual", id="users"))
+        self.addPanelWidget(self.pb_user)
+
         self.refresh()
 
         self.f_panel.raise_()
@@ -190,8 +209,8 @@ QPushButton:checked{
         return super().event(a0)
 
     def refresh(self):
-        return
-        for child in self.f_panel.findChildren(QWidget):  # 清空panel
-            if child not in (self.pb_allfunc, self.pb_expand, self.pb_software):
-                self.vbox_panel.removeWidget(child)
-                child.deleteLater()
+        users = Setting()["users"]
+        if users:
+            self.pb_user.setText(users[0])
+        else:
+            self.pb_user.setText("未设置用户")

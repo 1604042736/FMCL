@@ -29,7 +29,7 @@
    <property name="spacing">
     <number>0</number>
    </property>
-   <item row="1" column="0" colspan="3">
+   <item row="1" column="0" colspan="4">
     <widget class="QSplitter" name="splitter">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -65,6 +65,22 @@
      <widget class="QStackedWidget" name="sw_pages"/>
     </widget>
    </item>
+   <item row="0" column="1">
+    <widget class="QPushButton" name="pb_next">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>64</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>下一页</string>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QPushButton" name="pb_pre">
      <property name="enabled">
@@ -81,11 +97,18 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QPushButton" name="pb_next">
-     <property name="enabled">
-      <bool>false</bool>
+   <item row="0" column="2">
+    <widget class="QLabel" name="l_index">
+     <property name="text">
+      <string/>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QPushButton" name="pb_separate">
      <property name="maximumSize">
       <size>
        <width>64</width>
@@ -93,7 +116,7 @@
       </size>
      </property>
      <property name="text">
-      <string>下一页</string>
+      <string>分离</string>
      </property>
     </widget>
    </item>

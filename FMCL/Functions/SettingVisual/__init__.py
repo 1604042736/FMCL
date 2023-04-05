@@ -11,7 +11,7 @@ def functionInfo():
     }
 
 
-def main(setting_path=DEFAULT_SETTING_PATH):
+def main(setting_path=DEFAULT_SETTING_PATH, id=""):
     setting = Setting(setting_path)
     settingw = SettingWidget(setting)
-    settingw.show()
+    settingw.show(id)

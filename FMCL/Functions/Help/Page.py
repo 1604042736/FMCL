@@ -19,7 +19,19 @@ class Document(QObject):
 
 
 class Page(QWebEngineView):
+    instances = {}
+    new_count = {}
+
+    def __new__(cls, filename):
+        if filename not in Page.instances:
+            Page.instances[filename] = super().__new__(cls)
+            Page.new_count[filename] = 0
+        Page.new_count[filename] += 1
+        return Page.instances[filename]
+
     def __init__(self, filename: str) -> None:
+        if Page.new_count[filename] > 1:
+            return
         super().__init__()
         self.setWindowTitle(filename)
 
