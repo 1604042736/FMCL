@@ -1,10 +1,6 @@
 <RCC>
   <qresource prefix="/">
     <file>zh_CN/launcher/readme.md</file>
-    <file>Pictures/launcher.1.png</file>
-    <file>Pictures/launcher.2.png</file>
-    <file>Pictures/launcher.3.png</file>
-    <file>Pictures/launcher.4.png</file>
     <file>zh_CN/launcher/customfunction.md</file>
     <file>zh_CN/launcher/customhelp.md</file>
   </qresource>
