@@ -67,7 +67,14 @@ class Desktop(QListWidget):
             a_refresh = QAction(_translate("Desktop", "刷新"), self)
             a_refresh.setIcon(qta.icon("mdi.refresh"))
             a_refresh.triggered.connect(self.refresh)
+
+            a_background_image = QAction(_translate("Desktop", "设置背景图片"), self)
+            a_background_image.setIcon(qta.icon("fa.image"))
+            a_background_image.triggered.connect(lambda: Kernel.execFunction(
+                "SettingVisual", id="explorer.desktop.background_image"))
+
             menu.addAction(a_refresh)
+            menu.addAction(a_background_image)
 
         menu.exec(QCursor.pos())
 
