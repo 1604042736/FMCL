@@ -1,7 +1,9 @@
 from .LogoChooser import LogoChooser
 
 import qtawesome as qta
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QInputDialog
+from Setting import Setting
+import os
 
 
 def functionInfo():
@@ -13,7 +15,10 @@ def functionInfo():
 
 def main(name=None):
     if not name:
-        QMessageBox.critical(None, "参数错误", "应传入游戏名")
-        return 1
+        name, ok = QInputDialog.getItem(
+            None, "选择游戏", "游戏列表",
+            os.listdir(os.path.join(Setting()["game.directories"][0], "versions")), editable=False)
+        if not ok:
+            return
     logochooser = LogoChooser(name)
     logochooser.show()
