@@ -44,6 +44,11 @@ def init():
 
 def main():
     init()
+    try:
+        index = sys.argv.index("--update")+1
+        os.remove(sys.argv[index])
+    except:
+        pass
     app = Kernel()
     logging.info(f"退出代码: {app.exec()}")
     Setting().sync()
