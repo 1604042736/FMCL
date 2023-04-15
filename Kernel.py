@@ -6,7 +6,7 @@ from importlib import import_module
 from zipfile import *
 
 import qtawesome as qta
-from PyQt5.QtCore import QEvent, QObject, Qt
+from PyQt5.QtCore import QEvent, QObject, Qt, QTranslator
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QDialog, QWidget
 
@@ -28,6 +28,10 @@ class Kernel(QApplication):
         cur_path = os.path.abspath(".")
         if cur_path not in sys.path:
             sys.path.insert(0, os.path.abspath("."))
+
+        translator = QTranslator()
+        translator.load(Setting()["launcher.language"])
+        self.installTranslator(translator)
 
         logging.debug("解压默认功能...")
         self.unpackFunction()
