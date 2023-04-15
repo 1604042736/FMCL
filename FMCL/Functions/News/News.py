@@ -1,7 +1,7 @@
 import minecraft_launcher_lib as mll
 import multitasking
 import qtawesome as qta
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QResizeEvent
 from PyQt5.QtWidgets import QWidget
 
@@ -17,7 +17,6 @@ class News(QWidget, Ui_News):
         self.setupUi(self)
         self.setWindowIcon(qta.icon("fa.newspaper-o"))
         self.__NewsGot.connect(self.setNewsInfo)
-        self.scrollArea.verticalScrollBar().valueChanged.connect(self.getMoreNews)
 
         self.max_col = 0
         self.cur_row = self.cur_col = 0
@@ -29,11 +28,6 @@ class News(QWidget, Ui_News):
     def getNews(self):
         r = mll.utils.get_minecraft_news(self.page_size)
         self.__NewsGot.emit(r["article_grid"])
-
-    def getMoreNews(self, num):
-        if self.scrollArea.verticalScrollBar().maximum() == num:
-            self.page_size *= 2
-            self.getNews()
 
     def setNewsInfo(self, news):
         for i in news:
@@ -56,3 +50,8 @@ class News(QWidget, Ui_News):
         for newsinfo in self.newsinfo:
             self.addWidget(newsinfo)
         return super().resizeEvent(a0)
+
+    @pyqtSlot(bool)
+    def on_pb_loadmore_clicked(self, _):
+        self.page_size *= 2
+        self.getNews()

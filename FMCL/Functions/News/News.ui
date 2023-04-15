@@ -43,7 +43,18 @@
         <height>616</height>
        </rect>
       </property>
-      <layout class="QGridLayout" name="gl_news"/>
+      <layout class="QGridLayout" name="gl_scrollarea">
+       <item row="0" column="0">
+        <layout class="QGridLayout" name="gl_news"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QPushButton" name="pb_loadmore">
+         <property name="text">
+          <string>加载更多内容</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>
