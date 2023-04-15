@@ -16,9 +16,12 @@ from Setting import Setting
 
 def except_hook(*args):
     sys.__excepthook__(*args)
+    exception = "".join([str(sys.path), "\n"] +
+                        traceback.format_exception(*args))
     QMessageBox.critical(None,
                          "启动器发生了严重错误",
-                         "".join([str(sys.path), "\n"]+traceback.format_exception(*args)))
+                         exception)
+    logging.critical(exception)
     exit()
 
 
