@@ -82,5 +82,6 @@ class Help(QWidget, Ui_Help):
         a_back = QAction(widget)
         a_back.setText(_translate("Help", "合并"))
         a_back.setIcon(qta.icon("msc.reply"))
-        a_back.triggered.connect(lambda: self.sw_pages.addWidget(widget))
+        a_back.triggered.connect(lambda: (self.sw_pages.addWidget(
+            widget), self.sw_pages.setCurrentIndex(self.sw_pages.count()-1)))
         qApp.sendEvent(widget, AddToTitleMenuEvent(a_back))
