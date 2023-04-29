@@ -6,15 +6,12 @@ from zipfile import ZipFile
 
 import minecraft_launcher_lib as mll
 import toml
-from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import qApp
 from Setting import Setting
 
 from .Progress import Progress
 from .User import User
-
-_translate = QCoreApplication.translate
 
 
 class Game:

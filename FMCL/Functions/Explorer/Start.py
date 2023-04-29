@@ -13,7 +13,7 @@ from Setting import Setting
 
 from .AllFunctions import AllFunctions
 
-_translate = QCoreApplication.translate
+_translate = Kernel.translate
 
 
 class StartUi(QStackedWidget):
@@ -40,7 +40,7 @@ class Start(QWidget):
         if self.__new_count > 1:
             return
         super().__init__()
-        self.setWindowTitle(_translate("Start", "开始界面"))
+        self.setWindowTitle(_translate("开始界面"))
         # 面板
         self.f_panel = QFrame(self)
         self.f_panel.move(0, 0)
@@ -63,7 +63,7 @@ QFrame{
         self.vbox_panel.addSpacerItem(self.si_separate)
 
         self.pb_software = QPushButton()
-        self.pb_software.setText(_translate("Start", "软件"))
+        self.pb_software.setText(_translate("软件"))
         self.pb_software.resize(46, 46)
         self.pb_software.setStyleSheet("""
 QPushButton{
@@ -83,7 +83,7 @@ QPushButton:checked{
         self.addPanelWidget(self.pb_software)
 
         self.pb_expand = QPushButton()
-        self.pb_expand.setText(_translate("Start", "展开"))
+        self.pb_expand.setText(_translate("展开"))
         self.pb_expand.resize(46, 46)
         self.pb_expand.setStyleSheet("""
 QPushButton{
@@ -106,7 +106,7 @@ QPushButton:checked{
         self.ui.move(46, 0)
 
         self.pb_allfunc = QPushButton()
-        self.pb_allfunc.setText(_translate("AllFunctions", "所有应用"))
+        self.pb_allfunc.setText(_translate("所有应用"))
         self.pb_allfunc.resize(46, 46)
         self.pb_allfunc.setStyleSheet("""
 QPushButton{
@@ -177,11 +177,11 @@ QPushButton:hover{
     def showSoftwareMenu(self):
         menu = QMenu(self)
 
-        a_quit = QAction(self, text=_translate("Start", "退出"))
+        a_quit = QAction(self, text=_translate("退出"))
         a_quit.triggered.connect(qApp.quit)
         a_quit.setIcon(qta.icon("mdi.power"))
 
-        a_restart = QAction(self, text=_translate("Start", "重启"))
+        a_restart = QAction(self, text=_translate("重启"))
         a_restart.triggered.connect(self.restart)
         a_restart.setIcon(qta.icon("msc.debug-restart"))
 

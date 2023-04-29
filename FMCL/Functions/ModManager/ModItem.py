@@ -2,12 +2,13 @@ import logging
 
 import multitasking
 from Core import Game
-from PyQt5.QtCore import QCoreApplication, pyqtSlot
+from Kernel import Kernel
+from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget
 
 from .ui_ModItem import Ui_ModItem
 
-_translate = QCoreApplication.translate
+_translate = Kernel.translate
 
 
 class ModItem(QWidget, Ui_ModItem):
@@ -37,8 +38,8 @@ class ModItem(QWidget, Ui_ModItem):
             info_list = []
             info_list.append(info["name"])
             info_list.append(info["description"].replace("\n", ""))
-            info_list.append(_translate("ModItem", "版本")+": "+info["version"])
-            info_list.append(_translate("ModItem", "作者")+": " +
+            info_list.append(_translate("版本")+": "+info["version"])
+            info_list.append(_translate("作者")+": " +
                              ','.join(info["authors"]))
 
             text = ", ".join(info_list)

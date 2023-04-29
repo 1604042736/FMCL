@@ -1,14 +1,14 @@
 import qtawesome as qta
 from FMCL.Functions.LanguageChooser import LanguageChooser
 from Kernel import Kernel
-from PyQt5.QtCore import QCoreApplication, pyqtSlot
+from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QLabel, QTreeWidgetItem, QWidget
 from Setting import Setting
 
 from .SettingItems import SettingItem
 from .ui_SettingWidget import Ui_SettingWidget
 
-_translate = QCoreApplication.translate
+_translate = Kernel.translate
 
 
 class SettingWidget(QWidget, Ui_SettingWidget):

@@ -7,6 +7,8 @@ from typing import TextIO
 
 import minecraft_launcher_lib as mll
 
+from .Pack import main
+
 
 class ReleaseBuilder(TextIO):
     """构建一个Release"""
@@ -35,13 +37,9 @@ class ReleaseBuilder(TextIO):
         return wrap
 
     @call_build
-    def build_functionpack(self):
-        """生成功能打包文件"""
-        shutil.make_archive("../FunctionPack", "zip", "../FMCL/Functions")
-        with open("../FunctionPack.py", mode="w")as file:
-            file.write(
-                f"""import io
-zipfile_bytes=io.BytesIO({open('../FunctionPack.zip',mode='rb').read()})""")
+    def pack(self):
+        """打包"""
+        main()
 
     @call_build
     def build_pyz(self):
@@ -96,7 +94,7 @@ zipfile_bytes=io.BytesIO({open('../FunctionPack.zip',mode='rb').read()})""")
 
     def build(self):
         """生成"""
-        self.build_functionpack()
+        self.pack()
         self.build_pyz()
         self.build_exe()
 

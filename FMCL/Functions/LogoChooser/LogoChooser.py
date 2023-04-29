@@ -1,11 +1,11 @@
 import qtawesome as qta
 from Core import Game
-from PyQt5.QtCore import QCoreApplication, pyqtSlot
+from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QFileDialog, QWidget
 
 from .ui_LogoChooser import Ui_LogoChooser
-
-_translate = QCoreApplication.translate
+from Kernel import Kernel
+_translate = Kernel.translate
 
 
 class LogoChooser(QWidget, Ui_LogoChooser):
@@ -61,7 +61,7 @@ class LogoChooser(QWidget, Ui_LogoChooser):
     @pyqtSlot(bool)
     def on_pb_add_clicked(self, _):
         filename, _ = QFileDialog.getOpenFileName(
-            self, _translate("LogoChooser", "选择图标"), filter="Image Files(*.png *.jpg *.ico)")
+            self, _translate("选择图标"), filter="Image Files(*.png *.jpg *.ico)")
         if filename:
             self.logos.append(filename)
             self.refresh()

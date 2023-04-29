@@ -12,12 +12,13 @@ DEFAULT_SETTING = {
     "system.theme_color": "#ffffff",
     "launcher.width": 1000,
     "launcher.height": 618,
-    "launcher.language": ":/zh_CN.qm",
     "game.directories": [".minecraft"],
     "game.java_path": "javaw",
     "game.width": 1000,
     "game.height": 618,
     "users": [],
+    "language.folder": "Translations",
+    "language.type": "简体中文",
     "explorer.desktop.background_image": "",
     "explorer.desktop.item_clicked_actions": ["GameManager"]
 }
@@ -43,9 +44,6 @@ DEFAULT_SETTING_ATTR = {
     },
     "launcher.height": {
         "name": ("FMCLSetting", "启动器高度"),
-    },
-    "launcher.language": {
-        "name": ("FMCLSetting", "语言"),
     },
     "game": {
         "name": ("FMCLSetting", "游戏"),
@@ -138,8 +136,9 @@ class Setting(dict):
     def sync(self):
         if not os.path.exists(os.path.dirname(self.setting_path)):
             os.makedirs(os.path.dirname(self.setting_path))
-        json.dump(self, open(
-            self.setting_path, mode="w", encoding="utf-8"))
+        json.dump(self,
+                  open(self.setting_path, mode="w", encoding="utf-8"),
+                  ensure_ascii=False)
 
     def set(self, id: str, val):
         self[id] = val

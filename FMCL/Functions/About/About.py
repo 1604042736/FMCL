@@ -2,14 +2,13 @@ import sys
 import webbrowser
 
 import qtawesome as qta
-from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, qApp
-
+from Kernel import Kernel
 from .AboutItem import AboutItem
 from .ui_About import Ui_About
 
-_translate = QCoreApplication.translate
+_translate = Kernel.translate
 
 
 class About(QWidget, Ui_About):
@@ -34,17 +33,17 @@ class About(QWidget, Ui_About):
             "thanks": [
                 (
                     "bangbang93",
-                    _translate("About", "提供镜像源"),
+                    _translate("提供镜像源"),
                     QPixmap(":/Image/bangbang93.jpg"),
                     (
                         lambda:webbrowser.open(
                             "https://afdian.net/a/bangbang93"),
-                        _translate("About", "赞助")
+                        _translate("赞助")
                     )
                 ),
                 (
                     "HMCL",
-                    _translate("About", "提供技术帮助"),
+                    _translate("提供技术帮助"),
                     QPixmap(":/Image/hmcl.png"),
                     (
                         lambda:webbrowser.open(
@@ -60,7 +59,7 @@ class About(QWidget, Ui_About):
                     None,
                     (
                         lambda:webbrowser.open("https://www.python.org"),
-                        _translate("About", "官网")
+                        _translate("官网")
                     )
                 ),
                 (
@@ -99,7 +98,7 @@ class About(QWidget, Ui_About):
                     None,
                     (
                         qApp.aboutQt,
-                        _translate("About", "关于Qt")
+                        _translate("关于Qt")
                     )
                 ),
                 (

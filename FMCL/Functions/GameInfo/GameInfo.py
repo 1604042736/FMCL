@@ -1,11 +1,12 @@
 import qtawesome as qta
 from Core import Game
-from PyQt5.QtCore import QCoreApplication, pyqtSignal, pyqtSlot
+from Kernel import Kernel
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QLabel, QMessageBox, QWidget
 
 from .ui_GameInfo import Ui_GameInfo
 
-_translate = QCoreApplication.translate
+_translate = Kernel.translate
 
 
 class GameInfo(QWidget, Ui_GameInfo):
@@ -16,9 +17,9 @@ class GameInfo(QWidget, Ui_GameInfo):
         self.setupUi(self)
         self.setWindowIcon(qta.icon("mdi6.information-outline"))
         self. __info_translate = {
-            "version": _translate("GameInfo", "版本"),
-            "forge_version": _translate("GameInfo", "Forge版本"),
-            "fabric_version": _translate("GameInfo", "Fabric版本")
+            "version": _translate("版本"),
+            "forge_version": _translate("Forge版本"),
+            "fabric_version": _translate("Fabric版本")
         }
         self.game = Game(name)
         self.info = self.game.get_info()
@@ -48,8 +49,8 @@ class GameInfo(QWidget, Ui_GameInfo):
     @pyqtSlot(bool)
     def on_pb_delete_clicked(self, _):
         reply = QMessageBox.warning(self,
-                                    _translate("GameInfo", "删除"),
-                                    _translate("GameInfo", "确定删除?"),
+                                    _translate("删除"),
+                                    _translate("确定删除?"),
                                     QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
         if reply == QMessageBox.StandardButton.Yes:
             self.game.delete()

@@ -1,5 +1,6 @@
 import qtawesome as qta
 from Events import *
+from Kernel import Kernel
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QAction, QTreeWidgetItem, QWidget, qApp
 
@@ -7,7 +8,7 @@ from .Page import Page
 from .Pages import *
 from .ui_Help import Ui_Help
 
-_translate = QCoreApplication.translate
+_translate = Kernel.translate
 
 
 class Help(QWidget, Ui_Help):
@@ -80,7 +81,7 @@ class Help(QWidget, Ui_Help):
             return
         qApp.sendEvent(self, SeparateWidgetEvent(widget, self.size()))
         a_back = QAction(widget)
-        a_back.setText(_translate("Help", "合并"))
+        a_back.setText(_translate("合并"))
         a_back.setIcon(qta.icon("msc.reply"))
         a_back.triggered.connect(lambda: (self.sw_pages.addWidget(
             widget), self.sw_pages.setCurrentIndex(self.sw_pages.count()-1)))

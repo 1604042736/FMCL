@@ -1,17 +1,17 @@
 from PyQt5.QtCore import QCoreApplication, QFileInfo
 from Setting import Setting
 from . import Pages_rc as _
-
-_translate = QCoreApplication.translate
+from Kernel import Kernel
+_translate = Kernel.translate
 
 
 def getIndexes():
     lang_file = Setting().get("launcher.language").replace("\\", "/")
     lang = lang_file.split("/")[-1].replace(".qm", "")
 
-    launcher = _translate("Pages", "启动器")
-    costomfunction = _translate("Pages", "自定义功能")
-    costomhelp = _translate("Pages", "自定义帮助")
+    launcher = _translate("启动器")
+    costomfunction = _translate("自定义功能")
+    costomhelp = _translate("自定义帮助")
     default = {
         launcher: f":/zh_CN/launcher/readme.md",
         f"{launcher}.{costomfunction}": f":/zh_CN/launcher/customfunction.md",

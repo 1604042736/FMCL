@@ -1,8 +1,7 @@
-from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import QColorDialog, QLabel, QPushButton
 from .SettingItem import SettingItem
-
-_translate = QCoreApplication.translate
+from Kernel import Kernel
+_translate = Kernel.translate
 
 
 class ColorSettingItem(SettingItem):
@@ -15,7 +14,7 @@ class ColorSettingItem(SettingItem):
         self._layout.addWidget(self.l_color, 0, 0)
 
         self.pb_choosecolor = QPushButton()
-        self.pb_choosecolor.setText(_translate("ColorSettingItem", "选择颜色"))
+        self.pb_choosecolor.setText(_translate("选择颜色"))
         self.pb_choosecolor.clicked.connect(self.chooseColor)
         self._layout.addWidget(self.pb_choosecolor, 0, 1)
 

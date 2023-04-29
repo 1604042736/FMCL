@@ -1,10 +1,11 @@
+from Kernel import Kernel
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import (QComboBox, QFileDialog, QInputDialog, QMessageBox,
                              QPushButton)
 
 from .SettingItem import SettingItem
 
-_translate = QCoreApplication.translate
+_translate = Kernel.translate
 
 
 class ListSettingItem(SettingItem):
@@ -16,12 +17,12 @@ class ListSettingItem(SettingItem):
         self.w_value.currentTextChanged.connect(self.sync)
 
         self.pb_add = QPushButton()
-        self.pb_add.setText(_translate("ListSettingItem", "添加"))
+        self.pb_add.setText(_translate("添加"))
         self.pb_add.clicked.connect(self.add)
         self.pb_add.clicked.connect(self.sync)
 
         self.pb_delete = QPushButton()
-        self.pb_delete.setText(_translate("ListSettingItem", "删除"))
+        self.pb_delete.setText(_translate("删除"))
         self.pb_delete.clicked.connect(self.delete)
         self.pb_delete.clicked.connect(self.sync)
 
@@ -31,7 +32,7 @@ class ListSettingItem(SettingItem):
 
     def add(self):
         method = self.setting.getAttr(self.id, "method", "input")
-        title = _translate("ListSettingItem", "添加")
+        title = _translate("添加")
         item = ""
         if method == "input":
             item = QInputDialog.getText(self, title, "")
@@ -51,12 +52,12 @@ class ListSettingItem(SettingItem):
         atleast = self.setting.getAttr(self.id, "atleast", 0)
         if self.w_value.count() <= atleast:
             QMessageBox.warning(self,
-                                _translate("ListSettingItem", "删除"),
-                                f'{_translate("ListSettingItem","至少有")}{atleast}')
+                                _translate("删除"),
+                                f'{_translate("至少有")}{atleast}')
         else:
             reply = QMessageBox.warning(self,
-                                        _translate("ListSettingItem", "删除"),
-                                        _translate("ListSettingItem", "确定删除?"),
+                                        _translate("删除"),
+                                        _translate("确定删除?"),
                                         QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
             if reply == QMessageBox.StandardButton.Yes:
                 self.setting.get(self.id).remove(text)

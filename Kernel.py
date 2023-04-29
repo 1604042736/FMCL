@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import sys
@@ -6,7 +7,7 @@ from importlib import import_module
 from zipfile import *
 
 import qtawesome as qta
-from PyQt5.QtCore import QEvent, QObject, Qt, QTranslator
+from PyQt5.QtCore import QEvent, QObject, Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QDialog, QWidget
 
@@ -18,6 +19,7 @@ from Window import Window
 
 class Kernel(QApplication):
     tasks = set()
+    translation = {}  # 翻译
 
     def __init__(self, argv: list[str] = sys.argv) -> None:
         super().__init__(argv)
@@ -29,12 +31,9 @@ class Kernel(QApplication):
         if cur_path not in sys.path:
             sys.path.insert(0, os.path.abspath("."))
 
-        translator = QTranslator()
-        translator.load(Setting()["launcher.language"])
-        self.installTranslator(translator)
+        self.unpack()
+        self.loadTranslation()
 
-        logging.debug("解压默认功能...")
-        self.unpackFunction()
         logging.debug("初始化功能...")
         self.getAllFunctions()
         logging.debug("运行启动项...")
@@ -65,10 +64,37 @@ class Kernel(QApplication):
         self.showWidget(widget)
 
     @staticmethod
-    def unpackFunction():
+    def loadTranslation():
+        """加载翻译"""
+        logging.debug("加载翻译...")
+        folder = Setting()["language.folder"]
+        lang_type = Setting()["language.type"]
+        functions_path = Setting()["system.functions_path"]
+        paths = [os.path.join(i, folder)
+                 for i in ["FMCL"]+os.listdir(functions_path)]
+        for path in paths:
+            if not os.path.exists(path):
+                continue
+            Kernel.translation |= json.load(
+                open(f"{path}/{lang_type}.json", encoding="utf-8"))
+        logging.debug(Kernel.translation)
+
+    @staticmethod
+    def translate(text: str) -> str:
+        """翻译"""
+        if text in Kernel.translation:
+            return Kernel.translation[text]
+        lang_type = Setting()["language.type"]
+        logging.warning(f"未翻译的文本({lang_type}):{text}")
+        Kernel.translation[text] = text
+        return text
+
+    @staticmethod
+    def unpack():
+        # 由Scripts/Pack.py生成打包文件
+        logging.debug("解压功能...")
         try:
-            # FunctionPack.py由Scripts/ReleaseBuilder.py生成
-            from FunctionPack import zipfile_bytes
+            from Pack.Functions import zipfile_bytes
         except ImportError:
             return
         zip = ZipFile(zipfile_bytes)
@@ -80,6 +106,22 @@ class Kernel(QApplication):
             if not os.path.exists(target_path):
                 logging.debug(f"解压:{path}")
                 zip.extract(path, functions_path)
+        zip.close()
+
+        logging.debug("解压翻译...")
+        try:
+            from Pack.Translations import zipfile_bytes
+        except ImportError:
+            return
+        zip = ZipFile(zipfile_bytes)
+        for path in zip.namelist():
+            if "__pycache__" in path:
+                continue
+            translation_path = f'FMCL/{Setting()["language.folder"]}'
+            target_path = os.path.join(translation_path, path)
+            if not os.path.exists(target_path):
+                logging.debug(f"解压:{path}")
+                zip.extract(path, translation_path)
         zip.close()
 
     @staticmethod
