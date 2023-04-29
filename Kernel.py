@@ -67,10 +67,9 @@ class Kernel(QApplication):
     def loadTranslation():
         """加载翻译"""
         logging.debug("加载翻译...")
-        folder = Setting()["language.folder"]
         lang_type = Setting()["language.type"]
-        functions_path = Setting()["system.functions_path"]
-        paths = [os.path.join(i, folder)
+        functions_path = "FMCL/Functions"
+        paths = [os.path.join(i, "Translations")
                  for i in ["FMCL"]+os.listdir(functions_path)]
         for path in paths:
             if not os.path.exists(path):
@@ -101,7 +100,7 @@ class Kernel(QApplication):
         for path in zip.namelist():
             if "__pycache__" in path:
                 continue
-            functions_path = Setting()["system.functions_path"]
+            functions_path = "FMCL/Functions"
             target_path = os.path.join(functions_path, path)
             if not os.path.exists(target_path):
                 logging.debug(f"解压:{path}")
@@ -117,7 +116,7 @@ class Kernel(QApplication):
         for path in zip.namelist():
             if "__pycache__" in path:
                 continue
-            translation_path = f'FMCL/{Setting()["language.folder"]}'
+            translation_path = 'FMCL/Translations'
             target_path = os.path.join(translation_path, path)
             if not os.path.exists(target_path):
                 logging.debug(f"解压:{path}")
@@ -127,11 +126,9 @@ class Kernel(QApplication):
     @staticmethod
     def getFunction(function_name: str):
         """获取功能"""
-        functions_path = Setting()["system.functions_path"]
         try:
             logging.debug(f"获取功能:{function_name}...")
-            function = import_module(
-                f"{'.'.join(functions_path.split(os.sep))}.{function_name}")
+            function = import_module(f"FMCL.Functions.{function_name}")
             logging.debug(function)
             return function
         except:
@@ -156,7 +153,7 @@ class Kernel(QApplication):
     @staticmethod
     def getAllFunctions():
         """获取所有功能"""
-        functions_path = Setting()["system.functions_path"]
+        functions_path = "FMCL/Functions"
         functions = []
         for function_name in os.listdir(functions_path):
             try:
@@ -178,7 +175,10 @@ class Kernel(QApplication):
     @staticmethod
     def getFunctionInfo(function):
         """获取功能信息"""
-        return Kernel.defaultFunctionInfo(function) | getattr(function, "functionInfo", lambda: {})()
+        info = Kernel.defaultFunctionInfo(function) | getattr(
+            function, "functionInfo", lambda: {})()
+        info["name"] = Kernel.translate(info["name"])
+        return info
 
     @staticmethod
     def getAllFunctionInfo():

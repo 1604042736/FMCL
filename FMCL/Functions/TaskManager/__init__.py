@@ -4,7 +4,7 @@ import qtawesome as qta
 
 def functionInfo():
     return {
-        "name": "资源管理器",
+        "name": "任务管理器",
         "icon": qta.icon("fa.tasks")
     }
 

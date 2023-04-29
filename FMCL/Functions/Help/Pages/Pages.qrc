@@ -1,7 +1,7 @@
 <RCC>
   <qresource prefix="/">
-    <file>zh_CN/launcher/readme.md</file>
-    <file>zh_CN/launcher/customfunction.md</file>
-    <file>zh_CN/launcher/customhelp.md</file>
+    <file>简体中文/launcher/readme.md</file>
+    <file>简体中文/launcher/customfunction.md</file>
+    <file>简体中文/launcher/customhelp.md</file>
   </qresource>
 </RCC>

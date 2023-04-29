@@ -43,13 +43,13 @@ class Game:
 
         self.DEFAULT_SETTING_ATTR = {
             "specific": {
-                "name": ("GameSetting", "特定设置"),
+                "name": "特定设置",
             },
             "isolation": {
-                "name": ("GameSetting", "版本隔离"),
+                "name": "版本隔离",
             },
             "logo": {
-                "name": ("GameSetting", "游戏图标"),
+                "name":  "游戏图标",
             }
         }
         self.DEFAULT_SETTING = {

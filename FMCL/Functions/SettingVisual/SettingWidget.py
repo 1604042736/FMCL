@@ -48,7 +48,7 @@ class SettingWidget(QWidget, Ui_SettingWidget):
                 root = self.items.get(("???", lastid)[i-1 >= 0], None)
                 item = QTreeWidgetItem()
                 text = self.setting.getAttr(totalid, "name")
-                text = _translate(*text)
+                text = _translate(text)
                 item.setText(0, text)
                 self.addTreeItem(root, item)
                 self.items[totalid] = item
@@ -62,15 +62,8 @@ class SettingWidget(QWidget, Ui_SettingWidget):
                 self.gl_setting.addWidget(widget)
                 self.item_widget_id.append((item, widget, totalid))
 
-            if id == "users":
-                self.setting.attrs[id]["method"] = lambda: Kernel.execFunction(
-                    "CreateUser")
-
-            if id == "launcher.language":  # TODO 更好的方式
-                setting_item = LanguageChooser()
-            else:
-                setting_item = self.setting.getAttr(
-                    id, "setting_item", lambda id=id: SettingItem(id, self.setting))()
+            setting_item = self.setting.getAttr(
+                id, "setting_item", lambda id=id: SettingItem(id, self.setting))()
             self.gl_setting.addWidget(setting_item)
             self.setting_items.append(setting_item)
 

@@ -34,6 +34,10 @@ def main():
                         else:
                             continue
                         translation[text] = text
+    with open("../FMCL/latest.log", encoding="utf-8")as file:
+        for match in re.finditer(r"未翻译的文本\(.*?\):(.*?)\n", file.read()):
+            text = match.group(1)
+            translation[text] = text
     for i in ("简体中文", "English"):
         path = os.path.join("../FMCL", "Translations")
         if not os.path.exists(path):
@@ -43,7 +47,7 @@ def main():
             translation |= json.load(open(file_path, encoding="utf-8"))
         json.dump(translation,
                   open(file_path, encoding="utf-8", mode="w"),
-                  sort_keys=True, ensure_ascii=False)
+                  sort_keys=True, ensure_ascii=False, indent=4)
     print(translation)
 
 
