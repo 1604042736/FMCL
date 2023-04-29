@@ -87,13 +87,16 @@ class Setting(dict):
         self.setting_path = setting_path
         if setting_path == DEFAULT_SETTING_PATH:
             from Kernel import Kernel
-            DEFAULT_SETTING_ATTR["users"]["method"] = lambda: Kernel.execFunction(
-                "CreateUser")
+            DEFAULT_SETTING_ATTR["users"]["method"] = (
+                lambda: Kernel.execFunction("CreateUser")
+            )
             try:
-                from FMCL.Functions.LanguageChooser import LanguageChooser
-                DEFAULT_SETTING_ATTR["language.type"]["setting_item"] = LanguageChooser
+                DEFAULT_SETTING_ATTR["language.type"]["setting_item"] = (
+                    getattr(Kernel.getFunction("LanguageChooser"),
+                            "LanguageChooser")
+                )
             except:
-                pass
+                logging.error(traceback.format_exc())
             self.add(DEFAULT_SETTING)
             self.addAttr(DEFAULT_SETTING_ATTR)
             self.loadFunctionSetting()
@@ -135,7 +138,7 @@ class Setting(dict):
             os.makedirs(os.path.dirname(self.setting_path))
         json.dump(self,
                   open(self.setting_path, mode="w", encoding="utf-8"),
-                  ensure_ascii=False)
+                  ensure_ascii=False, indent=4)
 
     def set(self, id: str, val):
         self[id] = val
@@ -143,12 +146,8 @@ class Setting(dict):
 
     def loadFunctionSetting(self):
         """加载功能的设置"""
-        functions_path = "FMCL/Functions"
-        for function_name in os.listdir(functions_path):
-            try:
-                function = import_module(f"FMCL.Functions.{function_name}")
-                self.add(getattr(function, "defaultSetting", lambda: {})())
-                self.addAttr(
-                    getattr(function, "defaultSettingAttr", lambda: {})())
-            except:
-                logging.error(traceback.format_exc())
+        from Kernel import Kernel
+        for function in Kernel.getAllFunctions():
+            self.add(getattr(function, "defaultSetting", lambda: {})())
+            self.addAttr(
+                getattr(function, "defaultSettingAttr", lambda: {})())

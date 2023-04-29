@@ -1,13 +1,12 @@
 import os
 import shutil
 import sys
-import webbrowser
 import zipapp
 from typing import TextIO
 
 import minecraft_launcher_lib as mll
 
-from .Pack import main
+from Pack import main
 
 
 class ReleaseBuilder(TextIO):

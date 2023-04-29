@@ -126,6 +126,8 @@ class Kernel(QApplication):
     @staticmethod
     def getFunction(function_name: str):
         """获取功能"""
+        if f"FMCL.Functions.{function_name}" in sys.modules:
+            return sys.modules[f"FMCL.Functions.{function_name}"]
         try:
             logging.debug(f"获取功能:{function_name}...")
             function = import_module(f"FMCL.Functions.{function_name}")

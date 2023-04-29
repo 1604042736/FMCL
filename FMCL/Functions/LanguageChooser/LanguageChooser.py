@@ -27,4 +27,4 @@ class LanguageChooser(QWidget, Ui_LanguageChooser):
 
     @pyqtSlot(str)
     def on_cb_lang_currentTextChanged(self, lang):
-        Setting().set("language", lang)
+        Setting().set("language.type", lang)
