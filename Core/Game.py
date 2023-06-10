@@ -67,6 +67,22 @@ class Game:
                 self.DEFAULT_SETTING_ATTR[key] = val
 
     def launch(self):
+        dir, command = self.get_launch_command()
+        str_command = ""
+        for i in command:
+            if " " in i:
+                str_command += '"'+i+'" '
+            else:
+                str_command += i+' '
+        args = f"cd {dir}&start {str_command}"
+        logging.info(args)
+        os.popen(args)
+
+    def get_launch_command(self)->tuple[str,str]:
+        """
+        获取启动参数
+        返回游戏目录和参数
+        """
         self.generate_setting()
         absdir = os.path.abspath(self.directory)
         if self.setting.get("specific"):
@@ -89,15 +105,7 @@ class Game:
 
         command = mll.command.get_minecraft_command(self.name, absdir, options)
 
-        str_command = ""
-        for i in command:
-            if " " in i:
-                str_command += '"'+i+'" '
-            else:
-                str_command += i+' '
-        args = f"cd {self.directory}&start {str_command}"
-        logging.info(args)
-        os.popen(args)
+        return options["gameDirectory"], command
 
     def install_forge(self, forge_version, callback):
         mll.forge.install_forge_version(

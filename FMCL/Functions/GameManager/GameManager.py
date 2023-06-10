@@ -1,5 +1,7 @@
 import qtawesome as qta
 from Core import Game
+from FMCL.Functions.SettingVisual import SettingWidget
+from Kernel import Kernel
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget
 
@@ -7,7 +9,8 @@ from ..GameInfo import GameInfo
 from ..LogoChooser import LogoChooser
 from ..ModManager import ModManager
 from .ui_GameManager import Ui_GameManager
-from FMCL.Functions.SettingVisual import SettingWidget
+
+_translate = Kernel.translate
 
 
 class GameManager(QWidget, Ui_GameManager):
@@ -27,6 +30,7 @@ class GameManager(QWidget, Ui_GameManager):
             return
         super().__init__()
         self.setupUi(self)
+        self.setWindowTitle(f"{_translate('游戏管理')}:{name}")
         self.setWindowIcon(qta.icon("mdi6.minecraft"))
         self.pb_gameinfo.setIcon(qta.icon("mdi6.information-outline"))
         self.pb_gamesetting.setIcon(qta.icon("ri.settings-5-line"))

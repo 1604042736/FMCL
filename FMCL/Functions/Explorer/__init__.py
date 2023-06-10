@@ -6,7 +6,7 @@ from .Explorer import Explorer
 def defaultSetting() -> dict:
     return {
         "explorer.desktop.background_image": "",
-        "explorer.desktop.item_clicked_actions": ["GameManager"]
+        "explorer.desktop.item_clicked_actions": ["Launcher", "GameManager"]
     }
 
 

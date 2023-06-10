@@ -15,6 +15,7 @@ class GameInfo(QWidget, Ui_GameInfo):
     def __init__(self, name: str) -> None:
         super().__init__()
         self.setupUi(self)
+        self.setWindowTitle(f"{_translate('游戏信息')}:{name}")
         self.setWindowIcon(qta.icon("mdi6.information-outline"))
         self. __info_translate = {
             "version": _translate("版本"),

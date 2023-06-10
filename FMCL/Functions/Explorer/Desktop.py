@@ -46,12 +46,6 @@ class Desktop(QListWidget):
         menu = QMenu(self)
 
         if item:
-            action = QAction(self)
-            action.setText(_translate("启动"))
-            action.setIcon(qta.icon("mdi.rocket-launch-outline"))
-            action.triggered.connect(lambda: Game(item.text()).launch())
-            menu.addAction(action)
-
             action_functions = Setting(
             )["explorer.desktop.item_clicked_actions"]
             for action_function in action_functions:
@@ -61,7 +55,7 @@ class Desktop(QListWidget):
                 action.setText(info["name"])
                 action.setIcon(info["icon"])
                 action.triggered.connect(
-                    lambda f=action_function: Kernel.execFunction(action_function, item.text()))
+                    lambda _, f=action_function: Kernel.execFunction(f, item.text()))
                 menu.addAction(action)
         else:
             a_refresh = QAction(_translate("刷新"), self)
