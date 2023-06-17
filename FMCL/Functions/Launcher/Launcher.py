@@ -4,6 +4,7 @@ import qtawesome as qta
 from Core import Game
 from Kernel import Kernel
 from PyQt5.QtCore import QProcess, pyqtSlot
+from PyQt5.QtGui import QTextCursor
 from PyQt5.QtWidgets import QWidget
 
 from .ui_Launcher import Ui_Launcher
@@ -23,28 +24,40 @@ class Launcher(QWidget, Ui_Launcher):
     def start(self):
         game = Game(self.name)
         self.process = QProcess()
-        self.process.readyReadStandardOutput.connect(self.output)
-        self.process.readyReadStandardError.connect(self.error)
+        self.process.readyReadStandardOutput.connect(self.outputStandard)
+        self.process.readyReadStandardError.connect(self.errorStandard)
         dir, command = game.get_launch_command()
         logging.info(command)
         program, *args = command
         self.process.setWorkingDirectory(dir)
         self.process.start(program, args)
 
-    def output(self):
+    def outputStandard(self):
         try:
             text = self.process.readAllStandardOutput().data().decode("utf-8")
         except:
             text = self.process.readAllStandardOutput().data().decode("gbk")
-        self.te_output.insertPlainText(text)
+        self.output(text)
 
-    def error(self):
+    def errorStandard(self):
         try:
             text = self.process.readAllStandardError().data().decode("utf-8")
         except:
             text = self.process.readAllStandardError().data().decode("gbk")
+        self.output(text)
+
+    def output(self, text: str):
+        flag = False
+        scrollbar = self.te_output.verticalScrollBar()
+        print(scrollbar.value(), scrollbar.maximum())
+        if scrollbar.value() == scrollbar.maximum():
+            flag = True
         self.te_output.insertPlainText(text)
+        if flag:
+            scrollbar.setValue(scrollbar.maximum())
+            # self.te_output.moveCursor(QTextCursor.MoveOperation.End)
 
     @pyqtSlot(bool)
     def on_pb_kill_clicked(self, _):
         self.process.kill()
+        self.output("游戏结束!")
