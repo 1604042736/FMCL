@@ -15,9 +15,9 @@ filters = [
 ]
 
 
-def main():
+def generate(target_path, save_path):
     translation = {}
-    for root, dirs, files in os.walk(".."):
+    for root, dirs, files in os.walk(target_path):
         for file in files:
             file_path = os.path.join(root, file)
             name, ext = os.path.splitext(file_path)
@@ -34,12 +34,10 @@ def main():
                         else:
                             continue
                         translation[text] = text
-    with open("../FMCL/latest.log", encoding="utf-8")as file:
-        for match in re.finditer(r"未翻译的文本\(.*?\):(.*?)\n", file.read()):
-            text = match.group(1)
-            translation[text] = text
+    if not translation:
+        return
     for i in ("简体中文", "English"):
-        path = os.path.join("../FMCL", "Translations")
+        path = os.path.join(save_path, "Translations")
         if not os.path.exists(path):
             os.makedirs(path)
         file_path = os.path.join(path, f"{i}.json")
@@ -49,6 +47,12 @@ def main():
                   open(file_path, encoding="utf-8", mode="w"),
                   sort_keys=True, ensure_ascii=False, indent=4)
     print(translation)
+
+
+def main():
+    for i in os.listdir("../FMCL/Functions"):
+        generate(f"../FMCL/Functions/{i}", f"../FMCL/Functions/{i}")
+    generate(f"../Core", f"../FMCL")
 
 
 if __name__ == "__main__":

@@ -1,7 +1,0 @@
-<RCC>
-  <qresource prefix="/">
-    <file>简体中文/launcher/readme.md</file>
-    <file>简体中文/launcher/customfunction.md</file>
-    <file>简体中文/launcher/customhelp.md</file>
-  </qresource>
-</RCC>

@@ -57,6 +57,11 @@ class Kernel(QApplication):
                     self.sendEvent(self, WidgetCaughtEvent(a0))
                     if a0.parent() == None:  # 使用默认方法
                         self.showWidget(a0)
+        if a1.type() == QEvent.Type.WindowTitleChange:
+            oldtitle = a0.windowTitle()
+            newtitle = Kernel.translate(oldtitle)
+            if newtitle != oldtitle:
+                a0.setWindowTitle(newtitle)
         return super().notify(a0, a1)
 
     def separateWidget(self, widget: QWidget):
@@ -69,10 +74,11 @@ class Kernel(QApplication):
         logging.debug("加载翻译...")
         lang_type = Setting()["language.type"]
         functions_path = "FMCL/Functions"
-        paths = [os.path.join(i, "Translations")
-                 for i in ["FMCL"]+os.listdir(functions_path)]
+        paths = ["FMCL/Translations"]
+        paths.extend([os.path.join(functions_path, i, "Translations")
+                      for i in os.listdir(functions_path)])
         for path in paths:
-            if not os.path.exists(path):
+            if not os.path.exists(f"{path}/{lang_type}.json"):
                 continue
             Kernel.translation |= json.load(
                 open(f"{path}/{lang_type}.json", encoding="utf-8"))

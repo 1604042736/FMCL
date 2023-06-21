@@ -1,3 +1,5 @@
+import os
+
 import qtawesome as qta
 from Events import *
 from Kernel import Kernel
@@ -5,7 +7,6 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QAction, QTreeWidgetItem, QWidget, qApp
 
 from .Page import Page
-from .Pages import *
 from .ui_Help import Ui_Help
 
 _translate = Kernel.translate
@@ -17,26 +18,35 @@ class Help(QWidget, Ui_Help):
         self.setupUi(self)
         self.setWindowIcon(qta.icon("mdi.help"))
         self.splitter.setSizes([100, 500])
-
-        self.indexes = getIndexes()
         self.item_page = []
         self.items = {}
-        for key, page in self.indexes.items():
-            children = key.split(".")
-            for i, val in enumerate(children):
-                child = ".".join(children[:i+1]) if i > 0 else val
-                parent = ".".join(children[:i]) if i > 0 else "???"
+        for root, dirs, files in os.walk(os.path.dirname(__file__)+"/Pages"):
+            for file in files:
+                file_path = os.path.join(root, file)
+                name, ext = os.path.splitext(file_path)
+                if ext == ".md":
+                    self.addHelp(file_path)
 
-                if child in self.items:
-                    continue
-
-                root = self.items.get(parent, None)
-                item = QTreeWidgetItem()
-                item.setText(0, val)
-                self.addTreeItem(root, item)
-                self.items[child] = item
-
-            self.item_page.append((item, page))
+    def addHelp(self, file_path: str):
+        full_path = file_path
+        file_path = file_path.replace("/", "\\")
+        file_path = file_path.replace(
+            os.path.dirname(__file__)+"\\Pages\\", "")
+        file_path = file_path.split("\\")
+        for i in range(len(file_path)-1):
+            root_name = '/'.join(file_path[:i])
+            child_name = "/".join(file_path[:i+1])
+            if child_name in self.items:
+                continue
+            root = self.items.get(root_name, None)
+            item = QTreeWidgetItem()
+            item.setText(0, file_path[i])
+            self.addTreeItem(root, item)
+            self.items[child_name] = item
+        item = QTreeWidgetItem()
+        item.setText(0, os.path.splitext(file_path[-1])[0])
+        self.addTreeItem(self.items.get("/".join(file_path[:-1])), item)
+        self.item_page.append((item, full_path))
 
     def addTreeItem(self, root: QTreeWidgetItem | None, item: QTreeWidgetItem):
         if root == None:
