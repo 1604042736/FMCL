@@ -1,5 +1,7 @@
-from .Help import Help
 import qtawesome as qta
+
+from .Help import Help
+from .Page import Page
 
 
 def functionInfo():
@@ -9,6 +11,10 @@ def functionInfo():
     }
 
 
-def main():
-    help = Help()
-    help.show()
+def main(page: str = None):
+    if page:
+        page = Page(page)
+        page.show()
+    else:
+        help = Help()
+        help.show()

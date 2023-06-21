@@ -95,33 +95,35 @@ class Kernel(QApplication):
         try:
             from Pack.Functions import zipfile_bytes
         except ImportError:
-            return
-        zip = ZipFile(zipfile_bytes)
-        for path in zip.namelist():
-            if "__pycache__" in path:
-                continue
-            functions_path = "FMCL/Functions"
-            target_path = os.path.join(functions_path, path)
-            if not os.path.exists(target_path):
-                logging.debug(f"解压:{path}")
-                zip.extract(path, functions_path)
-        zip.close()
+            pass
+        else:
+            zip = ZipFile(zipfile_bytes)
+            for path in zip.namelist():
+                if "__pycache__" in path:
+                    continue
+                functions_path = "FMCL/Functions"
+                target_path = os.path.join(functions_path, path)
+                if not os.path.exists(target_path):
+                    logging.debug(f"解压:{path}")
+                    zip.extract(path, functions_path)
+            zip.close()
 
         logging.debug("解压翻译...")
         try:
             from Pack.Translations import zipfile_bytes
         except ImportError:
-            return
-        zip = ZipFile(zipfile_bytes)
-        for path in zip.namelist():
-            if "__pycache__" in path:
-                continue
-            translation_path = 'FMCL/Translations'
-            target_path = os.path.join(translation_path, path)
-            if not os.path.exists(target_path):
-                logging.debug(f"解压:{path}")
-                zip.extract(path, translation_path)
-        zip.close()
+            pass
+        else:
+            zip = ZipFile(zipfile_bytes)
+            for path in zip.namelist():
+                if "__pycache__" in path:
+                    continue
+                translation_path = 'FMCL/Translations'
+                target_path = os.path.join(translation_path, path)
+                if not os.path.exists(target_path):
+                    logging.debug(f"解压:{path}")
+                    zip.extract(path, translation_path)
+            zip.close()
 
     @staticmethod
     def getFunction(function_name: str):

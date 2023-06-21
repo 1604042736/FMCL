@@ -2,9 +2,10 @@ import sys
 import webbrowser
 
 import qtawesome as qta
+from Kernel import Kernel
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, qApp
-from Kernel import Kernel
+
 from .AboutItem import AboutItem
 from .ui_About import Ui_About
 
@@ -64,7 +65,7 @@ class About(QWidget, Ui_About):
                 ),
                 (
                     "minecraft_launcher_lib",
-                    "v5.3",
+                    "v6.1",
                     None,
                     (
                         lambda:webbrowser.open(
