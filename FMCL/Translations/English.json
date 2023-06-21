@@ -19,6 +19,7 @@
     "用户": "User",
     "语言": "Language",
     "语言类型": "Language type",
-    "背景图片": "Background image",
-    "游戏右键操作": "Game right clicked action"
+    "特定设置": "Specific Version",
+    "版本隔离": "Version isolation",
+    "游戏图标": "Game logo"
 }

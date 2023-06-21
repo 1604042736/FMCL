@@ -106,6 +106,11 @@ class Game:
                 os.path.join(self.directory, "versions", self.name))
 
         command = mll.command.get_minecraft_command(self.name, absdir, options)
+        try:
+            i = command.index("--versionType")
+            command[i+1] = "FMCL"
+        except:
+            pass
 
         return options["gameDirectory"], command
 
@@ -249,7 +254,7 @@ class Game:
                         self.setting[key] = val
                 for key, val in globalsetting.attrs.items():
                     if "game" in key:
-                        self.setting[key] = val
+                        self.setting.attrs[key] = val
 
     def delete(self):
         shutil.rmtree(os.path.join(self.directory, "versions", self.name))
