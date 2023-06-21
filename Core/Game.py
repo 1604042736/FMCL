@@ -78,7 +78,7 @@ class Game:
         logging.info(args)
         os.popen(args)
 
-    def get_launch_command(self)->tuple[str,str]:
+    def get_launch_command(self) -> tuple[str, str]:
         """
         获取启动参数
         返回游戏目录和参数
@@ -98,6 +98,8 @@ class Game:
         options["resolutionWidth"] = str(setting.get("game.width"))
         options["resolutionHeight"] = str(setting.get("game.height"))
         options["executablePath"] = setting.get("game.java_path")
+        options["executablePath"] = setting.get("game.java_path")
+        options["jvmArguments"] = [f"-Xmx{setting.get('game.maxmem')}m"]
         self.generate_setting()
         if self.setting.get("isolation"):
             options["gameDirectory"] = os.path.abspath(

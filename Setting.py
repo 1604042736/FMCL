@@ -16,6 +16,7 @@ DEFAULT_SETTING = {
     "game.java_path": "javaw",
     "game.width": 1000,
     "game.height": 618,
+    "game.maxmem": 2048,
     "users": [],
     "language.type": "简体中文"
 }
@@ -55,6 +56,9 @@ DEFAULT_SETTING_ATTR = {
     },
     "game.height": {
         "name": "游戏窗口高度"
+    },
+    "game.maxmem": {
+        "name": "最大内存"
     },
     "users": {
         "name":  "用户"

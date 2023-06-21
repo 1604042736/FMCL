@@ -49,7 +49,6 @@ class Launcher(QWidget, Ui_Launcher):
     def output(self, text: str):
         flag = False
         scrollbar = self.te_output.verticalScrollBar()
-        print(scrollbar.value(), scrollbar.maximum())
         if scrollbar.value() == scrollbar.maximum():
             flag = True
         self.te_output.insertPlainText(text)
