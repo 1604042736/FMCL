@@ -115,23 +115,27 @@ class Game:
         return options["gameDirectory"], command
 
     def install_forge(self, forge_version, callback):
+        logging.info(f"下载Forge({forge_version})")
         mll.forge.install_forge_version(
             forge_version, self.directory, callback)
         version, forge = forge_version.split("-")
         Game(f"{version}-forge-{forge}").rename(self.name)
 
     def install_fabric(self, version, fabric_version, callback):
+        logging.info(f"下载Fabric({version},{fabric_version})")
         mll.fabric.install_fabric(
             version, self.directory, fabric_version, callback)
         fabric_minecraft_version = f"fabric-loader-{fabric_version}-{version}"
         Game(fabric_minecraft_version).rename(self.name)
 
     def install_mc(self, version, callback):
+        logging.info(f"下载Minecraft({version})")
         mll.install.install_minecraft_version(
             version, self.directory, callback)
         Game(version).rename(self.name)
 
     def install(self, version, forge_version, fabric_version):
+        logging.info(f"下载({version},{forge_version},{fabric_version})")
         if forge_version:
             Progress().add(lambda callback: self.install_forge(forge_version, callback))
         elif fabric_version:
@@ -140,17 +144,41 @@ class Game:
             Progress().add(lambda callback: self.install_mc(version, callback))
 
     def rename(self, new_name):
+        if new_name == self.name:
+            return
+        logging.info(f"重命名: {new_name}")
+        old_path = f"{self.directory}/versions/{self.name}"
+        new_path = f"{self.directory}/versions/{new_name}"
+        if os.path.exists(new_path):  # 如果重命名之后的文件存在就覆盖原来的文件
+            # 移动新的文件
+            shutil.copy(f"{old_path}/{self.name}.jar", new_path)
+            shutil.copy(f"{old_path}/{self.name}.json", new_path)
+            # 删除旧的文件
+            os.remove(f"{new_path}/{new_name}.jar")
+            os.remove(f"{new_path}/{new_name}.json")
+
+            # 重命名
+            os.rename(f"{new_path}/{self.name}.jar",
+                      f"{new_path}/{new_name}.jar")
+            os.rename(f"{new_path}/{self.name}.json",
+                      f"{new_path}/{new_name}.json")
+
+            config = json.load(
+                open(f"{new_path}/{new_name}.json"))
+            config["id"] = new_name
+            json.dump(config,
+                      open(f"{new_path}/{new_name}.json", mode="w", encoding="utf-8"))
+            return
+        os.rename(f"{old_path}/{self.name}.jar",
+                  f"{old_path}/{new_name}.jar")
+        os.rename(f"{old_path}/{self.name}.json",
+                  f"{old_path}/{new_name}.json")
+        os.rename(old_path, new_path)
         config = json.load(
-            open(f"{self.directory}/versions/{self.name}/{self.name}.json"))
+            open(f"{new_path}/{new_name}.json"))
         config["id"] = new_name
         json.dump(config,
-                  open(f"{self.directory}/versions/{self.name}/{self.name}.json", mode="w", encoding="utf-8"))
-        os.rename(f"{self.directory}/versions/{self.name}/{self.name}.jar",
-                  f"{self.directory}/versions/{self.name}/{new_name}.jar")
-        os.rename(f"{self.directory}/versions/{self.name}/{self.name}.json",
-                  f"{self.directory}/versions/{self.name}/{new_name}.json")
-        os.rename(f"{self.directory}/versions/{self.name}",
-                  f"{self.directory}/versions/{new_name}")
+                  open(f"{new_path}/{new_name}.json", mode="w", encoding="utf-8"))
 
     def get_info(self) -> dict:
         if hasattr(self, "info"):

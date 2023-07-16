@@ -57,9 +57,8 @@ class GameManager(QWidget, Ui_GameManager):
         self.setUi(self.gameinfo)
 
     def renamed(self, name):
-        self.name = name
-        self.game = Game(name)
-        self.refresh()
+        Kernel.execFunction("GameManager", name=name)
+        self.close()
 
     def setUi(self, widget: QWidget):
         while self.sw_ui.count():

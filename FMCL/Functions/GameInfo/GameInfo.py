@@ -60,7 +60,11 @@ class GameInfo(QWidget, Ui_GameInfo):
     @pyqtSlot()
     def on_le_name_editingFinished(self):
         new_name = self.le_name.text()
+        if new_name == self.game.name:
+            return
         self.game.rename(new_name)
         if hasattr(self.game, "setting"):
-            self.game.setting.deleteLater()
+            self.game.setting = None
         self.game = Game(new_name)
+        self.refresh()
+        self.gameNameChanged.emit(new_name)
