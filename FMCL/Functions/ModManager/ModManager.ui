@@ -14,25 +14,15 @@
    <string>Mod管理</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QPushButton" name="pb_refresh">
-     <property name="text">
-      <string>刷新</string>
+   <item row="1" column="0" colspan="4">
+    <widget class="QListWidget" name="lw_mods">
+     <property name="resizeMode">
+      <enum>QListView::Adjust</enum>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
-   </item>
-   <item row="0" column="2">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item row="0" column="1">
     <widget class="QPushButton" name="pb_openmodir">
@@ -41,13 +31,17 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="3">
-    <widget class="QListWidget" name="lw_mods">
-     <property name="resizeMode">
-      <enum>QListView::Adjust</enum>
+   <item row="0" column="0">
+    <widget class="QPushButton" name="pb_refresh">
+     <property name="text">
+      <string>刷新</string>
      </property>
-     <property name="wordWrap">
-      <bool>true</bool>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLineEdit" name="le_search">
+     <property name="placeholderText">
+      <string>按回车以搜索</string>
      </property>
     </widget>
    </item>

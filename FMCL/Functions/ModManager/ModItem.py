@@ -1,10 +1,11 @@
 import logging
+import os
 
 import multitasking
 from Core import Game
 from Kernel import Kernel
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from PyQt5.QtWidgets import QMessageBox, QWidget
 
 from .ui_ModItem import Ui_ModItem
 
@@ -12,6 +13,8 @@ _translate = Kernel.translate
 
 
 class ModItem(QWidget, Ui_ModItem):
+    modDeleted = pyqtSignal()
+
     def __init__(self, game: Game, modenabled: bool, modname: str):
         super().__init__()
         self.setupUi(self)
@@ -29,7 +32,7 @@ class ModItem(QWidget, Ui_ModItem):
         modenabled = (False, True, True)[self.cb_modenabled.checkState()]
         if modenabled != self.modenabled:
             self.modenabled = modenabled
-            self.game.setModEnalbed(self.modenabled, self.modname)
+            self.game.setModEnabled(self.modenabled, self.modname)
 
     @multitasking.task
     def setInfo(self):
@@ -47,3 +50,17 @@ class ModItem(QWidget, Ui_ModItem):
             self.setToolTip(text)
         except Exception as e:
             logging.error(f'无法获取"{self.modname}"信息: {e}')
+
+    @pyqtSlot(bool)
+    def on_pb_del_clicked(self, _):
+        reply = QMessageBox.warning(
+            self,
+            _translate("删除"),
+            _translate("确认删除")+self.modname+"?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        if reply == QMessageBox.StandardButton.Yes:
+            path = os.path.join(self.game.get_mod_path(),
+                                self.modname+(".disabled" if not self.modenabled else ""))
+            logging.info(f"删除{path}")
+            os.remove(path)
+            self.modDeleted.emit()

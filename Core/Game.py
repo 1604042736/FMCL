@@ -232,7 +232,7 @@ class Game:
         self.get_info()
         return self.info["forge_version"] or self.info["fabric_version"]
 
-    def get_mods(self) -> list:
+    def get_mods(self, keyword="") -> list:
         if not self.mod_avaiable():
             return []
         path = self.get_mod_path()
@@ -240,6 +240,8 @@ class Game:
             return []
         result = []
         for i in os.listdir(path):
+            if keyword not in i:
+                continue
             if ".jar" in i:
                 if i.endswith(".disabled"):
                     result.append((False, i.replace(".disabled", "")))
@@ -253,7 +255,7 @@ class Game:
     def setModEnabled(self, enabled: bool, name: str):
         path = self.get_mod_path()
         enabled_path = os.path.join(path, name)
-        disabled_path = os.path.join(path, f"{name}.disbaled")
+        disabled_path = os.path.join(path, f"{name}.disabled")
         if enabled:
             os.rename(disabled_path, enabled_path)
         else:

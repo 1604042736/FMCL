@@ -1,5 +1,7 @@
 {
     "作者": "Author",
     "版本": "Version",
-    "Mod管理": "ModManager"
+    "Mod管理": "ModManager",
+    "删除": "Delete",
+    "确认删除": "Confirm Delete"
 }

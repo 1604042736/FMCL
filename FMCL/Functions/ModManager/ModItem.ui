@@ -20,14 +20,8 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
-   <item row="0" column="1">
-    <widget class="QLabel" name="l_modname">
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
+   <item row="1" column="1">
+    <widget class="QLabel" name="l_info">
      <property name="text">
       <string/>
      </property>
@@ -36,8 +30,14 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QLabel" name="l_info">
+   <item row="0" column="1">
+    <widget class="QLabel" name="l_modname">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -59,6 +59,19 @@
      </property>
      <property name="tristate">
       <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QPushButton" name="pb_del">
+     <property name="maximumSize">
+      <size>
+       <width>32</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>删除</string>
      </property>
     </widget>
    </item>
