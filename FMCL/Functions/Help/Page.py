@@ -1,6 +1,5 @@
-from PyQt5.QtCore import QFile, QObject, QUrl, pyqtProperty
-from PyQt5.QtWebChannel import QWebChannel
-from PyQt5.QtWebEngineWidgets import QWebEnginePage, QWebEngineView
+from PyQt5.QtCore import QFile, QObject, pyqtProperty
+from PyQt5.QtWidgets import QTextEdit
 
 from . import Help_rc as _
 
@@ -18,7 +17,7 @@ class Document(QObject):
         return self.m_text
 
 
-class Page(QWebEngineView):
+class Page(QTextEdit):
     instances = {}
     new_count = {}
 
@@ -34,11 +33,9 @@ class Page(QWebEngineView):
             return
         super().__init__()
         self.setWindowTitle(filename)
-
-        self.webpage = QWebEnginePage(self)
-        self.webchannel = QWebChannel()
-        self.document = Document(filename)
-        self.webchannel.registerObject("content", self.document)
-        self.webpage.setWebChannel(self.webchannel)
-        self.setPage(self.webpage)
-        self.setUrl(QUrl("qrc:/index.html"))
+        self.setReadOnly(True)
+        self.file = QFile(filename)
+        self.file.open(QFile.OpenModeFlag.ReadOnly)
+        self.m_text = bytes(self.file.readAll()).decode("utf-8")
+        self.setMarkdown(self.m_text)
+        self.file.close()
