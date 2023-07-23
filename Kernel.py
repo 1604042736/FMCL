@@ -9,7 +9,7 @@ from zipfile import *
 import qtawesome as qta
 from PyQt5.QtCore import QEvent, QObject, Qt
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QDialog, QWidget
+from PyQt5.QtWidgets import QApplication, QDialog, QMessageBox, QWidget
 
 from Events import *
 from Exceptions import *
@@ -158,7 +158,12 @@ class Kernel(QApplication):
         """运行启动项"""
         startup_functions = Setting()["system.startup_functions"]
         for function_name in startup_functions:
-            self.execFunction(function_name)
+            try:
+                self.execFunction(function_name)
+            except Exception as e:
+                QMessageBox.critical(None,
+                                     Kernel.translate("无法运行")+function_name,
+                                     str(e))
 
     @staticmethod
     def getAllFunctions():
