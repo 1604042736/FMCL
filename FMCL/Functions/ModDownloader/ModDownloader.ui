@@ -45,7 +45,7 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="2" column="0">
-        <widget class="QTreeWidget" name="tw_mods">
+        <widget class="TreeWidget" name="tw_mods">
          <attribute name="headerVisible">
           <bool>false</bool>
          </attribute>
@@ -89,23 +89,23 @@
           </widget>
          </item>
          <item row="0" column="4">
-          <widget class="QComboBox" name="cb_downloadsource"/>
+          <widget class="ComboBox" name="cb_downloadsource"/>
          </item>
          <item row="0" column="1" colspan="2">
-          <widget class="QLineEdit" name="le_name"/>
+          <widget class="LineEdit" name="le_name"/>
          </item>
          <item row="1" column="1" colspan="2">
-          <widget class="QComboBox" name="cb_sort"/>
+          <widget class="ComboBox" name="cb_sort"/>
          </item>
          <item row="1" column="3">
-          <widget class="QPushButton" name="pb_search">
+          <widget class="PushButton" name="pb_search">
            <property name="text">
             <string>搜索</string>
            </property>
           </widget>
          </item>
          <item row="1" column="4">
-          <widget class="QPushButton" name="pb_download">
+          <widget class="PushButton" name="pb_download">
            <property name="text">
             <string>下载</string>
            </property>
@@ -114,7 +114,7 @@
         </layout>
        </item>
        <item row="2" column="1">
-        <widget class="QTreeWidget" name="tw_files">
+        <widget class="TreeWidget" name="tw_files">
          <attribute name="headerVisible">
           <bool>false</bool>
          </attribute>
@@ -131,6 +131,28 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PushButton</class>
+   <extends>QPushButton</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
+   <class>LineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
+   <class>TreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
+   <class>ComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

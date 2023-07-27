@@ -1,7 +1,10 @@
-from Kernel import Kernel
+import logging
+import traceback
+
 import multitasking
 import qtawesome as qta
 from Core import Download, Mod, Progress
+from Kernel import Kernel
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QFileDialog, QTreeWidgetItem, QWidget
 
@@ -20,6 +23,8 @@ class ModDownloader(QWidget, Ui_ModDownloader):
         self.setWindowIcon(qta.icon("mdi.puzzle-outline"))
         self.mod = Mod()
         self.cb_downloadsource.addItems(self.mod.get_all_downloadsources())
+        self.cb_downloadsource.setCurrentText(
+            self.mod.get_all_downloadsources()[0])
         self.cb_sort.addItems(self.mod.get_all_sortmethod())
         self.cb_downloadsource.currentTextChanged.connect(
             self.mod.set_downloadsource)
@@ -42,8 +47,11 @@ class ModDownloader(QWidget, Ui_ModDownloader):
         self.tw_files.clear()
         name = self.le_name.text()
         sort = self.cb_sort.currentText()
-        for i in self.mod.search(name, sort, yield_=True):
-            self.__modFound.emit(i)
+        try:
+            for i in self.mod.search(name, sort, yield_=True):
+                self.__modFound.emit(i)
+        except:
+            logging.error(traceback.format_exc())
         self.pb_search.setEnabled(True)
 
     def setMods(self, mods: list):

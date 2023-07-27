@@ -1,7 +1,6 @@
 from Kernel import Kernel
-from PyQt5.QtCore import QCoreApplication
-from PyQt5.QtWidgets import (QComboBox, QFileDialog, QInputDialog, QMessageBox,
-                             QPushButton)
+from PyQt5.QtWidgets import QFileDialog, QInputDialog
+from qfluentwidgets import ComboBox, MessageBox, PushButton
 
 from .SettingItem import SettingItem
 
@@ -11,17 +10,18 @@ _translate = Kernel.translate
 class ListSettingItem(SettingItem):
     def __init__(self, id: str, setting) -> None:
         super().__init__(id, setting)
-        self.w_value = QComboBox()
+        self.w_value = ComboBox()
         self.w_value.addItems(setting.get(id))
+        self.w_value.setCurrentText(setting.get(id)[0])
         self.w_value.currentTextChanged.connect(self.promote_top)
         self.w_value.currentTextChanged.connect(self.sync)
 
-        self.pb_add = QPushButton()
+        self.pb_add = PushButton()
         self.pb_add.setText(_translate("添加"))
         self.pb_add.clicked.connect(self.add)
         self.pb_add.clicked.connect(self.sync)
 
-        self.pb_delete = QPushButton()
+        self.pb_delete = PushButton()
         self.pb_delete.setText(_translate("删除"))
         self.pb_delete.clicked.connect(self.delete)
         self.pb_delete.clicked.connect(self.sync)
@@ -51,17 +51,18 @@ class ListSettingItem(SettingItem):
         text = self.w_value.currentText()
         atleast = self.setting.getAttr(self.id, "atleast", 0)
         if self.w_value.count() <= atleast:
-            QMessageBox.warning(self,
-                                _translate("删除"),
-                                f'{_translate("至少有")}{atleast}')
+            MessageBox(_translate("删除"),
+                       f'{_translate("至少有")}{atleast}',
+                       self.window()).exec()
         else:
-            reply = QMessageBox.warning(self,
-                                        _translate("删除"),
-                                        _translate("确定删除?"),
-                                        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
-            if reply == QMessageBox.StandardButton.Yes:
+            def confirmDelete():
                 self.setting.get(self.id).remove(text)
                 self.w_value.removeItem(self.w_value.currentIndex())
+            box = MessageBox(_translate("删除"),
+                             _translate("确定删除?"),
+                             MessageBox)
+            box.yesSignal.connect(confirmDelete)
+            box.exec()
 
     def promote_top(self, text):
         if text:
@@ -73,5 +74,6 @@ class ListSettingItem(SettingItem):
         self.w_value.currentTextChanged.disconnect(self.promote_top)
         self.w_value.clear()
         self.w_value.addItems(self.setting.get(self.id))
+        self.w_value.setCurrentText(self.setting.get(self.id)[0])
         self.w_value.currentTextChanged.connect(self.promote_top)
         return super().refresh()

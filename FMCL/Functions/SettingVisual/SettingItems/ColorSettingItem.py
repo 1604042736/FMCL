@@ -1,6 +1,9 @@
-from PyQt5.QtWidgets import QColorDialog, QLabel, QPushButton
-from .SettingItem import SettingItem
 from Kernel import Kernel
+from PyQt5.QtWidgets import QColorDialog, QLabel
+from qfluentwidgets import ColorDialog, PushButton
+
+from .SettingItem import SettingItem
+
 _translate = Kernel.translate
 
 
@@ -13,7 +16,7 @@ class ColorSettingItem(SettingItem):
             f"QLabel{{background-color:{self.color};}}")
         self._layout.addWidget(self.l_color, 0, 0)
 
-        self.pb_choosecolor = QPushButton()
+        self.pb_choosecolor = PushButton()
         self.pb_choosecolor.setText(_translate("选择颜色"))
         self.pb_choosecolor.clicked.connect(self.chooseColor)
         self._layout.addWidget(self.pb_choosecolor, 0, 1)
@@ -23,15 +26,18 @@ class ColorSettingItem(SettingItem):
         return super().sync()
 
     def refresh(self):
-        self.color = self.setting.get(id)
+        self.color = self.setting.get(self.id)
         self.l_color.setStyleSheet(
             f"QLabel{{background-color:{self.color};}}")
         return super().refresh()
 
     def chooseColor(self):
-        color = QColorDialog.getColor()
-        if color.name() != "#000000":
+        def changeColor(color):
             self.color = color.name()
             self.l_color.setStyleSheet(
                 f"QLabel{{background-color:{self.color};}}")
             self.sync()
+        colordialog = ColorDialog(
+            self.color, _translate("选择颜色"), self.window())
+        colordialog.colorChanged.connect(changeColor)
+        colordialog.exec()

@@ -19,6 +19,7 @@ class AllFunctions(QListWidget):
         if self.__new_count > 1:
             return
         super().__init__()
+        self.setObjectName("AllFunctions")
         self.setMovement(QListView.Movement.Static)
         self.setViewMode(QListView.ViewMode.IconMode)
         self.setResizeMode(QListView.ResizeMode.Adjust)

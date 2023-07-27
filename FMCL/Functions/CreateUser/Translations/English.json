@@ -1,3 +1,5 @@
 {
-    "创建用户": "CreateUser"
+    "创建用户": "CreateUser",
+    "离线登录": "Offline",
+    "微软登录": "Microsoft"
 }

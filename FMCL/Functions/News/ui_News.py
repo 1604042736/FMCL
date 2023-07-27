@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\News\News.ui'
+# Form implementation generated from reading ui file 'News.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -30,7 +30,7 @@ class Ui_News(object):
         self.gl_news = QtWidgets.QGridLayout()
         self.gl_news.setObjectName("gl_news")
         self.gl_scrollarea.addLayout(self.gl_news, 0, 0, 1, 1)
-        self.pb_loadmore = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
+        self.pb_loadmore = PushButton(self.scrollAreaWidgetContents)
         self.pb_loadmore.setObjectName("pb_loadmore")
         self.gl_scrollarea.addWidget(self.pb_loadmore, 1, 0, 1, 1)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
@@ -43,3 +43,4 @@ class Ui_News(object):
         _translate = QtCore.QCoreApplication.translate
         News.setWindowTitle(_translate("News", "新闻"))
         self.pb_loadmore.setText(_translate("News", "加载更多内容"))
+from qfluentwidgets import PushButton

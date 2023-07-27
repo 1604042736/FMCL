@@ -1,10 +1,13 @@
 import os
 
+from Kernel import Kernel
 import qtawesome as qta
 from PyQt5.QtWidgets import QInputDialog
 from Setting import Setting
 
 from .Launcher import Launcher
+
+_translate = Kernel.translate
 
 
 def functionInfo():
@@ -17,7 +20,7 @@ def functionInfo():
 def main(name=None):
     if not name:
         name, ok = QInputDialog.getItem(
-            None, "选择游戏", "游戏列表",
+            None, _translate("选择游戏"), _translate("游戏列表"),
             os.listdir(os.path.join(Setting()["game.directories"][0], "versions")), editable=False)
         if not ok:
             return

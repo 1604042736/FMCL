@@ -4,5 +4,7 @@
     "删除": "Delete",
     "游戏信息": "GameInfo",
     "版本": "Version",
-    "确定删除?": "Confirm Delete?"
+    "确定删除?": "Confirm Delete?",
+    "选择游戏": "Choose game",
+    "游戏列表": "Game list"
 }

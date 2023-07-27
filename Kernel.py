@@ -10,6 +10,7 @@ import qtawesome as qta
 from PyQt5.QtCore import QEvent, QObject, Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QDialog, QMessageBox, QWidget
+from qfluentwidgets import RoundMenu
 
 from Events import *
 from Exceptions import *
@@ -51,6 +52,7 @@ class Kernel(QApplication):
         elif (isinstance(a0, QWidget)
                 and not isinstance(a0, Window)
                 and not isinstance(a0, QDialog)
+                and not isinstance(a0,RoundMenu)
                 and a0.windowType() != Qt.WindowType.ToolTip):
             if a1.type() == QEvent.Type.Show:
                 if a0.parent() == None:

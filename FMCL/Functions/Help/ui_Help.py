@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\Help\Help.ui'
+# Form implementation generated from reading ui file 'Help.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -16,8 +16,6 @@ class Ui_Help(object):
         Help.setObjectName("Help")
         Help.resize(1000, 618)
         self.gridLayout = QtWidgets.QGridLayout(Help)
-        self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
         self.splitter = QtWidgets.QSplitter(Help)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
@@ -29,7 +27,7 @@ class Ui_Help(object):
         self.splitter.setOpaqueResize(True)
         self.splitter.setChildrenCollapsible(False)
         self.splitter.setObjectName("splitter")
-        self.tw_indexes = QtWidgets.QTreeWidget(self.splitter)
+        self.tw_indexes = TreeWidget(self.splitter)
         self.tw_indexes.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.tw_indexes.setObjectName("tw_indexes")
         self.tw_indexes.headerItem().setText(0, "1")
@@ -37,12 +35,12 @@ class Ui_Help(object):
         self.sw_pages = QtWidgets.QStackedWidget(self.splitter)
         self.sw_pages.setObjectName("sw_pages")
         self.gridLayout.addWidget(self.splitter, 1, 0, 1, 4)
-        self.pb_next = QtWidgets.QPushButton(Help)
+        self.pb_next = PushButton(Help)
         self.pb_next.setEnabled(False)
         self.pb_next.setMaximumSize(QtCore.QSize(64, 16777215))
         self.pb_next.setObjectName("pb_next")
         self.gridLayout.addWidget(self.pb_next, 0, 1, 1, 1)
-        self.pb_pre = QtWidgets.QPushButton(Help)
+        self.pb_pre = PushButton(Help)
         self.pb_pre.setEnabled(False)
         self.pb_pre.setMaximumSize(QtCore.QSize(64, 16777215))
         self.pb_pre.setObjectName("pb_pre")
@@ -52,7 +50,7 @@ class Ui_Help(object):
         self.l_index.setAlignment(QtCore.Qt.AlignCenter)
         self.l_index.setObjectName("l_index")
         self.gridLayout.addWidget(self.l_index, 0, 2, 1, 1)
-        self.pb_separate = QtWidgets.QPushButton(Help)
+        self.pb_separate = PushButton(Help)
         self.pb_separate.setMaximumSize(QtCore.QSize(64, 16777215))
         self.pb_separate.setObjectName("pb_separate")
         self.gridLayout.addWidget(self.pb_separate, 0, 3, 1, 1)
@@ -66,3 +64,4 @@ class Ui_Help(object):
         self.pb_next.setText(_translate("Help", "下一页"))
         self.pb_pre.setText(_translate("Help", "上一页"))
         self.pb_separate.setText(_translate("Help", "分离"))
+from qfluentwidgets import PushButton, TreeWidget

@@ -48,7 +48,7 @@
         <widget class="QWidget" name="widget" native="true">
          <layout class="QGridLayout" name="gl_info">
           <item row="1" column="1">
-           <widget class="QPushButton" name="pb_opendir">
+           <widget class="PushButton" name="pb_opendir">
             <property name="text">
              <string>打开文件夹</string>
             </property>
@@ -68,14 +68,14 @@
            </spacer>
           </item>
           <item row="1" column="2">
-           <widget class="QPushButton" name="pb_delete">
+           <widget class="PushButton" name="pb_delete">
             <property name="text">
              <string>删除</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1" colspan="3">
-           <widget class="QLineEdit" name="le_name"/>
+           <widget class="LineEdit" name="le_name"/>
           </item>
           <item row="0" column="0" rowspan="2">
            <widget class="QLabel" name="l_logo">
@@ -119,7 +119,7 @@
         </spacer>
        </item>
        <item row="0" column="0">
-        <widget class="QPushButton" name="pb_refresh">
+        <widget class="PushButton" name="pb_refresh">
          <property name="text">
           <string>刷新</string>
          </property>
@@ -131,6 +131,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PushButton</class>
+   <extends>QPushButton</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
+   <class>LineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -1,10 +1,10 @@
 import qtawesome as qta
 from Events import *
 from Kernel import Kernel
-from PyQt5.QtCore import QCoreApplication, QEvent, QObject, QPoint, Qt
+from PyQt5.QtCore import QEvent, QObject, QPoint, Qt
 from PyQt5.QtGui import QShowEvent
-from PyQt5.QtWidgets import (QAction, QMenu, QPushButton, QStackedWidget,
-                             QWidget, qApp)
+from PyQt5.QtWidgets import QAction, QPushButton, QStackedWidget, QWidget, qApp
+from qfluentwidgets import RoundMenu, TransparentTogglePushButton
 
 from .Desktop import Desktop
 from .Start import Start
@@ -97,18 +97,12 @@ QPushButton:hover{
 
     def addTitleButton(self, widget: QWidget):
         """添加标题栏按钮"""
-        button = QPushButton()
+        button = TransparentTogglePushButton()
         button.resize(100, 32)
         button.setText(widget.windowTitle())
+        print(widget.windowIcon())
         button.setIcon(widget.windowIcon())
-        button.setStyleSheet("""
-QPushButton{
-    border:none;
-}
-QPushButton:hover{
-    background-color:rgb(200,200,200);
-}
-""")
+
         button.setToolTip(widget.windowTitle())
         button.clicked.connect(self.taskButtonClicked)
         button.setContextMenuPolicy(
@@ -121,16 +115,8 @@ QPushButton:hover{
 
     def addFixedButton(self, cls: type):
         """添加固定的按钮"""
-        button = QPushButton()
+        button = TransparentTogglePushButton()
         button.resize(46, 32)
-        button.setStyleSheet("""
-QPushButton{
-    border:none;
-}
-QPushButton:hover{
-    background-color:rgb(200,200,200);
-}
-""")
         button.clicked.connect(self.fixedButtonClicked)
 
         self.fixed_widgets[button] = cls
@@ -138,26 +124,15 @@ QPushButton:hover{
     def __currentChanged(self):
         for widget, button in self.caught_widgets.items():
             if widget == self.currentWidget():
-                button.setStyleSheet("""
-QPushButton{
-    border:none;
-    background-color:rgb(200,200,200);
-}
-""")
+                button.setChecked(True)
             else:
-                button.setStyleSheet("""
-QPushButton{
-    border:none;
-}
-QPushButton:hover{
-    background-color:rgb(200,200,200);
-}
-""")
+                button.setChecked(False)
 
         if not isinstance(self.currentWidget(), Start):
             for i in range(self.count()):
                 widget = self.widget(i)
                 if isinstance(widget, Start):
+                    widget.navigationInterface.panel.collapse()
                     self.removeWidget(widget)
                     break
 
@@ -223,7 +198,7 @@ QPushButton:hover{
         sender = self.sender()
         for widget, button in self.caught_widgets.items():
             if button == sender:
-                menu = QMenu(self)
+                menu = RoundMenu(self)
                 a_separate = QAction(self)
                 a_separate.setText(_translate("分离"))
                 a_separate.setIcon(qta.icon("ph.arrow-square-out-light"))

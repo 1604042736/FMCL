@@ -32,14 +32,14 @@ class Ui_ModItem(object):
         self.l_modname.setWordWrap(True)
         self.l_modname.setObjectName("l_modname")
         self.gl_main.addWidget(self.l_modname, 0, 1, 1, 1)
-        self.cb_modenabled = QtWidgets.QCheckBox(ModItem)
+        self.cb_modenabled = CheckBox(ModItem)
         self.cb_modenabled.setMaximumSize(QtCore.QSize(16, 16777215))
         self.cb_modenabled.setText("")
         self.cb_modenabled.setTristate(False)
         self.cb_modenabled.setObjectName("cb_modenabled")
         self.gl_main.addWidget(self.cb_modenabled, 0, 0, 2, 1)
-        self.pb_del = QtWidgets.QPushButton(ModItem)
-        self.pb_del.setMaximumSize(QtCore.QSize(32, 16777215))
+        self.pb_del = PushButton(ModItem)
+        self.pb_del.setMaximumSize(QtCore.QSize(64, 16777215))
         self.pb_del.setObjectName("pb_del")
         self.gl_main.addWidget(self.pb_del, 0, 2, 1, 1)
 
@@ -50,3 +50,4 @@ class Ui_ModItem(object):
         _translate = QtCore.QCoreApplication.translate
         ModItem.setWindowTitle(_translate("ModItem", "Mod"))
         self.pb_del.setText(_translate("ModItem", "删除"))
+from qfluentwidgets import CheckBox, PushButton

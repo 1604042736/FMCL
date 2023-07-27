@@ -1,10 +1,10 @@
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QFrame
 
 from .ui_AboutItem import Ui_AboutItem
 
 
-class AboutItem(QWidget, Ui_AboutItem):
+class AboutItem(QFrame, Ui_AboutItem):
     def __init__(self, name: str, description: str = "", icon: QPixmap = None, operator: tuple = None):
         super().__init__()
         self.setupUi(self)

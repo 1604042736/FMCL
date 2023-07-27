@@ -5,8 +5,8 @@ from Core.Game import Game
 from Kernel import Kernel
 from PyQt5.QtCore import QEvent, QSize, Qt
 from PyQt5.QtGui import QCursor
-from PyQt5.QtWidgets import (QAction, QListView, QListWidget, QListWidgetItem,
-                             QMenu)
+from PyQt5.QtWidgets import QAction, QListView, QListWidget, QListWidgetItem
+from qfluentwidgets import RoundMenu
 from Setting import Setting
 
 _translate = Kernel.translate
@@ -43,7 +43,7 @@ class Desktop(QListWidget):
     def showRightMenu(self):
         """显示右键菜单"""
         item = self.itemAt(self.mapFromGlobal(QCursor.pos()))
-        menu = QMenu(self)
+        menu = RoundMenu(self)
 
         if item:
             action_functions = Setting(

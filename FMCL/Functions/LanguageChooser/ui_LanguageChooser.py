@@ -17,7 +17,7 @@ class Ui_LanguageChooser(object):
         LanguageChooser.resize(1000, 618)
         self.gridLayout = QtWidgets.QGridLayout(LanguageChooser)
         self.gridLayout.setObjectName("gridLayout")
-        self.cb_lang = QtWidgets.QComboBox(LanguageChooser)
+        self.cb_lang = ComboBox(LanguageChooser)
         self.cb_lang.setObjectName("cb_lang")
         self.gridLayout.addWidget(self.cb_lang, 0, 0, 1, 1)
 
@@ -27,3 +27,4 @@ class Ui_LanguageChooser(object):
     def retranslateUi(self, LanguageChooser):
         _translate = QtCore.QCoreApplication.translate
         LanguageChooser.setWindowTitle(_translate("LanguageChooser", "语言选择"))
+from qfluentwidgets import ComboBox

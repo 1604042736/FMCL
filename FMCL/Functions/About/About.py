@@ -1,8 +1,14 @@
 import sys
 import webbrowser
 
+import multitasking
+import qfluentwidgets
+import qframelesswindow
 import qtawesome as qta
+import requests
+import toml
 from Kernel import Kernel
+from PyQt5.QtCore import qVersion
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, qApp
 
@@ -75,7 +81,7 @@ class About(QWidget, Ui_About):
                 ),
                 (
                     "multitasking",
-                    "v0.0.11",
+                    "v"+multitasking.__version__,
                     None,
                     (
                         lambda:webbrowser.open(
@@ -84,18 +90,8 @@ class About(QWidget, Ui_About):
                     )
                 ),
                 (
-                    "Pillow",
-                    "v9.4.0",
-                    None,
-                    (
-                        lambda:webbrowser.open(
-                            "https://github.com/python-pillow/Pillow"),
-                        "GitHub"
-                    )
-                ),
-                (
                     "PyQt5",
-                    "v5.15.9",
+                    "v"+qVersion(),
                     None,
                     (
                         qApp.aboutQt,
@@ -103,8 +99,18 @@ class About(QWidget, Ui_About):
                     )
                 ),
                 (
+                    "PyQt-Fluent-Widgets",
+                    "v"+qfluentwidgets.__version__,
+                    None,
+                    (
+                        lambda:webbrowser.open(
+                            "https://github.com/zhiyiYo/PyQt-Fluent-Widgets"),
+                        "GitHub"
+                    )
+                ),
+                (
                     "PyQt5_Frameless_Window",
-                    "v0.2.3",
+                    "v"+qframelesswindow.__version__,
                     None,
                     (
                         lambda:webbrowser.open(
@@ -112,20 +118,9 @@ class About(QWidget, Ui_About):
                         "GitHub"
                     )
                 ),
-                ("PyQtWebEngine", "v5.15.6"),
-                (
-                    "QtAwesome",
-                    "v1.2.3",
-                    None,
-                    (
-                        lambda:webbrowser.open(
-                            "https://github.com/spyder-ide/qtawesome"),
-                        "GitHub"
-                    )
-                ),
                 (
                     "requests",
-                    "v2.28.2",
+                    "v"+requests.__version__,
                     None,
                     (
                         lambda:webbrowser.open(
@@ -135,7 +130,7 @@ class About(QWidget, Ui_About):
                 ),
                 (
                     "toml",
-                    "v0.10.2",
+                    "v"+toml.__version__,
                     None,
                     (
                         lambda:webbrowser.open("https://github.com/uiri/toml"),

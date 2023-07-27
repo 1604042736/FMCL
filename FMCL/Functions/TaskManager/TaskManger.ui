@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="1">
-    <widget class="QPushButton" name="pb_stop">
+    <widget class="PushButton" name="pb_stop">
      <property name="text">
       <string>停止</string>
      </property>
@@ -35,10 +35,28 @@
     </spacer>
    </item>
    <item row="0" column="0" colspan="2">
-    <widget class="QTreeWidget" name="tw_tasks"/>
+    <widget class="TreeWidget" name="tw_tasks">
+     <column>
+      <property name="text">
+       <string notr="true">1</string>
+      </property>
+     </column>
+    </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PushButton</class>
+   <extends>QPushButton</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
+   <class>TreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

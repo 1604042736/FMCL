@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QSpinBox
+from qfluentwidgets import SpinBox
 
 from .SettingItem import SettingItem
 
@@ -6,7 +6,7 @@ from .SettingItem import SettingItem
 class IntSettingItem(SettingItem):
     def __init__(self, id: str, setting) -> None:
         super().__init__(id, setting)
-        self.w_value = QSpinBox(self)
+        self.w_value = SpinBox(self)
         self.w_value.setMaximum(2**31-1)
         self.w_value.setMinimum(-2**31)
         self.w_value.setValue(self.setting.get(id))

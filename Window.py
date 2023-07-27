@@ -2,8 +2,9 @@ import typing
 
 from PyQt5.QtCore import QEvent, QObject, QSize, Qt
 from PyQt5.QtGui import QCloseEvent, QCursor, QFont, QPainter, QPaintEvent
-from PyQt5.QtWidgets import (QAction, QDesktopWidget, QMenu, QSizePolicy,
-                             QSpacerItem, QWidget)
+from PyQt5.QtWidgets import (QAction, QDesktopWidget, QSizePolicy, QSpacerItem,
+                             QWidget)
+from qfluentwidgets import RoundMenu
 from qframelesswindow import FramelessWindow
 
 from Events import *
@@ -105,6 +106,6 @@ class Window(FramelessWindow):
 
     def showTitleMenu(self):
         """显示标题栏的右键菜单"""
-        menu = QMenu(self)
+        menu = RoundMenu(self)
         menu.addActions(self.titlemenu_actions)
         menu.exec(QCursor.pos())

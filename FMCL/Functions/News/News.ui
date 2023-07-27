@@ -48,7 +48,7 @@
         <layout class="QGridLayout" name="gl_news"/>
        </item>
        <item row="1" column="0">
-        <widget class="QPushButton" name="pb_loadmore">
+        <widget class="PushButton" name="pb_loadmore">
          <property name="text">
           <string>加载更多内容</string>
          </property>
@@ -60,6 +60,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PushButton</class>
+   <extends>QPushButton</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

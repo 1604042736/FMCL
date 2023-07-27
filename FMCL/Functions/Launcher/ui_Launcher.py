@@ -17,12 +17,12 @@ class Ui_Launcher(object):
         Launcher.resize(1000, 618)
         self.gridLayout = QtWidgets.QGridLayout(Launcher)
         self.gridLayout.setObjectName("gridLayout")
-        self.pb_kill = QtWidgets.QPushButton(Launcher)
+        self.pb_kill = PushButton(Launcher)
         self.pb_kill.setObjectName("pb_kill")
         self.gridLayout.addWidget(self.pb_kill, 1, 1, 1, 1)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem, 1, 0, 1, 1)
-        self.te_output = QtWidgets.QTextEdit(Launcher)
+        self.te_output = TextEdit(Launcher)
         self.te_output.setObjectName("te_output")
         self.gridLayout.addWidget(self.te_output, 0, 0, 1, 2)
 
@@ -33,3 +33,4 @@ class Ui_Launcher(object):
         _translate = QtCore.QCoreApplication.translate
         Launcher.setWindowTitle(_translate("Launcher", "启动游戏"))
         self.pb_kill.setText(_translate("Launcher", "结束游戏"))
+from qfluentwidgets import PushButton, TextEdit

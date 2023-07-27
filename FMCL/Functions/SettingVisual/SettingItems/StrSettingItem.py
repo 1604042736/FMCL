@@ -1,5 +1,5 @@
 from Kernel import Kernel
-from PyQt5.QtWidgets import QLineEdit
+from qfluentwidgets import LineEdit
 
 from .SettingItem import SettingItem
 
@@ -9,7 +9,7 @@ _translate = Kernel.translate
 class StrSettingItem(SettingItem):
     def __init__(self, id: str, setting) -> None:
         super().__init__(id, setting)
-        self.w_value = QLineEdit(self)
+        self.w_value = LineEdit(self)
         self.w_value.setText(self.setting.get(id))
         self.w_value.editingFinished.connect(self.sync)
         self._layout.addWidget(self.w_value)

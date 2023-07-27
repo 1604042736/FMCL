@@ -54,7 +54,6 @@ class Launcher(QWidget, Ui_Launcher):
         self.te_output.insertPlainText(text)
         if flag:
             scrollbar.setValue(scrollbar.maximum())
-            # self.te_output.moveCursor(QTextCursor.MoveOperation.End)
 
     @pyqtSlot(bool)
     def on_pb_kill_clicked(self, _):

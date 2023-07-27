@@ -1,13 +1,13 @@
-from Kernel import Kernel
 import qtawesome as qta
+from Kernel import Kernel
 from PyQt5.QtCore import QSize, QThread, pyqtSignal
-from PyQt5.QtWidgets import (QGridLayout, QLabel, QListWidget, QListWidgetItem,
-                             QProgressBar, QWidget)
+from PyQt5.QtWidgets import QGridLayout, QLabel, QListWidgetItem, QWidget
+from qfluentwidgets import ListWidget, ProgressBar
 
 _translate = Kernel.translate
 
 
-class Progress(QListWidget):
+class Progress(ListWidget):
     __instance = None
     __new_count = 0
 
@@ -45,7 +45,7 @@ class Callback(QWidget):
         super().__init__()
         self.gridlayout = QGridLayout(self)
         self.le_status = QLabel(self)
-        self.pbr_progress = QProgressBar(self)
+        self.pbr_progress = ProgressBar(self)
 
         self.gridlayout.addWidget(self.le_status)
         self.gridlayout.addWidget(self.pbr_progress)

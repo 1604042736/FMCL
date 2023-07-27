@@ -1,12 +1,11 @@
-from PyQt5.QtWidgets import QCheckBox
-
+from qfluentwidgets import CheckBox
 from .SettingItem import SettingItem
 
 
 class BoolSettingItem(SettingItem):
     def __init__(self, id, setting) -> None:
         super().__init__(id, setting)
-        self.w_value = QCheckBox(self)
+        self.w_value = CheckBox(self)
         self.w_value.setCheckState((0, 2)[self.setting.get(id)])
         self.w_value.stateChanged.connect(self.sync)
         self._layout.addWidget(self.w_value)

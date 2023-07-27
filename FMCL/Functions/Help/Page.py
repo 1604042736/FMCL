@@ -1,5 +1,5 @@
 from PyQt5.QtCore import QFile, QObject, pyqtProperty
-from PyQt5.QtWidgets import QTextEdit
+from qfluentwidgets import TextEdit
 
 from . import Help_rc as _
 
@@ -17,7 +17,7 @@ class Document(QObject):
         return self.m_text
 
 
-class Page(QTextEdit):
+class Page(TextEdit):
     instances = {}
     new_count = {}
 

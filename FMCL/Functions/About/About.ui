@@ -13,14 +13,14 @@
   <property name="windowTitle">
    <string>关于</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
     <number>0</number>
    </property>
    <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
     <number>0</number>
    </property>
    <property name="bottomMargin">
@@ -30,7 +30,12 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <widget class="QScrollArea" name="scrollArea">
+    <widget class="ScrollArea" name="scrollArea">
+     <property name="styleSheet">
+      <string notr="true">QScrollArea{
+	border:none;
+}</string>
+     </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
@@ -39,36 +44,69 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>998</width>
-        <height>616</height>
+        <width>991</width>
+        <height>618</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="2" column="0">
-        <widget class="QGroupBox" name="gb_3rdparty">
-         <property name="title">
-          <string>依赖</string>
+       <property name="leftMargin">
+        <number>16</number>
+       </property>
+       <property name="topMargin">
+        <number>16</number>
+       </property>
+       <property name="rightMargin">
+        <number>16</number>
+       </property>
+       <property name="bottomMargin">
+        <number>6</number>
+       </property>
+       <item row="5" column="0">
+        <layout class="QGridLayout" name="gl_3rdparty">
+         <property name="spacing">
+          <number>0</number>
          </property>
-         <layout class="QGridLayout" name="gl_3rdparty">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <property name="spacing">
-           <number>0</number>
-          </property>
-         </layout>
-        </widget>
+        </layout>
        </item>
        <item row="3" column="0">
+        <layout class="QGridLayout" name="gl_thanks">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+        </layout>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei</family>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>依赖</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei</family>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>启动器</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -81,66 +119,48 @@
          </property>
         </spacer>
        </item>
-       <item row="0" column="0">
-        <widget class="QGroupBox" name="gb_launcher">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="font">
+          <font>
+           <family>Microsoft YaHei</family>
+           <pointsize>16</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
          </property>
-         <property name="title">
-          <string>启动器</string>
+         <property name="text">
+          <string>鸣谢</string>
          </property>
-         <layout class="QGridLayout" name="gl_launcher">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <property name="spacing">
-           <number>0</number>
-          </property>
-         </layout>
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QGroupBox" name="gb_thanks">
-         <property name="title">
-          <string>鸣谢</string>
+        <layout class="QGridLayout" name="gl_launcher">
+         <property name="spacing">
+          <number>0</number>
          </property>
-         <layout class="QGridLayout" name="gl_thanks">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
-          <property name="spacing">
-           <number>0</number>
-          </property>
-         </layout>
-        </widget>
+        </layout>
        </item>
       </layout>
+      <zorder>gridLayoutWidget</zorder>
+      <zorder>label</zorder>
+      <zorder>label_2</zorder>
+      <zorder>gridLayoutWidget_2</zorder>
+      <zorder>label_3</zorder>
+      <zorder>gridLayoutWidget_3</zorder>
      </widget>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ScrollArea</class>
+   <extends>QScrollArea</extends>
+   <header>qfluentwidgets</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

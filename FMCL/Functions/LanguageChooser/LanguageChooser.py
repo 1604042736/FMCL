@@ -1,8 +1,6 @@
 import os
 
 import qtawesome as qta
-from Kernel import Kernel
-from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget
 from Setting import Setting
 
@@ -14,6 +12,7 @@ class LanguageChooser(QWidget, Ui_LanguageChooser):
         super().__init__()
         self.setupUi(self)
         self.setWindowIcon(qta.icon("fa.language"))
+        self.cb_lang.currentTextChanged.connect(self.changeLanguage)
         self.refresh()
 
     def refresh(self):
@@ -24,7 +23,7 @@ class LanguageChooser(QWidget, Ui_LanguageChooser):
             lang, _ = os.path.splitext(name)
             if lang != cur_lang:
                 self.cb_lang.addItem(lang)
+        self.cb_lang.setCurrentText(cur_lang)
 
-    @pyqtSlot(str)
-    def on_cb_lang_currentTextChanged(self, lang):
+    def changeLanguage(self, lang):
         Setting().set("language.type", lang)

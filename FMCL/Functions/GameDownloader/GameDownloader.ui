@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>游戏下载器</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
     <number>0</number>
@@ -31,6 +34,11 @@
    </property>
    <item row="0" column="1">
     <widget class="QScrollArea" name="scrollArea">
+     <property name="styleSheet">
+      <string notr="true">QScrollArea{
+	border:none;
+}</string>
+     </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
@@ -39,20 +47,20 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>998</width>
-        <height>616</height>
+        <width>1000</width>
+        <height>618</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
-        <widget class="QLineEdit" name="le_name">
+        <widget class="LineEdit" name="le_name">
          <property name="placeholderText">
           <string/>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QPushButton" name="pb_install">
+        <widget class="PushButton" name="pb_install">
          <property name="text">
           <string>安装</string>
          </property>
@@ -80,13 +88,13 @@
         </widget>
        </item>
        <item row="2" column="0" colspan="2">
-        <widget class="QListWidget" name="lw_minecraft"/>
+        <widget class="ListWidget" name="lw_minecraft"/>
        </item>
        <item row="5" column="0" colspan="2">
-        <widget class="QListWidget" name="lw_forge"/>
+        <widget class="ListWidget" name="lw_forge"/>
        </item>
        <item row="7" column="0" colspan="2">
-        <widget class="QListWidget" name="lw_fabric"/>
+        <widget class="ListWidget" name="lw_fabric"/>
        </item>
       </layout>
      </widget>
@@ -94,6 +102,23 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PushButton</class>
+   <extends>QPushButton</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
+   <class>LineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
+   <class>ListWidget</class>
+   <extends>QListWidget</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

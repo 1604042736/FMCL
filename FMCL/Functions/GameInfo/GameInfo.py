@@ -2,7 +2,8 @@ import qtawesome as qta
 from Core import Game
 from Kernel import Kernel
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QLabel, QMessageBox, QWidget
+from PyQt5.QtWidgets import QLabel, QWidget
+from qfluentwidgets import MessageBox
 
 from .ui_GameInfo import Ui_GameInfo
 
@@ -49,13 +50,14 @@ class GameInfo(QWidget, Ui_GameInfo):
 
     @pyqtSlot(bool)
     def on_pb_delete_clicked(self, _):
-        reply = QMessageBox.warning(self,
-                                    _translate("删除"),
-                                    _translate("确定删除?"),
-                                    QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
-        if reply == QMessageBox.StandardButton.Yes:
+        def confirmDelete():
             self.game.delete()
             self.close()
+        box = MessageBox(_translate("删除"),
+                         _translate("确定删除?"),
+                         self.window())
+        box.yesSignal.connect(confirmDelete)
+        box.exec()
 
     @pyqtSlot()
     def on_le_name_editingFinished(self):

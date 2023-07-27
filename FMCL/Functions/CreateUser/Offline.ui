@@ -54,14 +54,14 @@
     </spacer>
    </item>
    <item row="1" column="1">
-    <widget class="QLineEdit" name="le_username">
+    <widget class="LineEdit" name="le_username">
      <property name="placeholderText">
       <string>输入用户名</string>
      </property>
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QPushButton" name="pb_create">
+    <widget class="PushButton" name="pb_create">
      <property name="text">
       <string>创建</string>
      </property>
@@ -82,6 +82,18 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PushButton</class>
+   <extends>QPushButton</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
+   <class>LineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

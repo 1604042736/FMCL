@@ -2,8 +2,8 @@ minecraft_launcher_lib
 multitasking
 Pillow
 PyQt5
+PyQt-Fluent-Widgets
 PyQt5_Frameless_Window
 QtAwesome
 requests
-PyQtWebEngine
 toml

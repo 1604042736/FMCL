@@ -38,17 +38,8 @@
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton{
-    border:none;
-}
-QPushButton:hover{
-    background-color:rgb(200,200,200);
-}
-QPushButton:checked{
-    border-left:2px solid black;
-}
-QFrame{
-	background-color:rgb(255,255,255);
+      <string notr="true">QFrame{
+	background-color:rgb(253,253,253);
 }</string>
      </property>
      <property name="frameShape">
@@ -74,7 +65,7 @@ QFrame{
        <number>0</number>
       </property>
       <item row="1" column="0">
-       <widget class="QPushButton" name="pb_gamesetting">
+       <widget class="TransparentTogglePushButton" name="pb_gamesetting">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -93,7 +84,7 @@ QFrame{
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="QPushButton" name="pb_gameinfo">
+       <widget class="TransparentTogglePushButton" name="pb_gameinfo">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -112,7 +103,7 @@ QFrame{
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QPushButton" name="pb_modmanager">
+       <widget class="TransparentTogglePushButton" name="pb_modmanager">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -154,6 +145,13 @@ QFrame{
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TransparentTogglePushButton</class>
+   <extends>QPushButton</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

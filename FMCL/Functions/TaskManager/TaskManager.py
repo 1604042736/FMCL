@@ -14,7 +14,7 @@ class TaskManager(QWidget, Ui_TaskManager):
         self.setWindowIcon(qta.icon("fa.tasks"))
         self.task_attr = {
             "objectName": lambda obj: obj.objectName(),
-            "self": lambda obj: str(obj),
+            "class": lambda obj: obj.__class__.__name__,
             "windowTitle": lambda obj: obj.windowTitle()
         }
         self.tw_tasks.setColumnCount(len(self.task_attr))

@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
-    <widget class="QPushButton" name="pb_refresh">
+    <widget class="PushButton" name="pb_refresh">
      <property name="text">
       <string>刷新</string>
      </property>
@@ -39,7 +39,7 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QTreeWidget" name="tw_setting">
+     <widget class="TreeWidget" name="tw_setting">
       <attribute name="headerVisible">
        <bool>false</bool>
       </attribute>
@@ -49,7 +49,7 @@
        </property>
       </column>
      </widget>
-     <widget class="QScrollArea" name="sa_setting">
+     <widget class="ScrollArea" name="sa_setting">
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
@@ -58,7 +58,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>451</width>
+         <width>124</width>
          <height>569</height>
         </rect>
        </property>
@@ -88,6 +88,24 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PushButton</class>
+   <extends>QPushButton</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
+   <class>ScrollArea</class>
+   <extends>QScrollArea</extends>
+   <header>qfluentwidgets</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

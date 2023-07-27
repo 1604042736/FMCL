@@ -15,7 +15,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="1">
-    <widget class="QPushButton" name="pb_kill">
+    <widget class="PushButton" name="pb_kill">
      <property name="text">
       <string>结束游戏</string>
      </property>
@@ -35,10 +35,22 @@
     </spacer>
    </item>
    <item row="0" column="0" colspan="2">
-    <widget class="QTextEdit" name="te_output"/>
+    <widget class="TextEdit" name="te_output"/>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PushButton</class>
+   <extends>QPushButton</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
+   <class>TextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

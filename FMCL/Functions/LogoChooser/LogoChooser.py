@@ -1,10 +1,11 @@
 import qtawesome as qta
 from Core import Game
+from Kernel import Kernel
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QFileDialog, QWidget
 
 from .ui_LogoChooser import Ui_LogoChooser
-from Kernel import Kernel
+
 _translate = Kernel.translate
 
 
@@ -40,7 +41,7 @@ class LogoChooser(QWidget, Ui_LogoChooser):
         self.game.generate_setting()
         if self.game.setting.get("logo") not in self.logos:
             self.logos.append(self.game.setting.get("logo"))
-
+        self.cb_logo.currentTextChanged.connect(self.changeLogo)
         self.refresh()
 
     def refresh(self):
@@ -51,9 +52,10 @@ class LogoChooser(QWidget, Ui_LogoChooser):
         for i in self.logos:
             if i != cur_logo:
                 self.cb_logo.addItem(i)
+        self.cb_logo.setCurrentText(cur_logo)
+        self.changeLogo(cur_logo)
 
-    @pyqtSlot(str)
-    def on_cb_logo_currentTextChanged(self, text):
+    def changeLogo(self, text):
         if text:  # clear时text为空
             self.game.setting.set("logo", text)
             self.l_logo.setPixmap(self.game.get_pixmap().scaled(32, 32))
