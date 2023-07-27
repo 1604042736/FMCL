@@ -26,7 +26,7 @@ class Kernel(QApplication):
         super().__init__(argv)
         self.setWindowIcon(QIcon(":/Icon/FMCL.ico"))
         self.setApplicationName("FMCL")
-        self.setApplicationVersion("3.1")
+        self.setApplicationVersion("3.2")
 
         cur_path = os.path.abspath(".")
         if cur_path not in sys.path:
@@ -52,7 +52,7 @@ class Kernel(QApplication):
         elif (isinstance(a0, QWidget)
                 and not isinstance(a0, Window)
                 and not isinstance(a0, QDialog)
-                and not isinstance(a0,RoundMenu)
+                and not isinstance(a0, RoundMenu)
                 and a0.windowType() != Qt.WindowType.ToolTip):
             if a1.type() == QEvent.Type.Show:
                 if a0.parent() == None:
