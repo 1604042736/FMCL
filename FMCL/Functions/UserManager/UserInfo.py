@@ -1,16 +1,15 @@
 from Core.User import User
 from Kernel import Kernel
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QFrame
 from qfluentwidgets import MessageBox
-from Setting import Setting
 
 from .ui_UserInfo import Ui_UserInfo
 
 _translate = Kernel.translate
 
 
-class UserInfo(QWidget, Ui_UserInfo):
+class UserInfo(QFrame, Ui_UserInfo):
     userSelectChanged = pyqtSignal(dict)
     userDeleted = pyqtSignal(dict)
 
@@ -46,3 +45,7 @@ class UserInfo(QWidget, Ui_UserInfo):
                          self.window())
         box.yesSignal.connect(confirmDeleted)
         box.exec()
+
+    @pyqtSlot(bool)
+    def on_pb_refresh_clicked(self, _):
+        User.refresh(self.userinfo)

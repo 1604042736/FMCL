@@ -4,6 +4,7 @@ import logging
 import os
 import shutil
 import tempfile
+from copy import deepcopy
 from zipfile import ZipFile
 
 import minecraft_launcher_lib as mll
@@ -97,7 +98,7 @@ class Game:
 
         command = []
 
-        cur_user = User.get_cur_user()
+        cur_user = deepcopy(User.get_cur_user())
         if cur_user["type"] == "authlibInjector":
             logging.info(f"外置登录: {cur_user['mode']}")
             if cur_user["mode"] == "LittleSkin":

@@ -77,3 +77,19 @@ class User:
         if setting["users"]:
             return setting["users"][setting["users.selectindex"]]
         return None
+
+    @staticmethod
+    def refresh(user: dict):
+        if user["type"] == "authlibInjector" and user["mode"] == "LittleSkin":
+            api = "https://littleskin.cn/api/yggdrasil"
+            logging.info("刷新")
+            data = {
+                "accessToken": user["accessToken"],
+                "clientToken": user["clientToken"]
+            }
+            r = Requests.post(f"{api}/authserver/refresh",
+                              json=data,
+                              headers={"Content-Type": "application/json"}).json()
+            user["accessToken"] = r["accessToken"]
+            user["clientToken"] = r["clientToken"]
+            Setting().sync()

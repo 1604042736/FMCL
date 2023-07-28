@@ -19,13 +19,17 @@ class Ui_News(object):
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
-        self.scrollArea = QtWidgets.QScrollArea(News)
+        self.scrollArea = ScrollArea(News)
+        self.scrollArea.setStyleSheet("QScrollArea{\n"
+"    border:none;\n"
+"}")
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 998, 616))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1000, 618))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gl_scrollarea = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
+        self.gl_scrollarea.setContentsMargins(0, 0, 0, 0)
         self.gl_scrollarea.setObjectName("gl_scrollarea")
         self.gl_news = QtWidgets.QGridLayout()
         self.gl_news.setObjectName("gl_news")
@@ -43,4 +47,4 @@ class Ui_News(object):
         _translate = QtCore.QCoreApplication.translate
         News.setWindowTitle(_translate("News", "新闻"))
         self.pb_loadmore.setText(_translate("News", "加载更多内容"))
-from qfluentwidgets import PushButton
+from qfluentwidgets import PushButton, ScrollArea

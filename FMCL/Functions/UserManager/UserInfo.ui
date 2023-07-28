@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>UserInfo</class>
- <widget class="QWidget" name="UserInfo">
+ <widget class="QFrame" name="UserInfo">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -25,7 +25,25 @@
   <property name="windowTitle">
    <string/>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QFrame{
+	background-color:rgb(253,253,253);
+}</string>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="3">
+    <widget class="PushButton" name="pb_del">
+     <property name="maximumSize">
+      <size>
+       <width>64</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>删除</string>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="RadioButton" name="rb_select">
      <property name="maximumSize">
@@ -36,19 +54,6 @@
      </property>
      <property name="text">
       <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2">
-    <widget class="PushButton" name="pb_del">
-     <property name="maximumSize">
-      <size>
-       <width>64</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>删除</string>
      </property>
     </widget>
    </item>
@@ -76,6 +81,19 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="0" column="2">
+    <widget class="PushButton" name="pb_refresh">
+     <property name="maximumSize">
+      <size>
+       <width>64</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>刷新</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

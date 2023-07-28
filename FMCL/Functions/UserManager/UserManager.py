@@ -15,7 +15,7 @@ class UserManager(QWidget, Ui_UserManager):
         self.setupUi(self)
         self.setWindowIcon(qta.icon("ph.users"))
         self.userinfo: list[UserInfo] = []
-        self.pb_add.setIcon(qta.icon("msc.add"))
+        self.pb_add.setIcon(qta.icon("ei.plus"))
         self.refresh()
 
     def refresh(self):

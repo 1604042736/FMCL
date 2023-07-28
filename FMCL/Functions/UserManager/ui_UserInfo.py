@@ -18,17 +18,20 @@ class Ui_UserInfo(object):
         UserInfo.setMinimumSize(QtCore.QSize(0, 64))
         UserInfo.setMaximumSize(QtCore.QSize(16777215, 16777215))
         UserInfo.setWindowTitle("")
+        UserInfo.setStyleSheet("QFrame{\n"
+"    background-color:rgb(253,253,253);\n"
+"}")
         self.gridLayout = QtWidgets.QGridLayout(UserInfo)
         self.gridLayout.setObjectName("gridLayout")
+        self.pb_del = PushButton(UserInfo)
+        self.pb_del.setMaximumSize(QtCore.QSize(64, 16777215))
+        self.pb_del.setObjectName("pb_del")
+        self.gridLayout.addWidget(self.pb_del, 0, 3, 1, 1)
         self.rb_select = RadioButton(UserInfo)
         self.rb_select.setMaximumSize(QtCore.QSize(32, 16777215))
         self.rb_select.setText("")
         self.rb_select.setObjectName("rb_select")
         self.gridLayout.addWidget(self.rb_select, 0, 0, 1, 1)
-        self.pb_del = PushButton(UserInfo)
-        self.pb_del.setMaximumSize(QtCore.QSize(64, 16777215))
-        self.pb_del.setObjectName("pb_del")
-        self.gridLayout.addWidget(self.pb_del, 0, 2, 1, 1)
         self.gridLayout_2 = QtWidgets.QGridLayout()
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.l_type = SubtitleLabel(UserInfo)
@@ -44,6 +47,10 @@ class Ui_UserInfo(object):
         self.l_username.setObjectName("l_username")
         self.gridLayout_2.addWidget(self.l_username, 0, 0, 1, 2)
         self.gridLayout.addLayout(self.gridLayout_2, 0, 1, 1, 1)
+        self.pb_refresh = PushButton(UserInfo)
+        self.pb_refresh.setMaximumSize(QtCore.QSize(64, 16777215))
+        self.pb_refresh.setObjectName("pb_refresh")
+        self.gridLayout.addWidget(self.pb_refresh, 0, 2, 1, 1)
 
         self.retranslateUi(UserInfo)
         QtCore.QMetaObject.connectSlotsByName(UserInfo)
@@ -51,4 +58,5 @@ class Ui_UserInfo(object):
     def retranslateUi(self, UserInfo):
         _translate = QtCore.QCoreApplication.translate
         self.pb_del.setText(_translate("UserInfo", "删除"))
+        self.pb_refresh.setText(_translate("UserInfo", "刷新"))
 from qfluentwidgets import PushButton, RadioButton, SubtitleLabel, TitleLabel
