@@ -100,7 +100,6 @@ QPushButton:hover{
         button = TransparentTogglePushButton()
         button.resize(100, 32)
         button.setText(widget.windowTitle())
-        print(widget.windowIcon())
         button.setIcon(widget.windowIcon())
 
         button.setToolTip(widget.windowTitle())

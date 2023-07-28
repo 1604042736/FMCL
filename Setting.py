@@ -1,8 +1,5 @@
 import json
-import logging
 import os
-import traceback
-from importlib import import_module
 
 # 默认设置路径
 DEFAULT_SETTING_PATH = os.path.join("FMCL", "settings.json")
@@ -18,6 +15,7 @@ DEFAULT_SETTING = {
     "game.height": 618,
     "game.maxmem": 2048,
     "users": [],
+    "users.selectindex": 0,
     "language.type": "简体中文"
 }
 # 默认设置属性
@@ -63,6 +61,9 @@ DEFAULT_SETTING_ATTR = {
     "users": {
         "name":  "用户"
     },
+    "users.selectindex": {
+        "name": "选择用户索引"
+    },
     "language": {
         "name": "语言",
     },
@@ -94,13 +95,6 @@ class Setting(dict):
             DEFAULT_SETTING_ATTR["users"]["method"] = (
                 lambda: Kernel.execFunction("CreateUser")
             )
-            try:
-                DEFAULT_SETTING_ATTR["language.type"]["setting_item"] = (
-                    getattr(Kernel.getFunction("LanguageChooser"),
-                            "LanguageChooser")
-                )
-            except:
-                logging.error(traceback.format_exc())
             self.add(DEFAULT_SETTING)
             self.addAttr(DEFAULT_SETTING_ATTR)
             self.loadFunctionSetting()

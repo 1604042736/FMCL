@@ -12,7 +12,8 @@ class ListSettingItem(SettingItem):
         super().__init__(id, setting)
         self.w_value = ComboBox()
         self.w_value.addItems(setting.get(id))
-        self.w_value.setCurrentText(setting.get(id)[0])
+        if len(self.setting.get(self.id)) > 0:
+            self.w_value.setCurrentText(setting.get(id)[0])
         self.w_value.currentTextChanged.connect(self.promote_top)
         self.w_value.currentTextChanged.connect(self.sync)
 
@@ -57,10 +58,10 @@ class ListSettingItem(SettingItem):
         else:
             def confirmDelete():
                 self.setting.get(self.id).remove(text)
-                self.w_value.removeItem(self.w_value.currentIndex())
+                self.refresh()
             box = MessageBox(_translate("删除"),
                              _translate("确定删除?"),
-                             MessageBox)
+                             self.window())
             box.yesSignal.connect(confirmDelete)
             box.exec()
 
@@ -74,6 +75,7 @@ class ListSettingItem(SettingItem):
         self.w_value.currentTextChanged.disconnect(self.promote_top)
         self.w_value.clear()
         self.w_value.addItems(self.setting.get(self.id))
-        self.w_value.setCurrentText(self.setting.get(self.id)[0])
+        if len(self.setting.get(self.id)) > 0:
+            self.w_value.setCurrentText(self.setting.get(self.id)[0])
         self.w_value.currentTextChanged.connect(self.promote_top)
         return super().refresh()

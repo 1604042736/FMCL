@@ -4,7 +4,6 @@ import qtawesome as qta
 from Core import Game
 from Kernel import Kernel
 from PyQt5.QtCore import QProcess, pyqtSlot
-from PyQt5.QtGui import QTextCursor
 from PyQt5.QtWidgets import QWidget
 
 from .ui_Launcher import Ui_Launcher
@@ -47,11 +46,12 @@ class Launcher(QWidget, Ui_Launcher):
         self.output(text)
 
     def output(self, text: str):
+        text = text.rstrip()
         flag = False
         scrollbar = self.te_output.verticalScrollBar()
         if scrollbar.value() == scrollbar.maximum():
             flag = True
-        self.te_output.insertPlainText(text)
+        self.te_output.append(text)
         if flag:
             scrollbar.setValue(scrollbar.maximum())
 

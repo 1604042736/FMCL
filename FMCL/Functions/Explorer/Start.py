@@ -3,6 +3,7 @@ import sys
 from typing import *
 
 import qtawesome as qta
+from Core.User import User
 from Kernel import Kernel
 from PyQt5.QtCore import QEvent, QPoint
 from PyQt5.QtWidgets import QAction, QHBoxLayout, QStackedWidget, QWidget, qApp
@@ -50,7 +51,7 @@ class Start(QWidget):
                                             _translate("未选择用户"),
                                             False)
         self.pb_user.clicked.connect(
-            lambda: Kernel.execFunction("SettingVisual", id="users"))
+            lambda: Kernel.execFunction("UserManager"))
         self.navigationInterface.addWidget(
             routeKey='user',
             widget=self.pb_user,
@@ -100,9 +101,9 @@ class Start(QWidget):
         return super().event(a0)
 
     def refresh(self):
-        users = Setting()["users"]
-        if users:
-            self.pb_user.setText(users[0])
+        user = User.get_cur_user()
+        if user:
+            self.pb_user.setText(user["username"])
         else:
             self.pb_user.setText("未设置用户")
 

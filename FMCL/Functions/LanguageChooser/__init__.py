@@ -1,7 +1,7 @@
 import qtawesome as qta
+from Setting import Setting
 
 from .LanguageChooser import LanguageChooser
-from Setting import Setting
 
 
 def functionInfo():
@@ -9,6 +9,11 @@ def functionInfo():
         "name": "语言选择",
         "icon": qta.icon("fa.language")
     }
+
+
+def defaultSettingAttr() -> dict:
+    Setting().attrs["language.type"]["setting_item"] = LanguageChooser
+    return {}
 
 
 def main():

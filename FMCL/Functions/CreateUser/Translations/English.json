@@ -1,5 +1,7 @@
 {
     "创建用户": "CreateUser",
     "离线登录": "Offline",
-    "微软登录": "Microsoft"
+    "微软登录": "Microsoft",
+    "创建成功": "Created successfully",
+    "创建失败": "Creation failed"
 }

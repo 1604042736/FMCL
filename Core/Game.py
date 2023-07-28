@@ -1,7 +1,9 @@
+import base64
 import json
 import logging
 import os
 import shutil
+import tempfile
 from zipfile import ZipFile
 
 import minecraft_launcher_lib as mll
@@ -9,6 +11,9 @@ import toml
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import qApp
 from Setting import Setting
+
+from Core.Download import Download
+from Core.Requests import Requests
 
 from .Progress import Progress
 from .User import User
@@ -90,7 +95,37 @@ class Game:
         else:
             setting = Setting()
 
-        options = User.get_cur_user()
+        command = []
+
+        cur_user = User.get_cur_user()
+        if cur_user["type"] == "authlibInjector":
+            logging.info(f"外置登录: {cur_user['mode']}")
+            if cur_user["mode"] == "LittleSkin":
+                api = "https://authlib-injector.yushi.moe"
+                r = Requests.get(f"{api}/artifact/latest.json").json()
+
+                url = r["download_url"]
+                tempdir = os.path.join(tempfile.gettempdir(), "FMCL")
+                if not os.path.exists(tempdir):
+                    os.makedirs(tempdir)
+                filename = url.split("/")[-1]
+                path = os.path.join(tempdir, filename)
+                logging.info(f"下载{url}到{path}")
+                Download(url, path, {"setMax": logging.info,
+                         "setProgress": logging.info}).check()
+                logging.info("下载完成")
+
+                api = "https://littleskin.cn/api/yggdrasil"
+                meta = Requests.get(api).content
+                metab64 = base64.b64encode(meta)
+                metab64 = str(metab64)[2:-1]
+                logging.info(f"元数据Base64编码: {metab64}")
+                command.append(
+                    f"-javaagent:{path}={api}")
+                command.append(
+                    f"-Dauthlibinjector.yggdrasil.prefetched={metab64}")
+
+        options = cur_user
         options["launcherName"] = "FMCL"
         options["launcherVersion"] = qApp.applicationVersion()
         options["gameDirectory"] = absdir
@@ -105,7 +140,10 @@ class Game:
             options["gameDirectory"] = os.path.abspath(
                 os.path.join(self.directory, "versions", self.name))
 
-        command = mll.command.get_minecraft_command(self.name, absdir, options)
+        _command = mll.command.get_minecraft_command(
+            self.name, absdir, options)
+        command.insert(0, _command[0])
+        command += _command[1:]
         try:
             i = command.index("--versionType")
             command[i+1] = "FMCL"

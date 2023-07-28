@@ -1,21 +1,24 @@
 import json
+import logging
 import os
 
 import minecraft_launcher_lib as mll
 from Setting import Setting
 
+from Core.Requests import Requests
+
 
 class User:
-    setting = {}
-    if os.path.exists("FMCL/users.json"):
-        setting = json.load(open("FMCL/users.json", encoding="utf-8"))
-
     @staticmethod
     def create_offline(username: str):
         """创建离线登录用户"""
-        User.setting[username] = mll.utils.generate_test_options()
-        User.setting[username]["username"] = username
-        User.sync()
+        globalsetting = Setting()
+        setting = {}
+        setting = mll.utils.generate_test_options()
+        setting["type"] = "offline"
+        setting["username"] = username
+        globalsetting["users"].append(setting)
+        globalsetting.sync()
 
     @staticmethod
     def create_microsoft():
@@ -23,31 +26,54 @@ class User:
         # FIXME
 
     @staticmethod
-    def get_all_users():
-        """获取所有用户"""
-        return list(User.setting.keys())
+    def create_littleskin(username: str, password: str):
+        """创建LitteSkin账户"""
+        logging.info("开始创建LittleSkin用户")
+        api = "https://littleskin.cn/api/yggdrasil"
+
+        logging.info("登录")
+        data = {
+            "username": username,
+            "password": password,
+            "requestUser": False,
+            "agent": {
+                "name": "Minecraft",
+                "version": 1
+            }
+        }
+        r = Requests.post(f"{api}/authserver/authenticate",
+                          json=data,
+                          headers={"Content-Type": "application/json"}).json()
+        if "errorMessage" in r:
+            return r["errorMessage"]
+        if not r["selectedProfile"]:
+            return "没有选择的角色"
+        globalsetting = Setting()
+        setting = {}
+        name = r["selectedProfile"]["name"]
+        setting["type"] = "authlibInjector"
+        setting["username"] = name
+        setting["uuid"] = r["selectedProfile"]["id"]
+        setting["clientToken"] = r["clientToken"]
+        setting["accessToken"] = r["accessToken"]
+        setting["token"] = r["accessToken"]
+        setting["mode"] = "LittleSkin"
+        globalsetting["users"].append(setting)
+        globalsetting.sync()
 
     @staticmethod
-    def delete_user(username: str):
+    def delete(user: dict):
         """删除用户"""
-        User.setting.pop(username)
-        User.sync()
-
-    @staticmethod
-    def sync():
-        json.dump(User.setting,
-                  open("FMCL/users.json", mode="w", encoding="utf-8"))
-
-        value = Setting().get("users")
-        for i in User.setting:
-            if i not in value:
-                value.append(i)
+        setting = Setting()
+        setting["users"].remove(user)
+        if setting["users.selectindex"] >= len(setting["users"]):
+            setting["users.selectindex"] -= 1
+        setting.sync()
 
     @staticmethod
     def get_cur_user():
         """获取当前用户"""
-        value = Setting().get("users")
-        if value:
-            return User.setting[value[0]]
-        else:
-            return None
+        setting = Setting()
+        if setting["users"]:
+            return setting["users"][setting["users.selectindex"]]
+        return None
