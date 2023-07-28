@@ -32,7 +32,8 @@ class Kernel(QApplication):
         if cur_path not in sys.path:
             sys.path.insert(0, os.path.abspath("."))
 
-        self.unpack()
+        if "--notunpack" not in argv:
+            self.unpack()
         self.loadTranslation()
 
         logging.debug("初始化功能...")
@@ -110,10 +111,8 @@ class Kernel(QApplication):
                 if "__pycache__" in path:
                     continue
                 functions_path = "FMCL/Functions"
-                target_path = os.path.join(functions_path, path)
-                if not os.path.exists(target_path):
-                    logging.debug(f"解压:{path}")
-                    zip.extract(path, functions_path)
+                logging.debug(f"解压:{path}")
+                zip.extract(path, functions_path)
             zip.close()
 
         logging.debug("解压翻译...")
@@ -127,10 +126,8 @@ class Kernel(QApplication):
                 if "__pycache__" in path:
                     continue
                 translation_path = 'FMCL/Translations'
-                target_path = os.path.join(translation_path, path)
-                if not os.path.exists(target_path):
-                    logging.debug(f"解压:{path}")
-                    zip.extract(path, translation_path)
+                logging.debug(f"解压:{path}")
+                zip.extract(path, translation_path)
             zip.close()
 
     @staticmethod

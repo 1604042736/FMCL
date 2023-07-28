@@ -51,7 +51,7 @@ def main():
         os.remove(sys.argv[index])
     except:
         pass
-    app = Kernel()
+    app = Kernel(sys.argv)
     logging.info(f"退出代码: {app.exec()}")
     Setting().sync()
     multitasking.killall(None, None)
