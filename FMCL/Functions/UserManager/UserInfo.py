@@ -1,6 +1,7 @@
 from Core.User import User
 from Kernel import Kernel
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QFrame
 from qfluentwidgets import MessageBox
 
@@ -25,6 +26,11 @@ class UserInfo(QFrame, Ui_UserInfo):
         elif _type == "authlibInjector":
             self.l_type.setText(_translate("外置登录"))
             self.l_mode.setText(userinfo["mode"])
+
+        head = User.get_head(userinfo)
+        head = QPixmap.fromImage(head)
+        head = head.scaled(32, 32)
+        self.l_head.setPixmap(head)
 
         if userinfo == User.get_cur_user():
             self.rb_select.setChecked(True)

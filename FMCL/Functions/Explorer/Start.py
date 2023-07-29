@@ -6,6 +6,7 @@ import qtawesome as qta
 from Core.User import User
 from Kernel import Kernel
 from PyQt5.QtCore import QEvent, QPoint
+from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QAction, QHBoxLayout, QStackedWidget, QWidget, qApp
 from qfluentwidgets import (NavigationInterface, NavigationItemPosition,
                             NavigationPushButton, RoundMenu)
@@ -103,8 +104,14 @@ class Start(QWidget):
     def refresh(self):
         user = User.get_cur_user()
         if user:
+            head = User.get_head(user)
+            head = QPixmap.fromImage(head)
+            head = head.scaled(16, 16)
+            head = QIcon(head)
+            self.pb_user.setIcon(head)
             self.pb_user.setText(user["username"])
         else:
+            self.pb_user.setIcon(qta.icon("ph.user-circle"))
             self.pb_user.setText("未设置用户")
 
     def restart(self):

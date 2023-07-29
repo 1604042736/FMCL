@@ -2,6 +2,7 @@ import sys
 import webbrowser
 
 import multitasking
+import PIL
 import qfluentwidgets
 import qframelesswindow
 import qtawesome as qta
@@ -86,6 +87,16 @@ class About(QWidget, Ui_About):
                     (
                         lambda:webbrowser.open(
                             "https://github.com/ranaroussi/multitasking"),
+                        "GitHub"
+                    )
+                ),
+                (
+                    "Pillow",
+                    "v"+PIL.__version__,
+                    None,
+                    (
+                        lambda:webbrowser.open(
+                            "https://github.com/python-pillow/Pillow"),
                         "GitHub"
                     )
                 ),

@@ -29,8 +29,8 @@ class UserManager(QWidget, Ui_UserManager):
         self.userinfo = []
         for user in Setting()["users"]:
             userinfo = UserInfo(user)
-            userinfo.userSelectChanged.connect(self.deleteUser)
-            userinfo.userDeleted.connect(self.refresh)
+            userinfo.userSelectChanged.connect(self.changeUserSelect)
+            userinfo.userDeleted.connect(self.deleteUser)
             self.gl_userinfo.addWidget(userinfo)
             self.userinfo.append(userinfo)
 

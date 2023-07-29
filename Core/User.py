@@ -1,10 +1,15 @@
+import base64
 import json
 import logging
 import os
 
 import minecraft_launcher_lib as mll
+import qtawesome as qta
+from PIL import Image, ImageQt
+from PyQt5.QtGui import QImage
 from Setting import Setting
 
+from Core.Download import Download
 from Core.Requests import Requests
 
 
@@ -35,7 +40,7 @@ class User:
         data = {
             "username": username,
             "password": password,
-            "requestUser": False,
+            "requestUser": True,
             "agent": {
                 "name": "Minecraft",
                 "version": 1
@@ -48,6 +53,7 @@ class User:
             return r["errorMessage"]
         if not r["selectedProfile"]:
             return "没有选择的角色"
+
         globalsetting = Setting()
         setting = {}
         name = r["selectedProfile"]["name"]
@@ -58,6 +64,11 @@ class User:
         setting["accessToken"] = r["accessToken"]
         setting["token"] = r["accessToken"]
         setting["mode"] = "LittleSkin"
+
+        prole = Requests.get(
+            f'{api}/sessionserver/session/minecraft/profile/{r["selectedProfile"]["id"]}').json()
+        setting["profileProperties"] = prole["properties"]
+
         globalsetting["users"].append(setting)
         globalsetting.sync()
 
@@ -93,3 +104,29 @@ class User:
             user["accessToken"] = r["accessToken"]
             user["clientToken"] = r["clientToken"]
             Setting().sync()
+
+    @staticmethod
+    def get_head(user: dict):
+        """获取头像"""
+        if user["type"] == "authlibInjector" and user["mode"] == "LittleSkin":
+            for i in user["profileProperties"]:
+                if i["name"] == "textures":
+                    textures = json.loads(base64.b64decode(i["value"]))
+                    break
+            else:
+                return qta.icon("ph.user-circle")  # 找不到材质
+            if "SKIN" in textures["textures"]:
+                url = textures["textures"]["SKIN"]["url"]
+                name = url.split("/")[-1]
+                path = f"FMCL/Skin/{name}.png"
+                if not os.path.exists("FMCL/Skin"):
+                    os.makedirs("FMCL/Skin")
+                logging.info("下载皮肤")
+                Download(url, path, {"setMax": logging.info,
+                         "setProgress": logging.info}).check()
+                img = Image.open(path)
+                head = img.crop((8, 8, 16, 16))
+                head = ImageQt.ImageQt(head)
+                img.close()
+                return head
+        return QImage(":/Image/defaulthead.png")
