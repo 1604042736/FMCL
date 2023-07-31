@@ -1,7 +1,7 @@
 import qtawesome as qta
 from Setting import DEFAULT_SETTING_PATH, Setting
 
-from .SettingWidget import SettingWidget
+from .SettingEditor import SettingEditor
 
 
 def functionInfo():
@@ -13,5 +13,5 @@ def functionInfo():
 
 def main(setting_path=DEFAULT_SETTING_PATH, id=""):
     setting = Setting(setting_path)
-    settingw = SettingWidget(setting)
+    settingw = SettingEditor(setting)
     settingw.show(id)

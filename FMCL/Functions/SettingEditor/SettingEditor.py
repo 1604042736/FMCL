@@ -6,25 +6,25 @@ from PyQt5.QtWidgets import QLabel, QTreeWidgetItem, QWidget
 from Setting import Setting
 
 from .SettingItems import SettingItem
-from .ui_SettingWidget import Ui_SettingWidget
+from .ui_SettingEditor import Ui_SettingEditor
 
 _translate = Kernel.translate
 
 
-class SettingWidget(QWidget, Ui_SettingWidget):
+class SettingEditor(QWidget, Ui_SettingEditor):
     instances = {}
     new_count = {}
 
     def __new__(cls, setting: Setting):
-        if setting.setting_path not in SettingWidget.instances:
-            SettingWidget.instances[setting.setting_path] = super().__new__(
+        if setting.setting_path not in SettingEditor.instances:
+            SettingEditor.instances[setting.setting_path] = super().__new__(
                 cls)
-            SettingWidget.new_count[setting.setting_path] = 0
-        SettingWidget.new_count[setting.setting_path] += 1
-        return SettingWidget.instances[setting.setting_path]
+            SettingEditor.new_count[setting.setting_path] = 0
+        SettingEditor.new_count[setting.setting_path] += 1
+        return SettingEditor.instances[setting.setting_path]
 
     def __init__(self, setting: Setting):
-        if SettingWidget.new_count[setting.setting_path] > 1:
+        if SettingEditor.new_count[setting.setting_path] > 1:
             return
         super().__init__()
         self.setupUi(self)
@@ -62,10 +62,10 @@ class SettingWidget(QWidget, Ui_SettingWidget):
                 self.gl_setting.addWidget(widget)
                 self.item_widget_id.append((item, widget, totalid))
 
-            setting_item = self.setting.getAttr(
-                id, "setting_item", lambda id=id: SettingItem(id, self.setting))()
-            self.gl_setting.addWidget(setting_item)
-            self.setting_items.append(setting_item)
+            settingcard = self.setting.getAttr(
+                id, "settingcard", lambda id=id: SettingItem(id, self.setting))()
+            self.gl_setting.addWidget(settingcard)
+            self.setting_items.append(settingcard)
 
     def addTreeItem(self, root: QTreeWidgetItem | None, item: QTreeWidgetItem):
         if root == None:

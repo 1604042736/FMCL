@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'SettingWidget.ui'
+# Form implementation generated from reading ui file 'SettingEditor.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -11,18 +11,18 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_SettingWidget(object):
-    def setupUi(self, SettingWidget):
-        SettingWidget.setObjectName("SettingWidget")
-        SettingWidget.resize(1000, 618)
-        self.gridLayout_2 = QtWidgets.QGridLayout(SettingWidget)
+class Ui_SettingEditor(object):
+    def setupUi(self, SettingEditor):
+        SettingEditor.setObjectName("SettingEditor")
+        SettingEditor.resize(1000, 618)
+        self.gridLayout_2 = QtWidgets.QGridLayout(SettingEditor)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.pb_refresh = PushButton(SettingWidget)
+        self.pb_refresh = PushButton(SettingEditor)
         self.pb_refresh.setObjectName("pb_refresh")
         self.gridLayout_2.addWidget(self.pb_refresh, 0, 0, 1, 1)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout_2.addItem(spacerItem, 0, 1, 1, 1)
-        self.splitter = QtWidgets.QSplitter(SettingWidget)
+        self.splitter = QtWidgets.QSplitter(SettingEditor)
         self.splitter.setOrientation(QtCore.Qt.Horizontal)
         self.splitter.setObjectName("splitter")
         self.tw_setting = TreeWidget(self.splitter)
@@ -48,11 +48,11 @@ class Ui_SettingWidget(object):
         self.sa_setting.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout_2.addWidget(self.splitter, 1, 0, 1, 2)
 
-        self.retranslateUi(SettingWidget)
-        QtCore.QMetaObject.connectSlotsByName(SettingWidget)
+        self.retranslateUi(SettingEditor)
+        QtCore.QMetaObject.connectSlotsByName(SettingEditor)
 
-    def retranslateUi(self, SettingWidget):
+    def retranslateUi(self, SettingEditor):
         _translate = QtCore.QCoreApplication.translate
-        SettingWidget.setWindowTitle(_translate("SettingWidget", "设置"))
-        self.pb_refresh.setText(_translate("SettingWidget", "刷新"))
+        SettingEditor.setWindowTitle(_translate("SettingEditor", "设置"))
+        self.pb_refresh.setText(_translate("SettingEditor", "刷新"))
 from qfluentwidgets import PushButton, ScrollArea, TreeWidget

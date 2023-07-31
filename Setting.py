@@ -91,10 +91,6 @@ class Setting(dict):
         self.attrs = {}
         self.setting_path = setting_path
         if setting_path == DEFAULT_SETTING_PATH:
-            from Kernel import Kernel
-            DEFAULT_SETTING_ATTR["users"]["method"] = (
-                lambda: Kernel.execFunction("CreateUser")
-            )
             self.add(DEFAULT_SETTING)
             self.addAttr(DEFAULT_SETTING_ATTR)
             self.loadFunctionSetting()

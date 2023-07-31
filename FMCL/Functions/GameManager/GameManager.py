@@ -1,6 +1,6 @@
 import qtawesome as qta
 from Core import Game
-from FMCL.Functions.SettingVisual import SettingWidget
+from FMCL.Functions.SettingEditor import SettingEditor
 from Kernel import Kernel
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget
@@ -46,10 +46,10 @@ class GameManager(QWidget, Ui_GameManager):
         self.gameinfo = GameInfo(self.name)
         self.gameinfo.gameNameChanged.connect(self.renamed)
 
-        self.game.DEFAULT_SETTING_ATTR["logo"]["setting_item"] = \
+        self.game.DEFAULT_SETTING_ATTR["logo"]["settingcard"] = \
             lambda: LogoChooser(self.name)
         self.game.generate_setting()
-        self.gamesetting = SettingWidget(self.game.setting)
+        self.gamesetting = SettingEditor(self.game.setting)
 
         self.modmanager = ModManager(self.name)
 

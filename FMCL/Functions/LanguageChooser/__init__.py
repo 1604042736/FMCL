@@ -12,7 +12,7 @@ def functionInfo():
 
 
 def defaultSettingAttr() -> dict:
-    Setting().attrs["language.type"]["setting_item"] = LanguageChooser
+    Setting().attrs["language.type"]["settingcard"] = LanguageChooser
     return {}
 
 

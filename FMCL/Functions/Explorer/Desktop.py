@@ -65,7 +65,7 @@ class Desktop(QListWidget):
             a_background_image = QAction(_translate("设置背景图片"), self)
             a_background_image.setIcon(qta.icon("fa.image"))
             a_background_image.triggered.connect(lambda: Kernel.execFunction(
-                "SettingVisual", id="explorer.desktop.background_image"))
+                "SettingEditor", id="explorer.desktop.background_image"))
 
             menu.addAction(a_refresh)
             menu.addAction(a_background_image)

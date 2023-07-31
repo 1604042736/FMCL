@@ -20,8 +20,8 @@ def defaultSettingAttr() -> dict:
     button.setText(_translate("用户管理"))
     button.clicked.connect(main)
     setting = Setting()
-    setting.attrs["users"]["setting_item"] = lambda: button
-    setting.attrs["users.selectindex"]["setting_item"] = lambda: button
+    setting.attrs["users"]["settingcard"] = lambda: button
+    setting.attrs["users.selectindex"]["settingcard"] = lambda: button
     return {}
 
 
