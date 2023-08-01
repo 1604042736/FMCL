@@ -1,9 +1,9 @@
 from qfluentwidgets import SpinBox
 
-from .SettingItem import SettingItem
+from .SettingCard import SettingCard
 
 
-class IntSettingItem(SettingItem):
+class IntSettingCard(SettingCard):
     def __init__(self, id: str, setting) -> None:
         super().__init__(id, setting)
         self.w_value = SpinBox(self)

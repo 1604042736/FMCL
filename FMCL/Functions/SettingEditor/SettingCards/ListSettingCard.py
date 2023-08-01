@@ -2,12 +2,12 @@ from Kernel import Kernel
 from PyQt5.QtWidgets import QFileDialog, QInputDialog
 from qfluentwidgets import ComboBox, MessageBox, PushButton
 
-from .SettingItem import SettingItem
+from .SettingCard import SettingCard
 
 _translate = Kernel.translate
 
 
-class ListSettingItem(SettingItem):
+class ListSettingCard(SettingCard):
     def __init__(self, id: str, setting) -> None:
         super().__init__(id, setting)
         self.w_value = ComboBox()

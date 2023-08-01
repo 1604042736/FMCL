@@ -1,8 +1,8 @@
 from qfluentwidgets import CheckBox
-from .SettingItem import SettingItem
+from .SettingCard import SettingCard
 
 
-class BoolSettingItem(SettingItem):
+class BoolSettingCard(SettingCard):
     def __init__(self, id, setting) -> None:
         super().__init__(id, setting)
         self.w_value = CheckBox(self)

@@ -1,11 +1,10 @@
 import qtawesome as qta
-from FMCL.Functions.LanguageChooser import LanguageChooser
 from Kernel import Kernel
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QLabel, QTreeWidgetItem, QWidget
 from Setting import Setting
 
-from .SettingItems import SettingItem
+from .SettingCards import SettingCard
 from .ui_SettingEditor import Ui_SettingEditor
 
 _translate = Kernel.translate
@@ -63,7 +62,7 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                 self.item_widget_id.append((item, widget, totalid))
 
             settingcard = self.setting.getAttr(
-                id, "settingcard", lambda id=id: SettingItem(id, self.setting))()
+                id, "settingcard", lambda id=id: SettingCard(id, self.setting))()
             self.gl_setting.addWidget(settingcard)
             self.setting_items.append(settingcard)
 

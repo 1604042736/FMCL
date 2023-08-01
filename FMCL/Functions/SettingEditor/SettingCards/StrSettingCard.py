@@ -1,12 +1,12 @@
 from Kernel import Kernel
 from qfluentwidgets import LineEdit
 
-from .SettingItem import SettingItem
+from .SettingCard import SettingCard
 
 _translate = Kernel.translate
 
 
-class StrSettingItem(SettingItem):
+class StrSettingCard(SettingCard):
     def __init__(self, id: str, setting) -> None:
         super().__init__(id, setting)
         self.w_value = LineEdit(self)

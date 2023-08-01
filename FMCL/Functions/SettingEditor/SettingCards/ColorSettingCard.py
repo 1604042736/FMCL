@@ -2,12 +2,12 @@ from Kernel import Kernel
 from PyQt5.QtWidgets import QColorDialog, QLabel
 from qfluentwidgets import ColorDialog, PushButton
 
-from .SettingItem import SettingItem
+from .SettingCard import SettingCard
 
 _translate = Kernel.translate
 
 
-class ColorSettingItem(SettingItem):
+class ColorSettingCard(SettingCard):
     def __init__(self, id, setting) -> None:
         super().__init__(id, setting)
         self.color = self.setting.get(id)
