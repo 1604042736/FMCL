@@ -18,7 +18,6 @@ class Explorer(QStackedWidget):
         self.resize(1000, 618)
         self.setWindowTitle("Functional Minecraft Launcher")
         self.caught_widgets: dict[QWidget, QPushButton] = {}  # 被捕获的QWidget
-        self.fixed_widgets: dict[QPushButton, type] = {}  # 固定的QWidget
         self.currentChanged.connect(self.__currentChanged)
         qApp.installEventFilter(self)
 
@@ -35,8 +34,6 @@ QPushButton:hover{
         self.pb_start.setIcon(qApp.windowIcon())
         self.pb_start.clicked.connect(self.showStart)
 
-        self.fixed_widgets[self.pb_start] = Start
-
         self.a_showdesktop = QAction(self)
         self.a_showdesktop.setText(_translate("显示桌面"))
         self.a_showdesktop.setIcon(qta.icon("ph.desktop"))
@@ -51,9 +48,8 @@ QPushButton:hover{
         self.showDesktop()
 
     def showEvent(self, a0: QShowEvent) -> None:
-        for i, key in enumerate(self.fixed_widgets.keys()):
-            qApp.sendEvent(self,
-                           AddToTitleEvent(key, index=i))
+        qApp.sendEvent(self,
+                       AddToTitleEvent(self.pb_start, index=0))
         for _, button in self.caught_widgets.items():  # 恢复
             qApp.sendEvent(self,
                            AddToTitleEvent(button, "right", -1))
@@ -62,32 +58,15 @@ QPushButton:hover{
         qApp.sendEvent(self, AddToTitleMenuEvent(self.a_taskmanager))
         return super().showEvent(a0)
 
-    def isFixedWidget(self, widget: QWidget):
-        """判断是否是固定的QWidget"""
-        for _, cls in self.fixed_widgets.items():
-            if isinstance(widget, cls):
-                # widget只有唯一的一个才会返回True
-                for i in range(self.count()):
-                    if self.widget(i) != widget and isinstance(self.widget(i), cls):
-                        return False
-                return True
-        return False
-
     def addWidget(self, widget: QWidget):
         """添加控件"""
         if widget == self:
             return
-        if not isinstance(widget, Desktop):
-            if not self.isFixedWidget(widget):
-                if widget not in self.caught_widgets:
-                    # 添加任务栏的按钮
-                    button = self.addTitleButton(widget)
-                    self.caught_widgets[widget] = button
-            else:
-                for button, cls in self.fixed_widgets.items():
-                    if isinstance(widget, cls):
-                        self.caught_widgets[widget] = button
-                        break
+        if not isinstance(widget, Desktop) and not isinstance(widget, Start):
+            if widget not in self.caught_widgets:
+                # 添加任务栏的按钮
+                button = self.addTitleButton(widget)
+                self.caught_widgets[widget] = button
 
         super().addWidget(widget)
         widget.installEventFilter(self)
@@ -154,21 +133,6 @@ QPushButton:hover{
                     self.setCurrentWidget(widget)
                 break
 
-    def fixedButtonClicked(self):
-        sender = self.sender()
-        if sender in self.fixed_widgets:
-            cls = self.fixed_widgets[sender]
-            # 不能单纯的判断isinstance(self.currentWidget(),cls)
-            for widget, button in self.caught_widgets.items():
-                if button == sender:
-                    if widget == self.currentWidget():
-                        self.removeWidget(widget)
-                    else:
-                        self.setCurrentWidget(widget)
-                    break
-            else:
-                self.addWidget(cls())
-
     def eventFilter(self, a0: QObject, a1: QEvent) -> bool:
         if a0 in self.caught_widgets:
             if a1.type() in (QEvent.Type.Close, QEvent.Type.DeferredDelete):
@@ -187,10 +151,9 @@ QPushButton:hover{
         widget.removeEventFilter(self)
         if widget in self.caught_widgets:
             button = self.caught_widgets.pop(widget)
-            if button not in self.fixed_widgets:
-                qApp.sendEvent(
-                    self.window(), RemoveFromTitleEvent(button))
-                button.deleteLater()
+            qApp.sendEvent(
+                self.window(), RemoveFromTitleEvent(button))
+            button.deleteLater()
 
     def showRightMenu(self):
         """显示任务栏按钮的右键菜单"""
