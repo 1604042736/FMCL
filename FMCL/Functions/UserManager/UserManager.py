@@ -10,7 +10,18 @@ from .UserInfo import UserInfo
 
 
 class UserManager(QWidget, Ui_UserManager):
+    instance = None
+    new_count = 0
+
+    def __new__(cls):
+        if UserManager.instance==None:
+            UserManager.instance = super().__new__(cls)
+        UserManager.new_count += 1
+        return UserManager.instance
+
     def __init__(self) -> None:
+        if UserManager.new_count > 1:
+            return
         super().__init__()
         self.setupUi(self)
         self.setWindowIcon(qta.icon("ph.users"))
