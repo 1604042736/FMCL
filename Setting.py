@@ -10,7 +10,7 @@ DEFAULT_SETTING = {
     "launcher.width": 1000,
     "launcher.height": 618,
     "game.directories": [".minecraft"],
-    "game.java_path": "javaw",
+    "game.java_path": "java",
     "game.width": 1000,
     "game.height": 618,
     "game.maxmem": 2048,
