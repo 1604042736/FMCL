@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'Launcher.ui'
+# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\Launcher\Launcher.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -18,6 +18,7 @@ class Ui_Launcher(object):
         self.gridLayout = QtWidgets.QGridLayout(Launcher)
         self.gridLayout.setObjectName("gridLayout")
         self.pb_kill = PushButton(Launcher)
+        self.pb_kill.setEnabled(False)
         self.pb_kill.setObjectName("pb_kill")
         self.gridLayout.addWidget(self.pb_kill, 1, 1, 1, 1)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)

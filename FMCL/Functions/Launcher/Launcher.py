@@ -38,6 +38,7 @@ class Launcher(QWidget, Ui_Launcher):
         program, *args = command
         self.process.setWorkingDirectory(dir)
         self.process.start(program, args)
+        self.pb_kill.setEnabled(True)
 
     def outputStandard(self):
         try:
