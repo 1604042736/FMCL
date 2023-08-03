@@ -45,6 +45,7 @@ class GameManager(QWidget, Ui_GameManager):
 
         self.gameinfo = GameInfo(self.name)
         self.gameinfo.gameNameChanged.connect(self.renamed)
+        self.gameinfo.gameDeleted.connect(self.close)
 
         self.game.DEFAULT_SETTING_ATTR["logo"]["settingcard"] = \
             lambda: LogoChooser(self.name)

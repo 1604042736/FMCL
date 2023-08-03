@@ -12,6 +12,7 @@ _translate = Kernel.translate
 
 class GameInfo(QWidget, Ui_GameInfo):
     gameNameChanged = pyqtSignal(str)
+    gameDeleted = pyqtSignal()
 
     def __init__(self, name: str) -> None:
         super().__init__()
@@ -52,6 +53,7 @@ class GameInfo(QWidget, Ui_GameInfo):
     def on_pb_delete_clicked(self, _):
         def confirmDelete():
             self.game.delete()
+            self.gameDeleted.emit()
             self.close()
         box = MessageBox(_translate("删除"),
                          _translate("确定删除?"),
