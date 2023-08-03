@@ -1,5 +1,6 @@
 import logging
 
+import multitasking
 import qtawesome as qta
 from Core import Game
 from Kernel import Kernel
@@ -19,7 +20,9 @@ class Launcher(QWidget, Ui_Launcher):
         self.setWindowIcon(qta.icon("mdi.rocket-launch-outline"))
         self.name = game_name
         self.te_output.setReadOnly(True)
+        
 
+    @multitasking.task
     def start(self):
         game = Game(self.name)
         self.process = QProcess()
