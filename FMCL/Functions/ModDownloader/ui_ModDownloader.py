@@ -16,16 +16,18 @@ class Ui_ModDownloader(object):
         ModDownloader.setObjectName("ModDownloader")
         ModDownloader.resize(1000, 618)
         self.gridLayout = QtWidgets.QGridLayout(ModDownloader)
-        self.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
-        self.scrollArea = QtWidgets.QScrollArea(ModDownloader)
+        self.scrollArea = ScrollArea(ModDownloader)
+        self.scrollArea.setStyleSheet("QScrollArea{\n"
+"    border:none;\n"
+"}")
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 998, 616))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 982, 600))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
+        self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_2.setObjectName("gridLayout_2")
         self.tw_mods = TreeWidget(self.scrollAreaWidgetContents)
         self.tw_mods.setObjectName("tw_mods")
@@ -81,4 +83,4 @@ class Ui_ModDownloader(object):
         self.label_2.setText(_translate("ModDownloader", "下载源"))
         self.pb_search.setText(_translate("ModDownloader", "搜索"))
         self.pb_download.setText(_translate("ModDownloader", "下载"))
-from qfluentwidgets import ComboBox, LineEdit, PushButton, TreeWidget
+from qfluentwidgets import ComboBox, LineEdit, PushButton, ScrollArea, TreeWidget
