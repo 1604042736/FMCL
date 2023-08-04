@@ -1,4 +1,4 @@
-# FMCL
+# Functional Minecraft Launcher
 
 ![Downloads](https://img.shields.io/github/downloads/1604042736/FMCL/total)
 ![Stars](https://img.shields.io/github/stars/1604042736/FMCL)
@@ -9,14 +9,7 @@
 
 ## 介绍
 
-FMCL (Functional Minecraft Launcher) 是一个跨平台的MC启动器
-
-## 功能
-
-- 游戏的安装与运行(包括Forge,Fabric)
-- 游戏的管理(包括Mod管理)
-- 获取新闻
-- Mod搜索和下载
+FMCL (Functional Minecraft Launcher) 是一个用Python编写的基于PyQt5的跨平台的MC启动器
 
 ## 贡献
 
@@ -34,3 +27,14 @@ FMCL (Functional Minecraft Launcher) 是一个跨平台的MC启动器
 ```shell
 pip install -r requirements.txt
 ```
+
+## 依赖
+
+详见`FMCL/Functions/About/About.py`
+
+## 命令行参数
+
+| 参数          | 简介                                    |
+|---------------|----------------------------------------|
+|`--updated`    |将会删除参数后面指示的文件,一般在更新后使用 |
+|`--notunpack`  |不会解压功能和翻译,一般在开发时使用        |
