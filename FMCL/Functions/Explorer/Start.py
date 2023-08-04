@@ -10,7 +10,6 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QAction, QHBoxLayout, QStackedWidget, QWidget, qApp
 from qfluentwidgets import (NavigationInterface, NavigationItemPosition,
                             NavigationPushButton, RoundMenu)
-from Setting import Setting
 
 from .AllFunctions import AllFunctions
 
