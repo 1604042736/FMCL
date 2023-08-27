@@ -1,12 +1,10 @@
 import logging
-import os
 
 import multitasking
 from Core import Game
 from Kernel import Kernel
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QWidget
-from qfluentwidgets import MessageBox
 
 from .ui_ModItem import Ui_ModItem
 
@@ -14,8 +12,6 @@ _translate = Kernel.translate
 
 
 class ModItem(QWidget, Ui_ModItem):
-    modDeleted = pyqtSignal()
-
     def __init__(self, game: Game, modenabled: bool, modname: str):
         super().__init__()
         self.setupUi(self)
@@ -52,16 +48,6 @@ class ModItem(QWidget, Ui_ModItem):
         except Exception as e:
             logging.error(f'无法获取"{self.modname}"信息: {e}')
 
-    @pyqtSlot(bool)
-    def on_pb_del_clicked(self, _):
-        def confirmDelete():
-            path = os.path.join(self.game.get_mod_path(),
-                                self.modname+(".disabled" if not self.modenabled else ""))
-            logging.info(f"删除{path}")
-            os.remove(path)
-            self.modDeleted.emit()
-        box = MessageBox(_translate("删除"),
-                         _translate("确认删除")+self.modname+"?",
-                         self.window())
-        box.yesSignal.connect(confirmDelete)
-        box.exec()
+    def getModFileName(self):
+        """获取Mod文件名称"""
+        return self.modname+(".disabled" if not self.modenabled else "")

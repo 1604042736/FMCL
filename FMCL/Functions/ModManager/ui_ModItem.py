@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ModItem.ui'
+# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\ModManager\ModItem.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -18,11 +18,12 @@ class Ui_ModItem(object):
         self.gl_main = QtWidgets.QGridLayout(ModItem)
         self.gl_main.setContentsMargins(-1, 0, -1, 0)
         self.gl_main.setObjectName("gl_main")
-        self.l_info = QtWidgets.QLabel(ModItem)
-        self.l_info.setText("")
-        self.l_info.setWordWrap(True)
-        self.l_info.setObjectName("l_info")
-        self.gl_main.addWidget(self.l_info, 1, 1, 1, 1)
+        self.cb_modenabled = CheckBox(ModItem)
+        self.cb_modenabled.setMaximumSize(QtCore.QSize(16, 16777215))
+        self.cb_modenabled.setText("")
+        self.cb_modenabled.setTristate(False)
+        self.cb_modenabled.setObjectName("cb_modenabled")
+        self.gl_main.addWidget(self.cb_modenabled, 0, 0, 2, 1)
         self.l_modname = QtWidgets.QLabel(ModItem)
         font = QtGui.QFont()
         font.setBold(True)
@@ -32,16 +33,11 @@ class Ui_ModItem(object):
         self.l_modname.setWordWrap(True)
         self.l_modname.setObjectName("l_modname")
         self.gl_main.addWidget(self.l_modname, 0, 1, 1, 1)
-        self.cb_modenabled = CheckBox(ModItem)
-        self.cb_modenabled.setMaximumSize(QtCore.QSize(16, 16777215))
-        self.cb_modenabled.setText("")
-        self.cb_modenabled.setTristate(False)
-        self.cb_modenabled.setObjectName("cb_modenabled")
-        self.gl_main.addWidget(self.cb_modenabled, 0, 0, 2, 1)
-        self.pb_del = PushButton(ModItem)
-        self.pb_del.setMaximumSize(QtCore.QSize(64, 16777215))
-        self.pb_del.setObjectName("pb_del")
-        self.gl_main.addWidget(self.pb_del, 0, 2, 1, 1)
+        self.l_info = QtWidgets.QLabel(ModItem)
+        self.l_info.setText("")
+        self.l_info.setWordWrap(True)
+        self.l_info.setObjectName("l_info")
+        self.gl_main.addWidget(self.l_info, 1, 1, 1, 1)
 
         self.retranslateUi(ModItem)
         QtCore.QMetaObject.connectSlotsByName(ModItem)
@@ -49,5 +45,4 @@ class Ui_ModItem(object):
     def retranslateUi(self, ModItem):
         _translate = QtCore.QCoreApplication.translate
         ModItem.setWindowTitle(_translate("ModItem", "Mod"))
-        self.pb_del.setText(_translate("ModItem", "删除"))
-from qfluentwidgets import CheckBox, PushButton
+from qfluentwidgets import CheckBox

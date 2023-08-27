@@ -291,14 +291,36 @@ class Game:
     def open_directory(self):
         os.startfile(os.path.join(self.directory, "versions", self.name))
 
-    def setModEnabled(self, enabled: bool, name: str):
+    def setModEnabled(self, enabled: bool, names: str | list):
+        """
+        设置Mod启用/禁用
+        names不包含文件最后的.disabled
+        """
+        if isinstance(names, str):
+            names = [names]
         path = self.get_mod_path()
-        enabled_path = os.path.join(path, name)
-        disabled_path = os.path.join(path, f"{name}.disabled")
-        if enabled:
-            os.rename(disabled_path, enabled_path)
-        else:
-            os.rename(enabled_path, disabled_path)
+        for name in names:
+            enabled_path = os.path.join(path, name)
+            disabled_path = os.path.join(path, f"{name}.disabled")
+            if enabled:
+                if os.path.exists(disabled_path):  # 防止重复设置
+                    os.rename(disabled_path, enabled_path)
+            else:
+                if os.path.exists(enabled_path):
+                    os.rename(enabled_path, disabled_path)
+
+    def deleteMods(self, mods: list | str):
+        """
+        modss包含文件最后的.disabled
+        """
+        if isinstance(mods, str):
+            mods = [mods]
+        path = self.get_mod_path()
+        for mod in mods:
+            p = os.path.join(path, mod)
+            if os.path.exists(p):
+                os.remove(p)
+                logging.info(f"删除{p}")
 
     def generate_setting(self):
         if not hasattr(self, "setting"):
