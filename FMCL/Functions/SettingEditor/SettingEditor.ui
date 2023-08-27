@@ -14,27 +14,7 @@
    <string>设置</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
-    <widget class="PushButton" name="pb_refresh">
-     <property name="text">
-      <string>刷新</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="0" colspan="2">
+   <item row="0" column="0" colspan="2">
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -59,7 +39,7 @@
          <x>0</x>
          <y>0</y>
          <width>124</width>
-         <height>569</height>
+         <height>598</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout">
@@ -89,11 +69,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>PushButton</class>
-   <extends>QPushButton</extends>
-   <header>qfluentwidgets</header>
-  </customwidget>
   <customwidget>
    <class>ScrollArea</class>
    <extends>QScrollArea</extends>

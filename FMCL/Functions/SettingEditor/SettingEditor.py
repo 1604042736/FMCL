@@ -1,7 +1,10 @@
 import qtawesome as qta
+from Events import *
 from Kernel import Kernel
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QLabel, QTreeWidgetItem, QWidget
+from PyQt5.QtGui import QShowEvent
+from PyQt5.QtWidgets import QLabel, QTreeWidgetItem, QWidget, qApp
+from qfluentwidgets import TransparentToolButton
 from Setting import Setting
 
 from .SettingCards import SettingCard
@@ -66,6 +69,11 @@ class SettingEditor(QWidget, Ui_SettingEditor):
             self.gl_setting.addWidget(settingcard)
             self.setting_items.append(settingcard)
 
+        self.pb_refresh = TransparentToolButton()
+        self.pb_refresh.resize(46, 32)
+        self.pb_refresh.setIcon(qta.icon("mdi.refresh"))
+        self.pb_refresh.clicked.connect(lambda: self.refresh())
+
     def addTreeItem(self, root: QTreeWidgetItem | None, item: QTreeWidgetItem):
         if root == None:
             self.tw_setting.addTopLevelItem(item)
@@ -95,6 +103,7 @@ class SettingEditor(QWidget, Ui_SettingEditor):
             if hasattr(i, "refresh"):
                 i.refresh()
 
-    @pyqtSlot(bool)
-    def on_pb_refresh_clicked(self):
-        self.refresh()
+    def showEvent(self, a0: QShowEvent) -> None:
+        qApp.sendEvent(self.window(),
+                       AddToTitleEvent(self.pb_refresh, "right", sender=self))
+        return super().showEvent(a0)

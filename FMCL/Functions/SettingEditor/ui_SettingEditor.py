@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'SettingEditor.ui'
+# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\SettingEditor\SettingEditor.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -17,11 +17,6 @@ class Ui_SettingEditor(object):
         SettingEditor.resize(1000, 618)
         self.gridLayout_2 = QtWidgets.QGridLayout(SettingEditor)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.pb_refresh = PushButton(SettingEditor)
-        self.pb_refresh.setObjectName("pb_refresh")
-        self.gridLayout_2.addWidget(self.pb_refresh, 0, 0, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_2.addItem(spacerItem, 0, 1, 1, 1)
         self.splitter = QtWidgets.QSplitter(SettingEditor)
         self.splitter.setOrientation(QtCore.Qt.Horizontal)
         self.splitter.setObjectName("splitter")
@@ -33,7 +28,7 @@ class Ui_SettingEditor(object):
         self.sa_setting.setWidgetResizable(True)
         self.sa_setting.setObjectName("sa_setting")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 124, 569))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 124, 598))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
@@ -43,10 +38,10 @@ class Ui_SettingEditor(object):
         self.gl_setting = QtWidgets.QGridLayout(self.w_setting)
         self.gl_setting.setObjectName("gl_setting")
         self.gridLayout.addWidget(self.w_setting, 0, 0, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout.addItem(spacerItem1, 1, 0, 1, 1)
+        spacerItem = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout.addItem(spacerItem, 1, 0, 1, 1)
         self.sa_setting.setWidget(self.scrollAreaWidgetContents)
-        self.gridLayout_2.addWidget(self.splitter, 1, 0, 1, 2)
+        self.gridLayout_2.addWidget(self.splitter, 0, 0, 1, 2)
 
         self.retranslateUi(SettingEditor)
         QtCore.QMetaObject.connectSlotsByName(SettingEditor)
@@ -54,5 +49,4 @@ class Ui_SettingEditor(object):
     def retranslateUi(self, SettingEditor):
         _translate = QtCore.QCoreApplication.translate
         SettingEditor.setWindowTitle(_translate("SettingEditor", "设置"))
-        self.pb_refresh.setText(_translate("SettingEditor", "刷新"))
-from qfluentwidgets import PushButton, ScrollArea, TreeWidget
+from qfluentwidgets import ScrollArea, TreeWidget

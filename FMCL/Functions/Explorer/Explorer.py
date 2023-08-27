@@ -4,7 +4,7 @@ from Kernel import Kernel
 from PyQt5.QtCore import QEvent, QObject, QPoint, Qt
 from PyQt5.QtGui import QShowEvent
 from PyQt5.QtWidgets import QAction, QPushButton, QStackedWidget, QWidget, qApp
-from qfluentwidgets import RoundMenu, TransparentTogglePushButton
+from qfluentwidgets import RoundMenu, TransparentTogglePushButton, TransparentToolButton
 
 from .Desktop import Desktop
 from .Start import Start
@@ -21,16 +21,8 @@ class Explorer(QStackedWidget):
         self.currentChanged.connect(self.__currentChanged)
         qApp.installEventFilter(self)
 
-        self.pb_start = QPushButton()
+        self.pb_start = TransparentToolButton()
         self.pb_start.resize(46, 32)
-        self.pb_start.setStyleSheet("""
-QPushButton{
-    border:none;
-}
-QPushButton:hover{
-    background-color:rgb(200,200,200);
-}
-""")
         self.pb_start.setIcon(qApp.windowIcon())
         self.pb_start.clicked.connect(self.showStart)
 
@@ -48,14 +40,14 @@ QPushButton:hover{
         self.showDesktop()
 
     def showEvent(self, a0: QShowEvent) -> None:
-        qApp.sendEvent(self,
+        qApp.sendEvent(self.window(),
                        AddToTitleEvent(self.pb_start, index=0))
         for _, button in self.caught_widgets.items():  # 恢复
-            qApp.sendEvent(self,
+            qApp.sendEvent(self.window(),
                            AddToTitleEvent(button, "right", -1))
 
-        qApp.sendEvent(self, AddToTitleMenuEvent(self.a_showdesktop))
-        qApp.sendEvent(self, AddToTitleMenuEvent(self.a_taskmanager))
+        qApp.sendEvent(self.window(), AddToTitleMenuEvent(self.a_showdesktop))
+        qApp.sendEvent(self.window(), AddToTitleMenuEvent(self.a_taskmanager))
         return super().showEvent(a0)
 
     def addWidget(self, widget: QWidget):
@@ -87,7 +79,7 @@ QPushButton:hover{
             Qt.ContextMenuPolicy.CustomContextMenu)
         button.customContextMenuRequested.connect(
             self.showRightMenu)
-        qApp.sendEvent(self,
+        qApp.sendEvent(self.window(),
                        AddToTitleEvent(button, "right", -1))  # 相当于添加到左边的最后面
         return button
 
@@ -182,7 +174,7 @@ QPushButton:hover{
         a_back.setText(_translate("合并"))
         a_back.setIcon(qta.icon("msc.reply"))
         a_back.triggered.connect(lambda: self.addWidget(widget))
-        qApp.sendEvent(widget, AddToTitleMenuEvent(a_back))
+        qApp.sendEvent(widget.window(), AddToTitleMenuEvent(a_back))
 
     def showDesktop(self):
         """显示桌面"""

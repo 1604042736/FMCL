@@ -1,8 +1,9 @@
 import qtawesome as qta
+from Events import *
 from Kernel import Kernel
-from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QShowEvent
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, qApp
+from qfluentwidgets import TransparentToolButton
 from Setting import Setting
 
 from .ui_UserManager import Ui_UserManager
@@ -14,7 +15,7 @@ class UserManager(QWidget, Ui_UserManager):
     new_count = 0
 
     def __new__(cls):
-        if UserManager.instance==None:
+        if UserManager.instance == None:
             UserManager.instance = super().__new__(cls)
         UserManager.new_count += 1
         return UserManager.instance
@@ -25,8 +26,13 @@ class UserManager(QWidget, Ui_UserManager):
         super().__init__()
         self.setupUi(self)
         self.setWindowIcon(qta.icon("ph.users"))
+
+        self.pb_add = TransparentToolButton()
+        self.pb_add.setIcon(qta.icon("msc.add"))
+        self.pb_add.resize(46, 32)
+        self.pb_add.clicked.connect(lambda: Kernel.execFunction("CreateUser"))
+
         self.userinfo: list[UserInfo] = []
-        self.pb_add.setIcon(qta.icon("ei.plus"))
         self.refresh()
 
     def refresh(self):
@@ -58,8 +64,6 @@ class UserManager(QWidget, Ui_UserManager):
 
     def showEvent(self, a0: QShowEvent) -> None:
         self.refresh()
-        return super().showEvent(a0)
-
-    @pyqtSlot(bool)
-    def on_pb_add_clicked(self, _):
-        Kernel.execFunction("CreateUser")
+        qApp.sendEvent(self.window(),
+                       AddToTitleEvent(self.pb_add, "right", sender=self))
+        super().showEvent(a0)

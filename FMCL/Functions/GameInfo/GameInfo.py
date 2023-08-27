@@ -1,9 +1,11 @@
 import qtawesome as qta
 from Core import Game
+from Events import *
 from Kernel import Kernel
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QLabel, QWidget
-from qfluentwidgets import MessageBox
+from PyQt5.QtGui import QShowEvent
+from PyQt5.QtWidgets import QLabel, QWidget, qApp
+from qfluentwidgets import MessageBox, TransparentToolButton
 
 from .ui_GameInfo import Ui_GameInfo
 
@@ -34,16 +36,17 @@ class GameInfo(QWidget, Ui_GameInfo):
                 label.setText(f"{self.__info_translate[key]}: {val}")
                 self.gl_versions.addWidget(label)
 
+        self.pb_refresh = TransparentToolButton()
+        self.pb_refresh.resize(46, 32)
+        self.pb_refresh.setIcon(qta.icon("mdi.refresh"))
+        self.pb_refresh.clicked.connect(lambda: self.refresh())
+
         self.refresh()
 
     def refresh(self):
         pixmap = self.game.get_pixmap()
         if not pixmap.isNull():
             self.l_logo.setPixmap(pixmap.scaled(64, 64))
-
-    @pyqtSlot(bool)
-    def on_pb_refresh_clicked(self, _):
-        self.refresh()
 
     @pyqtSlot(bool)
     def on_pb_opendir_clicked(self, _):
@@ -72,3 +75,8 @@ class GameInfo(QWidget, Ui_GameInfo):
         self.game = Game(new_name)
         self.refresh()
         self.gameNameChanged.emit(new_name)
+
+    def showEvent(self, a0: QShowEvent) -> None:
+        qApp.sendEvent(self.window(),
+                       AddToTitleEvent(self.pb_refresh, "right", sender=self))
+        return super().showEvent(a0)

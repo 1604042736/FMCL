@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'GameInfo.ui'
+# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\GameInfo\GameInfo.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -20,13 +20,23 @@ class Ui_GameInfo(object):
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName("gridLayout")
         self.scrollArea = QtWidgets.QScrollArea(GameInfo)
+        self.scrollArea.setStyleSheet("QScrollArea{\n"
+"    border:none;\n"
+"}")
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 998, 616))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 1000, 618))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout_2.setObjectName("gridLayout_2")
+        self.widget_2 = QtWidgets.QWidget(self.scrollAreaWidgetContents)
+        self.widget_2.setObjectName("widget_2")
+        self.gl_versions = QtWidgets.QGridLayout(self.widget_2)
+        self.gl_versions.setObjectName("gl_versions")
+        self.gridLayout_2.addWidget(self.widget_2, 1, 0, 1, 2)
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout_2.addItem(spacerItem, 2, 0, 1, 1)
         self.widget = QtWidgets.QWidget(self.scrollAreaWidgetContents)
         self.widget.setObjectName("widget")
         self.gl_info = QtWidgets.QGridLayout(self.widget)
@@ -34,8 +44,8 @@ class Ui_GameInfo(object):
         self.pb_opendir = PushButton(self.widget)
         self.pb_opendir.setObjectName("pb_opendir")
         self.gl_info.addWidget(self.pb_opendir, 1, 1, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gl_info.addItem(spacerItem, 1, 3, 1, 1)
+        spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gl_info.addItem(spacerItem1, 1, 3, 1, 1)
         self.pb_delete = PushButton(self.widget)
         self.pb_delete.setObjectName("pb_delete")
         self.gl_info.addWidget(self.pb_delete, 1, 2, 1, 1)
@@ -46,19 +56,7 @@ class Ui_GameInfo(object):
         self.l_logo.setText("")
         self.l_logo.setObjectName("l_logo")
         self.gl_info.addWidget(self.l_logo, 0, 0, 2, 1)
-        self.gridLayout_2.addWidget(self.widget, 1, 0, 1, 2)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout_2.addItem(spacerItem1, 3, 0, 1, 1)
-        self.widget_2 = QtWidgets.QWidget(self.scrollAreaWidgetContents)
-        self.widget_2.setObjectName("widget_2")
-        self.gl_versions = QtWidgets.QGridLayout(self.widget_2)
-        self.gl_versions.setObjectName("gl_versions")
-        self.gridLayout_2.addWidget(self.widget_2, 2, 0, 1, 2)
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.gridLayout_2.addItem(spacerItem2, 0, 1, 1, 1)
-        self.pb_refresh = PushButton(self.scrollAreaWidgetContents)
-        self.pb_refresh.setObjectName("pb_refresh")
-        self.gridLayout_2.addWidget(self.pb_refresh, 0, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.widget, 0, 0, 1, 2)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout.addWidget(self.scrollArea, 0, 0, 1, 1)
 
@@ -70,5 +68,4 @@ class Ui_GameInfo(object):
         GameInfo.setWindowTitle(_translate("GameInfo", "游戏信息"))
         self.pb_opendir.setText(_translate("GameInfo", "打开文件夹"))
         self.pb_delete.setText(_translate("GameInfo", "删除"))
-        self.pb_refresh.setText(_translate("GameInfo", "刷新"))
 from qfluentwidgets import LineEdit, PushButton

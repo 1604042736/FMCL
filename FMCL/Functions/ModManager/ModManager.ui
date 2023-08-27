@@ -14,20 +14,6 @@
    <string>Mod管理</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="2" colspan="3">
-    <widget class="LineEdit" name="le_search">
-     <property name="placeholderText">
-      <string>按回车以搜索</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="PushButton" name="pb_refresh">
-     <property name="text">
-      <string>刷新</string>
-     </property>
-    </widget>
-   </item>
    <item row="3" column="0" colspan="5">
     <widget class="ListWidget" name="lw_mods">
      <property name="editTriggers">
@@ -41,13 +27,6 @@
      </property>
      <property name="wordWrap">
       <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="PushButton" name="pb_openmodir">
-     <property name="text">
-      <string>打开Mod文件夹</string>
      </property>
     </widget>
    </item>
@@ -109,6 +88,20 @@
        </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="PushButton" name="pb_openmodir">
+     <property name="text">
+      <string>打开Mod文件夹</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="4">
+    <widget class="LineEdit" name="le_search">
+     <property name="placeholderText">
+      <string>按回车以搜索</string>
+     </property>
     </widget>
    </item>
   </layout>
