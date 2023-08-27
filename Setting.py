@@ -1,6 +1,8 @@
 import json
 import os
 
+from qfluentwidgets import setThemeColor
+
 # 默认设置路径
 DEFAULT_SETTING_PATH = os.path.join("FMCL", "settings.json")
 # 默认设置
@@ -27,7 +29,8 @@ DEFAULT_SETTING_ATTR = {
         "name": "启动项"
     },
     "system.theme_color": {
-        "name": "主题颜色"
+        "name": "主题颜色",
+        "callback": lambda a: setThemeColor(a)
     },
     "launcher": {
         "name": "启动器"
@@ -137,6 +140,7 @@ class Setting(dict):
     def set(self, id: str, val):
         self[id] = val
         self.sync()
+        self.getAttr(id, "callback", lambda _: ...)(val)
 
     def loadFunctionSetting(self):
         """加载功能的设置"""

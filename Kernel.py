@@ -10,7 +10,7 @@ import qtawesome as qta
 from PyQt5.QtCore import QEvent, QObject, Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QDialog, QMessageBox, QWidget
-from qfluentwidgets import RoundMenu
+from qfluentwidgets import RoundMenu, setThemeColor
 
 from Events import *
 from Exceptions import *
@@ -35,6 +35,8 @@ class Kernel(QApplication):
         if "--notunpack" not in argv:
             self.unpack()
         self.loadTranslation()
+
+        setThemeColor(Setting().get("system.theme_color"))
 
         logging.debug("初始化功能...")
         self.getAllFunctions()
