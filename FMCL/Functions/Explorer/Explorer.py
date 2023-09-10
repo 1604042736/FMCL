@@ -4,7 +4,8 @@ from Kernel import Kernel
 from PyQt5.QtCore import QEvent, QObject, QPoint, Qt
 from PyQt5.QtGui import QShowEvent
 from PyQt5.QtWidgets import QAction, QPushButton, QStackedWidget, QWidget, qApp
-from qfluentwidgets import RoundMenu, TransparentTogglePushButton, TransparentToolButton
+from qfluentwidgets import (RoundMenu, TransparentTogglePushButton,
+                            TransparentToolButton)
 
 from .Desktop import Desktop
 from .Start import Start
@@ -19,10 +20,22 @@ class Explorer(QStackedWidget):
         self.currentChanged.connect(self.__currentChanged)
         qApp.installEventFilter(self)
 
-        self.pb_start = TransparentToolButton()
+        self.pb_start = QPushButton()
         self.pb_start.resize(46, 32)
         self.pb_start.setIcon(qApp.windowIcon())
+        self.pb_start.setCheckable(True)
         self.pb_start.clicked.connect(self.showStart)
+        self.pb_start.setStyleSheet("""
+QPushButton{
+    border:none;
+}
+QPushButton:hover{
+    background-color:rgb(232,232,232);
+}
+QPushButton:checked{
+    background-color:rgb(232,232,232);
+}
+""")
 
         self.a_showdesktop = QAction(self)
         self.a_showdesktop.setText(self.tr("显示桌面"))
@@ -97,12 +110,15 @@ class Explorer(QStackedWidget):
                 button.setChecked(False)
 
         if not isinstance(self.currentWidget(), Start):
+            self.pb_start.setChecked(False)
             for i in range(self.count()):
                 widget = self.widget(i)
                 if isinstance(widget, Start):
                     widget.navigationInterface.panel.collapse()
                     self.removeWidget(widget)
                     break
+        else:
+            self.pb_start.setChecked(True)
 
     def setCurrentWidget(self, widget: QWidget) -> None:
         if self.indexOf(widget) == -1:
