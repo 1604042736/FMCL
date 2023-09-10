@@ -1,7 +1,17 @@
 import json
 import os
 
-from qfluentwidgets import setThemeColor
+from qfluentwidgets import Theme, setTheme, setThemeColor
+
+
+def setThemeFromStr(theme: str):
+    if theme == "Light":
+        setTheme(Theme.LIGHT)
+    elif theme == "Dark":
+        setTheme(Theme.DARK)
+    elif theme == "Auto":
+        setTheme(Theme.AUTO)
+
 
 # 默认设置路径
 DEFAULT_SETTING_PATH = os.path.join("FMCL", "settings.json")
@@ -9,6 +19,7 @@ DEFAULT_SETTING_PATH = os.path.join("FMCL", "settings.json")
 DEFAULT_SETTING = {
     "system.startup_functions": ["Explorer", "Update"],
     "system.theme_color": "#ffffff",
+    "system.theme": ["Light", "Dark"],
     "launcher.width": 1000,
     "launcher.height": 618,
     "game.directories": [".minecraft"],
@@ -31,6 +42,11 @@ DEFAULT_SETTING_ATTR = {
     "system.theme_color": {
         "name": "主题颜色",
         "callback": lambda a: setThemeColor(a)
+    },
+    "system.theme": {
+        "name": "主题",
+        "callback": lambda a: setThemeFromStr(a[0]),
+        "static": True
     },
     "launcher": {
         "name": "启动器"
@@ -140,6 +156,11 @@ class Setting(dict):
     def set(self, id: str, val):
         self[id] = val
         self.sync()
+        self.callback(id, val)
+
+    def callback(self, id: str, val=None):
+        if val == None:
+            val = self.get(id)
         self.getAttr(id, "callback", lambda _: ...)(val)
 
     def loadFunctionSetting(self):

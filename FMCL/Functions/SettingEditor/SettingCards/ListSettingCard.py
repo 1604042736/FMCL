@@ -27,9 +27,11 @@ class ListSettingCard(SettingCard):
         self.pb_delete.clicked.connect(self.delete)
         self.pb_delete.clicked.connect(self.sync)
 
+        self.check_atleast()
         self._layout.addWidget(self.w_value, 0, 0)
-        self._layout.addWidget(self.pb_add, 0, 1)
-        self._layout.addWidget(self.pb_delete, 0, 2)
+        if not setting.getAttr(self.id, "static", False):
+            self._layout.addWidget(self.pb_add, 0, 1)
+            self._layout.addWidget(self.pb_delete, 0, 2)
 
     def add(self):
         method = self.setting.getAttr(self.id, "method", "input")
@@ -47,6 +49,7 @@ class ListSettingCard(SettingCard):
         if item:
             self.w_value.addItem(item)
             self.setting.get(self.id).append(item)
+            self.setting.callback(self.id)
 
     def delete(self):
         text = self.w_value.currentText()
@@ -59,6 +62,7 @@ class ListSettingCard(SettingCard):
             def confirmDelete():
                 self.setting.get(self.id).remove(text)
                 self.refresh()
+                self.setting.callback(self.id)
             box = MessageBox(_translate("删除"),
                              _translate("确定删除?"),
                              self.window())
@@ -70,6 +74,15 @@ class ListSettingCard(SettingCard):
             value = self.setting.get(self.id)
             value.remove(text)
             value.insert(0, text)
+            self.setting.callback(self.id)
+        self.check_atleast()
+
+    def check_atleast(self):
+        atleast = self.setting.getAttr(self.id, "atleast", 0)
+        if self.w_value.count() <= atleast:
+            self.pb_delete.setEnabled(False)
+        else:
+            self.pb_delete.setEnabled(True)
 
     def refresh(self):
         self.w_value.currentTextChanged.disconnect(self.promote_top)
@@ -78,4 +91,5 @@ class ListSettingCard(SettingCard):
         if len(self.setting.get(self.id)) > 0:
             self.w_value.setCurrentText(self.setting.get(self.id)[0])
         self.w_value.currentTextChanged.connect(self.promote_top)
+        self.check_atleast()
         return super().refresh()
