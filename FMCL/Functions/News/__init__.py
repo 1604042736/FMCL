@@ -2,10 +2,13 @@ import qtawesome as qta
 
 from .News import News
 
+from PyQt5.QtCore import QCoreApplication
+_translate = QCoreApplication.translate
+
 
 def functionInfo():
     return {
-        "name": "新闻",
+        "name": _translate("News", "新闻"),
         "icon": qta.icon("fa.newspaper-o")
     }
 

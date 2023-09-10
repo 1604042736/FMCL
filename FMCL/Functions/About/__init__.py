@@ -1,10 +1,14 @@
-from .About import About
 import qtawesome as qta
+from PyQt5.QtCore import QCoreApplication
+
+from .About import About
+
+_translate = QCoreApplication.translate
 
 
 def functionInfo():
     return {
-        "name": "关于",
+        "name": _translate("About", "关于"),
         "icon": qta.icon("mdi.information-outline")
     }
 

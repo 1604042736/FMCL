@@ -10,8 +10,6 @@ from Setting import Setting
 from .SettingCards import SettingCard
 from .ui_SettingEditor import Ui_SettingEditor
 
-_translate = Kernel.translate
-
 
 class SettingEditor(QWidget, Ui_SettingEditor):
     instances = {}
@@ -50,7 +48,6 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                 root = self.items.get(("???", lastid)[i-1 >= 0], None)
                 item = QTreeWidgetItem()
                 text = self.setting.getAttr(totalid, "name")
-                text = _translate(text)
                 item.setText(0, text)
                 self.addTreeItem(root, item)
                 self.items[totalid] = item

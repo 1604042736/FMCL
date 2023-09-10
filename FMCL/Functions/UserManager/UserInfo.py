@@ -7,8 +7,6 @@ from qfluentwidgets import MessageBox
 
 from .ui_UserInfo import Ui_UserInfo
 
-_translate = Kernel.translate
-
 
 class UserInfo(QFrame, Ui_UserInfo):
     userSelectChanged = pyqtSignal(dict)
@@ -22,9 +20,9 @@ class UserInfo(QFrame, Ui_UserInfo):
         self.l_username.setText(userinfo["username"])
         _type = userinfo["type"]
         if _type == "offline":
-            self.l_type.setText(_translate("离线登录"))
+            self.l_type.setText(self.tr("离线登录"))
         elif _type == "authlibInjector":
-            self.l_type.setText(_translate("外置登录"))
+            self.l_type.setText(self.tr("外置登录"))
             self.l_mode.setText(userinfo["mode"])
 
         head = User.get_head(userinfo)
@@ -47,7 +45,7 @@ class UserInfo(QFrame, Ui_UserInfo):
             User.delete(self.userinfo)
             self.userDeleted.emit(self.userinfo)
         box = MessageBox("",
-                         _translate("确认删除")+"?",
+                         self.tr("确认删除")+"?",
                          self.window())
         box.yesSignal.connect(confirmDeleted)
         box.exec()

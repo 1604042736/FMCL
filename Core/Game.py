@@ -9,6 +9,7 @@ from zipfile import ZipFile
 
 import minecraft_launcher_lib as mll
 import toml
+from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import qApp
 from Setting import Setting
@@ -18,6 +19,8 @@ from Core.Requests import Requests
 
 from .Progress import Progress
 from .User import User
+
+_translate = QCoreApplication.translate
 
 
 class Game:
@@ -49,13 +52,13 @@ class Game:
 
         self.DEFAULT_SETTING_ATTR = {
             "specific": {
-                "name": "特定设置",
+                "name": _translate("Game", "特定设置"),
             },
             "isolation": {
-                "name": "版本隔离",
+                "name": _translate("Game", "版本隔离"),
             },
             "logo": {
-                "name":  "游戏图标",
+                "name":  _translate("Game", "游戏图标"),
             }
         }
         self.DEFAULT_SETTING = {

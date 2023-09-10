@@ -10,8 +10,6 @@ from ..LogoChooser import LogoChooser
 from ..ModManager import ModManager
 from .ui_GameManager import Ui_GameManager
 
-_translate = Kernel.translate
-
 
 class GameManager(QWidget, Ui_GameManager):
 
@@ -30,7 +28,7 @@ class GameManager(QWidget, Ui_GameManager):
             return
         super().__init__()
         self.setupUi(self)
-        self.setWindowTitle(f"{_translate('游戏管理')}:{name}")
+        self.setWindowTitle(f"{self.tr('游戏管理')}:{name}")
         self.setWindowIcon(qta.icon("mdi6.minecraft"))
         self.pb_gameinfo.setIcon(qta.icon("mdi6.information-outline"))
         self.pb_gamesetting.setIcon(qta.icon("ri.settings-5-line"))

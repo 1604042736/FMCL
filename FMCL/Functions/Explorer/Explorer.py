@@ -9,8 +9,6 @@ from qfluentwidgets import RoundMenu, TransparentTogglePushButton, TransparentTo
 from .Desktop import Desktop
 from .Start import Start
 
-_translate = Kernel.translate
-
 
 class Explorer(QStackedWidget):
     def __init__(self):
@@ -27,12 +25,12 @@ class Explorer(QStackedWidget):
         self.pb_start.clicked.connect(self.showStart)
 
         self.a_showdesktop = QAction(self)
-        self.a_showdesktop.setText(_translate("显示桌面"))
+        self.a_showdesktop.setText(self.tr("显示桌面"))
         self.a_showdesktop.setIcon(qta.icon("ph.desktop"))
         self.a_showdesktop.triggered.connect(self.showDesktop)
 
         self.a_taskmanager = QAction(self)
-        self.a_taskmanager.setText(_translate("任务管理器"))
+        self.a_taskmanager.setText(self.tr("任务管理器"))
         self.a_taskmanager.setIcon(qta.icon("fa.tasks"))
         self.a_taskmanager.triggered.connect(
             lambda: Kernel.execFunction("TaskManager"))
@@ -154,14 +152,14 @@ class Explorer(QStackedWidget):
             if button == sender:
                 menu = RoundMenu(self)
                 a_separate = QAction(self)
-                a_separate.setText(_translate("分离"))
+                a_separate.setText(self.tr("分离"))
                 a_separate.setIcon(qta.icon("ph.arrow-square-out-light"))
                 a_separate.triggered.connect(
                     lambda: self.separateCaughtWidget(widget))
                 menu.addAction(a_separate)
 
                 a_close = QAction(self)
-                a_close.setText(_translate("关闭"))
+                a_close.setText(self.tr("关闭"))
                 a_close.setIcon(qta.icon("mdi6.close"))
                 a_close.triggered.connect(widget.close)
                 menu.addAction(a_close)
@@ -171,7 +169,7 @@ class Explorer(QStackedWidget):
     def separateCaughtWidget(self, widget: QWidget):
         qApp.sendEvent(self, SeparateWidgetEvent(widget))
         a_back = QAction(widget)
-        a_back.setText(_translate("合并"))
+        a_back.setText(self.tr("合并"))
         a_back.setIcon(qta.icon("msc.reply"))
         a_back.triggered.connect(lambda: self.addWidget(widget))
         qApp.sendEvent(widget.window(), AddToTitleMenuEvent(a_back))

@@ -11,8 +11,6 @@ from PyQt5.QtWidgets import QFileDialog, QTreeWidgetItem, QWidget
 from .ModFound import ModFound
 from .ui_ModDownloader import Ui_ModDownloader
 
-_translate = Kernel.translate
-
 
 class ModDownloader(QWidget, Ui_ModDownloader):
     __modFound = pyqtSignal(dict)
@@ -97,6 +95,6 @@ class ModDownloader(QWidget, Ui_ModDownloader):
         widget = self.tw_mods.itemWidget(self.tw_mods.currentItem(), 0)
         url = widget.foundmod["files"][version][filename]["url"]
         path = QFileDialog.getSaveFileName(
-            self, _translate("下载"), f"./{filename}")[0]
+            self, self.tr("下载"), f"./{filename}")[0]
         if path:
             Progress().add(lambda callback: Download(url, path, callback).start())

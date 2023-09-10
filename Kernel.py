@@ -1,4 +1,3 @@
-import json
 import logging
 import os
 import sys
@@ -7,20 +6,21 @@ from importlib import import_module
 from zipfile import *
 
 import qtawesome as qta
-from PyQt5.QtCore import QEvent, QObject, Qt
+from PyQt5.QtCore import QCoreApplication, QEvent, QObject, Qt, QTranslator
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QDialog, QMessageBox, QWidget
-from qfluentwidgets import RoundMenu, Theme, setTheme, setThemeColor
+from qfluentwidgets import RoundMenu, setThemeColor
 
 from Events import *
 from Exceptions import *
-from Setting import Setting, setThemeFromStr
+from Setting import Setting, defaultSettingAttr, setThemeFromStr
 from Window import Window
+
+_translate = QCoreApplication.translate
 
 
 class Kernel(QApplication):
     tasks = set()
-    translation = {}  # 翻译
 
     def __init__(self, argv: list[str] = sys.argv) -> None:
         super().__init__(argv)
@@ -63,42 +63,29 @@ class Kernel(QApplication):
                     self.sendEvent(self, WidgetCaughtEvent(a0))
                     if a0.parent() == None:  # 使用默认方法
                         self.showWidget(a0)
-        if a1.type() == QEvent.Type.WindowTitleChange:
-            oldtitle = a0.windowTitle()
-            newtitle = Kernel.translate(oldtitle)
-            if newtitle != oldtitle:
-                a0.setWindowTitle(newtitle)
         return super().notify(a0, a1)
 
     def separateWidget(self, widget: QWidget):
         """分离控件"""
         self.showWidget(widget)
 
-    @staticmethod
-    def loadTranslation():
+    def loadTranslation(self):
         """加载翻译"""
-        logging.debug("加载翻译...")
-        lang_type = Setting()["language.type"]
-        functions_path = "FMCL/Functions"
-        paths = ["FMCL/Translations"]
-        paths.extend([os.path.join(functions_path, i, "Translations")
-                      for i in os.listdir(functions_path)])
-        for path in paths:
-            if not os.path.exists(f"{path}/{lang_type}.json"):
+        logging.info("加载翻译")
+        lang = Setting().get("language.type")+".qm"
+        self.__translators = []  # 防止Translator被销毁
+        for i in ["FMCL/Translations"]+[f"FMCL/Functions/{i}/Translations"for i in os.listdir("FMCL/Functions")]:
+            file = f"{i}/{lang}"
+            if not os.path.exists(file):
                 continue
-            Kernel.translation |= json.load(
-                open(f"{path}/{lang_type}.json", encoding="utf-8"))
-        logging.debug(Kernel.translation)
-
-    @staticmethod
-    def translate(text: str) -> str:
-        """翻译"""
-        if text in Kernel.translation:
-            return Kernel.translation[text]
-        lang_type = Setting()["language.type"]
-        logging.warning(f"未翻译的文本({lang_type}):{text}")
-        Kernel.translation[text] = text
-        return text
+            translator = QTranslator()
+            if translator.load(file):
+                if self.installTranslator(translator):
+                    logging.info(f"已加载{file}")
+                    self.__translators.append(translator)
+        # 加载翻译后更新attr的值，因为之前加进去的attr没有翻译过
+        Setting().addAttr(defaultSettingAttr())
+        Setting().loadFunctionSetting()
 
     @staticmethod
     def unpack():
@@ -111,8 +98,6 @@ class Kernel(QApplication):
         else:
             zip = ZipFile(zipfile_bytes)
             for path in zip.namelist():
-                if "__pycache__" in path:
-                    continue
                 functions_path = "FMCL/Functions"
                 logging.debug(f"解压:{path}")
                 zip.extract(path, functions_path)
@@ -126,8 +111,6 @@ class Kernel(QApplication):
         else:
             zip = ZipFile(zipfile_bytes)
             for path in zip.namelist():
-                if "__pycache__" in path:
-                    continue
                 translation_path = 'FMCL/Translations'
                 logging.debug(f"解压:{path}")
                 zip.extract(path, translation_path)
@@ -164,7 +147,8 @@ class Kernel(QApplication):
                 self.execFunction(function_name)
             except Exception as e:
                 QMessageBox.critical(None,
-                                     Kernel.translate("无法运行")+function_name,
+                                     _translate("Kernel", "无法运行") +
+                                     function_name,
                                      str(e))
 
     @staticmethod
@@ -194,7 +178,6 @@ class Kernel(QApplication):
         """获取功能信息"""
         info = Kernel.defaultFunctionInfo(function) | getattr(
             function, "functionInfo", lambda: {})()
-        info["name"] = Kernel.translate(info["name"])
         return info
 
     @staticmethod

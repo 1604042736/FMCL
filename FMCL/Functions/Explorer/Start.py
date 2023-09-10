@@ -13,8 +13,6 @@ from qfluentwidgets import (NavigationInterface, NavigationItemPosition,
 
 from .AllFunctions import AllFunctions
 
-_translate = Kernel.translate
-
 
 class Navigation(NavigationInterface):
     def pos(self) -> QPoint:
@@ -43,12 +41,12 @@ class Start(QWidget):
         self.all_functions = AllFunctions()
         self.addSubInterface(self.all_functions,
                              qta.icon("mdi.format-list-checkbox"),
-                             _translate("所有应用"))
+                             self.tr("所有应用"))
         self.switchTo(self.all_functions)
         self.navigationInterface.setCurrentItem("AllFunctions")
 
         self.pb_user = NavigationPushButton(qta.icon("ph.user-circle"),
-                                            _translate("未选择用户"),
+                                            self.tr("未选择用户"),
                                             False)
         self.pb_user.clicked.connect(
             lambda: Kernel.execFunction("UserManager"))
@@ -59,7 +57,7 @@ class Start(QWidget):
         )
 
         self.pb_software = NavigationPushButton(qta.icon("mdi.application"),
-                                                _translate("软件"),
+                                                self.tr("软件"),
                                                 False)
         self.pb_software.clicked.connect(self.showSoftwareMenu)
         self.navigationInterface.addWidget(
@@ -120,11 +118,11 @@ class Start(QWidget):
     def showSoftwareMenu(self):
         menu = RoundMenu(self)
 
-        a_quit = QAction(self, text=_translate("退出"))
+        a_quit = QAction(self, text=self.tr("退出"))
         a_quit.triggered.connect(qApp.quit)
         a_quit.setIcon(qta.icon("mdi.power"))
 
-        a_restart = QAction(self, text=_translate("重启"))
+        a_restart = QAction(self, text=self.tr("重启"))
         a_restart.triggered.connect(self.restart)
         a_restart.setIcon(qta.icon("msc.debug-restart"))
 

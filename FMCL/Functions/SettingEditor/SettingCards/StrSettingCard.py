@@ -3,8 +3,6 @@ from qfluentwidgets import LineEdit
 
 from .SettingCard import SettingCard
 
-_translate = Kernel.translate
-
 
 class StrSettingCard(SettingCard):
     def __init__(self, id: str, setting) -> None:
@@ -14,7 +12,7 @@ class StrSettingCard(SettingCard):
         self.w_value.editingFinished.connect(self.sync)
         self._layout.addWidget(self.w_value)
 
-        self.setToolTip(_translate("输入完后按回车键以保存"))
+        self.setToolTip(self.tr("输入完后按回车键以保存"))
 
     def sync(self):
         self.setting.set(self.id, self.w_value.text())

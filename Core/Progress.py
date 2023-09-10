@@ -4,8 +4,6 @@ from PyQt5.QtCore import QSize, QThread, pyqtSignal
 from PyQt5.QtWidgets import QGridLayout, QLabel, QListWidgetItem, QWidget
 from qfluentwidgets import ListWidget, ProgressBar
 
-_translate = Kernel.translate
-
 
 class Progress(ListWidget):
     __instance = None
@@ -21,7 +19,7 @@ class Progress(ListWidget):
         if self.__new_count > 1:
             return
         super().__init__()
-        self.setWindowTitle(_translate("进度"))
+        self.setWindowTitle(self.tr("进度"))
         self.setWindowIcon(qta.icon("mdi.progress-download"))
 
     def add(self, func):

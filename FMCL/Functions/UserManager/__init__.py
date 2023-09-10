@@ -1,23 +1,23 @@
 import qtawesome as qta
-from Kernel import Kernel
+from PyQt5.QtCore import QCoreApplication
 from qfluentwidgets import PushButton
 from Setting import Setting
 
 from .UserManager import UserManager
 
-_translate = Kernel.translate
+_translate = QCoreApplication.translate
 
 
 def functionInfo():
     return {
-        "name": "用户管理",
+        "name": _translate("UserManager", "用户管理"),
         "icon": qta.icon("ph.users")
     }
 
 
 def defaultSettingAttr() -> dict:
     button = PushButton()
-    button.setText(_translate("用户管理"))
+    button.setText(_translate("UserManager", "用户管理"))
     button.clicked.connect(main)
     setting = Setting()
     setting.attrs["users"]["settingcard"] = lambda: button

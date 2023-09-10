@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'Help.ui'
+# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\Help\Help.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -37,12 +37,12 @@ class Ui_Help(object):
         self.gridLayout.addWidget(self.splitter, 1, 0, 1, 4)
         self.pb_next = PushButton(Help)
         self.pb_next.setEnabled(False)
-        self.pb_next.setMaximumSize(QtCore.QSize(64, 16777215))
+        self.pb_next.setMaximumSize(QtCore.QSize(128, 16777215))
         self.pb_next.setObjectName("pb_next")
         self.gridLayout.addWidget(self.pb_next, 0, 1, 1, 1)
         self.pb_pre = PushButton(Help)
         self.pb_pre.setEnabled(False)
-        self.pb_pre.setMaximumSize(QtCore.QSize(64, 16777215))
+        self.pb_pre.setMaximumSize(QtCore.QSize(128, 16777215))
         self.pb_pre.setObjectName("pb_pre")
         self.gridLayout.addWidget(self.pb_pre, 0, 0, 1, 1)
         self.l_index = QtWidgets.QLabel(Help)
@@ -51,7 +51,7 @@ class Ui_Help(object):
         self.l_index.setObjectName("l_index")
         self.gridLayout.addWidget(self.l_index, 0, 2, 1, 1)
         self.pb_separate = PushButton(Help)
-        self.pb_separate.setMaximumSize(QtCore.QSize(64, 16777215))
+        self.pb_separate.setMaximumSize(QtCore.QSize(128, 16777215))
         self.pb_separate.setObjectName("pb_separate")
         self.gridLayout.addWidget(self.pb_separate, 0, 3, 1, 1)
 

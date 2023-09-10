@@ -20,7 +20,9 @@ class LanguageChooser(QWidget, Ui_LanguageChooser):
         cur_lang = Setting().get("language.type")
         self.cb_lang.addItem(cur_lang)
         for name in os.listdir("FMCL/Translations"):
-            lang, _ = os.path.splitext(name)
+            lang, ext = os.path.splitext(name)
+            if ext != ".qm":
+                continue
             if lang != cur_lang:
                 self.cb_lang.addItem(lang)
         self.cb_lang.setCurrentText(cur_lang)

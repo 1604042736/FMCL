@@ -16,8 +16,6 @@ from PyQt5.QtWidgets import QWidget, qApp
 from .AboutItem import AboutItem
 from .ui_About import Ui_About
 
-_translate = Kernel.translate
-
 
 class About(QWidget, Ui_About):
     def __init__(self):
@@ -41,17 +39,17 @@ class About(QWidget, Ui_About):
             "thanks": [
                 (
                     "bangbang93",
-                    _translate("提供镜像源"),
+                    self.tr("提供镜像源"),
                     QPixmap(":/Image/bangbang93.jpg"),
                     (
                         lambda:webbrowser.open(
                             "https://afdian.net/a/bangbang93"),
-                        _translate("赞助")
+                        self.tr("赞助")
                     )
                 ),
                 (
                     "HMCL",
-                    _translate("提供技术帮助"),
+                    self.tr("提供技术帮助"),
                     QPixmap(":/Image/hmcl.png"),
                     (
                         lambda:webbrowser.open(
@@ -67,7 +65,7 @@ class About(QWidget, Ui_About):
                     None,
                     (
                         lambda:webbrowser.open("https://www.python.org"),
-                        _translate("官网")
+                        self.tr("官网")
                     )
                 ),
                 (
@@ -106,7 +104,7 @@ class About(QWidget, Ui_About):
                     None,
                     (
                         qApp.aboutQt,
-                        _translate("关于Qt")
+                        self.tr("关于Qt")
                     )
                 ),
                 (

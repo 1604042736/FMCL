@@ -57,7 +57,7 @@
      </property>
      <property name="maximumSize">
       <size>
-       <width>64</width>
+       <width>128</width>
        <height>16777215</height>
       </size>
      </property>
@@ -73,7 +73,7 @@
      </property>
      <property name="maximumSize">
       <size>
-       <width>64</width>
+       <width>128</width>
        <height>16777215</height>
       </size>
      </property>
@@ -96,7 +96,7 @@
     <widget class="PushButton" name="pb_separate">
      <property name="maximumSize">
       <size>
-       <width>64</width>
+       <width>128</width>
        <height>16777215</height>
       </size>
      </property>

@@ -7,8 +7,6 @@ from qfluentwidgets import MessageBox
 
 from .ui_Offline import Ui_Offline
 
-_translate = Kernel.translate
-
 
 class Offline(QWidget, Ui_Offline):
     def __init__(self) -> None:
@@ -19,4 +17,4 @@ class Offline(QWidget, Ui_Offline):
     @pyqtSlot(bool)
     def on_pb_create_clicked(self, _):
         User.create_offline(self.le_username.text())
-        MessageBox("", _translate("创建成功"), self.window()).exec()
+        MessageBox("", self.tr("创建成功"), self.window()).exec()

@@ -2,10 +2,13 @@ import qtawesome as qta
 
 from .Update import Update
 
+from PyQt5.QtCore import QCoreApplication
+_translate = QCoreApplication.translate
+
 
 def functionInfo():
     return {
-        "name": "更新",
+        "name": _translate("Update", "更新"),
         "icon": qta.icon("mdi6.update")
     }
 

@@ -1,58 +1,59 @@
-import json
 import os
-import re
 
-filters = [
-    r".*?\.git.*?",
-    r".*?\.minecraft.*?",
-    r".*?ui_.*?",
-    r".*?_rc.*?",
-    r".*?__pycache__.*?",
-    r".*?release.*?",
-    r".*?Languages.*?",
-    r".*?Resources.*?",
-    r".*?3dparty.*?"
+tasks = [
+    {
+        "scanpath": [
+            "../Core",
+            "../Events",
+            "../Exceptions"
+        ],
+        "scanfile":[
+            "../Kernel.py",
+            "../Main.py",
+            "../Setting.py",
+            "../Window.py"
+        ],
+        "targetpath":"../FMCL/Translations"
+    }
+]+[
+    {
+        "scanpath": [f"../FMCL/Functions/{i}"],
+        "scanfile":[],
+        "targetpath":f"../FMCL/Functions/{i}/Translations"
+    }for i in os.listdir("../FMCL/Functions")
 ]
 
 
-def generate(target_path, save_path):
-    translation = {}
-    for root, dirs, files in os.walk(target_path):
-        for file in files:
-            file_path = os.path.join(root, file)
-            name, ext = os.path.splitext(file_path)
-            for filter in filters:
-                if re.match(filter, file_path):
-                    break
-            else:
-                if ext == ".py":
-                    content = open(file_path, encoding="utf-8").read()
-                    for match in re.finditer(r"_translate\((.*?)\)", content):
-                        text = match.group(1)
-                        if text[0] == "'" or text[0] == '"':
-                            text = text[1:-1]
-                        else:
-                            continue
-                        translation[text] = text
-    if not translation:
-        return
-    for i in ("简体中文", "English"):
-        path = os.path.join(save_path, "Translations")
-        if not os.path.exists(path):
-            os.makedirs(path)
-        file_path = os.path.join(path, f"{i}.json")
-        if os.path.exists(file_path):
-            translation |= json.load(open(file_path, encoding="utf-8"))
-        json.dump(translation,
-                  open(file_path, encoding="utf-8", mode="w"),
-                  sort_keys=True, ensure_ascii=False, indent=4)
-    print(translation)
+def check_file(name: str):
+    return name[-3:] == ".py"
+
+
+def dotask(task: dict):
+    files = []
+    for file in task["scanfile"]:
+        if check_file(file):
+            files.append(file)
+    for path in task["scanpath"]:
+        for root, _, filenames in os.walk(path):
+            for filename in filenames:
+                if check_file(filename):
+                    files.append(root+"/"+filename)
+    files = list(map(os.path.abspath, files))
+    print("\n".join(files))
+    for lang in ("简体中文", "English"):
+        args = [
+            "pylupdate5",
+            " ".join(files),
+            "-ts",
+            f"{task['targetpath']}/{lang}.ts"
+        ]
+        os.system(" ".join(args))
 
 
 def main():
-    for i in os.listdir("../FMCL/Functions"):
-        generate(f"../FMCL/Functions/{i}", f"../FMCL/Functions/{i}")
-    generate(f"../Core", f"../FMCL")
+    for task in tasks:
+        dotask(task)
+        print("="*64)
 
 
 if __name__ == "__main__":

@@ -1,8 +1,6 @@
 from PyQt5.QtCore import QFile, QObject, pyqtProperty
 from qfluentwidgets import TextEdit
 
-from . import Help_rc as _
-
 
 class Document(QObject):
     def __init__(self, filename: str) -> None:

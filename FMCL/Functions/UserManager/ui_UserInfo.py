@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'UserInfo.ui'
+# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\UserManager\UserInfo.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -24,7 +24,7 @@ class Ui_UserInfo(object):
         self.gridLayout = QtWidgets.QGridLayout(UserInfo)
         self.gridLayout.setObjectName("gridLayout")
         self.pb_del = PushButton(UserInfo)
-        self.pb_del.setMaximumSize(QtCore.QSize(64, 16777215))
+        self.pb_del.setMaximumSize(QtCore.QSize(100, 16777215))
         self.pb_del.setObjectName("pb_del")
         self.gridLayout.addWidget(self.pb_del, 0, 4, 1, 1)
         self.gridLayout_2 = QtWidgets.QGridLayout()
@@ -52,7 +52,7 @@ class Ui_UserInfo(object):
         self.rb_select.setObjectName("rb_select")
         self.gridLayout.addWidget(self.rb_select, 0, 0, 1, 1)
         self.pb_refresh = PushButton(UserInfo)
-        self.pb_refresh.setMaximumSize(QtCore.QSize(64, 16777215))
+        self.pb_refresh.setMaximumSize(QtCore.QSize(100, 16777215))
         self.pb_refresh.setObjectName("pb_refresh")
         self.gridLayout.addWidget(self.pb_refresh, 0, 3, 1, 1)
 

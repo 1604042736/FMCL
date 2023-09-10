@@ -9,8 +9,6 @@ from qfluentwidgets import MessageBox, TransparentToolButton
 
 from .ui_GameInfo import Ui_GameInfo
 
-_translate = Kernel.translate
-
 
 class GameInfo(QWidget, Ui_GameInfo):
     gameNameChanged = pyqtSignal(str)
@@ -19,12 +17,12 @@ class GameInfo(QWidget, Ui_GameInfo):
     def __init__(self, name: str) -> None:
         super().__init__()
         self.setupUi(self)
-        self.setWindowTitle(f"{_translate('游戏信息')}:{name}")
+        self.setWindowTitle(f"{self.tr('游戏信息')}:{name}")
         self.setWindowIcon(qta.icon("mdi6.information-outline"))
         self. __info_translate = {
-            "version": _translate("版本"),
-            "forge_version": _translate("Forge版本"),
-            "fabric_version": _translate("Fabric版本")
+            "version": self.tr("版本"),
+            "forge_version": self.tr("Forge版本"),
+            "fabric_version": self.tr("Fabric版本")
         }
         self.game = Game(name)
         self.info = self.game.get_info()
@@ -58,8 +56,8 @@ class GameInfo(QWidget, Ui_GameInfo):
             self.game.delete()
             self.gameDeleted.emit()
             self.close()
-        box = MessageBox(_translate("删除"),
-                         _translate("确定删除?"),
+        box = MessageBox(self.tr("删除"),
+                         self.tr("确定删除?"),
                          self.window())
         box.yesSignal.connect(confirmDelete)
         box.exec()

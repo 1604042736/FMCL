@@ -9,8 +9,6 @@ from PyQt5.QtWidgets import QAction, QListView, QListWidget, QListWidgetItem
 from qfluentwidgets import RoundMenu
 from Setting import Setting
 
-_translate = Kernel.translate
-
 
 class Desktop(QListWidget):
     __instance = None
@@ -26,7 +24,7 @@ class Desktop(QListWidget):
         if self.__new_count > 1:
             return
         super().__init__()
-        self.setWindowTitle(_translate("桌面"))
+        self.setWindowTitle(self.tr("桌面"))
 
         self.setMovement(QListView.Movement.Static)
         self.setViewMode(QListView.ViewMode.IconMode)
@@ -58,11 +56,11 @@ class Desktop(QListWidget):
                     lambda _, f=action_function: Kernel.execFunction(f, item.text()))
                 menu.addAction(action)
         else:
-            a_refresh = QAction(_translate("刷新"), self)
+            a_refresh = QAction(self.tr("刷新"), self)
             a_refresh.setIcon(qta.icon("mdi.refresh"))
             a_refresh.triggered.connect(self.refresh)
 
-            a_background_image = QAction(_translate("设置背景图片"), self)
+            a_background_image = QAction(self.tr("设置背景图片"), self)
             a_background_image.setIcon(qta.icon("fa.image"))
             a_background_image.triggered.connect(lambda: Kernel.execFunction(
                 "SettingEditor", id="explorer.desktop.background_image"))

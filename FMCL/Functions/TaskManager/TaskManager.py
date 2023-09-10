@@ -10,8 +10,6 @@ from PyQt5.QtWidgets import QHeaderView, QTreeWidgetItem, QWidget
 
 from .ui_TaskManger import Ui_TaskManager
 
-_translate = Kernel.translate
-
 
 def get_size(obj, seen=None):
     """Recursively finds size of objects in bytes"""
@@ -64,10 +62,10 @@ class TaskManager(QWidget, Ui_TaskManager):
         self.setupUi(self)
         self.setWindowIcon(qta.icon("fa.tasks"))
         self.task_attr = {
-            _translate("对象"): lambda obj: obj.objectName(),
-            _translate("类"): lambda obj: obj.__class__.__name__,
-            _translate("标题"): lambda obj: obj.windowTitle(),
-            _translate("内存"): lambda obj: f"{get_size(obj)}B"
+            self.tr("对象"): lambda obj: obj.objectName(),
+            self.tr("类"): lambda obj: obj.__class__.__name__,
+            self.tr("标题"): lambda obj: obj.windowTitle(),
+            self.tr("内存"): lambda obj: f"{get_size(obj)}B"
         }
         self.tw_tasks.setColumnCount(len(self.task_attr))
         self.tw_tasks.setHeaderLabels(self.task_attr.keys())

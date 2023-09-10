@@ -1,7 +1,10 @@
 import json
 import os
 
+from PyQt5.QtCore import QCoreApplication
 from qfluentwidgets import Theme, setTheme, setThemeColor
+
+_translate = QCoreApplication.translate
 
 
 def setThemeFromStr(theme: str):
@@ -31,65 +34,67 @@ DEFAULT_SETTING = {
     "users.selectindex": 0,
     "language.type": "简体中文"
 }
-# 默认设置属性
-DEFAULT_SETTING_ATTR = {
-    "system": {
-        "name": "系统"
-    },
-    "system.startup_functions": {
-        "name": "启动项"
-    },
-    "system.theme_color": {
-        "name": "主题颜色",
-        "callback": lambda a: setThemeColor(a)
-    },
-    "system.theme": {
-        "name": "主题",
-        "callback": lambda a: setThemeFromStr(a[0]),
-        "static": True
-    },
-    "launcher": {
-        "name": "启动器"
-    },
-    "launcher.width": {
-        "name":  "启动器宽度"
-    },
-    "launcher.height": {
-        "name":  "启动器高度"
-    },
-    "game": {
-        "name":  "游戏"
-    },
-    "game.directories": {
-        "name":  "游戏目录",
-        "method": "directory",
-        "atleast": 1
-    },
-    "game.java_path": {
-        "name": "Java路径"
-    },
-    "game.width": {
-        "name":  "游戏窗口宽度"
-    },
-    "game.height": {
-        "name": "游戏窗口高度"
-    },
-    "game.maxmem": {
-        "name": "最大内存"
-    },
-    "users": {
-        "name":  "用户"
-    },
-    "users.selectindex": {
-        "name": "选择用户索引"
-    },
-    "language": {
-        "name": "语言",
-    },
-    "language.type": {
-        "name": "语言类型"
+
+
+def defaultSettingAttr():
+    return {
+        "system": {
+            "name": _translate("Setting", "系统")
+        },
+        "system.startup_functions": {
+            "name": _translate("Setting", "启动项")
+        },
+        "system.theme_color": {
+            "name": _translate("Setting", "主题颜色"),
+            "callback": lambda a: setThemeColor(a)
+        },
+        "system.theme": {
+            "name": _translate("Setting",  "主题"),
+            "callback": lambda a: setThemeFromStr(a[0]),
+            "static": True
+        },
+        "launcher": {
+            "name": _translate("Setting", "启动器")
+        },
+        "launcher.width": {
+            "name":  _translate("Setting", "启动器宽度")
+        },
+        "launcher.height": {
+            "name":  _translate("Setting", "启动器高度")
+        },
+        "game": {
+            "name": _translate("Setting",  "游戏")
+        },
+        "game.directories": {
+            "name":  _translate("Setting", "游戏目录"),
+            "method": "directory",
+            "atleast": 1
+        },
+        "game.java_path": {
+            "name": _translate("Setting", "Java路径")
+        },
+        "game.width": {
+            "name":  _translate("Setting", "游戏窗口宽度")
+        },
+        "game.height": {
+            "name": _translate("Setting", "游戏窗口高度")
+        },
+        "game.maxmem": {
+            "name": _translate("Setting", "最大内存")
+        },
+        "users": {
+            "name":  _translate("Setting", "用户")
+        },
+        "users.selectindex": {
+            "name": _translate("Setting", "选择用户索引")
+        },
+        "language": {
+            "name": _translate("Setting", "语言"),
+        },
+        "language.type": {
+            "name": _translate("Setting", "语言类型")
+        }
     }
-}
 
 
 class Setting(dict):
@@ -111,8 +116,6 @@ class Setting(dict):
         self.setting_path = setting_path
         if setting_path == DEFAULT_SETTING_PATH:
             self.add(DEFAULT_SETTING)
-            self.addAttr(DEFAULT_SETTING_ATTR)
-            self.loadFunctionSetting()
         if os.path.exists(setting_path):
             for key, val in json.load(open(setting_path, encoding="utf-8")).items():
                 self[key] = val

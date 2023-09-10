@@ -6,8 +6,6 @@ from PyQt5.QtWidgets import QFileDialog, QWidget
 
 from .ui_LogoChooser import Ui_LogoChooser
 
-_translate = Kernel.translate
-
 
 class LogoChooser(QWidget, Ui_LogoChooser):
     logos = [
@@ -63,7 +61,7 @@ class LogoChooser(QWidget, Ui_LogoChooser):
     @pyqtSlot(bool)
     def on_pb_add_clicked(self, _):
         filename, _ = QFileDialog.getOpenFileName(
-            self, _translate("选择图标"), filter="Image Files(*.png *.jpg *.ico)")
+            self, self.tr("选择图标"), filter="Image Files(*.png *.jpg *.ico)")
         if filename:
             self.logos.append(filename)
             self.refresh()

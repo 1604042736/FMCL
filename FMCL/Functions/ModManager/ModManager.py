@@ -12,8 +12,6 @@ from qfluentwidgets import MessageBox, TransparentToolButton
 from .ModItem import ModItem
 from .ui_ModManager import Ui_ModManager
 
-_translate = Kernel.translate
-
 
 class ModManager(QWidget, Ui_ModManager):
     def __init__(self, name: str):
@@ -69,8 +67,8 @@ class ModManager(QWidget, Ui_ModManager):
         def confirmDelete():
             self.game.deleteMods(mods)
             self.refresh()
-        box = MessageBox(_translate("删除"),
-                         _translate("确认删除")+str(mods)+"?",
+        box = MessageBox(self.tr("删除"),
+                         self.tr("确认删除")+str(mods)+"?",
                          self.window())
         box.yesSignal.connect(confirmDelete)
         box.exec()

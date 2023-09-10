@@ -1,10 +1,14 @@
-from .GameDownloader import GameDownloader
 import qtawesome as qta
+from PyQt5.QtCore import QCoreApplication
+
+from .GameDownloader import GameDownloader
+
+_translate = QCoreApplication.translate
 
 
 def functionInfo():
     return {
-        "name": "游戏下载器",
+        "name": _translate("GameDownloader", "游戏下载器"),
         "icon": qta.icon("ph.download-simple")
     }
 

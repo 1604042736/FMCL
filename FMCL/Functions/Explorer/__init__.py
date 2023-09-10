@@ -1,6 +1,9 @@
+from PyQt5.QtCore import QCoreApplication
 from Setting import Setting
 
 from .Explorer import Explorer
+
+_translate = QCoreApplication.translate
 
 
 def defaultSetting() -> dict:
@@ -16,13 +19,13 @@ def defaultSettingAttr() -> dict:
             "name": "Explorer"
         },
         "explorer.desktop": {
-            "name": "桌面"
+            "name": _translate("Explorer", "桌面")
         },
         "explorer.desktop.background_image": {
-            "name": "背景图片"
+            "name": _translate("Explorer", "背景图片")
         },
         "explorer.desktop.item_clicked_actions": {
-            "name": "游戏右键操作"
+            "name": _translate("Explorer", "游戏右键操作")
         }
     }
 

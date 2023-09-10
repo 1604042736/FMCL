@@ -1,19 +1,51 @@
 import os
-import shutil
+import re
+from zipfile import *
+
+tasks = [
+    {
+        "target": "Functions",
+        "path": "../FMCL/Functions",
+        "filter": [
+            r".*?\.ui",
+            r".*?\.ts",
+            r".*?__pycache__.*?"
+        ]
+    },
+    {
+        "target": "Translations",
+        "path": "../FMCL/Translations",
+        "filter": [
+            r".*?\.ts"
+        ]
+    }
+]
+
+
+def dotask(task: dict):
+    zippath = f"../Pack/{task['target']}Pack.zip"
+    zipfile = ZipFile(zippath, "w", ZIP_DEFLATED)
+    for root, _, files in os.walk(task["path"]):
+        for file in files:
+            filepath = f"{root}/{file}"
+            for f in task["filter"]:
+                if re.match(f, filepath):
+                    break
+            else:
+                print(filepath)
+                zipfilepath = filepath.replace(task["path"], "")[1:]
+                zipfile.write(filepath, zipfilepath)
+    zipfile.close()
+    with open(f"../Pack/{task['target']}.py", mode="w")as file:
+        file.write(
+            f"""import io
+zipfile_bytes=io.BytesIO({open(zippath,mode='rb').read()})""")
 
 
 def main():
-    if not os.path.exists("../Pack"):
-        os.makedirs("../Pack")
-    with open("../Pack/__init__.py", mode="w", encoding="utf-8")as file:
-        file.write("")
-    for i in (("Functions", "../FMCL/Functions"),
-              ("Translations", "../FMCL/Translations")):
-        shutil.make_archive(f"../Pack/{i[0]}Pack", "zip", i[1])
-        with open(f"../Pack/{i[0]}.py", mode="w")as file:
-            file.write(
-                f"""import io
-zipfile_bytes=io.BytesIO({open(f'../Pack/{i[0]}Pack.zip',mode='rb').read()})""")
+    for task in tasks:
+        dotask(task)
+        print("="*64)
 
 
 if __name__ == "__main__":

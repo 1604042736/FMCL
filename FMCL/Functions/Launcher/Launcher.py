@@ -9,8 +9,6 @@ from PyQt5.QtWidgets import QWidget
 
 from .ui_Launcher import Ui_Launcher
 
-_translate = Kernel.translate
-
 
 class Launcher(QWidget, Ui_Launcher):
     __commandGot = pyqtSignal(str, list)
@@ -18,7 +16,7 @@ class Launcher(QWidget, Ui_Launcher):
     def __init__(self, game_name: str):
         super().__init__()
         self.setupUi(self)
-        self.setWindowTitle(f"{_translate('启动游戏')}:{game_name}")
+        self.setWindowTitle(f"{self.tr('启动游戏')}:{game_name}")
         self.setWindowIcon(qta.icon("mdi.rocket-launch-outline"))
         self.name = game_name
         self.te_output.setReadOnly(True)

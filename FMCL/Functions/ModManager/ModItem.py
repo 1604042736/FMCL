@@ -8,8 +8,6 @@ from PyQt5.QtWidgets import QWidget
 
 from .ui_ModItem import Ui_ModItem
 
-_translate = Kernel.translate
-
 
 class ModItem(QWidget, Ui_ModItem):
     def __init__(self, game: Game, modenabled: bool, modname: str):
@@ -38,8 +36,8 @@ class ModItem(QWidget, Ui_ModItem):
             info_list = []
             info_list.append(info["name"])
             info_list.append(info["description"].replace("\n", ""))
-            info_list.append(_translate("版本")+": "+info["version"])
-            info_list.append(_translate("作者")+": " +
+            info_list.append(self.tr("版本")+": "+info["version"])
+            info_list.append(self.tr("作者")+": " +
                              ','.join(info["authors"]))
 
             text = ", ".join(info_list)

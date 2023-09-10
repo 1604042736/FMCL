@@ -1,10 +1,8 @@
-from Kernel import Kernel
+from PyQt5.QtCore import QCoreApplication
 
 from .Requests import Requests
 
-_translate = Kernel.translate
-
-
+_translate=QCoreApplication.translate
 class Mod:
     project_cache = {}
 
@@ -12,11 +10,11 @@ class Mod:
         self.downloadsource = "Modrinth"
 
         self.MODRINTH_SORTMETHOD = {
-            _translate("按匹配程度排序"): "relevance",
-            _translate("按下载量排序"): "downloads",
-            _translate("按关注者数量排序"): "follows",
-            _translate("按创建时间排序"): "newest",
-            _translate("按更新时间排序"): "updated",
+            _translate("Mod","按匹配程度排序"): "relevance",
+            _translate("Mod","按下载量排序"): "downloads",
+            _translate("Mod","按关注者数量排序"): "follows",
+            _translate("Mod","按创建时间排序"): "newest",
+            _translate("Mod","按更新时间排序"): "updated",
         }
 
     def search(self, name, sort="", yield_=False):

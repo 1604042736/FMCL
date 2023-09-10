@@ -1,12 +1,15 @@
 import qtawesome as qta
+from PyQt5.QtCore import QCoreApplication
 from Setting import DEFAULT_SETTING_PATH, Setting
 
 from .SettingEditor import SettingEditor
 
+_translate = QCoreApplication.translate
+
 
 def functionInfo():
     return {
-        "name": "设置",
+        "name": _translate("SettingEditor", "设置"),
         "icon": qta.icon("ri.settings-5-line")
     }
 

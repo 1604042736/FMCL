@@ -4,8 +4,6 @@ from qfluentwidgets import ColorDialog, PushButton
 
 from .SettingCard import SettingCard
 
-_translate = Kernel.translate
-
 
 class ColorSettingCard(SettingCard):
     def __init__(self, id, setting) -> None:
@@ -17,7 +15,7 @@ class ColorSettingCard(SettingCard):
         self._layout.addWidget(self.l_color, 0, 0)
 
         self.pb_choosecolor = PushButton()
-        self.pb_choosecolor.setText(_translate("选择颜色"))
+        self.pb_choosecolor.setText(self.tr("选择颜色"))
         self.pb_choosecolor.clicked.connect(self.chooseColor)
         self._layout.addWidget(self.pb_choosecolor, 0, 1)
 
@@ -38,6 +36,6 @@ class ColorSettingCard(SettingCard):
                 f"QLabel{{background-color:{self.color};}}")
             self.sync()
         colordialog = ColorDialog(
-            self.color, _translate("选择颜色"), self.window())
+            self.color, self.tr("选择颜色"), self.window())
         colordialog.colorChanged.connect(changeColor)
         colordialog.exec()

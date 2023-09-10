@@ -4,8 +4,6 @@ from qfluentwidgets import ComboBox, MessageBox, PushButton
 
 from .SettingCard import SettingCard
 
-_translate = Kernel.translate
-
 
 class ListSettingCard(SettingCard):
     def __init__(self, id: str, setting) -> None:
@@ -18,12 +16,12 @@ class ListSettingCard(SettingCard):
         self.w_value.currentTextChanged.connect(self.sync)
 
         self.pb_add = PushButton()
-        self.pb_add.setText(_translate("添加"))
+        self.pb_add.setText(self.tr("添加"))
         self.pb_add.clicked.connect(self.add)
         self.pb_add.clicked.connect(self.sync)
 
         self.pb_delete = PushButton()
-        self.pb_delete.setText(_translate("删除"))
+        self.pb_delete.setText(self.tr("删除"))
         self.pb_delete.clicked.connect(self.delete)
         self.pb_delete.clicked.connect(self.sync)
 
@@ -35,7 +33,7 @@ class ListSettingCard(SettingCard):
 
     def add(self):
         method = self.setting.getAttr(self.id, "method", "input")
-        title = _translate("添加")
+        title = self.tr("添加")
         item = ""
         if method == "input":
             item = QInputDialog.getText(self, title, "")
@@ -55,16 +53,16 @@ class ListSettingCard(SettingCard):
         text = self.w_value.currentText()
         atleast = self.setting.getAttr(self.id, "atleast", 0)
         if self.w_value.count() <= atleast:
-            MessageBox(_translate("删除"),
-                       f'{_translate("至少有")}{atleast}',
+            MessageBox(self.tr("删除"),
+                       f'{self.tr("至少有")}{atleast}',
                        self.window()).exec()
         else:
             def confirmDelete():
                 self.setting.get(self.id).remove(text)
                 self.refresh()
                 self.setting.callback(self.id)
-            box = MessageBox(_translate("删除"),
-                             _translate("确定删除?"),
+            box = MessageBox(self.tr("删除"),
+                             self.tr("确定删除?"),
                              self.window())
             box.yesSignal.connect(confirmDelete)
             box.exec()

@@ -9,8 +9,6 @@ from PyQt5.QtWidgets import QAction, QTreeWidgetItem, QWidget, qApp
 from .Page import Page
 from .ui_Help import Ui_Help
 
-_translate = Kernel.translate
-
 
 class Help(QWidget, Ui_Help):
     def __init__(self):
@@ -91,7 +89,7 @@ class Help(QWidget, Ui_Help):
             return
         qApp.sendEvent(self, SeparateWidgetEvent(widget, self.size()))
         a_back = QAction(widget)
-        a_back.setText(_translate("合并"))
+        a_back.setText(self.tr("合并"))
         a_back.setIcon(qta.icon("msc.reply"))
         a_back.triggered.connect(lambda: (self.sw_pages.addWidget(
             widget), self.sw_pages.setCurrentIndex(self.sw_pages.count()-1)))

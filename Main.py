@@ -5,6 +5,7 @@ import traceback
 import webbrowser as _  # 打包exe需要
 
 import multitasking
+from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import QMessageBox
 
 import Core as _  # 打包exe需要
@@ -12,13 +13,15 @@ import Resources as _
 from Kernel import Kernel
 from Setting import Setting
 
+_translate = QCoreApplication.translate
+
 
 def except_hook(*args):
     sys.__excepthook__(*args)
     exception = "".join([str(sys.path), "\n"] +
                         traceback.format_exception(*args))
     QMessageBox.critical(None,
-                         "启动器发生了严重错误",
+                         _translate("Main", "启动器发生了严重错误"),
                          exception)
     logging.critical(exception)
     exit()
