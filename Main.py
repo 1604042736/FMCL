@@ -24,7 +24,6 @@ def except_hook(*args):
                          _translate("Main", "启动器发生了严重错误"),
                          exception)
     logging.critical(exception)
-    exit()
 
 
 def init():
