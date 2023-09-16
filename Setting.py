@@ -21,7 +21,7 @@ DEFAULT_SETTING_PATH = os.path.join("FMCL", "settings.json")
 # 默认设置
 DEFAULT_SETTING = {
     "system.startup_functions": ["Explorer", "Update"],
-    "system.theme_color": "#ffffff",
+    "system.theme_color": "#00ff00",
     "system.theme": ["Light", "Dark"],
     "launcher.width": 1000,
     "launcher.height": 618,

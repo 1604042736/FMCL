@@ -1,6 +1,6 @@
 minecraft_launcher_lib
 multitasking
-Pillow=9.4.0
+Pillow==9.4.0
 PyQt5
 PyQt-Fluent-Widgets
 PyQt5_Frameless_Window
