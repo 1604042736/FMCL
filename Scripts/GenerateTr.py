@@ -4,8 +4,7 @@ tasks = [
     {
         "scanpath": [
             "../Core",
-            "../Events",
-            "../Exceptions"
+            "../Events"
         ],
         "scanfile":[
             "../Kernel.py",

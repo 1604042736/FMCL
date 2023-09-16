@@ -12,7 +12,6 @@ from PyQt5.QtWidgets import QApplication, QDialog, QMessageBox, QWidget
 from qfluentwidgets import RoundMenu, setThemeColor
 
 from Events import *
-from Exceptions import *
 from Setting import Setting, defaultSettingAttr, setThemeFromStr
 from Window import Window
 
@@ -119,23 +118,19 @@ class Kernel(QApplication):
     @staticmethod
     def getFunction(function_name: str):
         """获取功能"""
+        # 并不捕获异常而是留给调用者捕获
         if f"FMCL.Functions.{function_name}" in sys.modules:
             return sys.modules[f"FMCL.Functions.{function_name}"]
-        try:
-            logging.debug(f"获取功能:{function_name}...")
-            function = import_module(f"FMCL.Functions.{function_name}")
-            logging.debug(function)
-            return function
-        except:
-            logging.error(f"无法获取功能:{function_name}:\n{traceback.format_exc()}")
-            raise GetFunctionFailException(function_name)
+        logging.debug(f"获取功能:{function_name}...")
+        function = import_module(f"FMCL.Functions.{function_name}")
+        logging.debug(function)
+        return function
 
     @staticmethod
     def execFunction(function_name: str, *args, **kwargs):
         """运行功能"""
+        # 并不捕获异常而是留给调用者捕获
         function = Kernel.getFunction(function_name)
-        if not hasattr(function, "main"):
-            raise NoEntryException(function_name)
         logging.debug(f"运行:{function_name}")
         return getattr(function, "main")(*args, **kwargs)
 
@@ -149,7 +144,7 @@ class Kernel(QApplication):
                 QMessageBox.critical(None,
                                      _translate("Kernel", "无法运行") +
                                      function_name,
-                                     str(e))
+                                     traceback.format_exc(e))
 
     @staticmethod
     def getAllFunctions():
@@ -157,10 +152,7 @@ class Kernel(QApplication):
         functions_path = "FMCL/Functions"
         functions = []
         for function_name in os.listdir(functions_path):
-            try:
-                functions.append(Kernel.getFunction(function_name))
-            except:
-                logging.error(traceback.format_exc())
+            functions.append(Kernel.getFunction(function_name))
         return functions
 
     @staticmethod
