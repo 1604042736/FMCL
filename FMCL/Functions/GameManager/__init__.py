@@ -17,6 +17,14 @@ def functionInfo():
     }
 
 
+def defaultSetting() -> dict:
+    setting = Setting()
+    a = setting.get("explorer.desktop.item_clicked_actions", tuple())
+    if "GameManager" not in a:
+        a.insert(1,"GameManager")
+    return {}
+
+
 def main(name=None):
     if not name:
         name, ok = QInputDialog.getItem(

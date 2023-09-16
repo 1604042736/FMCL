@@ -9,7 +9,7 @@ _translate = QCoreApplication.translate
 def defaultSetting() -> dict:
     return {
         "explorer.desktop.background_image": "",
-        "explorer.desktop.item_clicked_actions": ["Launcher", "GameManager"]
+        "explorer.desktop.item_clicked_actions": []
     }
 
 
