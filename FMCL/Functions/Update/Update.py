@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+import time
 import webbrowser
 
 import multitasking
@@ -10,7 +11,6 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget, qApp
 
 from .ui_Update import Ui_Update
-import time
 
 
 class Update(QWidget, Ui_Update):
@@ -68,7 +68,7 @@ class Update(QWidget, Ui_Update):
     def prepare(self):
         self.pb_handupdate.setEnabled(True)
         self.pb_update.setEnabled(True)
-        self.setWindowTitle(f"更新:{self.info['tag_name']}")
+        self.setWindowTitle(f"{self.tr('更新')}:{self.info['tag_name']}")
         self.te_changelog.setText(self.info["body"])
         self.show()
 
@@ -88,7 +88,7 @@ class Update(QWidget, Ui_Update):
 
     @pyqtSlot(bool)
     def on_pb_update_clicked(self, _):
-        Progress().add(lambda callback: self.update_(callback))
+        Progress().add(self.tr("下载更新"), lambda callback: self.update_(callback))
 
     @pyqtSlot(bool)
     def on_pb_check_clicked(self, _):

@@ -18,11 +18,16 @@
         <source>游戏图标</source>
         <translation>Game Icon</translation>
     </message>
+    <message>
+        <location filename="../../../../../������/PCG/FMCL/Core/Game.py" line="188"/>
+        <source>下载</source>
+        <translation>Download</translation>
+    </message>
 </context>
 <context>
     <name>Kernel</name>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Kernel.py" line="152"/>
+        <location filename="../../../../../������/PCG/FMCL/Kernel.py" line="144"/>
         <source>无法运行</source>
         <translation>Cannot run</translation>
     </message>
@@ -30,7 +35,7 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Main.py" line="23"/>
+        <location filename="../../../../../������/PCG/FMCL/Main.py" line="22"/>
         <source>启动器发生了严重错误</source>
         <translation>A serious error occurred in the launcher</translation>
     </message>
@@ -66,7 +71,7 @@
 <context>
     <name>Progress</name>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Core/Progress.py" line="22"/>
+        <location filename="../../../../../������/PCG/FMCL/Core/Progress.py" line="21"/>
         <source>进度</source>
         <translation>Progress</translation>
     </message>
@@ -157,6 +162,14 @@
         <location filename="../../../../../������/PCG/FMCL/Setting.py" line="95"/>
         <source>语言类型</source>
         <translation>Language Type</translation>
+    </message>
+</context>
+<context>
+    <name>TaskItem</name>
+    <message>
+        <location filename="../../../../../������/PCG/FMCL/Core/Progress.py" line="48"/>
+        <source>取消</source>
+        <translation>Cancel</translation>
     </message>
 </context>
 </TS>

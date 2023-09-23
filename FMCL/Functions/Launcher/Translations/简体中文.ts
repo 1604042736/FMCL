@@ -14,12 +14,12 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Launcher/__init__.py" line="22"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Launcher/__init__.py" line="30"/>
         <source>选择游戏</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Launcher/__init__.py" line="22"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Launcher/__init__.py" line="30"/>
         <source>游戏列表</source>
         <translation></translation>
     </message>

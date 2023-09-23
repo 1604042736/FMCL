@@ -4,7 +4,6 @@ import traceback
 import multitasking
 import qtawesome as qta
 from Core import Download, Mod, Progress
-from Kernel import Kernel
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QFileDialog, QTreeWidgetItem, QWidget
 
@@ -97,4 +96,5 @@ class ModDownloader(QWidget, Ui_ModDownloader):
         path = QFileDialog.getSaveFileName(
             self, self.tr("下载"), f"./{filename}")[0]
         if path:
-            Progress().add(lambda callback: Download(url, path, callback).start())
+            Progress().add(self.tr("下载")+filename,
+                           lambda callback: Download(url, path, callback).start())

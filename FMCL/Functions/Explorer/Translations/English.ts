@@ -22,27 +22,27 @@
 <context>
     <name>Explorer</name>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="28"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="41"/>
         <source>显示桌面</source>
         <translation>Show desktop</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="33"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="46"/>
         <source>任务管理器</source>
         <translation>TaskManager</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="155"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="171"/>
         <source>分离</source>
         <translation>Separate</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="162"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="178"/>
         <source>关闭</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="172"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="188"/>
         <source>合并</source>
         <translation>Merge</translation>
     </message>

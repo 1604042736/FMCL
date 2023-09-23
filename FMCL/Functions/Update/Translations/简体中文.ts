@@ -18,5 +18,10 @@
         <source>手动更新</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Update/Update.py" line="91"/>
+        <source>下载更新</source>
+        <translation></translation>
+    </message>
 </context>
 </TS>

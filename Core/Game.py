@@ -179,11 +179,14 @@ class Game:
     def install(self, version, forge_version, fabric_version):
         logging.info(f"下载({version},{forge_version},{fabric_version})")
         if forge_version:
-            Progress().add(lambda callback: self.install_forge(forge_version, callback))
+            Progress().add(_translate("Game", "下载")+self.name,
+                           lambda callback: self.install_forge(forge_version, callback))
         elif fabric_version:
-            Progress().add(lambda callback: self.install_fabric(version, fabric_version, callback))
+            Progress().add(_translate("Game", "下载")+self.name,
+                           lambda callback: self.install_fabric(version, fabric_version, callback))
         else:
-            Progress().add(lambda callback: self.install_mc(version, callback))
+            Progress().add(_translate("Game", "下载")+self.name,
+                           lambda callback: self.install_mc(version, callback))
 
     def rename(self, new_name):
         if new_name == self.name:
