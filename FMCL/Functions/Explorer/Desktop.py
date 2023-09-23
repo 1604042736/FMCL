@@ -45,7 +45,7 @@ class Desktop(QListWidget):
 
         if item:
             action_functions = Setting(
-            )["explorer.desktop.item_clicked_actions"]
+            )["explorer.desktop.item_rightclicked_actions"]
             for action_function in action_functions:
                 function = Kernel.getFunction(action_function)
                 info = Kernel.getFunctionInfo(function)
