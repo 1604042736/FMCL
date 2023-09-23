@@ -33,14 +33,15 @@ class Kernel(QApplication):
 
         if "--notunpack" not in argv:
             self.unpack()
+
+        logging.info("初始化功能...")
+        self.getAllFunctions()
         self.loadTranslation()
 
         setThemeColor(Setting().get("system.theme_color"))
         setThemeFromStr(Setting().get("system.theme")[0])
 
-        logging.debug("初始化功能...")
-        self.getAllFunctions()
-        logging.debug("运行启动项...")
+        logging.info("运行启动项...")
         self.execStartupFunctions()
 
     def notify(self, a0: QObject, a1: QEvent) -> bool:
@@ -70,7 +71,7 @@ class Kernel(QApplication):
 
     def loadTranslation(self):
         """加载翻译"""
-        logging.info("加载翻译")
+        logging.info("加载翻译...")
         lang = Setting().get("language.type")+".qm"
         self.__translators = []  # 防止Translator被销毁
         for i in ["FMCL/Translations"]+[f"FMCL/Functions/{i}/Translations"for i in os.listdir("FMCL/Functions")]:
@@ -84,12 +85,12 @@ class Kernel(QApplication):
                     self.__translators.append(translator)
         # 加载翻译后更新attr的值，因为之前加进去的attr没有翻译过
         Setting().addAttr(defaultSettingAttr())
-        Setting().loadFunctionSetting()
+        Setting().loadFunctionSettingAttr()
 
     @staticmethod
     def unpack():
         # 由Scripts/Pack.py生成打包文件
-        logging.debug("解压功能...")
+        logging.info("解压功能...")
         try:
             from Pack.Functions import zipfile_bytes
         except ImportError:
@@ -98,11 +99,11 @@ class Kernel(QApplication):
             zip = ZipFile(zipfile_bytes)
             for path in zip.namelist():
                 functions_path = "FMCL/Functions"
-                logging.debug(f"解压:{path}")
+                logging.info(f"解压:{path}")
                 zip.extract(path, functions_path)
             zip.close()
 
-        logging.debug("解压翻译...")
+        logging.info("解压翻译...")
         try:
             from Pack.Translations import zipfile_bytes
         except ImportError:
@@ -111,7 +112,7 @@ class Kernel(QApplication):
             zip = ZipFile(zipfile_bytes)
             for path in zip.namelist():
                 translation_path = 'FMCL/Translations'
-                logging.debug(f"解压:{path}")
+                logging.info(f"解压:{path}")
                 zip.extract(path, translation_path)
             zip.close()
 
@@ -121,9 +122,8 @@ class Kernel(QApplication):
         # 并不捕获异常而是留给调用者捕获
         if f"FMCL.Functions.{function_name}" in sys.modules:
             return sys.modules[f"FMCL.Functions.{function_name}"]
-        logging.debug(f"获取功能:{function_name}...")
         function = import_module(f"FMCL.Functions.{function_name}")
-        logging.debug(function)
+        logging.info(f"已获取功能: {function_name}")
         return function
 
     @staticmethod
@@ -131,7 +131,7 @@ class Kernel(QApplication):
         """运行功能"""
         # 并不捕获异常而是留给调用者捕获
         function = Kernel.getFunction(function_name)
-        logging.debug(f"运行:{function_name}")
+        logging.info(f"运行:{function_name}")
         return getattr(function, "main")(*args, **kwargs)
 
     def execStartupFunctions(self):

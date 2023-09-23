@@ -116,6 +116,7 @@ class Setting(dict):
         self.setting_path = setting_path
         if setting_path == DEFAULT_SETTING_PATH:
             self.add(DEFAULT_SETTING)
+            self.loadFunctionSetting()
         if os.path.exists(setting_path):
             for key, val in json.load(open(setting_path, encoding="utf-8")).items():
                 self[key] = val
@@ -171,5 +172,10 @@ class Setting(dict):
         from Kernel import Kernel
         for function in Kernel.getAllFunctions():
             self.add(getattr(function, "defaultSetting", lambda: {})())
+
+    def loadFunctionSettingAttr(self):
+        """加载功能的设置属性"""
+        from Kernel import Kernel
+        for function in Kernel.getAllFunctions():
             self.addAttr(
                 getattr(function, "defaultSettingAttr", lambda: {})())

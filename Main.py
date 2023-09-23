@@ -18,12 +18,12 @@ _translate = QCoreApplication.translate
 
 def except_hook(*args):
     sys.__excepthook__(*args)
-    exception = "".join([str(sys.path), "\n"] +
-                        traceback.format_exception(*args))
+    exception = traceback.format_exception(*args)
     QMessageBox.critical(None,
                          _translate("Main", "启动器发生了严重错误"),
                          exception)
     logging.critical(exception)
+    logging.info(f"{sys.argv=}")
 
 
 def init():
