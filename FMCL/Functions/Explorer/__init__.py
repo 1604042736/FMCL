@@ -9,7 +9,8 @@ _translate = QCoreApplication.translate
 def defaultSetting() -> dict:
     return {
         "explorer.desktop.background_image": "",
-        "explorer.desktop.item_clicked_actions": []
+        "explorer.desktop.item_rightclicked_actions": [],
+        "explorer.title_rightclicked_actions": []
     }
 
 
@@ -24,8 +25,11 @@ def defaultSettingAttr() -> dict:
         "explorer.desktop.background_image": {
             "name": _translate("Explorer", "背景图片")
         },
-        "explorer.desktop.item_clicked_actions": {
+        "explorer.desktop.item_rightclicked_actions": {
             "name": _translate("Explorer", "游戏右键操作")
+        },
+        "explorer.title_rightclicked_actions": {
+            "name": _translate("Explorer", "标题栏右键操作")
         }
     }
 

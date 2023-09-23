@@ -24,7 +24,7 @@
         <translation>Memory</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/TaskManager/__init__.py" line="9"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/TaskManager/__init__.py" line="12"/>
         <source>任务管理器</source>
         <translation>TaskManager</translation>
     </message>

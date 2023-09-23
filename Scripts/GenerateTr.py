@@ -44,7 +44,8 @@ def dotask(task: dict):
             "pylupdate5",
             " ".join(files),
             "-ts",
-            f"{task['targetpath']}/{lang}.ts"
+            f"{task['targetpath']}/{lang}.ts",
+            "-noobsolete"
         ]
         os.system(" ".join(args))
 

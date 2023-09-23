@@ -4,8 +4,8 @@ from Kernel import Kernel
 from PyQt5.QtCore import QEvent, QObject, QPoint, Qt
 from PyQt5.QtGui import QShowEvent
 from PyQt5.QtWidgets import QAction, QPushButton, QStackedWidget, QWidget, qApp
-from qfluentwidgets import (RoundMenu, TransparentTogglePushButton,
-                            TransparentToolButton)
+from qfluentwidgets import RoundMenu, TransparentTogglePushButton
+from Setting import Setting
 
 from .Desktop import Desktop
 from .Start import Start
@@ -42,11 +42,16 @@ QPushButton:checked{
         self.a_showdesktop.setIcon(qta.icon("ph.desktop"))
         self.a_showdesktop.triggered.connect(self.showDesktop)
 
-        self.a_taskmanager = QAction(self)
-        self.a_taskmanager.setText(self.tr("任务管理器"))
-        self.a_taskmanager.setIcon(qta.icon("fa.tasks"))
-        self.a_taskmanager.triggered.connect(
-            lambda: Kernel.execFunction("TaskManager"))
+        self.title_rightclicked_actions = [self.a_showdesktop]
+
+        for name in Setting().get("explorer.title_rightclicked_actions"):
+            action = QAction(self)
+            func = Kernel.getFunction(name)
+            info = Kernel.getFunctionInfo(func)
+            action.setText(info["name"])
+            action.setIcon(info["icon"])
+            action.triggered.connect(lambda _, n=name: Kernel.execFunction(n))
+            self.title_rightclicked_actions.append(action)
 
         self.showDesktop()
 
@@ -57,8 +62,8 @@ QPushButton:checked{
             qApp.sendEvent(self.window(),
                            AddToTitleEvent(button, "right", -1))
 
-        qApp.sendEvent(self.window(), AddToTitleMenuEvent(self.a_showdesktop))
-        qApp.sendEvent(self.window(), AddToTitleMenuEvent(self.a_taskmanager))
+        for action in self.title_rightclicked_actions:
+            qApp.sendEvent(self.window(), AddToTitleMenuEvent(action))
         return super().showEvent(a0)
 
     def addWidget(self, widget: QWidget):

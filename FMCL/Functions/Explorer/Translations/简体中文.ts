@@ -27,38 +27,38 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="46"/>
-        <source>任务管理器</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="171"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="176"/>
         <source>分离</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="178"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="183"/>
         <source>关闭</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="188"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="193"/>
         <source>合并</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="22"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="23"/>
         <source>桌面</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="25"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="26"/>
         <source>背景图片</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="28"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="29"/>
         <source>游戏右键操作</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="32"/>
+        <source>标题栏右键操作</source>
         <translation></translation>
     </message>
 </context>
