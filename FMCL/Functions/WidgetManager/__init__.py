@@ -2,26 +2,26 @@ import qtawesome as qta
 from PyQt5.QtCore import QCoreApplication
 from Setting import Setting
 
-from .TaskManager import TaskManager
+from .WidgetManager import WidgetManager
 
 _translate = QCoreApplication.translate
 
 
 def functionInfo():
     return {
-        "name": _translate("TaskManager", "任务管理器"),
-        "icon": qta.icon("fa.tasks")
+        "name": _translate("WidgetManager", "控件管理器"),
+        "icon": qta.icon("mdi.widgets")
     }
 
 
 def defaultSetting() -> dict:
     setting = Setting()
     a = setting.get("explorer.title_rightclicked_actions", tuple())
-    if "TaskManager" not in a:
-        a.insert(1, "TaskManager")
+    if "WidgetManager" not in a:
+        a.insert(1, "WidgetManager")
     return {}
 
 
 def main():
-    taskmanager = TaskManager()
-    taskmanager.show()
+    widgetmanager = WidgetManager()
+    widgetmanager.show()

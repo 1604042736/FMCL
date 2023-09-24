@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'TaskManger.ui'
+# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\WidgetManager\WidgetManger.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -11,27 +11,27 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_TaskManager(object):
-    def setupUi(self, TaskManager):
-        TaskManager.setObjectName("TaskManager")
-        TaskManager.resize(1000, 618)
-        self.gridLayout = QtWidgets.QGridLayout(TaskManager)
+class Ui_WidgetManager(object):
+    def setupUi(self, WidgetManager):
+        WidgetManager.setObjectName("WidgetManager")
+        WidgetManager.resize(1000, 618)
+        self.gridLayout = QtWidgets.QGridLayout(WidgetManager)
         self.gridLayout.setObjectName("gridLayout")
-        self.pb_stop = PushButton(TaskManager)
+        self.pb_stop = PushButton(WidgetManager)
         self.pb_stop.setObjectName("pb_stop")
         self.gridLayout.addWidget(self.pb_stop, 1, 1, 1, 1)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem, 1, 0, 1, 1)
-        self.tw_tasks = TreeWidget(TaskManager)
+        self.tw_tasks = TreeWidget(WidgetManager)
         self.tw_tasks.setObjectName("tw_tasks")
         self.tw_tasks.headerItem().setText(0, "1")
         self.gridLayout.addWidget(self.tw_tasks, 0, 0, 1, 2)
 
-        self.retranslateUi(TaskManager)
-        QtCore.QMetaObject.connectSlotsByName(TaskManager)
+        self.retranslateUi(WidgetManager)
+        QtCore.QMetaObject.connectSlotsByName(WidgetManager)
 
-    def retranslateUi(self, TaskManager):
+    def retranslateUi(self, WidgetManager):
         _translate = QtCore.QCoreApplication.translate
-        TaskManager.setWindowTitle(_translate("TaskManager", "任务管理器"))
-        self.pb_stop.setText(_translate("TaskManager", "停止"))
+        WidgetManager.setWindowTitle(_translate("WidgetManager", "控件管理器"))
+        self.pb_stop.setText(_translate("WidgetManager", "停止"))
 from qfluentwidgets import PushButton, TreeWidget

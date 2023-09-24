@@ -277,7 +277,15 @@ class Game:
         self.get_info()
         return self.info["forge_version"] or self.info["fabric_version"]
 
-    def get_mods(self, keyword="") -> list:
+    def get_mods(self, keyword="") -> list[tuple[bool, str]]:
+        """获取Mod
+
+        Args:
+            keyword (str): 查找关键字. Defaults to "".
+
+        Returns:
+            list[tuple[bool,str]]: Mod列表, 每个元组的第一个元素代表是否启用, 第二个元素代表Mod名称
+        """
         if not self.mod_avaiable():
             return []
         path = self.get_mod_path()

@@ -8,7 +8,7 @@ from PyQt5.QtCore import QObject, QTimer, pyqtSlot
 from PyQt5.QtGui import QCloseEvent, QShowEvent
 from PyQt5.QtWidgets import QHeaderView, QTreeWidgetItem, QWidget
 
-from .ui_TaskManger import Ui_TaskManager
+from .ui_WidgetManger import Ui_WidgetManager
 
 
 def get_size(obj, seen=None):
@@ -45,22 +45,22 @@ def get_size(obj, seen=None):
     return size
 
 
-class TaskManager(QWidget, Ui_TaskManager):
+class WidgetManager(QWidget, Ui_WidgetManager):
     instance = None
     new_count = 0
 
     def __new__(cls):
-        if TaskManager.instance == None:
-            TaskManager.instance = super().__new__(cls)
-        TaskManager.new_count += 1
-        return TaskManager.instance
+        if WidgetManager.instance == None:
+            WidgetManager.instance = super().__new__(cls)
+        WidgetManager.new_count += 1
+        return WidgetManager.instance
 
     def __init__(self):
-        if TaskManager.new_count > 1:
+        if WidgetManager.new_count > 1:
             return
         super().__init__()
         self.setupUi(self)
-        self.setWindowIcon(qta.icon("fa.tasks"))
+        self.setWindowIcon(qta.icon("mdi.widgets"))
         self.task_attr = {
             self.tr("对象"): lambda obj: obj.objectName(),
             self.tr("类"): lambda obj: obj.__class__.__name__,
