@@ -65,27 +65,27 @@
 <context>
     <name>Start</name>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Start.py" line="42"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Start.py" line="45"/>
         <source>所有应用</source>
         <translation>All functions</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Start.py" line="48"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Start.py" line="51"/>
         <source>未选择用户</source>
         <translation>No user selected</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Start.py" line="59"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Start.py" line="62"/>
         <source>软件</source>
         <translation>Solfware</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Start.py" line="121"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Start.py" line="129"/>
         <source>退出</source>
         <translation>Quit</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Start.py" line="125"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Start.py" line="133"/>
         <source>重启</source>
         <translation>Restart</translation>
     </message>

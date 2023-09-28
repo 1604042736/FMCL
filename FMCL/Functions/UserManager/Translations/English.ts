@@ -14,17 +14,17 @@
         <translation>Refresh</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/UserManager/UserInfo.py" line="23"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/UserManager/UserInfo.py" line="24"/>
         <source>离线登录</source>
         <translation>Offline</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/UserManager/UserInfo.py" line="25"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/UserManager/UserInfo.py" line="26"/>
         <source>外置登录</source>
         <translation>Authlib Injector</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/UserManager/UserInfo.py" line="47"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/UserManager/UserInfo.py" line="52"/>
         <source>确认删除</source>
         <translation>Confirm Delete</translation>
     </message>

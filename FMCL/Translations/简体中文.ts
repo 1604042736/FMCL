@@ -19,7 +19,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Core/Game.py" line="188"/>
+        <location filename="../../../../../������/PCG/FMCL/Core/Game.py" line="186"/>
         <source>下载</source>
         <translation></translation>
     </message>

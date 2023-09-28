@@ -23,5 +23,25 @@
         <source>游戏列表</source>
         <translation>Game list</translation>
     </message>
+    <message>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Launcher/Launcher.py" line="24"/>
+        <source>检查外置登录</source>
+        <translation>Check Authlib Injector</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Launcher/Launcher.py" line="24"/>
+        <source>获取命令行参数</source>
+        <translation>Get Command</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Launcher/Launcher.py" line="24"/>
+        <source>启动</source>
+        <translation>Launch</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Launcher/Launcher.py" line="77"/>
+        <source>游戏结束</source>
+        <translation>Game Stop</translation>
+    </message>
 </context>
 </TS>
