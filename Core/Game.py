@@ -67,6 +67,8 @@ class Game:
             "logo": ""
         }
 
+        self.precommand = []
+
         globalsetting = Setting()
         for key, val in globalsetting.items():
             if "game" in key:
@@ -75,31 +77,11 @@ class Game:
             if "game" in key:
                 self.DEFAULT_SETTING_ATTR[key] = val
 
-    def launch(self):
-        dir, command = self.get_launch_command()
-        str_command = ""
-        for i in command:
-            if " " in i:
-                str_command += '"'+i+'" '
-            else:
-                str_command += i+' '
-        args = f"cd {dir}&start {str_command}"
-        logging.info(args)
-        os.popen(args)
-
-    def get_launch_command(self) -> tuple[str, str]:
-        """
-        获取启动参数
-        返回游戏目录和参数
-        """
-        self.generate_setting()
-        absdir = os.path.abspath(self.directory)
-        if self.setting.get("specific"):
-            setting = self.setting
-        else:
-            setting = Setting()
-
-        command = []
+    def check_authlibinjector(self, callback=None):
+        """检查当前用户是否是外置登录, 如果是则下载对应的加载文件"""
+        setMax = callback.get("setMax", lambda _: None)
+        setProgress = callback.get("setProgress", lambda _: None)
+        setStatus = callback.get("setStatus", lambda _: None)
 
         cur_user = deepcopy(User.get_cur_user())
         if cur_user["type"] == "authlibInjector":
@@ -115,21 +97,37 @@ class Game:
                 filename = url.split("/")[-1]
                 path = os.path.join(tempdir, filename)
                 logging.info(f"下载{url}到{path}")
-                Download(url, path, {"setMax": logging.info,
-                         "setProgress": logging.info}).check()
+                Download(url, path, callback).check()
                 logging.info("下载完成")
 
+                setMax(0)
+                setProgress(0)
+                setStatus("获取元数据编码")
                 api = "https://littleskin.cn/api/yggdrasil"
                 meta = Requests.get(api).content
                 metab64 = base64.b64encode(meta)
                 metab64 = str(metab64)[2:-1]
                 logging.info(f"元数据Base64编码: {metab64}")
-                command.append(
+                self.precommand.append(
                     f"-javaagent:{path}={api}")
-                command.append(
+                self.precommand.append(
                     f"-Dauthlibinjector.yggdrasil.prefetched={metab64}")
 
-        options = cur_user
+    def get_launch_command(self) -> tuple[str, str]:
+        """
+        获取启动参数
+        返回游戏目录和参数
+        """
+        self.generate_setting()
+        absdir = os.path.abspath(self.directory)
+        if self.setting.get("specific"):
+            setting = self.setting
+        else:
+            setting = Setting()
+
+        command = deepcopy(self.precommand)
+
+        options = deepcopy(User.get_cur_user())
         options["launcherName"] = "FMCL"
         options["launcherVersion"] = qApp.applicationVersion()
         options["gameDirectory"] = absdir

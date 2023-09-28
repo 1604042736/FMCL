@@ -38,6 +38,8 @@ class TaskManager(QWidget, Ui_TaskManager):
         item.setSizeHint(0, widget.size())
         if root:
             root.addChild(item)
+            item.setExpanded(True)
+            root.setExpanded(True)
         else:
             self.tw_tasks.addTopLevelItem(item)
             self.show()

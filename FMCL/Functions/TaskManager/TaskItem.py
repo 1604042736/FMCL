@@ -26,13 +26,14 @@ class TaskItem(QWidget, Ui_TaskItem):
     @multitasking.task
     def sync(self):
         """同步"""
+        self.__Refresh.emit()
         while not self.task.isFinished():
             if (self.task.progress != self.progress
                 or self.task.status != self.status
                     or self.task.maxprogress != self.maxprogress):
                 # 防止频繁刷新
                 self.__Refresh.emit()
-            time.sleep(0.1)
+            time.sleep(0.01)
 
     def refresh(self):
         self.name = self.task.name

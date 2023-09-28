@@ -58,4 +58,4 @@ class Task(QThread):
                 else:
                     child.start()
             self.progress = len(self.children)-tasks_left
-            time.sleep(0.1)  # 太快会卡死
+            time.sleep(0.01)  # 太快会卡死
