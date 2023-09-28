@@ -21,7 +21,7 @@ class Explorer(QStackedWidget):
         qApp.installEventFilter(self)
 
         self.pb_start = QPushButton()
-        self.pb_start.resize(46, 32)
+        self.pb_start.setFixedSize(46, 32)
         self.pb_start.setIcon(qApp.windowIcon())
         self.pb_start.setCheckable(True)
         self.pb_start.clicked.connect(self.showStart)
@@ -85,7 +85,6 @@ QPushButton:checked{
     def addTitleButton(self, widget: QWidget):
         """添加标题栏按钮"""
         button = TransparentTogglePushButton()
-        button.resize(100, 32)
         button.setText(widget.windowTitle())
         button.setIcon(widget.windowIcon())
 
@@ -184,7 +183,8 @@ QPushButton:checked{
                 a_close.setIcon(qta.icon("mdi6.close"))
                 a_close.triggered.connect(widget.close)
                 menu.addAction(a_close)
-                menu.exec(button.mapToGlobal(QPoint(0, button.height())))
+                menu.exec(button.mapToGlobal(
+                    QPoint((button.width()-menu.view.width())//2, button.height())))
                 break
 
     def separateCaughtWidget(self, widget: QWidget):

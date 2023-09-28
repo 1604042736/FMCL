@@ -1,3 +1,4 @@
+import qtawesome as qta
 from PyQt5.QtCore import QFile, QObject, pyqtProperty
 from qfluentwidgets import TextEdit
 
@@ -31,6 +32,7 @@ class Page(TextEdit):
             return
         super().__init__()
         self.setWindowTitle(filename)
+        self.setWindowIcon(qta.icon("ri.pages-line"))
         self.setReadOnly(True)
         self.file = QFile(filename)
         self.file.open(QFile.OpenModeFlag.ReadOnly)

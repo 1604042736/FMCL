@@ -1,6 +1,6 @@
 import typing
 
-from PyQt5.QtCore import QEvent, QObject, QSize, Qt
+from PyQt5.QtCore import QEvent, QObject, Qt
 from PyQt5.QtGui import QCloseEvent, QCursor, QFont, QPainter, QPaintEvent
 from PyQt5.QtWidgets import (QAction, QDesktopWidget, QSizePolicy, QSpacerItem,
                              QWidget)
@@ -65,7 +65,6 @@ class Window(FramelessWindow):
     def addTitleWidget(self, widget: QWidget, place: typing.Literal["right", "left"] = "left", index: int = 0):
         """往标题栏上添加控件"""
         self.removeTitleWidget(widget)  # 防止重复添加
-        widget.setFixedSize(QSize(widget.width(), self.titleBar.height()))
         if place == "right":
             index = self.titleBar.hBoxLayout.indexOf(self.si_separate)+index+1
         self.titleBar.hBoxLayout.insertWidget(index, widget, 0)
