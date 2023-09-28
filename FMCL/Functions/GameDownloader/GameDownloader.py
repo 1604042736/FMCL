@@ -1,25 +1,27 @@
 import multitasking
 import qtawesome as qta
 from Core import Game
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QListWidgetItem, QWidget
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from PyQt5.QtWidgets import QListWidget, QListWidgetItem, QWidget
 
 from .ui_GameDownloader import Ui_GameDownloader
 
 
 class GameDownloader(QWidget, Ui_GameDownloader):
+    __addItems = pyqtSignal(QListWidget, list)
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.setWindowIcon(qta.icon("ph.download-simple"))
+        self.__addItems.connect(lambda a, b: a.addItems(b))
         self.setVersions()
         self.setFabric()
 
     @multitasking.task
     def setVersions(self):
         self.lw_minecraft.clear()
-        self.lw_minecraft.addItems(Game.get_versions())
-        self.lw_minecraft.setCurrentRow(0)
+        self.__addItems.emit(self.lw_minecraft, Game.get_versions())
 
     @multitasking.task
     def setFabric(self):

@@ -180,13 +180,13 @@ class Game:
         logging.info(f"下载({version},{forge_version},{fabric_version})")
         if forge_version:
             Task(_translate("Game", "下载")+self.name,
-                           lambda callback: self.install_forge(forge_version, callback)).start()
+                 lambda callback: self.install_forge(forge_version, callback)).start()
         elif fabric_version:
             Task(_translate("Game", "下载")+self.name,
-                           lambda callback: self.install_fabric(version, fabric_version, callback)).start()
+                 lambda callback: self.install_fabric(version, fabric_version, callback)).start()
         else:
             Task(_translate("Game", "下载")+self.name,
-                           lambda callback: self.install_mc(version, callback)).start()
+                 lambda callback: self.install_mc(version, callback)).start()
 
     def rename(self, new_name):
         if new_name == self.name:
@@ -325,7 +325,7 @@ class Game:
 
     def deleteMods(self, mods: list | str):
         """
-        modss包含文件最后的.disabled
+        mods包含文件最后的.disabled
         """
         if isinstance(mods, str):
             mods = [mods]
