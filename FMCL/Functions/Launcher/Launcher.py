@@ -3,7 +3,6 @@ import logging
 import multitasking
 import qtawesome as qta
 from Core import Game
-from Kernel import Kernel
 from PyQt5.QtCore import QProcess, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 

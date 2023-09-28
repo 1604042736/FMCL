@@ -35,7 +35,7 @@
     </spacer>
    </item>
    <item row="0" column="0" colspan="2">
-    <widget class="TreeWidget" name="tw_tasks">
+    <widget class="TreeWidget" name="tw_widgets">
      <column>
       <property name="text">
        <string notr="true">1</string>

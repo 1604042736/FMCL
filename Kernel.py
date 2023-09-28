@@ -19,7 +19,7 @@ _translate = QCoreApplication.translate
 
 
 class Kernel(QApplication):
-    tasks = set()
+    widgets = set()
 
     def __init__(self, argv: list[str] = sys.argv) -> None:
         super().__init__(argv)
@@ -46,10 +46,10 @@ class Kernel(QApplication):
 
     def notify(self, a0: QObject, a1: QEvent) -> bool:
         if a1.type() == QEvent.Type.Show:
-            Kernel.tasks.add(a0)
+            Kernel.widgets.add(a0)
         elif a1.type() in (QEvent.Type.Close, QEvent.Type.DeferredDelete):
-            if a0 in Kernel.tasks:
-                Kernel.tasks.remove(a0)
+            if a0 in Kernel.widgets:
+                Kernel.widgets.remove(a0)
         if a1.type() == SeparateWidgetEvent.EventType:
             a1.widget.resize(a1.size)
             self.separateWidget(a1.widget)

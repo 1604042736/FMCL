@@ -18,7 +18,7 @@ def defaultSetting() -> dict:
     setting = Setting()
     a = setting.get("explorer.title_rightclicked_actions", tuple())
     if "WidgetManager" not in a:
-        a.insert(1, "WidgetManager")
+        a.insert(0, "WidgetManager")
     return {}
 
 

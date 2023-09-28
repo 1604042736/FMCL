@@ -6,7 +6,7 @@ import webbrowser
 
 import multitasking
 import qtawesome as qta
-from Core import Download, Progress, Requests
+from Core import Download, Requests, Task
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget, qApp
 
@@ -88,7 +88,7 @@ class Update(QWidget, Ui_Update):
 
     @pyqtSlot(bool)
     def on_pb_update_clicked(self, _):
-        Progress().add(self.tr("下载更新"), lambda callback: self.update_(callback))
+        Task(self.tr("下载更新"), lambda callback: self.update_(callback)).start()
 
     @pyqtSlot(bool)
     def on_pb_check_clicked(self, _):

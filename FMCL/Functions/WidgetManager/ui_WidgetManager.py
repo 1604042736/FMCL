@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\WidgetManager\WidgetManger.ui'
+# Form implementation generated from reading ui file 'WidgetManager.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -22,10 +22,10 @@ class Ui_WidgetManager(object):
         self.gridLayout.addWidget(self.pb_stop, 1, 1, 1, 1)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem, 1, 0, 1, 1)
-        self.tw_tasks = TreeWidget(WidgetManager)
-        self.tw_tasks.setObjectName("tw_tasks")
-        self.tw_tasks.headerItem().setText(0, "1")
-        self.gridLayout.addWidget(self.tw_tasks, 0, 0, 1, 2)
+        self.tw_widgets = TreeWidget(WidgetManager)
+        self.tw_widgets.setObjectName("tw_widgets")
+        self.tw_widgets.headerItem().setText(0, "1")
+        self.gridLayout.addWidget(self.tw_widgets, 0, 0, 1, 2)
 
         self.retranslateUi(WidgetManager)
         QtCore.QMetaObject.connectSlotsByName(WidgetManager)

@@ -8,7 +8,7 @@ from PyQt5.QtCore import QObject, QTimer, pyqtSlot
 from PyQt5.QtGui import QCloseEvent, QShowEvent
 from PyQt5.QtWidgets import QHeaderView, QTreeWidgetItem, QWidget
 
-from .ui_WidgetManger import Ui_WidgetManager
+from .ui_WidgetManager import Ui_WidgetManager
 
 
 def get_size(obj, seen=None):
@@ -61,79 +61,78 @@ class WidgetManager(QWidget, Ui_WidgetManager):
         super().__init__()
         self.setupUi(self)
         self.setWindowIcon(qta.icon("mdi.widgets"))
-        self.task_attr = {
+        self.widget_attr = {
             self.tr("对象"): lambda obj: obj.objectName(),
             self.tr("类"): lambda obj: obj.__class__.__name__,
             self.tr("标题"): lambda obj: obj.windowTitle(),
             self.tr("内存"): lambda obj: f"{get_size(obj)}B"
         }
-        self.tw_tasks.setColumnCount(len(self.task_attr))
-        self.tw_tasks.setHeaderLabels(self.task_attr.keys())
-        for i in range(len(self.task_attr.keys())):
-            self.tw_tasks.header().setSectionResizeMode(i,
-                                                        QHeaderView.ResizeMode.ResizeToContents)
+        self.tw_widgets.setColumnCount(len(self.widget_attr))
+        self.tw_widgets.setHeaderLabels(self.widget_attr.keys())
 
-        self.task_item: dict[QObject, QTreeWidgetItem] = {}
+        self.widget_item: dict[QObject, QTreeWidgetItem] = {}
         self.refresh()
 
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.refresh)
 
-    def setItemAttr(self, task: QObject, item: QTreeWidgetItem):
+    def setItemAttr(self, widget: QObject, item: QTreeWidgetItem):
         """设置item属性"""
-        for i, key in enumerate(self.task_attr.keys()):
+        for i, key in enumerate(self.widget_attr.keys()):
             try:
-                item.setText(i, str(self.task_attr[key](task)))
+                item.setText(i, str(self.widget_attr[key](widget)))
             except:
                 item.setText(i, "")
-        if hasattr(task, "windowIcon"):
-            item.setIcon(0, task.windowIcon())
+        if hasattr(widget, "windowIcon"):
+            item.setIcon(0, widget.windowIcon())
 
     def removeItem(self, item: QTreeWidgetItem):
         try:
             if item.parent() != None:
                 item.parent().removeChild(item)
             else:
-                self.tw_tasks.takeTopLevelItem(
-                    self.tw_tasks.indexOfTopLevelItem(item))
+                self.tw_widgets.takeTopLevelItem(
+                    self.tw_widgets.indexOfTopLevelItem(item))
         except RuntimeError:
             pass
 
     def refresh(self):
-        tasks = list(Kernel.tasks)
-        # 移除不存在的task
-        for task in tuple(self.task_item.keys()):
-            if task not in tasks:
-                item = self.task_item.pop(task)
+        widgets = list(Kernel.widgets)
+        # 移除不存在的widget
+        for widget in tuple(self.widget_item.keys()):
+            if widget not in widgets:
+                item = self.widget_item.pop(widget)
                 self.removeItem(item)
-        for task in tasks:
+        for widget in widgets:
             try:
+                # 更改QTreeWidgetItem, 而不是删除之后再创建
+                # 这样可以防止界面频繁刷新
                 root = None
-                if task.parent() in self.task_item:
-                    root = self.task_item[task.parent()]
-                if task in self.task_item:
-                    child = self.task_item[task]
+                if widget.parent() in self.widget_item:
+                    root = self.widget_item[widget.parent()]
+                if widget in self.widget_item:
+                    child = self.widget_item[widget]
                 else:
-                    child = QTreeWidgetItem(self.tw_tasks)
-                self.setItemAttr(task, child)
+                    child = QTreeWidgetItem(self.tw_widgets)
+                self.setItemAttr(widget, child)
                 if root:
                     if root.indexOfChild(child) == -1:
-                        self.removeItem(child)
+                        self.removeItem(child)  # 防止child出现在别的地方
                         root.addChild(child)
                         child.setExpanded(True)
                         root.setExpanded(True)
                 else:
-                    self.tw_tasks.addTopLevelItem(child)
-                self.task_item[task] = child
+                    self.tw_widgets.addTopLevelItem(child)
+                self.widget_item[widget] = child
             except RuntimeError:
-                if task in self.task_item:
-                    self.task_item.pop(task)
+                if widget in self.widget_item:
+                    self.widget_item.pop(widget)
 
     @pyqtSlot(bool)
     def on_pb_stop_clicked(self, _):
-        for task, item in self.task_item.items():
-            if self.tw_tasks.currentItem() == item:
-                task.close()
+        for widget, item in self.widget_item.items():
+            if self.tw_widgets.currentItem() == item:
+                widget.close()
                 self.refresh()
                 break
 

@@ -69,14 +69,6 @@
     </message>
 </context>
 <context>
-    <name>Progress</name>
-    <message>
-        <location filename="../../../../../������/PCG/FMCL/Core/Progress.py" line="21"/>
-        <source>进度</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>Setting</name>
     <message>
         <location filename="../../../../../������/PCG/FMCL/Setting.py" line="42"/>
@@ -161,14 +153,6 @@
     <message>
         <location filename="../../../../../������/PCG/FMCL/Setting.py" line="95"/>
         <source>语言类型</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>TaskItem</name>
-    <message>
-        <location filename="../../../../../������/PCG/FMCL/Core/Progress.py" line="48"/>
-        <source>取消</source>
         <translation></translation>
     </message>
 </context>

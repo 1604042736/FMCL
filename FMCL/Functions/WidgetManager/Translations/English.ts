@@ -4,7 +4,7 @@
 <context>
     <name>WidgetManager</name>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/WidgetManager/ui_WidgetManger.py" line="36"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/WidgetManager/ui_WidgetManager.py" line="36"/>
         <source>停止</source>
         <translation>Stop</translation>
     </message>

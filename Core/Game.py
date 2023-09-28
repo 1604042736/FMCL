@@ -17,7 +17,7 @@ from Setting import Setting
 from Core.Download import Download
 from Core.Requests import Requests
 
-from .Progress import Progress
+from .Task import Task
 from .User import User
 
 _translate = QCoreApplication.translate
@@ -179,14 +179,14 @@ class Game:
     def install(self, version, forge_version, fabric_version):
         logging.info(f"下载({version},{forge_version},{fabric_version})")
         if forge_version:
-            Progress().add(_translate("Game", "下载")+self.name,
-                           lambda callback: self.install_forge(forge_version, callback))
+            Task(_translate("Game", "下载")+self.name,
+                           lambda callback: self.install_forge(forge_version, callback)).start()
         elif fabric_version:
-            Progress().add(_translate("Game", "下载")+self.name,
-                           lambda callback: self.install_fabric(version, fabric_version, callback))
+            Task(_translate("Game", "下载")+self.name,
+                           lambda callback: self.install_fabric(version, fabric_version, callback)).start()
         else:
-            Progress().add(_translate("Game", "下载")+self.name,
-                           lambda callback: self.install_mc(version, callback))
+            Task(_translate("Game", "下载")+self.name,
+                           lambda callback: self.install_mc(version, callback)).start()
 
     def rename(self, new_name):
         if new_name == self.name:

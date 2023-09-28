@@ -42,22 +42,22 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="23"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="27"/>
         <source>桌面</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="26"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="30"/>
         <source>背景图片</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="29"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="33"/>
         <source>游戏右键操作</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="32"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="36"/>
         <source>标题栏右键操作</source>
         <translation></translation>
     </message>
