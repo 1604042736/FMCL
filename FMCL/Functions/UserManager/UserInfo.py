@@ -1,7 +1,7 @@
+import multitasking
 from Core.User import User
-from Kernel import Kernel
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QFrame
 from qfluentwidgets import MessageBox
 
@@ -11,6 +11,7 @@ from .ui_UserInfo import Ui_UserInfo
 class UserInfo(QFrame, Ui_UserInfo):
     userSelectChanged = pyqtSignal(dict)
     userDeleted = pyqtSignal(dict)
+    __headGot = pyqtSignal(QPixmap)
 
     def __init__(self, userinfo: dict) -> None:
         super().__init__()
@@ -25,13 +26,17 @@ class UserInfo(QFrame, Ui_UserInfo):
             self.l_type.setText(self.tr("外置登录"))
             self.l_mode.setText(userinfo["mode"])
 
-        head = User.get_head(userinfo)
-        head = QPixmap.fromImage(head)
-        head = head.scaled(32, 32)
-        self.l_head.setPixmap(head)
+        multitasking.task(lambda: self.__headGot.emit(
+            QPixmap.fromImage(User.get_head(userinfo))))()
 
         if userinfo == User.get_cur_user():
             self.rb_select.setChecked(True)
+
+        self.__headGot.connect(self.__setHead)
+
+    def __setHead(self, head):
+        head = head.scaled(32, 32)
+        self.l_head.setPixmap(head)
 
     @pyqtSlot(bool)
     def on_rb_select_clicked(self, _):

@@ -2,10 +2,11 @@ import os
 import sys
 from typing import *
 
+import multitasking
 import qtawesome as qta
 from Core.User import User
 from Kernel import Kernel
-from PyQt5.QtCore import QEvent, QPoint
+from PyQt5.QtCore import QEvent, QPoint, pyqtSignal
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QAction, QHBoxLayout, QStackedWidget, QWidget, qApp
 from qfluentwidgets import (NavigationInterface, NavigationItemPosition,
@@ -21,6 +22,8 @@ class Navigation(NavigationInterface):
 
 
 class Start(QWidget):
+    __headGot = pyqtSignal(QPixmap)
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.hBoxLayout = QHBoxLayout(self)
@@ -66,6 +69,8 @@ class Start(QWidget):
             position=NavigationItemPosition.BOTTOM
         )
 
+        self.__headGot.connect(self.__setHead)
+
     def addSubInterface(self, interface: QWidget, icon, text: str,
                         position=NavigationItemPosition.TOP, parent=None):
         if not interface.objectName():
@@ -101,15 +106,18 @@ class Start(QWidget):
     def refresh(self):
         user = User.get_cur_user()
         if user:
-            head = User.get_head(user)
-            head = QPixmap.fromImage(head)
-            head = head.scaled(16, 16)
-            head = QIcon(head)
-            self.pb_user.setIcon(head)
+            multitasking.task(lambda: self.__headGot.emit(
+                QPixmap.fromImage(User.get_head(user))))()
+            self.pb_user.setIcon(qta.icon("ph.user-circle"))  # 过渡
             self.pb_user.setText(user["username"])
         else:
             self.pb_user.setIcon(qta.icon("ph.user-circle"))
             self.pb_user.setText("未设置用户")
+
+    def __setHead(self, head):
+        head = head.scaled(16, 16)
+        head = QIcon(head)
+        self.pb_user.setIcon(head)
 
     def restart(self):
         os.popen(f'start {sys.argv[0]}')
