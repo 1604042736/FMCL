@@ -14,17 +14,17 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/About/About.py" line="50"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/About/About.py" line="60"/>
         <source>提供技术帮助</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/About/About.py" line="62"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/About/About.py" line="72"/>
         <source>官网</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/About/About.py" line="101"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/About/About.py" line="111"/>
         <source>关于Qt</source>
         <translation></translation>
     </message>

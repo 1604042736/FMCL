@@ -52,6 +52,10 @@ class Ui_ModManager(object):
         self.le_search = LineEdit(ModManager)
         self.le_search.setObjectName("le_search")
         self.gridLayout.addWidget(self.le_search, 0, 1, 1, 4)
+        self.l_statistics = QtWidgets.QLabel(ModManager)
+        self.l_statistics.setText("")
+        self.l_statistics.setObjectName("l_statistics")
+        self.gridLayout.addWidget(self.l_statistics, 1, 2, 1, 1)
 
         self.retranslateUi(ModManager)
         QtCore.QMetaObject.connectSlotsByName(ModManager)

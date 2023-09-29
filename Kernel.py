@@ -140,11 +140,11 @@ class Kernel(QApplication):
         for function_name in startup_functions:
             try:
                 self.execFunction(function_name)
-            except Exception as e:
+            except:
                 QMessageBox.critical(None,
                                      _translate("Kernel", "无法运行") +
                                      function_name,
-                                     traceback.format_exc(e))
+                                     traceback.format_exc())
 
     @staticmethod
     def getAllFunctions():

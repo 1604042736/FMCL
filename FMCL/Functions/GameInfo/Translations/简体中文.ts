@@ -4,17 +4,17 @@
 <context>
     <name>GameInfo</name>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/GameInfo/GameInfo.py" line="23"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/GameInfo/GameInfo.py" line="24"/>
         <source>版本</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/GameInfo/GameInfo.py" line="24"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/GameInfo/GameInfo.py" line="25"/>
         <source>Forge版本</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/GameInfo/GameInfo.py" line="25"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/GameInfo/GameInfo.py" line="26"/>
         <source>Fabric版本</source>
         <translation></translation>
     </message>
@@ -24,7 +24,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/GameInfo/GameInfo.py" line="59"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/GameInfo/GameInfo.py" line="60"/>
         <source>确定删除?</source>
         <translation></translation>
     </message>

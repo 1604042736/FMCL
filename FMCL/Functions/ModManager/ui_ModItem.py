@@ -18,6 +18,11 @@ class Ui_ModItem(object):
         self.gl_main = QtWidgets.QGridLayout(ModItem)
         self.gl_main.setContentsMargins(-1, 0, -1, 0)
         self.gl_main.setObjectName("gl_main")
+        self.l_info = QtWidgets.QLabel(ModItem)
+        self.l_info.setText("")
+        self.l_info.setWordWrap(True)
+        self.l_info.setObjectName("l_info")
+        self.gl_main.addWidget(self.l_info, 1, 1, 1, 1)
         self.cb_modenabled = CheckBox(ModItem)
         self.cb_modenabled.setMaximumSize(QtCore.QSize(16, 16777215))
         self.cb_modenabled.setText("")
@@ -33,11 +38,11 @@ class Ui_ModItem(object):
         self.l_modname.setWordWrap(True)
         self.l_modname.setObjectName("l_modname")
         self.gl_main.addWidget(self.l_modname, 0, 1, 1, 1)
-        self.l_info = QtWidgets.QLabel(ModItem)
-        self.l_info.setText("")
-        self.l_info.setWordWrap(True)
-        self.l_info.setObjectName("l_info")
-        self.gl_main.addWidget(self.l_info, 1, 1, 1, 1)
+        self.pb_url = TransparentToolButton(ModItem)
+        self.pb_url.setMaximumSize(QtCore.QSize(32, 32))
+        self.pb_url.setText("")
+        self.pb_url.setObjectName("pb_url")
+        self.gl_main.addWidget(self.pb_url, 0, 2, 2, 1)
 
         self.retranslateUi(ModItem)
         QtCore.QMetaObject.connectSlotsByName(ModItem)
@@ -45,4 +50,4 @@ class Ui_ModItem(object):
     def retranslateUi(self, ModItem):
         _translate = QtCore.QCoreApplication.translate
         ModItem.setWindowTitle(_translate("ModItem", "Mod"))
-from qfluentwidgets import CheckBox
+from qfluentwidgets import CheckBox, TransparentToolButton

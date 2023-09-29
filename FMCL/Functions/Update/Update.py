@@ -68,7 +68,8 @@ class Update(QWidget, Ui_Update):
     def prepare(self):
         self.pb_handupdate.setEnabled(True)
         self.pb_update.setEnabled(True)
-        self.setWindowTitle(f"{self.tr('更新')}:{self.info['tag_name']}")
+        t = self.tr('更新')
+        self.setWindowTitle(f"{t}:{self.info['tag_name']}")
         self.te_changelog.setText(self.info["body"])
         self.show()
 

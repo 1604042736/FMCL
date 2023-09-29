@@ -4,22 +4,22 @@
 <context>
     <name>Game</name>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Core/Game.py" line="55"/>
+        <location filename="../../../../../������/PCG/FMCL/Core/Game.py" line="56"/>
         <source>特定设置</source>
         <translation>Specific Setting</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Core/Game.py" line="58"/>
+        <location filename="../../../../../������/PCG/FMCL/Core/Game.py" line="59"/>
         <source>版本隔离</source>
         <translation>Version Isolation</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Core/Game.py" line="61"/>
+        <location filename="../../../../../������/PCG/FMCL/Core/Game.py" line="62"/>
         <source>游戏图标</source>
         <translation>Game Icon</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Core/Game.py" line="186"/>
+        <location filename="../../../../../������/PCG/FMCL/Core/Game.py" line="187"/>
         <source>下载</source>
         <translation>Download</translation>
     </message>

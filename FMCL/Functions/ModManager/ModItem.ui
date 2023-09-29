@@ -20,6 +20,16 @@
    <property name="bottomMargin">
     <number>0</number>
    </property>
+   <item row="1" column="1">
+    <widget class="QLabel" name="l_info">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0" rowspan="2">
     <widget class="CheckBox" name="cb_modenabled">
      <property name="maximumSize">
@@ -52,13 +62,16 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QLabel" name="l_info">
+   <item row="0" column="2" rowspan="2">
+    <widget class="TransparentToolButton" name="pb_url">
+     <property name="maximumSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
      <property name="text">
       <string/>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -68,6 +81,11 @@
   <customwidget>
    <class>CheckBox</class>
    <extends>QCheckBox</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
+   <class>TransparentToolButton</class>
+   <extends>QPushButton</extends>
    <header>qfluentwidgets</header>
   </customwidget>
  </customwidgets>

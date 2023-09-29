@@ -104,6 +104,13 @@
      </property>
     </widget>
    </item>
+   <item row="1" column="2">
+    <widget class="QLabel" name="l_statistics">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>

@@ -28,7 +28,8 @@ class GameManager(QWidget, Ui_GameManager):
             return
         super().__init__()
         self.setupUi(self)
-        self.setWindowTitle(f"{self.tr('游戏管理')}:{name}")
+        t=self.tr('游戏管理')
+        self.setWindowTitle(f"{t}:{name}")
         self.setWindowIcon(qta.icon("mdi6.minecraft"))
         self.pb_gameinfo.setIcon(qta.icon("mdi6.information-outline"))
         self.pb_gamesetting.setIcon(qta.icon("ri.settings-5-line"))

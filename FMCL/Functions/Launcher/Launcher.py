@@ -14,15 +14,17 @@ class Launcher(QWidget, Ui_Launcher):
     def __init__(self, game_name: str):
         super().__init__()
         self.setupUi(self)
-        self.setWindowTitle(f"{self.tr('游戏日志')}:{game_name}")
+        t = self.tr('游戏日志')
+        self.setWindowTitle(f"{t}:{game_name}")
         self.setWindowIcon(qta.icon("mdi.rocket-launch-outline"))
         self.name = game_name
         self.te_output.setReadOnly(True)
         self.__commandGot.connect(self.__start)
 
+        t = self.tr('启动游戏')
         self.game = Game(self.name)
         Task(
-            f"{self.tr('启动游戏')}:{game_name}",
+            f"{t}:{game_name}",
             children=[
                 Task(self.tr("检查外置登录"),
                      self.game.check_authlibinjector),

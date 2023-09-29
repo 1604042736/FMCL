@@ -19,7 +19,7 @@
         <translation>Manual update</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Update/Update.py" line="91"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Update/Update.py" line="92"/>
         <source>下载更新</source>
         <translation>Download Update</translation>
     </message>

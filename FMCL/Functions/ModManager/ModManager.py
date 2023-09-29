@@ -36,12 +36,20 @@ class ModManager(QWidget, Ui_ModManager):
             return
         self.lw_mods.clear()
         mods = self.game.get_mods(keyword)
+        total=len(mods)
+        enabled_num=0
         for enabled, name in mods:
+            if enabled:
+                enabled_num+=1
             item = QListWidgetItem()
             widget = ModItem(self.game, enabled, name)
             item.setSizeHint(widget.size())
             self.lw_mods.addItem(item)
             self.lw_mods.setItemWidget(item, widget)
+        t1=self.tr('总共')
+        t2=self.tr('启用')
+        t3=self.tr('禁用')
+        self.l_statistics.setText(f"{t1}: {total}, {t2}: {enabled_num}, {t3}: {total-enabled_num}")
 
     @pyqtSlot(bool)
     def on_pb_openmodir_clicked(self, _):

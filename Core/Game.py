@@ -237,7 +237,7 @@ class Game:
         configstr = str(config)
 
         if "net.fabricmc:fabric-loader" in configstr:
-            fabric_version = re.findall(r"net.fabricmc:fabric-loader:[0-9\.]+(\+build.[0-9]+)?",
+            fabric_version = re.findall(r"net.fabricmc:fabric-loader:([0-9\.]+)",
                                         configstr)
             if fabric_version:
                 fabric_version = fabric_version[0].replace("+build", "")
@@ -273,7 +273,7 @@ class Game:
                     info["version"] = patch["version"]
                     return info
         if "id" in config:
-            info["version"]=config["id"]
+            info["version"] = config["id"]
             return info
         # 从 Forge Arguments 中获取版本号
         if "arguments" in config and "game" in config["arguments"]:
@@ -429,9 +429,10 @@ class Game:
             "name": "",
             "description": "",
             "version": "",
-            "authors": []
+            "authors": [],
+            "url": ""
         }
-
+        # 很多时侯报错是由于多行字符串
         zipfile = ZipFile(mod_path)
         for zipinfo in zipfile.filelist:
             if "fabric.mod.json" == zipinfo.filename:
@@ -444,6 +445,8 @@ class Game:
                         info["authors"].append(i["name"])
                     else:
                         info["authors"].append(i)
+                if "contact" in config and "homepage" in config["contact"]:
+                    info["url"] = config["contact"]["homepage"]
                 break
             elif "mods.toml" in zipinfo.filename:
                 config = toml.loads(zipfile.open(
@@ -456,6 +459,8 @@ class Game:
                 except KeyError:
                     info["authors"] = [config.get("authors", "")]
 
+                info["url"] = config["mods"][0].get("displayURL", "")
+
                 if "${file.jarVersion}" in info["version"]:
                     MANIFESTMF = zipfile.open(
                         "META-INF/MANIFEST.MF").read().decode("utf-8").split("\n")
@@ -464,5 +469,20 @@ class Game:
                             info["version"] = info["version"].replace(
                                 "${file.jarVersion}", i.split(":")[-1].strip())
                             break
+                break
+            elif ".info" in zipinfo.filename:
+                config = json.loads(zipfile.open(zipinfo.filename).read())
+                if isinstance(config, list):
+                    config = config[0]
+                else:
+                    config = config["modList"][0]
+                info["name"] = config.get("name", "")
+                info["version"] = config.get("version", "")
+                info["description"] = config.get("description", "")
+                if "authorList" in config:
+                    info["authors"] = config["authorList"]
+                elif "authors" in config:
+                    info["authors"] = config["authors"]
+                info["url"] = config.get("url", "")
                 break
         return info

@@ -27,12 +27,12 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="176"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="175"/>
         <source>分离</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="183"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="182"/>
         <source>关闭</source>
         <translation></translation>
     </message>
