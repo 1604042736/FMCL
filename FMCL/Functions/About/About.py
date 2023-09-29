@@ -56,6 +56,16 @@ class About(QWidget, Ui_About):
                             "https://github.com/huanghongxun/HMCL"),
                         "GitHub"
                     )
+                ),
+                (
+                    "PCL",
+                    self.tr("提供技术帮助"),
+                    QPixmap(":/Image/pcl.png"),
+                    (
+                        lambda:webbrowser.open(
+                            "https://github.com/Hex-Dragon/PCL2"),
+                        "GitHub"
+                    )
                 )
             ],
             "3rdparty": [

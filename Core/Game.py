@@ -2,6 +2,7 @@ import base64
 import json
 import logging
 import os
+import re
 import shutil
 import tempfile
 from copy import deepcopy
@@ -233,34 +234,82 @@ class Game:
         }
         config = json.load(open(os.path.join(
             self.directory, "versions", self.name, f"{self.name}.json"), encoding="utf-8"))
+        configstr = str(config)
 
-        try:
-            i = config["arguments"]["game"].index("--fml.forgeVersion")
-            info["forge_version"] = config["arguments"]["game"][i+1]
-            i = config["arguments"]["game"].index("--fml.mcVersion")
-            info["version"] = config["arguments"]["game"][i+1]
-            return info
-        except:
-            pass
-
-        if "net.minecraftforge:forge:" in config["libraries"][0]["name"]:
-            version, forge_version = config["libraries"][0]["name"].rsplit(
-                ":")[-1].split("-")
-            info["version"] = version
+        if "net.fabricmc:fabric-loader" in configstr:
+            fabric_version = re.findall(r"net.fabricmc:fabric-loader:[0-9\.]+(\+build.[0-9]+)?",
+                                        configstr)
+            if fabric_version:
+                fabric_version = fabric_version[0].replace("+build", "")
+            else:
+                fabric_version = ""
+            info["fabric_version"] = fabric_version
+        elif "minecraftforge" in configstr:
+            forge_version = re.findall(r"forge:([0-9\.]+)", configstr)
+            if forge_version:
+                forge_version = forge_version[0]
+            else:
+                forge_version = re.findall(
+                    r"net.minecraftforge:minecraftforge:([0-9\.]+)", configstr)
+                if forge_version:
+                    forge_version = forge_version[0]
+                else:
+                    forge_version = re.findall(
+                        r"net.minecraftforge:fmlloader:[0-9\.]+-([0-9\.]+)", configstr)
+                if forge_version:
+                    forge_version = forge_version[0]
+                else:
+                    forge_version = ""
             info["forge_version"] = forge_version
-            return info
 
-        for i in config["libraries"]:
-            if "net.fabricmc:fabric-loader:" in i["name"]:
-                info["fabric_version"] = i["name"].replace(
-                    "net.fabricmc:fabric-loader:", "")
-                break
+        # 从 PCL 下载的版本信息中获取版本号
         if "clientVersion" in config:
             info["version"] = config["clientVersion"]
-        elif "inheritsFrom" in config:
+            return info
+        # 从 HMCL 下载的版本信息中获取版本号
+        if "patches" in config:
+            for patch in config["patches"]:
+                if patch.get("id", "") == "game" and "version" in patch:
+                    info["version"] = patch["version"]
+                    return info
+        if "id" in config:
+            info["version"]=config["id"]
+            return info
+        # 从 Forge Arguments 中获取版本号
+        if "arguments" in config and "game" in config["arguments"]:
+            mark = False
+            for argument in config["arguments"]["game"]:
+                if mark:
+                    info["version"] = argument
+                    return info
+                if argument == "--fml.mcVersion":
+                    mark = True
+        # 从继承版本中获取版本号
+        if "inheritsFrom" in config:
             info["version"] = config["inheritsFrom"]
-        else:
-            info["version"] = config["id"]
+            return info
+        # 从下载地址中获取版本号
+        version = re.findall(r"launcher.mojang.com/mc/game/([^/])*", configstr)
+        if version:
+            info["version"] = version[0]
+            return info
+        # 从 Forge 版本中获取版本号
+        version = re.findall(
+            r"net.minecraftforge:fmlloader:([0-9\.]+)-[0-9\.]+", configstr)
+        if version:
+            info["version"] = version[0]
+            return info
+        # 从 Fabric 版本中获取版本号
+        version = re.findall(
+            r"net.fabricmc:intermediary:([0-9\.]+)", configstr)
+        if version:
+            info["version"] = version[0]
+            return info
+        # 从 jar 项中获取版本号
+        if "jar" in config:
+            info["version"] = config["jar"]
+            return info
+        logging.error(f"无法确定{self.name}的版本")
         return info
 
     def get_mod_path(self):
