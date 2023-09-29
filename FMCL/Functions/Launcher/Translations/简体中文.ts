@@ -24,27 +24,27 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Launcher/Launcher.py" line="26"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Launcher/Launcher.py" line="27"/>
         <source>检查外置登录</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Launcher/Launcher.py" line="26"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Launcher/Launcher.py" line="27"/>
         <source>获取命令行参数</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Launcher/Launcher.py" line="26"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Launcher/Launcher.py" line="27"/>
         <source>启动</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Launcher/Launcher.py" line="79"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Launcher/Launcher.py" line="84"/>
         <source>游戏结束</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Launcher/Launcher.py" line="17"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Launcher/Launcher.py" line="18"/>
         <source>游戏日志</source>
         <translation></translation>
     </message>

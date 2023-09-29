@@ -4,12 +4,12 @@
 <context>
     <name>ModItem</name>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModItem.py" line="51"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModItem.py" line="53"/>
         <source>版本</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModItem.py" line="53"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModItem.py" line="55"/>
         <source>作者</source>
         <translation></translation>
     </message>
@@ -27,7 +27,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModManager.py" line="78"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModManager.py" line="96"/>
         <source>确认删除</source>
         <translation></translation>
     </message>
@@ -67,13 +67,18 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModManager.py" line="49"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModManager.py" line="64"/>
         <source>总共</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModManager.py" line="50"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModManager.py" line="65"/>
         <source>启用</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModManager.py" line="67"/>
+        <source>已选择</source>
         <translation></translation>
     </message>
 </context>

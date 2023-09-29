@@ -3,7 +3,6 @@ import os
 import qtawesome as qta
 from Core import Game
 from Events import *
-from Kernel import Kernel
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QShowEvent
 from PyQt5.QtWidgets import QListWidgetItem, QWidget, qApp
@@ -28,28 +27,45 @@ class ModManager(QWidget, Ui_ModManager):
         self.pb_refresh.setIcon(qta.icon("mdi.refresh"))
         self.pb_refresh.clicked.connect(lambda: self.refresh())
 
+        self.total = 0
+        self.enabled_num = 0
+
         self.refresh()
 
-    def refresh(self, keyword=""):
+    def refresh(self):
         if not self.game.mod_avaiable():
             self.setEnabled(False)
             return
+        keyword = self.le_search.text()
         self.lw_mods.clear()
         mods = self.game.get_mods(keyword)
-        total=len(mods)
-        enabled_num=0
+        self.total = len(mods)
+        self.enabled_num = 0
         for enabled, name in mods:
             if enabled:
-                enabled_num+=1
+                self.enabled_num += 1
             item = QListWidgetItem()
             widget = ModItem(self.game, enabled, name)
+            widget.enabledChanged.connect(self.singlemodEnabledChanged)
             item.setSizeHint(widget.size())
             self.lw_mods.addItem(item)
             self.lw_mods.setItemWidget(item, widget)
-        t1=self.tr('总共')
-        t2=self.tr('启用')
-        t3=self.tr('禁用')
-        self.l_statistics.setText(f"{t1}: {total}, {t2}: {enabled_num}, {t3}: {total-enabled_num}")
+        self.setStatistics()
+
+    def singlemodEnabledChanged(self, enabled):
+        if enabled:
+            self.enabled_num += 1
+        else:
+            self.enabled_num -= 1
+        self.setStatistics()
+
+    def setStatistics(self):
+        t1 = self.tr('总共')
+        t2 = self.tr('启用')
+        t3 = self.tr('禁用')
+        t4 = self.tr('已选择')
+        self.l_statistics.setText(
+            f"{t1}: {self.total}, {t2}: {self.enabled_num}, {t3}: {self.total-self.enabled_num}, {t4}: {len(self.lw_mods.selectedItems())}")
 
     @pyqtSlot(bool)
     def on_pb_openmodir_clicked(self, _):
@@ -57,7 +73,7 @@ class ModManager(QWidget, Ui_ModManager):
 
     @pyqtSlot()
     def on_le_search_editingFinished(self):
-        self.refresh(self.le_search.text())
+        self.refresh()
 
     @pyqtSlot()
     def on_lw_mods_itemSelectionChanged(self):
@@ -65,6 +81,7 @@ class ModManager(QWidget, Ui_ModManager):
             self.f_operate.setEnabled(True)
         else:
             self.f_operate.setEnabled(False)
+        self.setStatistics()
 
     @pyqtSlot(bool)
     def on_pb_del_clicked(self, _):

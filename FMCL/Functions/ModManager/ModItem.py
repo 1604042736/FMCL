@@ -12,6 +12,7 @@ from .ui_ModItem import Ui_ModItem
 
 
 class ModItem(QWidget, Ui_ModItem):
+    enabledChanged = pyqtSignal(bool)
     __infoSetFinished = pyqtSignal()
 
     def __init__(self, game: Game, modenabled: bool, modname: str):
@@ -37,6 +38,7 @@ class ModItem(QWidget, Ui_ModItem):
         if modenabled != self.modenabled:
             self.modenabled = modenabled
             self.game.setModEnabled(self.modenabled, self.modname)
+            self.enabledChanged.emit(self.modenabled)
 
     @multitasking.task
     def setInfo(self):
