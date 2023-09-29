@@ -36,4 +36,3 @@ def main(name=None):
             return
     launcher = Launcher(name)
     launcher.show()
-    launcher.start()

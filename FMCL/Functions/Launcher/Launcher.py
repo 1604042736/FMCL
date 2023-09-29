@@ -1,4 +1,5 @@
 import logging
+import time
 
 import qtawesome as qta
 from Core import Game, Task
@@ -33,8 +34,12 @@ class Launcher(QWidget, Ui_Launcher):
                                       self.game.get_launch_command()),
                      waittasks=[0]),
                 Task(self.tr("启动"),
-                     lambda _:(self.show(),
-                     self.__commandGot.emit(self.dir_command[0], self.dir_command[1])),
+                     lambda _:(
+                     time.sleep(0.1),  # 防止执行太快来不及显示
+                     self.show(),
+                     self.__commandGot.emit(
+                         self.dir_command[0], self.dir_command[1])
+                     ),
                      waittasks=[1])
             ]
         ).start()

@@ -245,7 +245,8 @@ class Game:
                 fabric_version = ""
             info["fabric_version"] = fabric_version
         elif "minecraftforge" in configstr:
-            forge_version = re.findall(r"forge:([0-9\.]+)", configstr)
+            forge_version = re.findall(
+                r"net.minecraftforge:forge:[0-9\.]+-([0-9\.]+)", configstr)
             if forge_version:
                 forge_version = forge_version[0]
             else:

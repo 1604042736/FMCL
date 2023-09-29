@@ -1,6 +1,10 @@
 import qtawesome as qta
+from Events import *
+from Kernel import Kernel
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtGui import QShowEvent
+from PyQt5.QtWidgets import QWidget, qApp
+from qfluentwidgets import TransparentToolButton
 
 from .LittleSkin import LittleSkin
 from .Microsoft import Microsoft
@@ -23,6 +27,14 @@ class CreateUser(QWidget, Ui_CreateUser):
         self.pb_offline.setChecked(True)
         self.sw_way.addWidget(self.offline)
 
+        self.pb_usermanager = TransparentToolButton()
+        functioninfo = Kernel.getFunctionInfo(
+            Kernel.getFunction("UserManager"))
+        self.pb_usermanager.setIcon(functioninfo["icon"])
+        self.pb_usermanager.resize(46, 32)
+        self.pb_usermanager.clicked.connect(
+            lambda: Kernel.execFunction("UserManager"))
+
     @pyqtSlot(bool)
     def on_pb_offline_clicked(self, _):
         self.sw_way.removeWidget(self.sw_way.currentWidget())
@@ -37,3 +49,8 @@ class CreateUser(QWidget, Ui_CreateUser):
     def on_pb_littleskin_clicked(self, _):
         self.sw_way.removeWidget(self.sw_way.currentWidget())
         self.sw_way.addWidget(self.littleskin)
+
+    def showEvent(self, a0: QShowEvent) -> None:
+        qApp.sendEvent(self.window(),
+                       AddToTitleEvent(self.pb_usermanager, "right", sender=self))
+        super().showEvent(a0)
