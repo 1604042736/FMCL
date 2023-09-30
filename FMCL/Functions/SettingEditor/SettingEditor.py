@@ -101,6 +101,7 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                 i.refresh()
 
     def showEvent(self, a0: QShowEvent) -> None:
+        self.refresh()
         qApp.sendEvent(self.window(),
                        AddToTitleEvent(self.pb_refresh, "right", sender=self))
         return super().showEvent(a0)

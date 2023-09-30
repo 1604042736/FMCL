@@ -26,14 +26,6 @@ class GameInfo(QWidget, Ui_GameInfo):
             "fabric_version": self.tr("Fabric版本")
         }
         self.game = Game(name)
-        self.info = self.game.get_info()
-        self.le_name.setText(name)
-
-        for key, val in self.info.items():
-            if val:
-                label = QLabel()
-                label.setText(f"{self.__info_translate[key]}: {val}")
-                self.gl_versions.addWidget(label)
 
         self.pb_refresh = TransparentToolButton()
         self.pb_refresh.resize(46, 32)
@@ -43,9 +35,24 @@ class GameInfo(QWidget, Ui_GameInfo):
         self.refresh()
 
     def refresh(self):
+        self.le_name.setText(self.game.name)
+
         pixmap = self.game.get_pixmap()
         if not pixmap.isNull():
             self.l_logo.setPixmap(pixmap.scaled(64, 64))
+
+        for i in range(self.gl_versions.count()-1, -1, -1):
+            item = self.gl_versions.itemAt(i)
+            self.gl_versions.removeItem(item)
+            if item.widget():
+                item.widget().deleteLater()
+
+        self.info = self.game.get_info()
+        for key, val in self.info.items():
+            if val:
+                label = QLabel()
+                label.setText(f"{self.__info_translate[key]}: {val}")
+                self.gl_versions.addWidget(label)
 
     @pyqtSlot(bool)
     def on_pb_opendir_clicked(self, _):
@@ -76,6 +83,7 @@ class GameInfo(QWidget, Ui_GameInfo):
         self.gameNameChanged.emit(new_name)
 
     def showEvent(self, a0: QShowEvent) -> None:
+        self.refresh()
         qApp.sendEvent(self.window(),
                        AddToTitleEvent(self.pb_refresh, "right", sender=self))
         return super().showEvent(a0)
