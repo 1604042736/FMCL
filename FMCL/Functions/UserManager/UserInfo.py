@@ -72,3 +72,23 @@ class UserInfo(QFrame, Ui_UserInfo):
                     duration=2000,
                     parent=self.window()
                 )
+            else:
+                InfoBar.error(
+                    title=self.tr("刷新失败"),
+                    content="",
+                    orient=Qt.Horizontal,
+                    isClosable=True,
+                    position=InfoBarPosition.TOP,
+                    duration=2000,
+                    parent=self.window()
+                )
+        else:
+            InfoBar.success(
+                title=self.tr("刷新成功"),
+                content="",
+                orient=Qt.Horizontal,
+                isClosable=True,
+                position=InfoBarPosition.TOP,
+                duration=2000,
+                parent=self.window()
+            )

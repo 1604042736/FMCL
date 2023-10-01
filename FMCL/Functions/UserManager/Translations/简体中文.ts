@@ -33,6 +33,16 @@
         <source>请重新登录</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/UserManager/UserInfo.py" line="86"/>
+        <source>刷新成功</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/UserManager/UserInfo.py" line="76"/>
+        <source>刷新失败</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>UserManager</name>
