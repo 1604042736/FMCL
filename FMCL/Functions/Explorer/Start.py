@@ -113,6 +113,7 @@ class Start(QWidget):
         else:
             self.pb_user.setIcon(qta.icon("ph.user-circle"))
             self.pb_user.setText("未设置用户")
+        self.all_functions.refresh()
 
     def __setHead(self, head):
         head = head.scaled(16, 16)

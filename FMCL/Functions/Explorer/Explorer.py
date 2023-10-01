@@ -64,6 +64,9 @@ QPushButton:checked{
 
         for action in self.title_rightclicked_actions:
             qApp.sendEvent(self.window(), AddToTitleMenuEvent(action))
+
+        if isinstance(self.currentWidget(), (Start, Desktop)):
+            self.currentWidget().refresh()
         return super().showEvent(a0)
 
     def addWidget(self, widget: QWidget):

@@ -2,7 +2,7 @@ import qtawesome as qta
 from Core import Game
 from FMCL.Functions.SettingEditor import SettingEditor
 from Kernel import Kernel
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import QEvent, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 
 from ..GameInfo import GameInfo
@@ -28,7 +28,7 @@ class GameManager(QWidget, Ui_GameManager):
             return
         super().__init__()
         self.setupUi(self)
-        t=self.tr('游戏管理')
+        t = self.tr('游戏管理')
         self.setWindowTitle(f"{t}:{name}")
         self.setWindowIcon(qta.icon("mdi6.minecraft"))
         self.pb_gameinfo.setIcon(qta.icon("mdi6.information-outline"))
@@ -79,3 +79,11 @@ class GameManager(QWidget, Ui_GameManager):
     def on_pb_modmanager_clicked(self, _):
         self.pb_modmanager.setChecked(True)
         self.setUi(self.modmanager)
+
+    def event(self, a0: QEvent) -> bool:
+        if a0.type() == QEvent.Type.Show:
+            self.gameinfo.refresh()
+            self.gamesetting.refresh()
+            # 由于ModManger刷新可能会导致卡顿
+            # 所以这里不自动刷新
+        return super().event(a0)
