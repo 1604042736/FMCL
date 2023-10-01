@@ -6,12 +6,14 @@ import os
 import minecraft_launcher_lib as mll
 import qtawesome as qta
 from PIL import Image, ImageQt
+from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QImage
 from Setting import Setting
 
 from Core.Download import Download
 from Core.Requests import Requests
 
+_translate=QCoreApplication.translate
 
 class User:
     @staticmethod
@@ -52,7 +54,7 @@ class User:
         if "errorMessage" in r:
             return r["errorMessage"]
         if not r["selectedProfile"]:
-            return "没有选择的角色"
+            return _translate("User","没有选择的角色")
 
         globalsetting = Setting()
         setting = {}
@@ -69,7 +71,15 @@ class User:
             f'{api}/sessionserver/session/minecraft/profile/{r["selectedProfile"]["id"]}').json()
         setting["profileProperties"] = prole["properties"]
 
-        globalsetting["users"].append(setting)
+        for i in range(len(globalsetting["users"])):
+            user = globalsetting["users"][i]
+            if (user["type"] == setting["type"]
+                and user["username"] == setting["username"]
+                    and user["mode"] == setting["mode"]):  # 如果是重登录只需覆盖
+                globalsetting["users"][i] = setting
+                break
+        else:
+            globalsetting["users"].append(setting)
         globalsetting.sync()
 
     @staticmethod
@@ -101,6 +111,8 @@ class User:
             r = Requests.post(f"{api}/authserver/refresh",
                               json=data,
                               headers={"Content-Type": "application/json"}).json()
+            if "error" in r:
+                return r
             user["accessToken"] = r["accessToken"]
             user["clientToken"] = r["clientToken"]
             Setting().sync()

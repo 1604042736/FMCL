@@ -156,4 +156,12 @@
         <translation></translation>
     </message>
 </context>
+<context>
+    <name>User</name>
+    <message>
+        <location filename="../../../../../������/PCG/FMCL/Core/User.py" line="57"/>
+        <source>没有选择的角色</source>
+        <translation></translation>
+    </message>
+</context>
 </TS>

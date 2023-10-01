@@ -27,17 +27,17 @@
         <translation>Show desktop</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="175"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="178"/>
         <source>分离</source>
         <translation>Separate</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="182"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="185"/>
         <source>关闭</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="193"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Explorer.py" line="196"/>
         <source>合并</source>
         <translation>Merge</translation>
     </message>
@@ -80,12 +80,12 @@
         <translation>Solfware</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Start.py" line="129"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Start.py" line="130"/>
         <source>退出</source>
         <translation>Quit</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Start.py" line="133"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/Start.py" line="134"/>
         <source>重启</source>
         <translation>Restart</translation>
     </message>

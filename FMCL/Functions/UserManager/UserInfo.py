@@ -1,9 +1,10 @@
 import multitasking
 from Core.User import User
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from Kernel import Kernel
+from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QFrame
-from qfluentwidgets import MessageBox
+from qfluentwidgets import InfoBar, InfoBarPosition, MessageBox
 
 from .ui_UserInfo import Ui_UserInfo
 
@@ -57,4 +58,17 @@ class UserInfo(QFrame, Ui_UserInfo):
 
     @pyqtSlot(bool)
     def on_pb_refresh_clicked(self, _):
-        User.refresh(self.userinfo)
+        result = User.refresh(self.userinfo)
+        if result != None:
+            if result["error"] == "ForbiddenOperationException":
+                Kernel.execFunction(
+                    "CreateUser", self.userinfo["mode"].lower())
+                InfoBar.warning(
+                    title=self.tr("请重新登录"),
+                    content="",
+                    orient=Qt.Horizontal,
+                    isClosable=True,
+                    position=InfoBarPosition.TOP,
+                    duration=2000,
+                    parent=self.window()
+                )

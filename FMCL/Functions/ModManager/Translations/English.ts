@@ -27,7 +27,7 @@
         <translation>Delet</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModManager.py" line="96"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModManager.py" line="95"/>
         <source>确认删除</source>
         <translation>Confirm Delete</translation>
     </message>
@@ -67,17 +67,17 @@
         <translation>Game list</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModManager.py" line="64"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModManager.py" line="63"/>
         <source>总共</source>
         <translation>Total</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModManager.py" line="65"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModManager.py" line="64"/>
         <source>启用</source>
         <translation>Enabled</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModManager.py" line="67"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/ModManager/ModManager.py" line="66"/>
         <source>已选择</source>
         <translation>Selected</translation>
     </message>

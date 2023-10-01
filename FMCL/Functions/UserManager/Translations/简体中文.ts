@@ -14,18 +14,23 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/UserManager/UserInfo.py" line="24"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/UserManager/UserInfo.py" line="25"/>
         <source>离线登录</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/UserManager/UserInfo.py" line="26"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/UserManager/UserInfo.py" line="27"/>
         <source>外置登录</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/UserManager/UserInfo.py" line="52"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/UserManager/UserInfo.py" line="53"/>
         <source>确认删除</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/UserManager/UserInfo.py" line="66"/>
+        <source>请重新登录</source>
         <translation></translation>
     </message>
 </context>

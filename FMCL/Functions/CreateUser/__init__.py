@@ -13,6 +13,6 @@ def functionInfo():
     }
 
 
-def main():
+def main(tab="offline"):
     createuser = CreateUser()
-    createuser.show()
+    createuser.show(tab)

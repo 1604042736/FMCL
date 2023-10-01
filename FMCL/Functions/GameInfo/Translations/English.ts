@@ -24,7 +24,7 @@
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/GameInfo/GameInfo.py" line="60"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/GameInfo/GameInfo.py" line="67"/>
         <source>确定删除?</source>
         <translation>Confirm Delete?</translation>
     </message>

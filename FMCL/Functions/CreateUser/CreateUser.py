@@ -54,3 +54,12 @@ class CreateUser(QWidget, Ui_CreateUser):
         qApp.sendEvent(self.window(),
                        AddToTitleEvent(self.pb_usermanager, "right", sender=self))
         super().showEvent(a0)
+
+    def show(self, tab="offline") -> None:
+        if tab == "offline":
+            self.pb_offline.click()
+        elif tab == "microsoft":
+            self.pb_microsoft.click()
+        elif tab == "littleskin":
+            self.pb_littleskin.click()
+        return super().show()

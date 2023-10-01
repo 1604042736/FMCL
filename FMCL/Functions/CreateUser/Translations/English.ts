@@ -27,12 +27,12 @@
 <context>
     <name>LittleSkin</name>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/CreateUser/LittleSkin.py" line="22"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/CreateUser/LittleSkin.py" line="21"/>
         <source>创建成功</source>
         <translation>Created successfully</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/CreateUser/LittleSkin.py" line="24"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/CreateUser/LittleSkin.py" line="31"/>
         <source>创建失败</source>
         <translation>Creation failed</translation>
     </message>
@@ -68,7 +68,7 @@
 <context>
     <name>Offline</name>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/CreateUser/Offline.py" line="20"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/CreateUser/Offline.py" line="19"/>
         <source>创建成功</source>
         <translation>Created successfully</translation>
     </message>
