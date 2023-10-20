@@ -399,15 +399,15 @@ class Game:
             self.setting.add(self.DEFAULT_SETTING)
             self.setting.addAttr(self.DEFAULT_SETTING_ATTR)
 
-            # 保证当不启用特定设置时与全局设置相同
-            if not self.setting.get("specific"):
-                globalsetting = Setting()
-                for key, val in globalsetting.items():
-                    if "game" in key:
-                        self.setting[key] = val
-                for key, val in globalsetting.attrs.items():
-                    if "game" in key:
-                        self.setting.attrs[key] = val
+        # 保证当不启用特定设置时与全局设置相同
+        if not self.setting.get("specific"):
+            globalsetting = Setting()
+            for key, val in globalsetting.items():
+                if "game" in key:
+                    self.setting[key] = val
+            for key, val in globalsetting.attrs.items():
+                if "game" in key:
+                    self.setting.attrs[key] = val
 
     def delete(self):
         shutil.rmtree(os.path.join(self.directory, "versions", self.name))

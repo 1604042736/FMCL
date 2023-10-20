@@ -97,7 +97,7 @@ def defaultSettingAttr():
     }
 
 
-class Setting(dict):
+class Setting:
     """管理设置文件"""
     instances = {}
     new_count = {}
@@ -114,18 +114,18 @@ class Setting(dict):
             return
         self.attrs = {}
         self.setting_path = setting_path
+        self.modifiedsetting = {}  # 修改过的设置
+        self.defaultsetting = {}  # 默认设置
         if setting_path == DEFAULT_SETTING_PATH:
             self.add(DEFAULT_SETTING)
             self.loadFunctionSetting()
         if os.path.exists(setting_path):
             for key, val in json.load(open(setting_path, encoding="utf-8")).items():
-                self[key] = val
+                self.modifiedsetting[key] = val
 
     def add(self, new_setting: dict):
-        """添加新的设置"""
-        for key, val in new_setting.items():
-            if key not in self:
-                self[key] = val
+        """添加新的默认设置"""
+        self.defaultsetting |= new_setting
 
         for id in new_setting:
             self.attrs[id] = {
@@ -134,17 +134,7 @@ class Setting(dict):
 
     def addAttr(self, attr: dict):
         """添加设置属性"""
-        self.merge(self.attrs, attr)
-
-    def merge(self, a: dict, b: dict):
-        """合并a和b"""
-        for key, val in b.items():
-            if key not in a:
-                a[key] = val
-            elif isinstance(val, dict):
-                self.merge(a[key], val)
-            else:
-                a[key] = val
+        self.attrs |= attr
 
     def getAttr(self, id: str, attr: str, default=None):
         """获取设置项的属性"""
@@ -153,7 +143,7 @@ class Setting(dict):
     def sync(self):
         if not os.path.exists(os.path.dirname(self.setting_path)):
             os.makedirs(os.path.dirname(self.setting_path))
-        json.dump(self,
+        json.dump(self.modifiedsetting,
                   open(self.setting_path, mode="w", encoding="utf-8"),
                   ensure_ascii=False, indent=4)
 
@@ -179,3 +169,26 @@ class Setting(dict):
         for function in Kernel.getAllFunctions():
             self.addAttr(
                 getattr(function, "defaultSettingAttr", lambda: {})())
+
+    def get(self, key, default=None):
+        if key in self.modifiedsetting:
+            return self.modifiedsetting[key]
+        elif key in self.defaultsetting:
+            return self.defaultsetting[key]
+        else:
+            return default
+
+    def __getitem__(self, key):
+        if key in self.modifiedsetting:
+            return self.modifiedsetting[key]
+        elif key in self.defaultsetting:
+            return self.defaultsetting[key]
+        raise KeyError(key)
+
+    def items(self):
+        return (self.defaultsetting | self.modifiedsetting).items()
+
+    def __setitem__(self, key, value):
+        self.modifiedsetting[key] = value
+        if key in self.defaultsetting and self.defaultsetting[key] == value:
+            self.modifiedsetting.pop(key)
