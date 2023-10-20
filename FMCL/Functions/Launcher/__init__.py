@@ -19,9 +19,11 @@ def functionInfo():
 
 def defaultSetting() -> dict:
     setting = Setting()
-    a = setting.get("explorer.desktop.item_rightclicked_actions", tuple())
-    if "Launcher" not in a:
-        a.insert(0, "Launcher")
+    if "explorer.desktop.item_rightclicked_actions" in setting.defaultsetting:
+        a = setting.defaultsetting.get(
+            "explorer.desktop.item_rightclicked_actions")
+        if "Launcher" not in a:
+            a.insert(0, "Launcher")
     return {}
 
 

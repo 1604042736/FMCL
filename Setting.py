@@ -125,7 +125,9 @@ class Setting:
 
     def add(self, new_setting: dict):
         """添加新的默认设置"""
-        self.defaultsetting |= new_setting
+        for key, val in new_setting.items():
+            if key not in self.defaultsetting:
+                self.defaultsetting[key] = val
 
         for id in new_setting:
             self.attrs[id] = {

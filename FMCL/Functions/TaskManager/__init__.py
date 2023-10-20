@@ -16,9 +16,10 @@ def functionInfo():
 
 def defaultSetting() -> dict:
     setting = Setting()
-    a = setting.get("explorer.title_rightclicked_actions", tuple())
-    if "TaskManager" not in a:
-        a.insert(1, "TaskManager")
+    if "explorer.title_rightclicked_actions" in setting.defaultsetting:
+        a = setting.get("explorer.title_rightclicked_actions")
+        if "TaskManager" not in a:
+            a.insert(1, "TaskManager")
     return {}
 
 

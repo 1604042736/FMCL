@@ -8,9 +8,10 @@ _translate = QCoreApplication.translate
 
 def defaultSetting() -> dict:
     setting = Setting()
-    a = setting.get("system.startup_functions", tuple())
-    if "Explorer" not in a:
-        a.insert(0, "Explorer")
+    if "system.startup_functions" in setting.defaultsetting:
+        a = setting.defaultsetting.get("system.startup_functions")
+        if "Explorer" not in a:
+            a.insert(0, "Explorer")
     return {
         "explorer.desktop.background_image": "",
         "explorer.desktop.item_rightclicked_actions": [],

@@ -1,10 +1,11 @@
+from Setting import Setting
 import qtawesome as qta
+from PyQt5.QtCore import QCoreApplication
 
 from .Update import Update
 
-from PyQt5.QtCore import QCoreApplication
 _translate = QCoreApplication.translate
-from Setting import Setting
+
 
 def functionInfo():
     return {
@@ -12,11 +13,13 @@ def functionInfo():
         "icon": qta.icon("mdi6.update")
     }
 
+
 def defaultSetting() -> dict:
     setting = Setting()
-    a = setting.get("system.startup_functions", tuple())
-    if "Update" not in a:
-        a.insert(1, "Update")
+    if "system.startup_functions" in setting.defaultsetting:
+        a = setting.defaultsetting.get("system.startup_functions")
+        if "Update" not in a:
+            a.insert(1, "Update")
     return {}
 
 
