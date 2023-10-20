@@ -70,7 +70,7 @@ class UserManager(QWidget, Ui_UserManager):
     def showEvent(self, a0: QShowEvent) -> None:
         self.refresh()
         qApp.sendEvent(self.window(),
-                       AddToTitleEvent(self.pb_add, "right", sender=self))
+                       AddToTitleEvent(self.pb_add, "right", bind=self))
         qApp.sendEvent(self.window(),
-                       AddToTitleEvent(self.pb_refresh, "right", sender=self))
+                       AddToTitleEvent(self.pb_refresh, "right", bind=self))
         super().showEvent(a0)

@@ -52,7 +52,7 @@ class CreateUser(QWidget, Ui_CreateUser):
 
     def showEvent(self, a0: QShowEvent) -> None:
         qApp.sendEvent(self.window(),
-                       AddToTitleEvent(self.pb_usermanager, "right", sender=self))
+                       AddToTitleEvent(self.pb_usermanager, "right", bind=self))
         super().showEvent(a0)
 
     def show(self, tab="offline") -> None:
