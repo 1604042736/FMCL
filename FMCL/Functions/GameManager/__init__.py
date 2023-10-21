@@ -20,8 +20,7 @@ def functionInfo():
 def defaultSetting() -> dict:
     setting = Setting()
     if "explorer.desktop.item_rightclicked_actions" in setting.defaultsetting:
-        a = setting.defaultsetting.get(
-            "explorer.desktop.item_rightclicked_actions")
+        a = setting.defaultsetting["explorer.desktop.item_rightclicked_actions"]
         if "GameManager" not in a:
             a.insert(1, "GameManager")
     return {}

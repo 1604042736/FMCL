@@ -47,8 +47,13 @@
 <context>
     <name>UserManager</name>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/UserManager/__init__.py" line="20"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/UserManager/__init__.py" line="13"/>
         <source>用户管理</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/UserManager/__init__.py" line="20"/>
+        <source>前往用户管理设置</source>
         <translation></translation>
     </message>
 </context>

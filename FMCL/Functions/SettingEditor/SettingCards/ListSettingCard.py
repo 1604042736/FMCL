@@ -1,4 +1,4 @@
-from Kernel import Kernel
+
 from PyQt5.QtWidgets import QFileDialog, QInputDialog
 from qfluentwidgets import ComboBox, MessageBox, PushButton
 
@@ -46,8 +46,7 @@ class ListSettingCard(SettingCard):
             method()
         if item:
             self.w_value.addItem(item)
-            self.setting.get(self.id).append(item)
-            self.setting.callback(self.id)
+            self.setting.set(self.id, self.setting.get(self.id)+[item])
 
     def delete(self):
         text = self.w_value.currentText()
@@ -58,9 +57,10 @@ class ListSettingCard(SettingCard):
                        self.window()).exec()
         else:
             def confirmDelete():
-                self.setting.get(self.id).remove(text)
+                v = self.setting.get(self.id)
+                v.remove(text)
                 self.refresh()
-                self.setting.callback(self.id)
+                self.setting.set(self.id, v)
             box = MessageBox(self.tr("删除"),
                              self.tr("确定删除?"),
                              self.window())
@@ -72,7 +72,7 @@ class ListSettingCard(SettingCard):
             value = self.setting.get(self.id)
             value.remove(text)
             value.insert(0, text)
-            self.setting.callback(self.id)
+            self.setting.set(self.id, value)
         self.check_atleast()
 
     def check_atleast(self):

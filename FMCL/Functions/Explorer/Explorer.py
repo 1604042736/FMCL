@@ -14,7 +14,7 @@ from .Start import Start
 class Explorer(QStackedWidget):
     def __init__(self):
         super().__init__()
-        self.resize(1000, 618)
+        self.resize(Setting()["launcher.width"], Setting()["launcher.height"])
         self.setWindowTitle("Functional Minecraft Launcher")
         self.caught_widgets: dict[QWidget, QPushButton] = {}  # 被捕获的QWidget
         self.currentChanged.connect(self.__currentChanged)

@@ -4,7 +4,7 @@
 <context>
     <name>Update</name>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Update/__init__.py" line="11"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Update/__init__.py" line="12"/>
         <source>更新</source>
         <translation></translation>
     </message>

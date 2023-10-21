@@ -17,7 +17,7 @@ def functionInfo():
 
 def defaultSettingAttr() -> dict:
     button = PushButton()
-    button.setText(_translate("UserManager", "用户管理"))
+    button.setText(_translate("UserManager", "前往用户管理设置"))
     button.clicked.connect(main)
     setting = Setting()
     setting.attrs["users"]["settingcard"] = lambda: button

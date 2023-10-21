@@ -42,22 +42,22 @@
         <translation>Merge</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="27"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="28"/>
         <source>桌面</source>
         <translation>Desktop</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="30"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="31"/>
         <source>背景图片</source>
         <translation>Background image</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="33"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="34"/>
         <source>游戏右键操作</source>
         <translation>Item right clicked action</translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="36"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/Explorer/__init__.py" line="37"/>
         <source>标题栏右键操作</source>
         <translation>Title Right Clicked Action</translation>
     </message>

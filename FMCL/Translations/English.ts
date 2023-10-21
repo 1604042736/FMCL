@@ -71,87 +71,87 @@
 <context>
     <name>Setting</name>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="42"/>
+        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="43"/>
         <source>系统</source>
         <translation>System</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="45"/>
+        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="46"/>
         <source>启动项</source>
         <translation>Startup Items</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="48"/>
+        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="49"/>
         <source>主题颜色</source>
         <translation>Theme Color</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="52"/>
+        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="53"/>
         <source>主题</source>
         <translation>Theme</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="57"/>
+        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="58"/>
         <source>启动器</source>
         <translation>Launcher</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="60"/>
+        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="61"/>
         <source>启动器宽度</source>
         <translation>Launcher Width</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="63"/>
+        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="64"/>
         <source>启动器高度</source>
         <translation>Launcher Height</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="66"/>
+        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="67"/>
         <source>游戏</source>
         <translation>Game</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="69"/>
+        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="70"/>
         <source>游戏目录</source>
         <translation>Game Directories</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="74"/>
+        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="75"/>
         <source>Java路径</source>
         <translation>Jave Path</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="77"/>
+        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="78"/>
         <source>游戏窗口宽度</source>
         <translation>Game Window Width</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="80"/>
+        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="81"/>
         <source>游戏窗口高度</source>
         <translation>Game Window Height</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="83"/>
+        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="84"/>
         <source>最大内存</source>
         <translation>Max Memory</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="86"/>
+        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="87"/>
         <source>用户</source>
         <translation>User</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="89"/>
+        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="90"/>
         <source>选择用户索引</source>
         <translation>User selected index</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="92"/>
+        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="93"/>
         <source>语言</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="95"/>
+        <location filename="../../../../../������/PCG/FMCL/Setting.py" line="96"/>
         <source>语言类型</source>
         <translation>Language Type</translation>
     </message>

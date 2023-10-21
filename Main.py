@@ -5,6 +5,7 @@ import traceback
 import webbrowser as _  # 打包exe需要
 
 import multitasking
+import PyQt5.QtMultimedia as _  # 打包exe需要
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import QMessageBox
 

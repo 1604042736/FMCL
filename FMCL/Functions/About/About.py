@@ -8,7 +8,6 @@ import qframelesswindow
 import qtawesome as qta
 import requests
 import toml
-from Kernel import Kernel
 from PyQt5.QtCore import qVersion
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, qApp

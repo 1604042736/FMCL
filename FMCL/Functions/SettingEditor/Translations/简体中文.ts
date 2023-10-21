@@ -12,17 +12,17 @@
 <context>
     <name>ListSettingCard</name>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/SettingEditor/SettingCards/ListSettingCard.py" line="36"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/SettingEditor/SettingCards/ListSettingCard.py" line="35"/>
         <source>添加</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/SettingEditor/SettingCards/ListSettingCard.py" line="64"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/SettingEditor/SettingCards/ListSettingCard.py" line="63"/>
         <source>删除</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/SettingEditor/SettingCards/ListSettingCard.py" line="64"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/SettingEditor/SettingCards/ListSettingCard.py" line="63"/>
         <source>确定删除?</source>
         <translation></translation>
     </message>

@@ -17,7 +17,7 @@ def functionInfo():
 def defaultSetting() -> dict:
     setting = Setting()
     if "explorer.title_rightclicked_actions" in setting.defaultsetting:
-        a = setting.get("explorer.title_rightclicked_actions")
+        a = setting.defaultsetting["explorer.title_rightclicked_actions"]
         if "WidgetManager" not in a:
             a.insert(0, "WidgetManager")
     return {}

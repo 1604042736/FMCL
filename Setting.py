@@ -1,5 +1,6 @@
 import json
 import os
+from copy import deepcopy
 
 from PyQt5.QtCore import QCoreApplication
 from qfluentwidgets import Theme, setTheme, setThemeColor
@@ -173,18 +174,17 @@ class Setting:
                 getattr(function, "defaultSettingAttr", lambda: {})())
 
     def get(self, key, default=None):
-        if key in self.modifiedsetting:
-            return self.modifiedsetting[key]
-        elif key in self.defaultsetting:
-            return self.defaultsetting[key]
-        else:
+        try:
+            return self[key]
+        except KeyError:
             return default
 
     def __getitem__(self, key):
         if key in self.modifiedsetting:
             return self.modifiedsetting[key]
         elif key in self.defaultsetting:
-            return self.defaultsetting[key]
+            # 不允许随意更改默认设置
+            return deepcopy(self.defaultsetting[key])
         raise KeyError(key)
 
     def items(self):
