@@ -1,5 +1,6 @@
 import logging
 import os
+import shutil
 import sys
 import traceback
 from importlib import import_module
@@ -29,10 +30,12 @@ class Kernel(QApplication):
 
         cur_path = os.path.abspath(".")
         if cur_path not in sys.path:
-            sys.path.insert(0, os.path.abspath("."))
+            sys.path.insert(0, cur_path)
+        default_path = os.path.abspath("FMCL/Default")
+        if default_path not in sys.path:
+            sys.path.insert(1, default_path)
 
-        if "--notunpack" not in argv:
-            self.unpack()
+        self.unpack()
 
         logging.info("初始化功能...")
         self.getAllFunctions()
@@ -74,7 +77,12 @@ class Kernel(QApplication):
         logging.info("加载翻译...")
         lang = Setting().get("language.type")+".qm"
         self.__translators = []  # 防止Translator被销毁
-        for i in ["FMCL/Translations"]+[f"FMCL/Functions/{i}/Translations"for i in os.listdir("FMCL/Functions")]:
+        # QTranslator优先搜索最新安装的文件
+        for i in (["FMCL/Default/FMCL/Translations"]
+                  + [f"FMCL/Default/FMCL/Functions/{i}/Translations"for i in os.listdir(
+                      "FMCL/Default/FMCL/Functions")]
+                  + ["FMCL/Translations"]
+                  + [f"FMCL/Functions/{i}/Translations"for i in os.listdir("FMCL/Functions")]):
             file = f"{i}/{lang}"
             if not os.path.exists(file):
                 continue
@@ -89,8 +97,10 @@ class Kernel(QApplication):
 
     @staticmethod
     def unpack():
+        if os.path.exists("FMCL/Default"):
+            shutil.rmtree("FMCL/Default")
         # 由Scripts/Pack.py生成打包文件
-        logging.info("解压功能...")
+        logging.info("解压默认功能...")
         try:
             from Pack.Functions import zipfile_bytes
         except ImportError:
@@ -98,12 +108,12 @@ class Kernel(QApplication):
         else:
             zip = ZipFile(zipfile_bytes)
             for path in zip.namelist():
-                functions_path = "FMCL/Functions"
+                functions_path = "FMCL/Default/FMCL/Functions"
                 logging.info(f"解压:{path}")
                 zip.extract(path, functions_path)
             zip.close()
 
-        logging.info("解压翻译...")
+        logging.info("解压默认翻译...")
         try:
             from Pack.Translations import zipfile_bytes
         except ImportError:
@@ -111,7 +121,7 @@ class Kernel(QApplication):
         else:
             zip = ZipFile(zipfile_bytes)
             for path in zip.namelist():
-                translation_path = 'FMCL/Translations'
+                translation_path = 'FMCL/Default/FMCL/Translations'
                 logging.info(f"解压:{path}")
                 zip.extract(path, translation_path)
             zip.close()
@@ -123,7 +133,7 @@ class Kernel(QApplication):
         if f"FMCL.Functions.{function_name}" in sys.modules:
             return sys.modules[f"FMCL.Functions.{function_name}"]
         function = import_module(f"FMCL.Functions.{function_name}")
-        logging.info(f"已获取功能: {function_name}")
+        logging.info(f"已获取功能: {function_name}({function}")
         return function
 
     @staticmethod
@@ -149,11 +159,11 @@ class Kernel(QApplication):
     @staticmethod
     def getAllFunctions():
         """获取所有功能"""
-        functions_path = "FMCL/Functions"
-        functions = []
-        for function_name in os.listdir(functions_path):
-            functions.append(Kernel.getFunction(function_name))
-        return functions
+        functions = {}
+        for functions_path in ("FMCL/Default/FMCL/Functions", "FMCL/Functions"):
+            for function_name in os.listdir(functions_path):
+                functions[function_name] = Kernel.getFunction(function_name)
+        return functions.values()
 
     @staticmethod
     def defaultFunctionInfo(function):
@@ -193,3 +203,15 @@ class Kernel(QApplication):
         """使用Window来显示控件"""
         window = Window(widget)
         window.show()
+
+    @staticmethod
+    def getAllLanguages():
+        """获取所有语言"""
+        lang = []
+        default_path = "FMCL/Default/FMCL/Translations"
+        if os.path.exists(default_path):
+            lang += os.listdir(default_path)
+        path = "FMCL/Translations"
+        if os.path.exists(path):
+            lang += os.listdir(path)
+        return set(lang)

@@ -1,6 +1,7 @@
 import os
 
 import qtawesome as qta
+from Kernel import Kernel
 from PyQt5.QtWidgets import QWidget
 from Setting import Setting
 
@@ -19,7 +20,7 @@ class LanguageChooser(QWidget, Ui_LanguageChooser):
         self.cb_lang.clear()
         cur_lang = Setting().get("language.type")
         self.cb_lang.addItem(cur_lang)
-        for name in os.listdir("FMCL/Translations"):
+        for name in Kernel.getAllLanguages():
             lang, ext = os.path.splitext(name)
             if ext != ".qm":
                 continue

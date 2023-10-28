@@ -37,4 +37,3 @@ Please refer to `FMCL/Functions/About/About.py` for details
 |Parameters     | Introduction                                                                          |
 |---------------|---------------------------------------------------------------------------------------|
 |`--updated`    | The file indicated after the parameter will be deleted, usually used after the update |
-|`--notunpack`  | Unable to decompress and translate, usually used during development                   |
