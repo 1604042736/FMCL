@@ -26,6 +26,9 @@ Execute the following command at the root directory
 
 ```shell
 pip install -r requirements.txt
+mkdir Pack
+cd Scripts
+python Pack.py
 ```
 
 ## Dependency
