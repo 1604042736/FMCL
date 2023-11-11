@@ -26,6 +26,11 @@ FMCL (Functional Minecraft Launcher) 是一个用Python编写的基于PyQt5的�
 
 ```shell
 pip install -r requirements.txt
+```
+
+以下是非必要的命令
+
+```shell
 mkdir Pack
 cd Scripts
 python Pack.py

@@ -26,6 +26,11 @@ Execute the following command at the root directory
 
 ```shell
 pip install -r requirements.txt
+```
+
+The following are non-essential commands
+
+```shell
 mkdir Pack
 cd Scripts
 python Pack.py
