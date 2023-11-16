@@ -1,3 +1,4 @@
+from genericpath import exists
 import logging
 import os
 import shutil
@@ -78,11 +79,12 @@ class Kernel(QApplication):
         lang = Setting().get("language.type")+".qm"
         self.__translators = []  # 防止Translator被销毁
         # QTranslator优先搜索最新安装的文件
+        default_path = "FMCL/Default/FMCL"
         for i in (["FMCL/Default/FMCL/Translations"]
-                  + [f"FMCL/Default/FMCL/Functions/{i}/Translations"for i in os.listdir(
-                      "FMCL/Default/FMCL/Functions")]
+                  + (([f"{default_path}/Functions/{i}/Translations"for i in os.listdir(
+                      "{default_path}/Functions")]) if os.path.exists("{default_path}/Functions") else [])
                   + ["FMCL/Translations"]
-                  + [f"FMCL/Functions/{i}/Translations"for i in os.listdir("FMCL/Functions")]):
+                  + (([f"FMCL/Functions/{i}/Translations"for i in os.listdir("FMCL/Functions")]) if os.path.exists("FMCL/Functions")else [])):
             file = f"{i}/{lang}"
             if not os.path.exists(file):
                 continue
