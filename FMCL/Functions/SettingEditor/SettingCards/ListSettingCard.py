@@ -47,6 +47,7 @@ class ListSettingCard(SettingCard):
         if item:
             self.w_value.addItem(item)
             self.setting.set(self.id, self.setting.get(self.id)+[item])
+            self.check_atleast()
 
     def delete(self):
         text = self.w_value.currentText()
@@ -57,10 +58,8 @@ class ListSettingCard(SettingCard):
                        self.window()).exec()
         else:
             def confirmDelete():
-                v = self.setting.get(self.id)
-                v.remove(text)
+                self.setting.get(self.id).remove(text)
                 self.refresh()
-                self.setting.set(self.id, v)
             box = MessageBox(self.tr("删除"),
                              self.tr("确定删除?"),
                              self.window())
@@ -72,7 +71,6 @@ class ListSettingCard(SettingCard):
             value = self.setting.get(self.id)
             value.remove(text)
             value.insert(0, text)
-            self.setting.set(self.id, value)
         self.check_atleast()
 
     def check_atleast(self):

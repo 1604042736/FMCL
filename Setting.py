@@ -98,6 +98,45 @@ def defaultSettingAttr():
     }
 
 
+class ListSettingTrace(list):
+    """跟踪设置中的列表项, 在该列表被修改时同时更改设置"""
+
+    def __init__(self, l, id: str, setting: "Setting"):
+        super().__init__(l)
+        self.id = id
+        self.setting = setting
+
+    def __setitem__(self, key, val):
+        super().__setitem__(key, val)
+        self.setting.set(self.id, self)
+
+    def append(self, __object) -> None:
+        super().append(__object)
+        self.setting.set(self.id, self)
+
+    def pop(self, __index=-1):
+        ret = super().pop(__index)
+        self.setting.set(self.id, self)
+        return ret
+
+    def insert(self, __index, __object):
+        super().insert(__index, __object)
+        self.setting.set(self.id, self)
+
+    def extend(self, __iterable):
+        super().extend(__iterable)
+        self.setting.set(self.id, self)
+
+    def remove(self, __value):
+        super().remove(__value)
+        print(self)
+        self.setting.set(self.id, self)
+
+    def sort(self, *args):
+        super().sort(*args)
+        self.setting.set(self.id, self)
+
+
 class Setting:
     """管理设置文件"""
     instances = {}
@@ -181,10 +220,15 @@ class Setting:
 
     def __getitem__(self, key):
         if key in self.modifiedsetting:
-            return self.modifiedsetting[key]
+            val = self.modifiedsetting[key]
+            if isinstance(val, list):  # 对list设置项的操作将会被捕捉
+                return ListSettingTrace(val, key, self)
+            return val
         elif key in self.defaultsetting:
-            # 不允许随意更改默认设置
-            return deepcopy(self.defaultsetting[key])
+            val = self.defaultsetting[key]
+            if isinstance(val, list):  # 对list设置项的操作将会被捕捉
+                return ListSettingTrace(val, key, self)
+            return val
         raise KeyError(key)
 
     def items(self):
