@@ -68,7 +68,7 @@ def defaultSettingAttr():
         },
         "game.directories": {
             "name":  _translate("Setting", "游戏目录"),
-            "method": "directory",
+            "type": "directory",
             "atleast": 1
         },
         "game.java_path": {

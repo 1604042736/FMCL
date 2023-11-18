@@ -32,18 +32,18 @@ class ListSettingCard(SettingCard):
             self._layout.addWidget(self.pb_delete, 0, 2)
 
     def add(self):
-        method = self.setting.getAttr(self.id, "method", "input")
+        type = self.setting.getAttr(self.id, "type", "input")
         title = self.tr("添加")
         item = ""
-        if method == "input":
+        if type == "input":
             item = QInputDialog.getText(self, title, "")
             item = ("", item[0])[item[1]]
-        elif method == "directory":
+        elif type == "directory":
             item = QFileDialog.getExistingDirectory(self, title)
-        elif method == "file":
+        elif type == "file":
             item = QFileDialog.getOpenFileName(self, title)
         else:  # 自定义方式
-            method()
+            type()
         if item:
             self.w_value.addItem(item)
             self.setting.set(self.id, self.setting.get(self.id)+[item])
