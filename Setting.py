@@ -1,6 +1,5 @@
 import json
 import os
-from copy import deepcopy
 
 from PyQt5.QtCore import QCoreApplication
 from qfluentwidgets import Theme, setTheme, setThemeColor

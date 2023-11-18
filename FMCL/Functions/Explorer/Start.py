@@ -112,7 +112,7 @@ class Start(QWidget):
             self.pb_user.setText(user["username"])
         else:
             self.pb_user.setIcon(qta.icon("ph.user-circle"))
-            self.pb_user.setText("未设置用户")
+            self.pb_user.setText(self.tr("未选择用户"))
         self.all_functions.refresh()
 
     def __setHead(self, head):

@@ -1,4 +1,3 @@
-from genericpath import exists
 import logging
 import os
 import shutil
