@@ -2,10 +2,12 @@ import os
 import re
 from zipfile import *
 
+root=os.path.abspath("..")
+
 tasks = [
     {
         "target": "Functions",
-        "path": "../FMCL/Functions",
+        "path": f"{root}/FMCL/Functions",
         "filter": [
             r".*?\.ui",
             r".*?\.ts",
@@ -14,7 +16,7 @@ tasks = [
     },
     {
         "target": "Translations",
-        "path": "../FMCL/Translations",
+        "path": f"{root}/FMCL/Translations",
         "filter": [
             r".*?\.ts"
         ]
@@ -23,11 +25,11 @@ tasks = [
 
 
 def dotask(task: dict):
-    zippath = f"../Pack/{task['target']}Pack.zip"
+    zippath = f"{root}/Pack/{task['target']}Pack.zip"
     zipfile = ZipFile(zippath, "w", ZIP_DEFLATED)
-    for root, _, files in os.walk(task["path"]):
+    for dirpath, _, files in os.walk(task["path"]):
         for file in files:
-            filepath = f"{root}/{file}"
+            filepath = f"{dirpath}/{file}"
             for f in task["filter"]:
                 if re.match(f, filepath):
                     break
@@ -36,7 +38,7 @@ def dotask(task: dict):
                 zipfilepath = filepath.replace(task["path"], "")[1:]
                 zipfile.write(filepath, zipfilepath)
     zipfile.close()
-    with open(f"../Pack/{task['target']}.py", mode="w")as file:
+    with open(f"{root}/Pack/{task['target']}.py", mode="w")as file:
         file.write(
             f"""import io
 zipfile_bytes=io.BytesIO({open(zippath,mode='rb').read()})""")

@@ -1,25 +1,27 @@
 import os
 
+root=os.path.abspath("..")
+
 tasks = [
     {
         "scanpath": [
-            "../Core",
-            "../Events"
+            f"{root}/Core",
+            f"{root}/Events"
         ],
         "scanfile":[
-            "../Kernel.py",
-            "../Main.py",
-            "../Setting.py",
-            "../Window.py"
+            f"{root}/Kernel.py",
+            f"{root}/Main.py",
+            f"{root}/Setting.py",
+            f"{root}/Window.py"
         ],
-        "targetpath":"../FMCL/Translations"
+        "targetpath":f"{root}/FMCL/Translations"
     }
 ]+[
     {
-        "scanpath": [f"../FMCL/Functions/{i}"],
+        "scanpath": [f"{root}/FMCL/Functions/{i}"],
         "scanfile":[],
-        "targetpath":f"../FMCL/Functions/{i}/Translations"
-    }for i in os.listdir("../FMCL/Functions")
+        "targetpath":f"{root}/FMCL/Functions/{i}/Translations"
+    }for i in os.listdir(f"{root}/FMCL/Functions")
 ]
 
 

@@ -1,9 +1,10 @@
 import os
 from PIL import Image
 
+root=os.path.abspath("..")
 
 def main():
-    path = '../Resources/Image/icon.png'
+    path = f'{root}/Resources/Image/icon.png'
     try:
         os.makedirs(os.path.dirname(path))
     except:
@@ -29,7 +30,7 @@ def main():
         img.putpixel((i, 7), color)
         img.putpixel((i, 8), color)
     img.save(path)
-    path = "../Resources/Icon/FMCL.ico"
+    path = f"{root}/Resources/Icon/FMCL.ico"
     try:
         os.makedirs(os.path.dirname(path))
     except:

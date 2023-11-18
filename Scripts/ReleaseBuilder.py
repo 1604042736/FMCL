@@ -3,10 +3,12 @@ import shutil
 import sys
 import zipapp
 from typing import TextIO
-
+import traceback
 import minecraft_launcher_lib as mll
 
 from Pack import main
+
+root=os.path.abspath("..")
 
 
 class ReleaseBuilder(TextIO):
@@ -16,7 +18,7 @@ class ReleaseBuilder(TextIO):
 
     def __init__(self, version) -> None:
         self.version = version
-        self.release_path = f"../release/{version}"
+        self.release_path = f"{root}/release/{version}"
         if not os.path.exists(self.release_path):
             os.makedirs(self.release_path)
 
@@ -29,9 +31,10 @@ class ReleaseBuilder(TextIO):
                 func(*args)
                 ReleaseBuilder.indent -= 1
                 print(f"{func.__doc__}完成")
-            except BaseException as e:
+            except:
                 ReleaseBuilder.indent -= 1
-                print(f"{func.__doc__}失败: {e}")
+                traceback.print_exc()
+                print(f"{func.__doc__}失败")
                 exit()
         return wrap
 
@@ -47,13 +50,13 @@ class ReleaseBuilder(TextIO):
             """过滤函数"""
             path_str = str(path).replace('\\', '/')
             if path_str.endswith('.py') and "Scripts"not in path_str and "FMCL"not in path_str:
-                if os.path.isfile("../"+path_str):
+                if os.path.isfile(root+"/"+path_str):
                     print(f'打包"{path_str}"')
                 return True
             else:
                 return False
 
-        zipapp.create_archive('../',
+        zipapp.create_archive(root+"/",
                               os.path.join(
                                   self.release_path, f'FMCL_{self.version}.pyzw'),
                               main='Main:main',
@@ -62,8 +65,8 @@ class ReleaseBuilder(TextIO):
     @call_build
     def build_exe(self):
         """生成exe文件"""
-        icon_dir = os.path.abspath("../Resources/Icon/FMCL.ico")
-        file = "../Main.py"
+        icon_dir = os.path.abspath(f"{root}/Resources/Icon/FMCL.ico")
+        file = f"{root}/Main.py"
         name = f'FMCL_{self.version}'
         distpath = self.release_path
         workpath = self.release_path+'/build'
