@@ -101,14 +101,6 @@ QPushButton:checked{
                        AddToTitleEvent(button, "right", -1))  # 相当于添加到左边的最后面
         return button
 
-    def addFixedButton(self, cls: type):
-        """添加固定的按钮"""
-        button = TransparentTogglePushButton()
-        button.resize(46, 32)
-        button.clicked.connect(self.fixedButtonClicked)
-
-        self.fixed_widgets[button] = cls
-
     def __currentChanged(self):
         for widget, button in self.caught_widgets.items():
             if widget == self.currentWidget():

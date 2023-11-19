@@ -1,10 +1,9 @@
 import qtawesome as qta
 from Events import *
-from Kernel import Kernel
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QShowEvent
 from PyQt5.QtWidgets import QLabel, QTreeWidgetItem, QWidget, qApp
-from qfluentwidgets import TransparentToolButton
+from qfluentwidgets import TransparentToolButton,PrimaryPushButton
 from Setting import Setting
 
 from .SettingCards import SettingCard
@@ -35,8 +34,8 @@ class SettingEditor(QWidget, Ui_SettingEditor):
         self.setting = setting
         self.items = {}
         self.item_widget_id = []
-        self.setting_items = []
-
+        self.setting_cards = {}
+        row=1
         for id, val in self.setting.items():
             splitids = id.split(".")
             for i, splitid in enumerate(splitids):
@@ -58,18 +57,29 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                 font.setBold((False, True)[i == 0])
                 font.setPixelSize(16-i*2)
                 widget.setFont(font)
-                self.gl_setting.addWidget(widget)
+                self.gl_setting.addWidget(widget,row,1)
                 self.item_widget_id.append((item, widget, totalid))
+
+                link=self.setting.getAttr(totalid,"link",None)
+                if link:
+                    button=PrimaryPushButton()
+                    button.setText(link["name"])
+                    button.clicked.connect(lambda _,l=link:l["action"]())
+                    self.gl_setting.addWidget(button,row,2)
+                row+=1
 
             settingcard = self.setting.getAttr(
                 id, "settingcard", lambda id=id: SettingCard(id, self.setting))()
-            self.gl_setting.addWidget(settingcard)
-            self.setting_items.append(settingcard)
-
+            self.gl_setting.addWidget(settingcard,row,1,1,2)
+            self.setting_cards[id]=settingcard
+            row+=1
+        
         self.pb_refresh = TransparentToolButton()
         self.pb_refresh.resize(46, 32)
         self.pb_refresh.setIcon(qta.icon("mdi.refresh"))
         self.pb_refresh.clicked.connect(lambda: self.refresh())
+
+        self.checkCondition()
 
     def addTreeItem(self, root: QTreeWidgetItem | None, item: QTreeWidgetItem):
         if root == None:
@@ -91,17 +101,34 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                 break
 
     def show(self, id="") -> None:
+        super().show()
         if id:
             self.turnTo(id)
-        return super().show()
 
     def refresh(self):
-        for i in self.setting_items:
+        for i in self.setting_cards.values():
             if hasattr(i, "refresh"):
                 i.refresh()
+        self.checkCondition()
 
     def showEvent(self, a0: QShowEvent) -> None:
         self.refresh()
         qApp.sendEvent(self.window(),
                        AddToTitleEvent(self.pb_refresh, "right", bind=self))
         return super().showEvent(a0)
+
+    def checkCondition(self):
+        enable={}
+        disable=[]
+        for key,val in self.setting.attrs.items():
+            enable[key]=val.get("enable_condition",lambda _:True)(self.setting)
+            if not enable[key]:
+                disable.append(key)
+        for id in disable:
+            for key,val in self.setting.attrs.items():
+                if key.find(id)==0:
+                    enable[key]=False
+        for _, widget, id in self.item_widget_id:
+            widget.setEnabled(enable[id])
+            if id in self.setting_cards:
+                self.setting_cards[id].setEnabled(enable[id])

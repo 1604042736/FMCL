@@ -7,7 +7,7 @@ import shutil
 import tempfile
 from copy import deepcopy
 from zipfile import ZipFile
-
+from Kernel import Kernel
 import minecraft_launcher_lib as mll
 import toml
 from PyQt5.QtCore import QCoreApplication
@@ -54,12 +54,19 @@ class Game:
         self.DEFAULT_SETTING_ATTR = {
             "specific": {
                 "name": _translate("Game", "特定设置"),
+                "link":{
+                    "name":_translate("Game", "前往全局设置"),
+                    "action":lambda:Kernel.execFunction("SettingEditor",id="game")
+                }
             },
             "isolation": {
                 "name": _translate("Game", "版本隔离"),
             },
             "logo": {
                 "name":  _translate("Game", "游戏图标"),
+            },
+            "game":{
+                "enable_condition":lambda setting:setting.get("specific",False)==True
             }
         }
         self.DEFAULT_SETTING = {
@@ -76,7 +83,9 @@ class Game:
                 self.DEFAULT_SETTING[key] = val
         for key, val in globalsetting.attrs.items():
             if "game" in key:
-                self.DEFAULT_SETTING_ATTR[key] = val
+                if key not in self.DEFAULT_SETTING_ATTR:
+                    self.DEFAULT_SETTING_ATTR[key]={}
+                self.DEFAULT_SETTING_ATTR[key] |= val
 
     def check_authlibinjector(self, callback=None):
         """检查当前用户是否是外置登录, 如果是则下载对应的加载文件"""
@@ -398,16 +407,6 @@ class Game:
                 self.directory, "versions", self.name, "FMCL", "setting.json"))
             self.setting.add(self.DEFAULT_SETTING)
             self.setting.addAttr(self.DEFAULT_SETTING_ATTR)
-
-        # 保证当不启用特定设置时与全局设置相同
-        if not self.setting.get("specific"):
-            globalsetting = Setting()
-            for key, val in globalsetting.items():
-                if "game" in key:
-                    self.setting[key] = val
-            for key, val in globalsetting.attrs.items():
-                if "game" in key:
-                    self.setting.attrs[key] = val
 
     def delete(self):
         shutil.rmtree(os.path.join(self.directory, "versions", self.name))
