@@ -1,7 +1,10 @@
 from PyQt5.QtWidgets import QGridLayout, QWidget
+from PyQt5.QtCore import pyqtSignal
 
 
 class SettingCard(QWidget):
+    Changed = pyqtSignal()
+
     def __new__(cls, id, setting):
         if cls == SettingCard:
             from .BoolSettingCard import BoolSettingCard
@@ -9,6 +12,7 @@ class SettingCard(QWidget):
             from .IntSettingCard import IntSettingCard
             from .ListSettingCard import ListSettingCard
             from .StrSettingCard import StrSettingCard
+
             value = setting.get(id)
             if isinstance(value, bool):
                 return BoolSettingCard(id, setting)
@@ -31,6 +35,7 @@ class SettingCard(QWidget):
 
     def sync(self):
         self.setting.sync()
+        self.Changed.emit()
 
     def refresh(self):
         pass

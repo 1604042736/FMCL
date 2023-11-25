@@ -3,7 +3,7 @@ from Events import *
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QShowEvent
 from PyQt5.QtWidgets import QLabel, QTreeWidgetItem, QWidget, qApp
-from qfluentwidgets import TransparentToolButton,PrimaryPushButton
+from qfluentwidgets import TransparentToolButton, PrimaryPushButton
 from Setting import Setting
 
 from .SettingCards import SettingCard
@@ -16,8 +16,7 @@ class SettingEditor(QWidget, Ui_SettingEditor):
 
     def __new__(cls, setting: Setting):
         if setting.setting_path not in SettingEditor.instances:
-            SettingEditor.instances[setting.setting_path] = super().__new__(
-                cls)
+            SettingEditor.instances[setting.setting_path] = super().__new__(cls)
             SettingEditor.new_count[setting.setting_path] = 0
         SettingEditor.new_count[setting.setting_path] += 1
         return SettingEditor.instances[setting.setting_path]
@@ -35,16 +34,16 @@ class SettingEditor(QWidget, Ui_SettingEditor):
         self.items = {}
         self.item_widget_id = []
         self.setting_cards = {}
-        row=1
+        row = 1
         for id, val in self.setting.items():
             splitids = id.split(".")
             for i, splitid in enumerate(splitids):
-                totalid = ".".join(splitids[:i+1])
+                totalid = ".".join(splitids[: i + 1])
                 lastid = ".".join(splitids[:i])
                 if totalid in self.items:
                     continue
 
-                root = self.items.get(("???", lastid)[i-1 >= 0], None)
+                root = self.items.get(("???", lastid)[i - 1 >= 0], None)
                 item = QTreeWidgetItem()
                 text = self.setting.getAttr(totalid, "name")
                 item.setText(0, text)
@@ -55,25 +54,28 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                 widget.setText(text)
                 font = widget.font()
                 font.setBold((False, True)[i == 0])
-                font.setPixelSize(16-i*2)
+                font.setPixelSize(16 - i * 2)
                 widget.setFont(font)
-                self.gl_setting.addWidget(widget,row,1)
+                self.gl_setting.addWidget(widget, row, 1)
                 self.item_widget_id.append((item, widget, totalid))
 
-                link=self.setting.getAttr(totalid,"link",None)
+                link = self.setting.getAttr(totalid, "link", None)
                 if link:
-                    button=PrimaryPushButton()
+                    button = PrimaryPushButton()
                     button.setText(link["name"])
-                    button.clicked.connect(lambda _,l=link:l["action"]())
-                    self.gl_setting.addWidget(button,row,2)
-                row+=1
+                    button.clicked.connect(lambda _, l=link: l["action"]())
+                    self.gl_setting.addWidget(button, row, 2)
+                row += 1
 
             settingcard = self.setting.getAttr(
-                id, "settingcard", lambda id=id: SettingCard(id, self.setting))()
-            self.gl_setting.addWidget(settingcard,row,1,1,2)
-            self.setting_cards[id]=settingcard
-            row+=1
-        
+                id, "settingcard", lambda id=id: SettingCard(id, self.setting)
+            )()
+            if isinstance(settingcard, SettingCard):
+                settingcard.Changed.connect(self.refresh)
+            self.gl_setting.addWidget(settingcard, row, 1, 1, 2)
+            self.setting_cards[id] = settingcard
+            row += 1
+
         self.pb_refresh = TransparentToolButton()
         self.pb_refresh.resize(46, 32)
         self.pb_refresh.setIcon(qta.icon("mdi.refresh"))
@@ -113,21 +115,22 @@ class SettingEditor(QWidget, Ui_SettingEditor):
 
     def showEvent(self, a0: QShowEvent) -> None:
         self.refresh()
-        qApp.sendEvent(self.window(),
-                       AddToTitleEvent(self.pb_refresh, "right", bind=self))
+        qApp.sendEvent(
+            self.window(), AddToTitleEvent(self.pb_refresh, "right", bind=self)
+        )
         return super().showEvent(a0)
 
     def checkCondition(self):
-        enable={}
-        disable=[]
-        for key,val in self.setting.attrs.items():
-            enable[key]=val.get("enable_condition",lambda _:True)(self.setting)
+        enable = {}
+        disable = []
+        for key, val in self.setting.attrs.items():
+            enable[key] = val.get("enable_condition", lambda _: True)(self.setting)
             if not enable[key]:
                 disable.append(key)
-        for id in disable:
-            for key,val in self.setting.attrs.items():
-                if key.find(id)==0:
-                    enable[key]=False
+        for id in disable:  # 将子设置项设为不可用
+            for key, val in self.setting.attrs.items():
+                if key.find(id) == 0:
+                    enable[key] = False
         for _, widget, id in self.item_widget_id:
             widget.setEnabled(enable[id])
             if id in self.setting_cards:
