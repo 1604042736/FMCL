@@ -1,4 +1,3 @@
-
 from PyQt5.QtWidgets import QFileDialog, QInputDialog
 from qfluentwidgets import ComboBox, MessageBox, PushButton
 
@@ -46,23 +45,23 @@ class ListSettingCard(SettingCard):
             type()
         if item:
             self.w_value.addItem(item)
-            self.setting.set(self.id, self.setting.get(self.id)+[item])
+            self.setting.set(self.id, self.setting.get(self.id) + [item])
             self.check_atleast()
 
     def delete(self):
         text = self.w_value.currentText()
         atleast = self.setting.getAttr(self.id, "atleast", 0)
         if self.w_value.count() <= atleast:
-            MessageBox(self.tr("删除"),
-                       f'{self.tr("至少有")}{atleast}',
-                       self.window()).exec()
+            MessageBox(
+                self.tr("删除"), f'{self.tr("至少有")}{atleast}', self.window()
+            ).exec()
         else:
+
             def confirmDelete():
                 self.setting.get(self.id).remove(text)
                 self.refresh()
-            box = MessageBox(self.tr("删除"),
-                             self.tr("确定删除?"),
-                             self.window())
+
+            box = MessageBox(self.tr("删除"), self.tr("确定删除?"), self.window())
             box.yesSignal.connect(confirmDelete)
             box.exec()
 
@@ -82,10 +81,12 @@ class ListSettingCard(SettingCard):
 
     def refresh(self):
         self.w_value.currentTextChanged.disconnect(self.promote_top)
+        self.w_value.currentTextChanged.disconnect(self.sync)  # 防覆盖
         self.w_value.clear()
         self.w_value.addItems(self.setting.get(self.id))
         if len(self.setting.get(self.id)) > 0:
             self.w_value.setCurrentText(self.setting.get(self.id)[0])
         self.w_value.currentTextChanged.connect(self.promote_top)
+        self.w_value.currentTextChanged.connect(self.sync)
         self.check_atleast()
         return super().refresh()

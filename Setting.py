@@ -128,7 +128,6 @@ class ListSettingTrace(list):
 
     def remove(self, __value):
         super().remove(__value)
-        print(self)
         self.setting.set(self.id, self)
 
     def sort(self, *args):
