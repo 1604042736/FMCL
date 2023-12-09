@@ -2,8 +2,7 @@ import typing
 
 from PyQt5.QtCore import QEvent, QObject, Qt
 from PyQt5.QtGui import QCloseEvent, QCursor, QFont, QPainter, QPaintEvent
-from PyQt5.QtWidgets import (QAction, QDesktopWidget, QSizePolicy, QSpacerItem,
-                             QWidget)
+from PyQt5.QtWidgets import QAction, QDesktopWidget, QSizePolicy, QSpacerItem, QWidget
 from qfluentwidgets import RoundMenu
 from qframelesswindow import FramelessWindow
 
@@ -22,8 +21,9 @@ class Window(FramelessWindow):
         # 标题栏控件的sender，以及它添加进窗口标题栏的控件的参数
         self.titlewidgetbinds: list[QWidget, list] = {}
         # 用来分离标题栏左右控件
-        self.si_separate = QSpacerItem(0, 0,
-                                       QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.si_separate = QSpacerItem(
+            0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+        )
         self.titleBar.hBoxLayout.insertSpacerItem(0, self.si_separate)
         self.titleBar.hBoxLayout.setStretch(1, 0)
         self.titleBar.hBoxLayout.setStretch(0, 1)
@@ -39,14 +39,14 @@ class Window(FramelessWindow):
 
         self.setWindowTitle(self.client.windowTitle())
         self.setWindowIcon(self.client.windowIcon())
-        self.resize(self.client.width(),
-                    self.client.height() + self.titleBar.height())
-        self.move(int((QDesktopWidget().width()-self.width())/2),
-                  int((QDesktopWidget().height()-self.height())/2))
+        self.resize(self.client.width(), self.client.height() + self.titleBar.height())
+        self.move(
+            int((QDesktopWidget().width() - self.width()) / 2),
+            int((QDesktopWidget().height() - self.height()) / 2),
+        )
 
         self.titleBar.setObjectName("titleBar")
-        self.titleBar.setContextMenuPolicy(
-            Qt.ContextMenuPolicy.CustomContextMenu)
+        self.titleBar.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.titleBar.customContextMenuRequested.connect(self.showTitleMenu)
 
     def paintEvent(self, a0: QPaintEvent) -> None:
@@ -54,19 +54,25 @@ class Window(FramelessWindow):
         # 绘制标题
         painter.setFont(QFont("Microsoft YaHei", 10))
         title = self.windowTitle()
-        painter.drawText(self.si_separate.geometry(),
-                         Qt.AlignmentFlag.AlignCenter, title)
+        painter.drawText(
+            self.si_separate.geometry(), Qt.AlignmentFlag.AlignCenter, title
+        )
         return super().paintEvent(a0)
 
     def resizeEvent(self, e):
-        self.client.resize(self.width(), self.height()-self.titleBar.height())
+        self.client.resize(self.width(), self.height() - self.titleBar.height())
         return super().resizeEvent(e)
 
-    def addTitleWidget(self, widget: QWidget, place: typing.Literal["right", "left"] = "left", index: int = 0):
+    def addTitleWidget(
+        self,
+        widget: QWidget,
+        place: typing.Literal["right", "left"] = "left",
+        index: int = 0,
+    ):
         """往标题栏上添加控件"""
         self.removeTitleWidget(widget)  # 防止重复添加
         if place == "right":
-            index = self.titleBar.hBoxLayout.indexOf(self.si_separate)+index+1
+            index = self.titleBar.hBoxLayout.indexOf(self.si_separate) + index + 1
         self.titleBar.hBoxLayout.insertWidget(index, widget, 0)
 
     def removeTitleWidget(self, widget: QWidget):
@@ -81,8 +87,9 @@ class Window(FramelessWindow):
                 if a0.parent() != self:
                     self.close()
         elif a0 in self.titlewidgetbinds:
-            if (a1.type() in (QEvent.Type.Close, QEvent.Type.DeferredDelete)
-                    or (a1.type() == QEvent.Type.ParentChange and a0.window() != self)):
+            if a1.type() in (QEvent.Type.Close, QEvent.Type.DeferredDelete) or (
+                a1.type() == QEvent.Type.ParentChange and a0.window() != self
+            ):
                 a0.removeEventFilter(self)
                 for args in self.titlewidgetbinds[a0]:
                     self.removeTitleWidget(args[0])
@@ -105,7 +112,11 @@ class Window(FramelessWindow):
             self.client.setParent(None)
         # 用户添加的按钮也不删除
         for child in self.titleBar.findChildren(QWidget):
-            if child not in (self.titleBar.minBtn, self.titleBar.maxBtn, self.titleBar.closeBtn):
+            if child not in (
+                self.titleBar.minBtn,
+                self.titleBar.maxBtn,
+                self.titleBar.closeBtn,
+            ):
                 child.setParent(None)
         self.deleteLater()
         return super().closeEvent(a0)
@@ -124,8 +135,7 @@ class Window(FramelessWindow):
                 a0.bind.installEventFilter(self)
                 if a0.bind not in self.titlewidgetbinds:
                     self.titlewidgetbinds[a0.bind] = []
-                self.titlewidgetbinds[a0.bind].append(
-                    (a0.widget, a0.place, a0.index))
+                self.titlewidgetbinds[a0.bind].append((a0.widget, a0.place, a0.index))
         elif a0.type() == RemoveFromTitleEvent.EventType:
             self.removeTitleWidget(a0.widget)
         elif a0.type() == AddToTitleMenuEvent.EventType:

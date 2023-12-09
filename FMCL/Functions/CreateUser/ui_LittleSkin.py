@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'LittleSkin.ui'
+# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\CreateUser\LittleSkin.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -23,7 +23,7 @@ class Ui_LittleSkin(object):
         self.gridLayout.addItem(spacerItem1, 0, 1, 1, 1)
         spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.gridLayout.addItem(spacerItem2, 4, 1, 1, 1)
-        self.le_password = LineEdit(LittleSkin)
+        self.le_password = PasswordLineEdit(LittleSkin)
         self.le_password.setEchoMode(QtWidgets.QLineEdit.Password)
         self.le_password.setObjectName("le_password")
         self.gridLayout.addWidget(self.le_password, 2, 1, 1, 1)
@@ -46,4 +46,4 @@ class Ui_LittleSkin(object):
         self.le_password.setPlaceholderText(_translate("LittleSkin", "密码"))
         self.pb_logon.setText(_translate("LittleSkin", "登录"))
         self.le_username.setPlaceholderText(_translate("LittleSkin", "邮箱"))
-from qfluentwidgets import LineEdit, PushButton
+from qfluentwidgets import LineEdit, PasswordLineEdit, PushButton

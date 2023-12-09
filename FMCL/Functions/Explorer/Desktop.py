@@ -4,13 +4,13 @@ import qtawesome as qta
 from Core.Game import Game
 from Kernel import Kernel
 from PyQt5.QtCore import QEvent, QSize, Qt
-from PyQt5.QtGui import QCursor
-from PyQt5.QtWidgets import QAction, QListView, QListWidget, QListWidgetItem
-from qfluentwidgets import RoundMenu
+from PyQt5.QtGui import QCursor, QPainter, QPixmap
+from PyQt5.QtWidgets import QAction, QListView, QListWidgetItem
+from qfluentwidgets import RoundMenu, ListWidget
 from Setting import Setting
 
 
-class Desktop(QListWidget):
+class Desktop(ListWidget):
     __instance = None
     __new_count = 0
 
@@ -31,7 +31,6 @@ class Desktop(QListWidget):
         self.setFlow(QListView.Flow.TopToBottom)
         self.setResizeMode(QListView.ResizeMode.Adjust)
         self.setWordWrap(True)
-        self.setStyleSheet("QListWidget{border:none;}")
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self.showRightMenu)
 
@@ -44,8 +43,7 @@ class Desktop(QListWidget):
         menu = RoundMenu(self)
 
         if item:
-            action_functions = Setting(
-            )["explorer.desktop.item_rightclicked_actions"]
+            action_functions = Setting()["explorer.desktop.item_rightclicked_actions"]
             for action_function in action_functions:
                 function = Kernel.getFunction(action_function)
                 info = Kernel.getFunctionInfo(function)
@@ -53,7 +51,8 @@ class Desktop(QListWidget):
                 action.setText(info["name"])
                 action.setIcon(info["icon"])
                 action.triggered.connect(
-                    lambda _, f=action_function: Kernel.execFunction(f, item.text()))
+                    lambda _, f=action_function: Kernel.execFunction(f, item.text())
+                )
                 menu.addAction(action)
         else:
             a_refresh = QAction(self.tr("刷新"), self)
@@ -62,8 +61,11 @@ class Desktop(QListWidget):
 
             a_background_image = QAction(self.tr("设置背景图片"), self)
             a_background_image.setIcon(qta.icon("fa.image"))
-            a_background_image.triggered.connect(lambda: Kernel.execFunction(
-                "SettingEditor", id="explorer.desktop.background_image"))
+            a_background_image.triggered.connect(
+                lambda: Kernel.execFunction(
+                    "SettingEditor", id="explorer.desktop.background_image"
+                )
+            )
 
             menu.addAction(a_refresh)
             menu.addAction(a_background_image)
@@ -71,14 +73,9 @@ class Desktop(QListWidget):
         menu.exec(QCursor.pos())
 
     def refresh(self):
-        background_image = Setting().get(
-            "explorer.desktop.background_image").replace("\\", "/")
-        self.setStyleSheet(f"""
-QListWidget{{
-    border:none;
-    border-image:url("{background_image}")
-}}""")
-
+        self.background_image = (
+            Setting().get("explorer.desktop.background_image").replace("\\", "/")
+        )
         self.clear()
         path = Setting()["game.directories"][0]
         if not os.path.exists(os.path.join(path, "versions")):
@@ -89,8 +86,12 @@ QListWidget{{
             item.setText(game_name)
             item.setIcon(Game(game_name).get_icon())
             self.addItem(item)
+        self.repaint()
 
     def event(self, e: QEvent) -> bool:
         if e.type() == QEvent.Type.Show:
             self.refresh()
+        elif e.type() == QEvent.Type.Paint:
+            painter = QPainter(self)
+            painter.drawPixmap(self.rect(), QPixmap(self.background_image))
         return super().event(e)

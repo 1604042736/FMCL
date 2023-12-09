@@ -54,7 +54,7 @@
     </spacer>
    </item>
    <item row="2" column="1">
-    <widget class="LineEdit" name="le_password">
+    <widget class="PasswordLineEdit" name="le_password">
      <property name="echoMode">
       <enum>QLineEdit::Password</enum>
      </property>
@@ -103,6 +103,11 @@
   </customwidget>
   <customwidget>
    <class>LineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
+   <class>PasswordLineEdit</class>
    <extends>QLineEdit</extends>
    <header>qfluentwidgets</header>
   </customwidget>

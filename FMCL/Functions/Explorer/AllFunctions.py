@@ -1,9 +1,10 @@
 from Kernel import Kernel
 from PyQt5.QtCore import QEvent, QSize
-from PyQt5.QtWidgets import QListView, QListWidget, QListWidgetItem
+from PyQt5.QtWidgets import QListView, QListWidgetItem
+from qfluentwidgets import ListWidget
 
 
-class AllFunctions(QListWidget):
+class AllFunctions(ListWidget):
     """所有功能"""
 
     __instance = None
@@ -24,7 +25,6 @@ class AllFunctions(QListWidget):
         self.setViewMode(QListView.ViewMode.IconMode)
         self.setResizeMode(QListView.ResizeMode.Adjust)
         self.setWordWrap(True)
-        self.setStyleSheet("QListWidget{border:none;}")
 
         self.refresh()
         self.itemClicked.connect(self.launchFunc)

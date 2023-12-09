@@ -25,7 +25,8 @@ class Explorer(QStackedWidget):
         self.pb_start.setIcon(qApp.windowIcon())
         self.pb_start.setCheckable(True)
         self.pb_start.clicked.connect(self.showStart)
-        self.pb_start.setStyleSheet("""
+        self.pb_start.setStyleSheet(
+            """
 QPushButton{
     border:none;
 }
@@ -35,8 +36,8 @@ QPushButton:hover{
 QPushButton:checked{
     background-color:rgb(232,232,232);
 }
-""")
-
+"""
+        )
         self.a_showdesktop = QAction(self)
         self.a_showdesktop.setText(self.tr("显示桌面"))
         self.a_showdesktop.setIcon(qta.icon("ph.desktop"))
@@ -56,11 +57,9 @@ QPushButton:checked{
         self.showDesktop()
 
     def showEvent(self, a0: QShowEvent) -> None:
-        qApp.sendEvent(self.window(),
-                       AddToTitleEvent(self.pb_start, index=0))
+        qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_start, index=0))
         for _, button in self.caught_widgets.items():  # 恢复
-            qApp.sendEvent(self.window(),
-                           AddToTitleEvent(button, "right", -1))
+            qApp.sendEvent(self.window(), AddToTitleEvent(button, "right", -1))
 
         for action in self.title_rightclicked_actions:
             qApp.sendEvent(self.window(), AddToTitleMenuEvent(action))
@@ -93,12 +92,11 @@ QPushButton:checked{
 
         button.setToolTip(widget.windowTitle())
         button.clicked.connect(self.taskButtonClicked)
-        button.setContextMenuPolicy(
-            Qt.ContextMenuPolicy.CustomContextMenu)
-        button.customContextMenuRequested.connect(
-            self.showRightMenu)
-        qApp.sendEvent(self.window(),
-                       AddToTitleEvent(button, "right", -1))  # 相当于添加到左边的最后面
+        button.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        button.customContextMenuRequested.connect(self.showRightMenu)
+        qApp.sendEvent(
+            self.window(), AddToTitleEvent(button, "right", -1)
+        )  # 相当于添加到左边的最后面
         return button
 
     def __currentChanged(self):
@@ -122,7 +120,7 @@ QPushButton:checked{
     def setCurrentWidget(self, widget: QWidget) -> None:
         if self.indexOf(widget) == -1:
             self.addWidget(widget)
-        elif self.indexOf(widget) != self.count()-1:  # 置于最上层
+        elif self.indexOf(widget) != self.count() - 1:  # 置于最上层
             # 单纯的进行，不需要其他操作，所以使用父类的方法
             QStackedWidget.removeWidget(self, widget)
             QStackedWidget.addWidget(self, widget)
@@ -156,8 +154,7 @@ QPushButton:checked{
         widget.removeEventFilter(self)
         if widget in self.caught_widgets:
             button = self.caught_widgets.pop(widget)
-            qApp.sendEvent(
-                self.window(), RemoveFromTitleEvent(button))
+            qApp.sendEvent(self.window(), RemoveFromTitleEvent(button))
             button.deleteLater()
 
     def showRightMenu(self):
@@ -169,8 +166,7 @@ QPushButton:checked{
                 a_separate = QAction(self)
                 a_separate.setText(self.tr("分离"))
                 a_separate.setIcon(qta.icon("ph.arrow-square-out-light"))
-                a_separate.triggered.connect(
-                    lambda: self.separateCaughtWidget(widget))
+                a_separate.triggered.connect(lambda: self.separateCaughtWidget(widget))
                 menu.addAction(a_separate)
 
                 a_close = QAction(self)
@@ -178,8 +174,13 @@ QPushButton:checked{
                 a_close.setIcon(qta.icon("mdi6.close"))
                 a_close.triggered.connect(widget.close)
                 menu.addAction(a_close)
-                menu.exec(button.mapToGlobal(
-                    QPoint((button.width()-menu.view.width())//2, button.height())))
+                menu.exec(
+                    button.mapToGlobal(
+                        QPoint(
+                            (button.width() - menu.view.width()) // 2, button.height()
+                        )
+                    )
+                )
                 break
 
     def separateCaughtWidget(self, widget: QWidget):
