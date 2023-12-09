@@ -161,7 +161,7 @@ class Kernel(QApplication):
     def getAllFunctions():
         """获取所有功能"""
         functions = {}
-        for functions_path in ("FMCL/Default/FMCL/Functions", "FMCL/Functions"):
+        for functions_path in ("FMCL/Functions","FMCL/Default/FMCL/Functions"):
             if not os.path.exists(functions_path):
                 continue
             for function_name in os.listdir(functions_path):

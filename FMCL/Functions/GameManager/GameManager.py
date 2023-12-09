@@ -5,14 +5,13 @@ from Kernel import Kernel
 from PyQt5.QtCore import QEvent, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 
-from ..GameInfo import GameInfo
+from .GameInfo import GameInfo
 from ..LogoChooser import LogoChooser
-from ..ModManager import ModManager
+from .ModManager import ModManager
 from .ui_GameManager import Ui_GameManager
 
 
 class GameManager(QWidget, Ui_GameManager):
-
     __instances = {}
     __new_count = {}
 
@@ -28,7 +27,7 @@ class GameManager(QWidget, Ui_GameManager):
             return
         super().__init__()
         self.setupUi(self)
-        t = self.tr('游戏管理')
+        t = self.tr("游戏管理")
         self.setWindowTitle(f"{t}:{name}")
         self.setWindowIcon(qta.icon("mdi6.minecraft"))
         self.pb_gameinfo.setIcon(qta.icon("mdi6.information-outline"))
@@ -46,8 +45,9 @@ class GameManager(QWidget, Ui_GameManager):
         self.gameinfo.gameNameChanged.connect(self.renamed)
         self.gameinfo.gameDeleted.connect(self.close)
 
-        self.game.DEFAULT_SETTING_ATTR["logo"]["settingcard"] = \
-            lambda: LogoChooser(self.name)
+        self.game.DEFAULT_SETTING_ATTR["logo"]["settingcard"] = lambda: LogoChooser(
+            self.name
+        )
         self.game.generate_setting()
         self.gamesetting = SettingEditor(self.game.setting)
 

@@ -1,7 +1,6 @@
 import qtawesome as qta
 from Core import Game
 from Events import *
-from Kernel import Kernel
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QShowEvent
 from PyQt5.QtWidgets import QLabel, QWidget, qApp
@@ -17,13 +16,13 @@ class GameInfo(QWidget, Ui_GameInfo):
     def __init__(self, name: str) -> None:
         super().__init__()
         self.setupUi(self)
-        t = self.tr('游戏信息')
+        t = self.tr("游戏信息")
         self.setWindowTitle(f"{t}:{name}")
         self.setWindowIcon(qta.icon("mdi6.information-outline"))
-        self. __info_translate = {
+        self.__info_translate = {
             "version": self.tr("版本"),
             "forge_version": self.tr("Forge版本"),
-            "fabric_version": self.tr("Fabric版本")
+            "fabric_version": self.tr("Fabric版本"),
         }
         self.game = Game(name)
 
@@ -41,7 +40,7 @@ class GameInfo(QWidget, Ui_GameInfo):
         if not pixmap.isNull():
             self.l_logo.setPixmap(pixmap.scaled(64, 64))
 
-        for i in range(self.gl_versions.count()-1, -1, -1):
+        for i in range(self.gl_versions.count() - 1, -1, -1):
             item = self.gl_versions.itemAt(i)
             self.gl_versions.removeItem(item)
             if item.widget():
@@ -64,9 +63,8 @@ class GameInfo(QWidget, Ui_GameInfo):
             self.game.delete()
             self.gameDeleted.emit()
             self.close()
-        box = MessageBox(self.tr("删除"),
-                         self.tr("确定删除?"),
-                         self.window())
+
+        box = MessageBox(self.tr("删除"), self.tr("确定删除?"), self.window())
         box.yesSignal.connect(confirmDelete)
         box.exec()
 
@@ -84,6 +82,7 @@ class GameInfo(QWidget, Ui_GameInfo):
 
     def showEvent(self, a0: QShowEvent) -> None:
         self.refresh()
-        qApp.sendEvent(self.window(),
-                       AddToTitleEvent(self.pb_refresh, "right", bind=self))
+        qApp.sendEvent(
+            self.window(), AddToTitleEvent(self.pb_refresh, "right", bind=self)
+        )
         return super().showEvent(a0)
