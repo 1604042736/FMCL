@@ -32,68 +32,42 @@ DEFAULT_SETTING = {
     "game.maxmem": 2048,
     "users": [],
     "users.selectindex": 0,
-    "language.type": "简体中文"
+    "language.type": "简体中文",
 }
 
 
 def defaultSettingAttr():
     return {
-        "system": {
-            "name": _translate("Setting", "系统")
-        },
-        "system.startup_functions": {
-            "name": _translate("Setting", "启动项")
-        },
+        "system": {"name": _translate("Setting", "系统")},
+        "system.startup_functions": {"name": _translate("Setting", "启动项")},
         "system.theme_color": {
             "name": _translate("Setting", "主题颜色"),
-            "callback": lambda a: setThemeColor(a)
+            "callback": lambda a: setThemeColor(a),
         },
         "system.theme": {
-            "name": _translate("Setting",  "主题"),
+            "name": _translate("Setting", "主题"),
             "callback": lambda a: setThemeFromStr(a[0]),
-            "static": True
+            "static": True,
         },
-        "launcher": {
-            "name": _translate("Setting", "启动器")
-        },
-        "launcher.width": {
-            "name":  _translate("Setting", "启动器宽度")
-        },
-        "launcher.height": {
-            "name":  _translate("Setting", "启动器高度")
-        },
-        "game": {
-            "name": _translate("Setting",  "游戏")
-        },
+        "launcher": {"name": _translate("Setting", "启动器")},
+        "launcher.width": {"name": _translate("Setting", "启动器宽度")},
+        "launcher.height": {"name": _translate("Setting", "启动器高度")},
+        "game": {"name": _translate("Setting", "游戏")},
         "game.directories": {
-            "name":  _translate("Setting", "游戏目录"),
+            "name": _translate("Setting", "游戏目录"),
             "type": "directory",
-            "atleast": 1
+            "atleast": 1,
         },
-        "game.java_path": {
-            "name": _translate("Setting", "Java路径")
-        },
-        "game.width": {
-            "name":  _translate("Setting", "游戏窗口宽度")
-        },
-        "game.height": {
-            "name": _translate("Setting", "游戏窗口高度")
-        },
-        "game.maxmem": {
-            "name": _translate("Setting", "最大内存")
-        },
-        "users": {
-            "name":  _translate("Setting", "用户")
-        },
-        "users.selectindex": {
-            "name": _translate("Setting", "选择用户索引")
-        },
+        "game.java_path": {"name": _translate("Setting", "Java路径")},
+        "game.width": {"name": _translate("Setting", "游戏窗口宽度")},
+        "game.height": {"name": _translate("Setting", "游戏窗口高度")},
+        "game.maxmem": {"name": _translate("Setting", "最大内存")},
+        "users": {"name": _translate("Setting", "用户")},
+        "users.selectindex": {"name": _translate("Setting", "选择用户索引")},
         "language": {
             "name": _translate("Setting", "语言"),
         },
-        "language.type": {
-            "name": _translate("Setting", "语言类型")
-        }
+        "language.type": {"name": _translate("Setting", "语言类型")},
     }
 
 
@@ -137,6 +111,7 @@ class ListSettingTrace(list):
 
 class Setting:
     """管理设置文件"""
+
     instances = {}
     new_count = {}
 
@@ -168,9 +143,7 @@ class Setting:
                 self.defaultsetting[key] = val
 
         for id in new_setting:
-            self.attrs[id] = {
-                "name": id
-            }
+            self.attrs[id] = {"name": id}
 
     def addAttr(self, attr: dict):
         """添加设置属性"""
@@ -183,9 +156,12 @@ class Setting:
     def sync(self):
         if not os.path.exists(os.path.dirname(self.setting_path)):
             os.makedirs(os.path.dirname(self.setting_path))
-        json.dump(self.modifiedsetting,
-                  open(self.setting_path, mode="w", encoding="utf-8"),
-                  ensure_ascii=False, indent=4)
+        json.dump(
+            self.modifiedsetting,
+            open(self.setting_path, mode="w", encoding="utf-8"),
+            ensure_ascii=False,
+            indent=4,
+        )
 
     def set(self, id: str, val):
         self[id] = val
@@ -200,15 +176,16 @@ class Setting:
     def loadFunctionSetting(self):
         """加载功能的设置"""
         from Kernel import Kernel
+
         for function in Kernel.getAllFunctions():
             self.add(getattr(function, "defaultSetting", lambda: {})())
 
     def loadFunctionSettingAttr(self):
         """加载功能的设置属性"""
         from Kernel import Kernel
+
         for function in Kernel.getAllFunctions():
-            self.addAttr(
-                getattr(function, "defaultSettingAttr", lambda: {})())
+            self.addAttr(getattr(function, "defaultSettingAttr", lambda: {})())
 
     def get(self, key, default=None):
         try:
