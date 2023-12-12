@@ -1,6 +1,6 @@
 import multitasking
 import qtawesome as qta
-from Core import Game
+from Core import Version
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QListWidget, QListWidgetItem, QWidget
 
@@ -21,17 +21,17 @@ class GameDownloader(QWidget, Ui_GameDownloader):
     @multitasking.task
     def setVersions(self):
         self.lw_minecraft.clear()
-        self.__addItems.emit(self.lw_minecraft, Game.get_versions())
+        self.__addItems.emit(self.lw_minecraft, Version.get_versions())
 
     @multitasking.task
     def setFabric(self):
         self.lw_fabric.clear()
-        self.lw_fabric.addItems(Game.get_fabric())
+        self.lw_fabric.addItems(Version.get_fabric())
 
     @multitasking.task
     def setForge(self, version):
         self.lw_forge.clear()
-        self.lw_forge.addItems(Game.get_forge(version))
+        self.lw_forge.addItems(Version.get_forge(version))
 
     @pyqtSlot(QListWidgetItem, QListWidgetItem)
     def on_lw_minecraft_currentItemChanged(self, current, previous):
@@ -48,4 +48,4 @@ class GameDownloader(QWidget, Ui_GameDownloader):
                 forge_version = self.lw_forge.currentItem().text()
             if self.lw_fabric.currentItem():
                 fabric_version = self.lw_fabric.currentItem().text()
-            Game(name).install(version, forge_version, fabric_version)
+            Version(name).install(version, forge_version, fabric_version)

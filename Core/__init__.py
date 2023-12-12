@@ -1,5 +1,5 @@
 from .Download import Download
-from .Game import Game
+from .Version import Version
 from .Mod import Mod
 from .Requests import Requests
 from .Task import Task

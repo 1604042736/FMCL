@@ -1,5 +1,5 @@
 import qtawesome as qta
-from Core import Game
+from Core import Version
 from Events import *
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QShowEvent
@@ -24,7 +24,7 @@ class GameInfo(QWidget, Ui_GameInfo):
             "forge_version": self.tr("Forge版本"),
             "fabric_version": self.tr("Fabric版本"),
         }
-        self.game = Game(name)
+        self.game = Version(name)
 
         self.pb_refresh = TransparentToolButton()
         self.pb_refresh.resize(46, 32)
@@ -76,7 +76,7 @@ class GameInfo(QWidget, Ui_GameInfo):
         self.game.rename(new_name)
         if hasattr(self.game, "setting"):
             self.game.setting = None
-        self.game = Game(new_name)
+        self.game = Version(new_name)
         self.refresh()
         self.gameNameChanged.emit(new_name)
 

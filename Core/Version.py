@@ -24,7 +24,9 @@ from .User import User
 _translate = QCoreApplication.translate
 
 
-class Game:
+class Version:
+    """对versions文件夹下的子文件夹的管理"""
+
     @staticmethod
     def get_versions():
         result = []
@@ -53,27 +55,24 @@ class Game:
 
         self.DEFAULT_SETTING_ATTR = {
             "specific": {
-                "name": _translate("Game", "特定设置"),
-                "link":{
-                    "name":_translate("Game", "前往全局设置"),
-                    "action":lambda:Kernel.execFunction("SettingEditor",id="game")
-                }
+                "name": _translate("Version", "特定设置"),
+                "link": {
+                    "name": _translate("Version", "前往全局设置"),
+                    "action": lambda: Kernel.execFunction("SettingEditor", id="game"),
+                },
             },
             "isolation": {
-                "name": _translate("Game", "版本隔离"),
+                "name": _translate("Version", "版本隔离"),
             },
             "logo": {
-                "name":  _translate("Game", "游戏图标"),
+                "name": _translate("Version", "游戏图标"),
             },
-            "game":{
-                "enable_condition":lambda setting:setting.get("specific",False)==True
-            }
+            "game": {
+                "enable_condition": lambda setting: setting.get("specific", False)
+                == True
+            },
         }
-        self.DEFAULT_SETTING = {
-            "specific": False,
-            "isolation": False,
-            "logo": ""
-        }
+        self.DEFAULT_SETTING = {"specific": False, "isolation": False, "logo": ""}
 
         self.precommand = []
 
@@ -84,7 +83,7 @@ class Game:
         for key, val in globalsetting.attrs.items():
             if "game" in key:
                 if key not in self.DEFAULT_SETTING_ATTR:
-                    self.DEFAULT_SETTING_ATTR[key]={}
+                    self.DEFAULT_SETTING_ATTR[key] = {}
                 self.DEFAULT_SETTING_ATTR[key] |= val
 
     def check_authlibinjector(self, callback=None):
@@ -118,10 +117,10 @@ class Game:
                 metab64 = base64.b64encode(meta)
                 metab64 = str(metab64)[2:-1]
                 logging.info(f"元数据Base64编码: {metab64}")
+                self.precommand.append(f"-javaagent:{path}={api}")
                 self.precommand.append(
-                    f"-javaagent:{path}={api}")
-                self.precommand.append(
-                    f"-Dauthlibinjector.yggdrasil.prefetched={metab64}")
+                    f"-Dauthlibinjector.yggdrasil.prefetched={metab64}"
+                )
 
     def get_launch_command(self) -> tuple[str, str]:
         """
@@ -150,15 +149,15 @@ class Game:
         self.generate_setting()
         if self.setting.get("isolation"):
             options["gameDirectory"] = os.path.abspath(
-                os.path.join(self.directory, "versions", self.name))
+                os.path.join(self.directory, "versions", self.name)
+            )
 
-        _command = mll.command.get_minecraft_command(
-            self.name, absdir, options)
+        _command = mll.command.get_minecraft_command(self.name, absdir, options)
         command.insert(0, _command[0])
         command += _command[1:]
         try:
             i = command.index("--versionType")
-            command[i+1] = "FMCL"
+            command[i + 1] = "FMCL"
         except:
             pass
 
@@ -166,35 +165,38 @@ class Game:
 
     def install_forge(self, forge_version, callback):
         logging.info(f"下载Forge({forge_version})")
-        mll.forge.install_forge_version(
-            forge_version, self.directory, callback)
+        mll.forge.install_forge_version(forge_version, self.directory, callback)
         version, forge = forge_version.split("-")
-        Game(f"{version}-forge-{forge}").rename(self.name)
+        Version(f"{version}-forge-{forge}").rename(self.name)
 
     def install_fabric(self, version, fabric_version, callback):
         logging.info(f"下载Fabric({version},{fabric_version})")
-        mll.fabric.install_fabric(
-            version, self.directory, fabric_version, callback)
+        mll.fabric.install_fabric(version, self.directory, fabric_version, callback)
         fabric_minecraft_version = f"fabric-loader-{fabric_version}-{version}"
-        Game(fabric_minecraft_version).rename(self.name)
+        Version(fabric_minecraft_version).rename(self.name)
 
     def install_mc(self, version, callback):
         logging.info(f"下载Minecraft({version})")
-        mll.install.install_minecraft_version(
-            version, self.directory, callback)
-        Game(version).rename(self.name)
+        mll.install.install_minecraft_version(version, self.directory, callback)
+        Version(version).rename(self.name)
 
     def install(self, version, forge_version, fabric_version):
         logging.info(f"下载({version},{forge_version},{fabric_version})")
         if forge_version:
-            Task(_translate("Game", "下载")+self.name,
-                 lambda callback: self.install_forge(forge_version, callback)).start()
+            Task(
+                _translate("Version", "下载") + self.name,
+                lambda callback: self.install_forge(forge_version, callback),
+            ).start()
         elif fabric_version:
-            Task(_translate("Game", "下载")+self.name,
-                 lambda callback: self.install_fabric(version, fabric_version, callback)).start()
+            Task(
+                _translate("Version", "下载") + self.name,
+                lambda callback: self.install_fabric(version, fabric_version, callback),
+            ).start()
         else:
-            Task(_translate("Game", "下载")+self.name,
-                 lambda callback: self.install_mc(version, callback)).start()
+            Task(
+                _translate("Version", "下载") + self.name,
+                lambda callback: self.install_mc(version, callback),
+            ).start()
 
     def rename(self, new_name):
         if new_name == self.name:
@@ -211,43 +213,42 @@ class Game:
             os.remove(f"{new_path}/{new_name}.json")
 
             # 重命名
-            os.rename(f"{new_path}/{self.name}.jar",
-                      f"{new_path}/{new_name}.jar")
-            os.rename(f"{new_path}/{self.name}.json",
-                      f"{new_path}/{new_name}.json")
+            os.rename(f"{new_path}/{self.name}.jar", f"{new_path}/{new_name}.jar")
+            os.rename(f"{new_path}/{self.name}.json", f"{new_path}/{new_name}.json")
 
-            config = json.load(
-                open(f"{new_path}/{new_name}.json"))
+            config = json.load(open(f"{new_path}/{new_name}.json"))
             config["id"] = new_name
-            json.dump(config,
-                      open(f"{new_path}/{new_name}.json", mode="w", encoding="utf-8"))
+            json.dump(
+                config, open(f"{new_path}/{new_name}.json", mode="w", encoding="utf-8")
+            )
             return
-        os.rename(f"{old_path}/{self.name}.jar",
-                  f"{old_path}/{new_name}.jar")
-        os.rename(f"{old_path}/{self.name}.json",
-                  f"{old_path}/{new_name}.json")
+        os.rename(f"{old_path}/{self.name}.jar", f"{old_path}/{new_name}.jar")
+        os.rename(f"{old_path}/{self.name}.json", f"{old_path}/{new_name}.json")
         os.rename(old_path, new_path)
-        config = json.load(
-            open(f"{new_path}/{new_name}.json"))
+        config = json.load(open(f"{new_path}/{new_name}.json"))
         config["id"] = new_name
-        json.dump(config,
-                  open(f"{new_path}/{new_name}.json", mode="w", encoding="utf-8"))
+        json.dump(
+            config, open(f"{new_path}/{new_name}.json", mode="w", encoding="utf-8")
+        )
 
     def get_info(self) -> dict:
         if hasattr(self, "info"):
             return self.info
-        self.info = info = {
-            "version": "",
-            "forge_version": "",
-            "fabric_version": ""
-        }
-        config = json.load(open(os.path.join(
-            self.directory, "versions", self.name, f"{self.name}.json"), encoding="utf-8"))
+        self.info = info = {"version": "", "forge_version": "", "fabric_version": ""}
+        config = json.load(
+            open(
+                os.path.join(
+                    self.directory, "versions", self.name, f"{self.name}.json"
+                ),
+                encoding="utf-8",
+            )
+        )
         configstr = str(config)
 
         if "net.fabricmc:fabric-loader" in configstr:
-            fabric_version = re.findall(r"net.fabricmc:fabric-loader:([0-9\.]+)",
-                                        configstr)
+            fabric_version = re.findall(
+                r"net.fabricmc:fabric-loader:([0-9\.]+)", configstr
+            )
             if fabric_version:
                 fabric_version = fabric_version[0].replace("+build", "")
             else:
@@ -255,17 +256,20 @@ class Game:
             info["fabric_version"] = fabric_version
         elif "minecraftforge" in configstr:
             forge_version = re.findall(
-                r"net.minecraftforge:forge:[0-9\.]+-([0-9\.]+)", configstr)
+                r"net.minecraftforge:forge:[0-9\.]+-([0-9\.]+)", configstr
+            )
             if forge_version:
                 forge_version = forge_version[0]
             else:
                 forge_version = re.findall(
-                    r"net.minecraftforge:minecraftforge:([0-9\.]+)", configstr)
+                    r"net.minecraftforge:minecraftforge:([0-9\.]+)", configstr
+                )
                 if forge_version:
                     forge_version = forge_version[0]
                 else:
                     forge_version = re.findall(
-                        r"net.minecraftforge:fmlloader:[0-9\.]+-([0-9\.]+)", configstr)
+                        r"net.minecraftforge:fmlloader:[0-9\.]+-([0-9\.]+)", configstr
+                    )
                 if forge_version:
                     forge_version = forge_version[0]
                 else:
@@ -305,13 +309,13 @@ class Game:
             return info
         # 从 Forge 版本中获取版本号
         version = re.findall(
-            r"net.minecraftforge:fmlloader:([0-9\.]+)-[0-9\.]+", configstr)
+            r"net.minecraftforge:fmlloader:([0-9\.]+)-[0-9\.]+", configstr
+        )
         if version:
             info["version"] = version[0]
             return info
         # 从 Fabric 版本中获取版本号
-        version = re.findall(
-            r"net.fabricmc:intermediary:([0-9\.]+)", configstr)
+        version = re.findall(r"net.fabricmc:intermediary:([0-9\.]+)", configstr)
         if version:
             info["version"] = version[0]
             return info
@@ -403,8 +407,11 @@ class Game:
             else:
                 self.DEFAULT_SETTING["logo"] = ":/Image/grass.png"
 
-            self.setting = Setting(os.path.join(
-                self.directory, "versions", self.name, "FMCL", "setting.json"))
+            self.setting = Setting(
+                os.path.join(
+                    self.directory, "versions", self.name, "FMCL", "setting.json"
+                )
+            )
             self.setting.add(self.DEFAULT_SETTING)
             self.setting.addAttr(self.DEFAULT_SETTING_ATTR)
 
@@ -422,16 +429,10 @@ class Game:
     def get_mod_info(self, mod_name: str, enabled=True) -> list:
         path = self.get_mod_path()
         if not enabled:
-            mod_name = mod_name+".disabled"
+            mod_name = mod_name + ".disabled"
         mod_path = os.path.join(path, mod_name)
 
-        info = {
-            "name": "",
-            "description": "",
-            "version": "",
-            "authors": [],
-            "url": ""
-        }
+        info = {"name": "", "description": "", "version": "", "authors": [], "url": ""}
         # 很多时侯报错是由于多行字符串
         zipfile = ZipFile(mod_path)
         for zipinfo in zipfile.filelist:
@@ -440,7 +441,7 @@ class Game:
                 info["name"] = config["name"]
                 info["description"] = config.get("description", "")
                 info["version"] = config["version"]
-                for i in config.get("authors", [])+config.get("contributors", []):
+                for i in config.get("authors", []) + config.get("contributors", []):
                     if isinstance(i, dict):
                         info["authors"].append(i["name"])
                     else:
@@ -449,8 +450,9 @@ class Game:
                     info["url"] = config["contact"]["homepage"]
                 break
             elif "mods.toml" in zipinfo.filename:
-                config = toml.loads(zipfile.open(
-                    zipinfo.filename).read().decode("utf-8"))
+                config = toml.loads(
+                    zipfile.open(zipinfo.filename).read().decode("utf-8")
+                )
                 info["name"] = config["mods"][0]["displayName"]
                 info["version"] = config["mods"][0]["version"]
                 info["description"] = config["mods"][0].get("description", "")
@@ -462,12 +464,17 @@ class Game:
                 info["url"] = config["mods"][0].get("displayURL", "")
 
                 if "${file.jarVersion}" in info["version"]:
-                    MANIFESTMF = zipfile.open(
-                        "META-INF/MANIFEST.MF").read().decode("utf-8").split("\n")
+                    MANIFESTMF = (
+                        zipfile.open("META-INF/MANIFEST.MF")
+                        .read()
+                        .decode("utf-8")
+                        .split("\n")
+                    )
                     for i in MANIFESTMF:
                         if "Implementation-Version" in i:
                             info["version"] = info["version"].replace(
-                                "${file.jarVersion}", i.split(":")[-1].strip())
+                                "${file.jarVersion}", i.split(":")[-1].strip()
+                            )
                             break
                 break
             elif ".info" in zipinfo.filename:

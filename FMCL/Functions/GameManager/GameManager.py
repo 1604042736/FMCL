@@ -1,5 +1,5 @@
 import qtawesome as qta
-from Core import Game
+from Core import Version
 from FMCL.Functions.SettingEditor import SettingEditor
 from Kernel import Kernel
 from PyQt5.QtCore import QEvent, pyqtSlot
@@ -34,7 +34,7 @@ class GameManager(QWidget, Ui_GameManager):
         self.pb_gamesetting.setIcon(qta.icon("ri.settings-5-line"))
         self.pb_modmanager.setIcon(qta.icon("mdi.puzzle-outline"))
         self.name = name
-        self.game = Game(name)
+        self.game = Version(name)
         self.refresh()
 
     def refresh(self):

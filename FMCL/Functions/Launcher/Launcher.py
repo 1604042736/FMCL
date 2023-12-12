@@ -2,7 +2,7 @@ import logging
 import time
 
 import qtawesome as qta
-from Core import Game, Task
+from Core import Version, Task
 from PyQt5.QtCore import QProcess, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 
@@ -15,33 +15,38 @@ class Launcher(QWidget, Ui_Launcher):
     def __init__(self, game_name: str):
         super().__init__()
         self.setupUi(self)
-        t = self.tr('游戏日志')
+        t = self.tr("游戏日志")
         self.setWindowTitle(f"{t}:{game_name}")
         self.setWindowIcon(qta.icon("mdi.rocket-launch-outline"))
         self.name = game_name
         self.te_output.setReadOnly(True)
         self.__commandGot.connect(self.__start)
 
-        t = self.tr('启动游戏')
-        self.game = Game(self.name)
+        t = self.tr("启动游戏")
+        self.game = Version(self.name)
         Task(
             f"{t}:{game_name}",
             children=[
-                Task(self.tr("检查外置登录"),
-                     self.game.check_authlibinjector),
-                Task(self.tr("获取命令行参数"),
-                     lambda _:setattr(self, "dir_command",
-                                      self.game.get_launch_command()),
-                     waittasks=[0]),
-                Task(self.tr("启动"),
-                     lambda _:(
-                     time.sleep(0.1),  # 防止执行太快来不及显示
-                     self.show(),
-                     self.__commandGot.emit(
-                         self.dir_command[0], self.dir_command[1])
-                     ),
-                     waittasks=[1])
-            ]
+                Task(self.tr("检查外置登录"), self.game.check_authlibinjector),
+                Task(
+                    self.tr("获取命令行参数"),
+                    lambda _: setattr(
+                        self, "dir_command", self.game.get_launch_command()
+                    ),
+                    waittasks=[0],
+                ),
+                Task(
+                    self.tr("启动"),
+                    lambda _: (
+                        time.sleep(0.1),  # 防止执行太快来不及显示
+                        self.show(),
+                        self.__commandGot.emit(
+                            self.dir_command[0], self.dir_command[1]
+                        ),
+                    ),
+                    waittasks=[1],
+                ),
+            ],
         ).start()
 
     def __start(self, dir, command):

@@ -1,7 +1,7 @@
 import os
 
 import qtawesome as qta
-from Core import Game
+from Core import Version
 from Events import *
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QShowEvent
@@ -18,7 +18,7 @@ class ModManager(QWidget, Ui_ModManager):
         self.setupUi(self)
         self.setWindowIcon(qta.icon("mdi.puzzle-outline"))
 
-        self.game = Game(name)
+        self.game = Version(name)
         self.game.generate_setting()
         self.f_operate.setEnabled(False)
 
@@ -60,12 +60,13 @@ class ModManager(QWidget, Ui_ModManager):
         self.setStatistics()
 
     def setStatistics(self):
-        t1 = self.tr('总共')
-        t2 = self.tr('启用')
-        t3 = self.tr('禁用')
-        t4 = self.tr('已选择')
+        t1 = self.tr("总共")
+        t2 = self.tr("启用")
+        t3 = self.tr("禁用")
+        t4 = self.tr("已选择")
         self.l_statistics.setText(
-            f"{t1}: {self.total}, {t2}: {self.enabled_num}, {t3}: {self.total-self.enabled_num}, {t4}: {len(self.lw_mods.selectedItems())}")
+            f"{t1}: {self.total}, {t2}: {self.enabled_num}, {t3}: {self.total-self.enabled_num}, {t4}: {len(self.lw_mods.selectedItems())}"
+        )
 
     @pyqtSlot(bool)
     def on_pb_openmodir_clicked(self, _):
@@ -86,22 +87,25 @@ class ModManager(QWidget, Ui_ModManager):
     @pyqtSlot(bool)
     def on_pb_del_clicked(self, _):
         mods = [
-            self.lw_mods.itemWidget(item).getModFileName() for item in self.lw_mods.selectedItems()
+            self.lw_mods.itemWidget(item).getModFileName()
+            for item in self.lw_mods.selectedItems()
         ]
 
         def confirmDelete():
             self.game.deleteMods(mods)
             self.refresh()
-        box = MessageBox(self.tr("删除"),
-                         self.tr("确认删除")+str(mods)+"?",
-                         self.window())
+
+        box = MessageBox(
+            self.tr("删除"), self.tr("确认删除") + str(mods) + "?", self.window()
+        )
         box.yesSignal.connect(confirmDelete)
         box.exec()
 
     @pyqtSlot(bool)
     def on_pb_enabled_clicked(self, _):
         mods = [
-            self.lw_mods.itemWidget(item).modname for item in self.lw_mods.selectedItems()
+            self.lw_mods.itemWidget(item).modname
+            for item in self.lw_mods.selectedItems()
         ]
         self.game.setModEnabled(True, mods)
         self.refresh()
@@ -109,12 +113,14 @@ class ModManager(QWidget, Ui_ModManager):
     @pyqtSlot(bool)
     def on_pb_disabled_clicked(self, _):
         mods = [
-            self.lw_mods.itemWidget(item).modname for item in self.lw_mods.selectedItems()
+            self.lw_mods.itemWidget(item).modname
+            for item in self.lw_mods.selectedItems()
         ]
         self.game.setModEnabled(False, mods)
         self.refresh()
 
     def showEvent(self, a0: QShowEvent) -> None:
-        qApp.sendEvent(self.window(),
-                       AddToTitleEvent(self.pb_refresh, "right", bind=self))
+        qApp.sendEvent(
+            self.window(), AddToTitleEvent(self.pb_refresh, "right", bind=self)
+        )
         return super().showEvent(a0)

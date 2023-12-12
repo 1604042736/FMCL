@@ -1,5 +1,5 @@
 import qtawesome as qta
-from Core import Game
+from Core import Version
 from Kernel import Kernel
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QFileDialog, QWidget
@@ -16,7 +16,7 @@ class LogoChooser(QWidget, Ui_LogoChooser):
         ":/Image/fabric.png",
         ":/Image/forge.png",
         ":/Image/furnace.png",
-        ":/Image/grass.png"
+        ":/Image/grass.png",
     ]
 
     __instances = {}
@@ -35,7 +35,7 @@ class LogoChooser(QWidget, Ui_LogoChooser):
         self.setupUi(self)
         self.setWindowIcon(qta.icon("ph.image"))
 
-        self.game = Game(name)
+        self.game = Version(name)
         self.game.generate_setting()
         if self.game.setting.get("logo") not in self.logos:
             self.logos.append(self.game.setting.get("logo"))
@@ -61,7 +61,8 @@ class LogoChooser(QWidget, Ui_LogoChooser):
     @pyqtSlot(bool)
     def on_pb_add_clicked(self, _):
         filename, _ = QFileDialog.getOpenFileName(
-            self, self.tr("选择图标"), filter="Image Files(*.png *.jpg *.ico)")
+            self, self.tr("选择图标"), filter="Image Files(*.png *.jpg *.ico)"
+        )
         if filename:
             self.logos.append(filename)
             self.refresh()

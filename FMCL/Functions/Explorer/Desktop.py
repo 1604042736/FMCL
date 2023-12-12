@@ -1,7 +1,7 @@
 import os
 
 import qtawesome as qta
-from Core.Game import Game
+from Core.Version import Version
 from Kernel import Kernel
 from PyQt5.QtCore import QEvent, QSize, Qt
 from PyQt5.QtGui import QCursor, QPainter, QPixmap
@@ -84,7 +84,7 @@ class Desktop(ListWidget):
             item = QListWidgetItem()
             item.setSizeHint(QSize(80, 80))
             item.setText(game_name)
-            item.setIcon(Game(game_name).get_icon())
+            item.setIcon(Version(game_name).get_icon())
             self.addItem(item)
         self.repaint()
 

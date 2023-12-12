@@ -4,7 +4,7 @@ import webbrowser
 
 import multitasking
 import qtawesome as qta
-from Core import Game
+from Core import Version
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget
 
@@ -15,7 +15,7 @@ class ModItem(QWidget, Ui_ModItem):
     enabledChanged = pyqtSignal(bool)
     __infoSetFinished = pyqtSignal()
 
-    def __init__(self, game: Game, modenabled: bool, modname: str):
+    def __init__(self, game: Version, modenabled: bool, modname: str):
         super().__init__()
         self.setupUi(self)
         self.pb_url.setIcon(qta.icon("mdi6.web"))
@@ -26,10 +26,9 @@ class ModItem(QWidget, Ui_ModItem):
         self.url = ""
 
         self.cb_modenabled.setCheckState((0, 2)[modenabled])
-        self.l_modname.setText(modname.replace('.jar', ""))
+        self.l_modname.setText(modname.replace(".jar", ""))
         self.pb_url.hide()
-        self.__infoSetFinished.connect(
-            lambda: self.pb_url.show() if self.url else None)
+        self.__infoSetFinished.connect(lambda: self.pb_url.show() if self.url else None)
         self.setInfo()
 
     @pyqtSlot(int)
@@ -50,23 +49,21 @@ class ModItem(QWidget, Ui_ModItem):
             if info["description"]:
                 info_list.append(info["description"].replace("\n", ""))
             if info["version"]:
-                info_list.append(self.tr("版本")+": "+info["version"])
+                info_list.append(self.tr("版本") + ": " + info["version"])
             if info["authors"]:
-                info_list.append(self.tr("作者")+": " +
-                                 ','.join(info["authors"]))
+                info_list.append(self.tr("作者") + ": " + ",".join(info["authors"]))
             self.url = info["url"]
 
             text = ", ".join(info_list)
             self.l_info.setText(text)
             self.setToolTip(text)
         except:
-            logging.error(
-                f'无法获取"{self.modname}"信息: {traceback.format_exc()}')
+            logging.error(f'无法获取"{self.modname}"信息: {traceback.format_exc()}')
         self.__infoSetFinished.emit()
 
     def getModFileName(self):
         """获取Mod文件名称"""
-        return self.modname+(".disabled" if not self.modenabled else "")
+        return self.modname + (".disabled" if not self.modenabled else "")
 
     @pyqtSlot(bool)
     def on_pb_url_clicked(self, _):
