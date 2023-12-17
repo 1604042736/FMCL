@@ -90,7 +90,7 @@ class GameManager(QWidget, Ui_GameManager):
 
     def event(self, a0: QEvent) -> bool:
         if a0.type() == QEvent.Type.Show:
-            self.gameinfo.refresh()
+            self.gameinfo.refresh()  # 这里的方法调用会调用Version.sync_default_setting
             self.gamesetting.refresh()
             # 由于ModManger和SaveManager刷新可能会导致卡顿
             # 所以这里不自动刷新

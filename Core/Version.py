@@ -76,15 +76,22 @@ class Version:
 
         self.precommand = []
 
+        self.sync_default_setting()
+
+    def sync_default_setting(self):
         globalsetting = Setting()
         for key, val in globalsetting.items():
             if key.find("game") == 0:
                 self.DEFAULT_SETTING[key] = val
+                if hasattr(self, "setting"):
+                    self.setting.defaultsetting[key] = val
         for key, val in globalsetting.attrs.items():
             if key.find("game") == 0:
                 if key not in self.DEFAULT_SETTING_ATTR:
                     self.DEFAULT_SETTING_ATTR[key] = {}
                 self.DEFAULT_SETTING_ATTR[key] |= val
+                if hasattr(self, "setting"):
+                    self.setting.attrs[key] |= val
 
     def check_authlibinjector(self, callback=None):
         """检查当前用户是否是外置登录, 如果是则下载对应的加载文件"""
@@ -422,6 +429,7 @@ class Version:
             )
             self.setting.add(self.DEFAULT_SETTING)
             self.setting.addAttr(self.DEFAULT_SETTING_ATTR)
+        self.sync_default_setting()
 
     def delete(self):
         shutil.rmtree(os.path.join(self.directory, "versions", self.name))
