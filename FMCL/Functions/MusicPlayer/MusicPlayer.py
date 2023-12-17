@@ -1,8 +1,7 @@
 import qtawesome as qta
 from Events import *
 from Kernel import Kernel
-from PyQt5.QtCore import QUrl, pyqtSlot
-from PyQt5.QtGui import QShowEvent
+from PyQt5.QtCore import QUrl, pyqtSlot, QEvent
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer, QMediaPlaylist
 from PyQt5.QtWidgets import QFileDialog, QListWidgetItem, QWidget, qApp
 from qfluentwidgets import MessageBox, TransparentToolButton
@@ -41,7 +40,8 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
         self.pb_gosetting.setIcon(qta.icon("ri.settings-5-line"))
         self.pb_gosetting.resize(46, 32)
         self.pb_gosetting.clicked.connect(
-            lambda: Kernel.execFunction("SettingEditor", id="musicplayer"))
+            lambda: Kernel.execFunction("SettingEditor", id="musicplayer")
+        )
 
         self.pb_refresh = TransparentToolButton()
         self.pb_refresh.resize(46, 32)
@@ -51,8 +51,7 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
         self.pb_music = TransparentToolButton()
         self.pb_music.resize(46, 32)
         self.pb_music.setIcon(qta.icon("ei.music"))
-        self.pb_music.clicked.connect(
-            lambda: Kernel.execFunction("MusicPlayer"))
+        self.pb_music.clicked.connect(lambda: Kernel.execFunction("MusicPlayer"))
 
         self.playlist = QMediaPlaylist(self)
         self.player = QMediaPlayer(self)
@@ -79,18 +78,23 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
             musiclist.append(music)
         Setting().set("musicplayer.musiclist", musiclist)
 
-    def showEvent(self, a0: QShowEvent) -> None:
-        self.refresh()
-        qApp.sendEvent(self.window(),
-                       AddToTitleEvent(self.pb_gosetting, "right", bind=self))
-        qApp.sendEvent(self.window(),
-                       AddToTitleEvent(self.pb_refresh, "right", bind=self))
-        super().showEvent(a0)
+    def event(self, a0: QEvent) -> bool:
+        if a0.type() == QEvent.Type.Show:
+            qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_gosetting, "right"))
+            qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_refresh, "right"))
+            self.refresh()
+        elif a0.type() == QEvent.Type.Hide:
+            qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_gosetting))
+            qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_refresh))
+            self.pb_gosetting.setParent(self)
+            self.pb_refresh.setParent(self)
+        return super().event(a0)
 
     @pyqtSlot(bool)
     def on_pb_add_clicked(self, _):
         files, _ = QFileDialog.getOpenFileNames(
-            self, self.tr("选择音频文件"), ".", "Sound(*wav *.mp3)")
+            self, self.tr("选择音频文件"), ".", "Sound(*wav *.mp3)"
+        )
         for file in files:
             self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(file)))
         self.refresh()
@@ -104,9 +108,8 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
         def confirmDeleted():
             self.playlist.removeMedia(index)
             self.refresh()
-        box = MessageBox("",
-                         self.tr("确认删除")+"?",
-                         self.window())
+
+        box = MessageBox("", self.tr("确认删除") + "?", self.window())
         box.yesSignal.connect(confirmDeleted)
         box.exec()
 
@@ -116,7 +119,7 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
             return
         index = self.lw_musiclist.currentRow()
         if index != 0:
-            self.playlist.moveMedia(index, index-1)
+            self.playlist.moveMedia(index, index - 1)
         self.refresh()
 
     @pyqtSlot(bool)
@@ -124,8 +127,8 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
         if not self.lw_musiclist.currentItem():
             return
         index = self.lw_musiclist.currentRow()
-        if index != self.playlist.mediaCount()-1:
-            self.playlist.moveMedia(index, index+1)
+        if index != self.playlist.mediaCount() - 1:
+            self.playlist.moveMedia(index, index + 1)
         self.refresh()
 
     @pyqtSlot(bool)
@@ -162,14 +165,16 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
 
     def setMusicName(self):
         media = self.player.currentMedia()
-        self.l_musicname.setText(media.canonicalUrl().url(
-            QUrl.UrlFormattingOption.PreferLocalFile))
+        self.l_musicname.setText(
+            media.canonicalUrl().url(QUrl.UrlFormattingOption.PreferLocalFile)
+        )
 
     def setMusicTime(self):
         def totime(a):
             s = a // 1000 % 60
-            m = a//1000//60
-            return f'{m}:{s}'
+            m = a // 1000 // 60
+            return f"{m}:{s}"
+
         p = self.player.position()
         d = self.player.duration()
         self.hs_music.setRange(0, d)
@@ -179,11 +184,13 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
     def setButton(self, state):
         if state == QMediaPlayer.State.PlayingState:
             self.pb_control.setIcon(qta.icon("mdi6.pause"))
-            qApp.sendEvent(qApp.topLevelWindows()[0],
-                           AddToTitleEvent(self.pb_music, "right"))
+            qApp.sendEvent(
+                qApp.topLevelWindows()[0], AddToTitleEvent(self.pb_music, "right")
+            )
             self.pb_music.show()
         else:
             self.pb_control.setIcon(qta.icon("fa.play"))
-            qApp.sendEvent(qApp.topLevelWindows()[0],
-                           RemoveFromTitleEvent(self.pb_music))
+            qApp.sendEvent(
+                qApp.topLevelWindows()[0], RemoveFromTitleEvent(self.pb_music)
+            )
             self.pb_music.hide()

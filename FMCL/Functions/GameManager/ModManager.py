@@ -3,8 +3,7 @@ import os
 import qtawesome as qta
 from Core import Version
 from Events import *
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtGui import QShowEvent
+from PyQt5.QtCore import pyqtSlot, QEvent
 from PyQt5.QtWidgets import QListWidgetItem, QWidget, qApp
 from qfluentwidgets import MessageBox, TransparentToolButton
 
@@ -119,8 +118,10 @@ class ModManager(QWidget, Ui_ModManager):
         self.game.setModEnabled(False, mods)
         self.refresh()
 
-    def showEvent(self, a0: QShowEvent) -> None:
-        qApp.sendEvent(
-            self.window(), AddToTitleEvent(self.pb_refresh, "right", bind=self)
-        )
-        return super().showEvent(a0)
+    def event(self, a0: QEvent) -> bool:
+        if a0.type() == QEvent.Type.Show:
+            qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_refresh, "right"))
+        elif a0.type() == QEvent.Type.Hide:
+            qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_refresh))
+            self.pb_refresh.setParent(self)
+        return super().event(a0)

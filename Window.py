@@ -18,8 +18,6 @@ class Window(FramelessWindow):
     def __init__(self, client: QWidget):
         super().__init__()
         self.titlemenu_actions: list[QAction] = []
-        # 标题栏控件的sender，以及它添加进窗口标题栏的控件的参数
-        self.titlewidgetbinds: list[QWidget, list] = {}
         # 用来分离标题栏左右控件
         self.si_separate = QSpacerItem(
             0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
@@ -86,22 +84,6 @@ class Window(FramelessWindow):
             elif a1.type() == QEvent.Type.ParentChange:
                 if a0.parent() != self:
                     self.close()
-        elif a0 in self.titlewidgetbinds:
-            if a1.type() in (QEvent.Type.Close, QEvent.Type.DeferredDelete) or (
-                a1.type() == QEvent.Type.ParentChange and a0.window() != self
-            ):
-                a0.removeEventFilter(self)
-                for args in self.titlewidgetbinds[a0]:
-                    self.removeTitleWidget(args[0])
-                    args[0].setParent(a0)
-                self.titlewidgetbinds.pop(a0)
-            elif a1.type() == QEvent.Type.Hide:
-                for args in self.titlewidgetbinds[a0]:
-                    self.removeTitleWidget(args[0])
-                    args[0].setParent(a0)
-            elif a1.type() == QEvent.Type.Show:
-                for args in self.titlewidgetbinds[a0]:
-                    self.addTitleWidget(*args)
         return super().eventFilter(a0, a1)
 
     def closeEvent(self, a0: QCloseEvent) -> None:
@@ -131,11 +113,6 @@ class Window(FramelessWindow):
         # 这些事件必须发送给顶层窗口
         if a0.type() == AddToTitleEvent.EventType:
             self.addTitleWidget(a0.widget, a0.place, a0.index)
-            if a0.bind != None:
-                a0.bind.installEventFilter(self)
-                if a0.bind not in self.titlewidgetbinds:
-                    self.titlewidgetbinds[a0.bind] = []
-                self.titlewidgetbinds[a0.bind].append((a0.widget, a0.place, a0.index))
         elif a0.type() == RemoveFromTitleEvent.EventType:
             self.removeTitleWidget(a0.widget)
         elif a0.type() == AddToTitleMenuEvent.EventType:

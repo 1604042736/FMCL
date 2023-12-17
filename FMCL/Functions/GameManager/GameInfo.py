@@ -1,8 +1,7 @@
 import qtawesome as qta
 from Core import Version
 from Events import *
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
-from PyQt5.QtGui import QShowEvent
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, QEvent
 from PyQt5.QtWidgets import QLabel, QWidget, qApp
 from qfluentwidgets import MessageBox, TransparentToolButton
 
@@ -80,9 +79,11 @@ class GameInfo(QWidget, Ui_GameInfo):
         self.refresh()
         self.gameNameChanged.emit(new_name)
 
-    def showEvent(self, a0: QShowEvent) -> None:
-        self.refresh()
-        qApp.sendEvent(
-            self.window(), AddToTitleEvent(self.pb_refresh, "right", bind=self)
-        )
-        return super().showEvent(a0)
+    def event(self, a0: QEvent) -> bool:
+        if a0.type() == QEvent.Type.Show:
+            qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_refresh, "right"))
+            self.refresh()
+        elif a0.type() == QEvent.Type.Hide:
+            qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_refresh))
+            self.pb_refresh.setParent(self)
+        return super().event(a0)

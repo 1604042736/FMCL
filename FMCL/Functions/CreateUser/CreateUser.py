@@ -1,8 +1,7 @@
 import qtawesome as qta
 from Events import *
 from Kernel import Kernel
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtGui import QShowEvent
+from PyQt5.QtCore import pyqtSlot, QEvent
 from PyQt5.QtWidgets import QWidget, qApp
 from qfluentwidgets import TransparentToolButton
 
@@ -28,12 +27,10 @@ class CreateUser(QWidget, Ui_CreateUser):
         self.sw_way.addWidget(self.offline)
 
         self.pb_usermanager = TransparentToolButton()
-        functioninfo = Kernel.getFunctionInfo(
-            Kernel.getFunction("UserManager"))
+        functioninfo = Kernel.getFunctionInfo(Kernel.getFunction("UserManager"))
         self.pb_usermanager.setIcon(functioninfo["icon"])
         self.pb_usermanager.resize(46, 32)
-        self.pb_usermanager.clicked.connect(
-            lambda: Kernel.execFunction("UserManager"))
+        self.pb_usermanager.clicked.connect(lambda: Kernel.execFunction("UserManager"))
 
     @pyqtSlot(bool)
     def on_pb_offline_clicked(self, _):
@@ -50,11 +47,6 @@ class CreateUser(QWidget, Ui_CreateUser):
         self.sw_way.removeWidget(self.sw_way.currentWidget())
         self.sw_way.addWidget(self.littleskin)
 
-    def showEvent(self, a0: QShowEvent) -> None:
-        qApp.sendEvent(self.window(),
-                       AddToTitleEvent(self.pb_usermanager, "right", bind=self))
-        super().showEvent(a0)
-
     def show(self, tab="offline") -> None:
         if tab == "offline":
             self.pb_offline.click()
@@ -63,3 +55,11 @@ class CreateUser(QWidget, Ui_CreateUser):
         elif tab == "littleskin":
             self.pb_littleskin.click()
         return super().show()
+
+    def event(self, a0: QEvent) -> bool:
+        if a0.type() == QEvent.Type.Show:
+            qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_usermanager, "right"))
+        elif a0.type() == QEvent.Type.Hide:
+            qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_usermanager))
+            self.pb_usermanager.setParent(self)
+        return super().event(a0)

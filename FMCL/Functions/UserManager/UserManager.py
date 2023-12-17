@@ -1,7 +1,7 @@
 import qtawesome as qta
 from Events import *
 from Kernel import Kernel
-from PyQt5.QtGui import QShowEvent
+from PyQt5.QtCore import QEvent
 from PyQt5.QtWidgets import QWidget, qApp
 from qfluentwidgets import TransparentToolButton
 from Setting import Setting
@@ -28,7 +28,8 @@ class UserManager(QWidget, Ui_UserManager):
         self.setWindowIcon(qta.icon("ph.users"))
 
         self.pb_add = TransparentToolButton()
-        self.pb_add.setIcon(qta.icon("msc.add"))
+        functioninfo = Kernel.getFunctionInfo(Kernel.getFunction("CreateUser"))
+        self.pb_add.setIcon(functioninfo["icon"])
         self.pb_add.resize(46, 32)
         self.pb_add.clicked.connect(lambda: Kernel.execFunction("CreateUser"))
 
@@ -67,10 +68,14 @@ class UserManager(QWidget, Ui_UserManager):
         setting["users.selectindex"] = setting["users"].index(uinfo)
         setting.sync()
 
-    def showEvent(self, a0: QShowEvent) -> None:
-        self.refresh()
-        qApp.sendEvent(self.window(),
-                       AddToTitleEvent(self.pb_add, "right", bind=self))
-        qApp.sendEvent(self.window(),
-                       AddToTitleEvent(self.pb_refresh, "right", bind=self))
-        super().showEvent(a0)
+    def event(self, a0: QEvent) -> bool:
+        if a0.type() == QEvent.Type.Show:
+            qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_add, "right"))
+            qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_refresh, "right"))
+            self.refresh()
+        elif a0.type() == QEvent.Type.Hide:
+            qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_add))
+            qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_refresh))
+            self.pb_add.setParent(self)
+            self.pb_refresh.setParent(self)
+        return super().event(a0)

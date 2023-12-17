@@ -1,7 +1,6 @@
 import qtawesome as qta
 from Events import *
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtGui import QShowEvent
+from PyQt5.QtCore import pyqtSlot, QEvent
 from PyQt5.QtWidgets import QLabel, QTreeWidgetItem, QWidget, qApp
 from qfluentwidgets import TransparentToolButton, PrimaryPushButton
 from Setting import Setting
@@ -42,7 +41,6 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                 lastid = ".".join(splitids[:i])
                 if totalid in self.items:
                     continue
-
                 root = self.items.get(("???", lastid)[i - 1 >= 0], None)
                 item = QTreeWidgetItem()
                 text = self.setting.getAttr(totalid, "name")
@@ -113,12 +111,14 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                 i.refresh()
         self.checkCondition()
 
-    def showEvent(self, a0: QShowEvent) -> None:
-        self.refresh()
-        qApp.sendEvent(
-            self.window(), AddToTitleEvent(self.pb_refresh, "right", bind=self)
-        )
-        return super().showEvent(a0)
+    def event(self, a0: QEvent) -> bool:
+        if a0.type() == QEvent.Type.Show:
+            qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_refresh, "right"))
+            self.refresh()
+        elif a0.type() == QEvent.Type.Hide:
+            qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_refresh))
+            self.pb_refresh.setParent(self)
+        return super().event(a0)
 
     def checkCondition(self):
         enable = {}

@@ -78,10 +78,10 @@ class Version:
 
         globalsetting = Setting()
         for key, val in globalsetting.items():
-            if "game" in key:
+            if key.find("game")==0:
                 self.DEFAULT_SETTING[key] = val
         for key, val in globalsetting.attrs.items():
-            if "game" in key:
+            if key.find("game")==0:
                 if key not in self.DEFAULT_SETTING_ATTR:
                     self.DEFAULT_SETTING_ATTR[key] = {}
                 self.DEFAULT_SETTING_ATTR[key] |= val

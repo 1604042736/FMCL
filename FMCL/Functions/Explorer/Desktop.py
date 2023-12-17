@@ -105,9 +105,14 @@ class Desktop(ListWidget):
             if Setting()["explorer.desktop.quick_switch_gamedir"]:
                 qApp.sendEvent(
                     self.window(),
-                    AddToTitleEvent(self.pb_quickswitchgamedir, "right", 0, bind=self),
+                    AddToTitleEvent(self.pb_quickswitchgamedir, "right", 0),
                 )
             self.refresh()
+        elif e.type() == QEvent.Type.Hide:
+            qApp.sendEvent(
+                self.window(), RemoveFromTitleEvent(self.pb_quickswitchgamedir)
+            )
+            self.pb_quickswitchgamedir.setParent(self)
         elif e.type() == QEvent.Type.Paint:
             painter = QPainter(self)
             painter.drawPixmap(self.rect(), QPixmap(self.background_image))
