@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'GameManager.ui'
+# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\GameManager\GameManager.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -31,26 +31,31 @@ class Ui_GameManager(object):
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_2.setSpacing(0)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.pb_gamesetting = TransparentTogglePushButton(self.f_panel)
-        self.pb_gamesetting.setMinimumSize(QtCore.QSize(0, 32))
-        self.pb_gamesetting.setCheckable(True)
-        self.pb_gamesetting.setAutoExclusive(True)
-        self.pb_gamesetting.setObjectName("pb_gamesetting")
-        self.gridLayout_2.addWidget(self.pb_gamesetting, 1, 0, 1, 1)
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout_2.addItem(spacerItem, 4, 0, 1, 1)
         self.pb_gameinfo = TransparentTogglePushButton(self.f_panel)
         self.pb_gameinfo.setMinimumSize(QtCore.QSize(0, 32))
         self.pb_gameinfo.setCheckable(True)
         self.pb_gameinfo.setAutoExclusive(True)
         self.pb_gameinfo.setObjectName("pb_gameinfo")
         self.gridLayout_2.addWidget(self.pb_gameinfo, 0, 0, 1, 1)
+        self.pb_gamesetting = TransparentTogglePushButton(self.f_panel)
+        self.pb_gamesetting.setMinimumSize(QtCore.QSize(0, 32))
+        self.pb_gamesetting.setCheckable(True)
+        self.pb_gamesetting.setAutoExclusive(True)
+        self.pb_gamesetting.setObjectName("pb_gamesetting")
+        self.gridLayout_2.addWidget(self.pb_gamesetting, 1, 0, 1, 1)
         self.pb_modmanager = TransparentTogglePushButton(self.f_panel)
         self.pb_modmanager.setMinimumSize(QtCore.QSize(0, 32))
         self.pb_modmanager.setCheckable(True)
         self.pb_modmanager.setAutoExclusive(True)
         self.pb_modmanager.setObjectName("pb_modmanager")
         self.gridLayout_2.addWidget(self.pb_modmanager, 2, 0, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout_2.addItem(spacerItem, 3, 0, 1, 1)
+        self.pb_savemanager = TransparentTogglePushButton(self.f_panel)
+        self.pb_savemanager.setMinimumSize(QtCore.QSize(0, 32))
+        self.pb_savemanager.setAutoExclusive(True)
+        self.pb_savemanager.setObjectName("pb_savemanager")
+        self.gridLayout_2.addWidget(self.pb_savemanager, 3, 0, 1, 1)
         self.gridLayout.addWidget(self.f_panel, 0, 0, 1, 1)
         self.sw_ui = QtWidgets.QStackedWidget(GameManager)
         self.sw_ui.setObjectName("sw_ui")
@@ -68,7 +73,8 @@ class Ui_GameManager(object):
     def retranslateUi(self, GameManager):
         _translate = QtCore.QCoreApplication.translate
         GameManager.setWindowTitle(_translate("GameManager", "游戏管理"))
-        self.pb_gamesetting.setText(_translate("GameManager", "设置"))
         self.pb_gameinfo.setText(_translate("GameManager", "信息"))
+        self.pb_gamesetting.setText(_translate("GameManager", "设置"))
         self.pb_modmanager.setText(_translate("GameManager", "Mod管理"))
+        self.pb_savemanager.setText(_translate("GameManager", "存档管理"))
 from qfluentwidgets import TransparentTogglePushButton

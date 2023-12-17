@@ -1,6 +1,5 @@
 import qtawesome as qta
 from Core import Version
-from Kernel import Kernel
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtWidgets import QFileDialog, QWidget
 

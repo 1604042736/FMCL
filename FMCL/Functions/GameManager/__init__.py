@@ -13,7 +13,7 @@ _translate = QCoreApplication.translate
 def functionInfo():
     return {
         "name": _translate("GameManager", "游戏管理"),
-        "icon": qta.icon("mdi6.minecraft")
+        "icon": qta.icon("mdi6.minecraft"),
     }
 
 
@@ -23,7 +23,17 @@ def defaultSetting() -> dict:
         a = setting.defaultsetting["explorer.desktop.item_rightclicked_actions"]
         if "GameManager" not in a:
             a.insert(1, "GameManager")
-    return {}
+    return {"gamemanager.savemanager.show_full_save_info": False}
+
+
+def defaultSettingAttr() -> dict:
+    return {
+        "gamemanager": {"name": _translate("GameManager", "游戏管理")},
+        "gamemanager.savemanager": {"name": _translate("GameManager", "存档管理")},
+        "gamemanager.savemanager.show_full_save_info": {
+            "name": _translate("GameManager", "显示完整存档信息")
+        },
+    }
 
 
 def main(name=None):
@@ -32,7 +42,9 @@ def main(name=None):
             None,
             _translate("GameManager", "选择游戏"),
             _translate("GameManager", "游戏列表"),
-            os.listdir(os.path.join(Setting()["game.directories"][0], "versions")), editable=False)
+            os.listdir(os.path.join(Setting()["game.directories"][0], "versions")),
+            editable=False,
+        )
         if not ok:
             return
     gamemanager = GameManager(name)

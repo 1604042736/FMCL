@@ -78,10 +78,10 @@ class Version:
 
         globalsetting = Setting()
         for key, val in globalsetting.items():
-            if key.find("game")==0:
+            if key.find("game") == 0:
                 self.DEFAULT_SETTING[key] = val
         for key, val in globalsetting.attrs.items():
-            if key.find("game")==0:
+            if key.find("game") == 0:
                 if key not in self.DEFAULT_SETTING_ATTR:
                     self.DEFAULT_SETTING_ATTR[key] = {}
                 self.DEFAULT_SETTING_ATTR[key] |= val
@@ -332,6 +332,14 @@ class Version:
             path = os.path.join(self.directory, "versions", self.name, "mods")
         else:
             path = os.path.join(self.directory, "mods")
+        return path
+
+    def get_save_path(self):
+        self.generate_setting()
+        if self.setting.get("isolation"):
+            path = os.path.join(self.directory, "versions", self.name, "saves")
+        else:
+            path = os.path.join(self.directory, "saves")
         return path
 
     def mod_avaiable(self):
