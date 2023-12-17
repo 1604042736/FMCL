@@ -1,7 +1,7 @@
 import json
 import os
 
-from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtCore import QCoreApplication, QObject, pyqtSignal
 from qfluentwidgets import Theme, setTheme, setThemeColor
 
 _translate = QCoreApplication.translate
@@ -23,8 +23,6 @@ DEFAULT_SETTING = {
     "system.startup_functions": [],
     "system.theme_color": "#00ff00",
     "system.theme": ["Light", "Dark"],
-    "launcher.width": 1000,
-    "launcher.height": 618,
     "game.directories": [".minecraft"],
     "game.java_path": "java",
     "game.width": 1000,
@@ -49,9 +47,6 @@ def defaultSettingAttr():
             "callback": lambda a: setThemeFromStr(a[0]),
             "static": True,
         },
-        "launcher": {"name": _translate("Setting", "启动器")},
-        "launcher.width": {"name": _translate("Setting", "启动器宽度")},
-        "launcher.height": {"name": _translate("Setting", "启动器高度")},
         "game": {"name": _translate("Setting", "游戏")},
         "game.directories": {
             "name": _translate("Setting", "游戏目录"),
@@ -109,8 +104,10 @@ class ListSettingTrace(list):
         self.setting.set(self.id, self)
 
 
-class Setting:
+class Setting(QObject):
     """管理设置文件"""
+
+    itemChanged = pyqtSignal(str)
 
     instances = {}
     new_count = {}
@@ -125,6 +122,7 @@ class Setting:
     def __init__(self, setting_path: str = DEFAULT_SETTING_PATH):
         if Setting.new_count[setting_path] > 1:  # 防止重复初始化
             return
+        super().__init__()
         self.attrs = {}
         self.setting_path = setting_path
         self.modifiedsetting = {}  # 修改过的设置
@@ -213,3 +211,4 @@ class Setting:
         self.modifiedsetting[key] = value
         if key in self.defaultsetting and self.defaultsetting[key] == value:
             self.modifiedsetting.pop(key)
+        self.itemChanged.emit(key)

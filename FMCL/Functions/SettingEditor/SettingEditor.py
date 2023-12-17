@@ -68,8 +68,6 @@ class SettingEditor(QWidget, Ui_SettingEditor):
             settingcard = self.setting.getAttr(
                 id, "settingcard", lambda id=id: SettingCard(id, self.setting)
             )()
-            if isinstance(settingcard, SettingCard):
-                settingcard.Changed.connect(self.refresh)
             self.gl_setting.addWidget(settingcard, row, 1, 1, 2)
             self.setting_cards[id] = settingcard
             row += 1
@@ -80,6 +78,7 @@ class SettingEditor(QWidget, Ui_SettingEditor):
         self.pb_refresh.clicked.connect(lambda: self.refresh())
 
         self.checkCondition()
+        self.setting.itemChanged.connect(self.refresh)
 
     def addTreeItem(self, root: QTreeWidgetItem | None, item: QTreeWidgetItem):
         if root == None:

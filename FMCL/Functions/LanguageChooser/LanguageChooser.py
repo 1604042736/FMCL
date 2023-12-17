@@ -17,6 +17,7 @@ class LanguageChooser(QWidget, Ui_LanguageChooser):
         self.refresh()
 
     def refresh(self):
+        self.cb_lang.currentTextChanged.disconnect(self.changeLanguage)
         self.cb_lang.clear()
         cur_lang = Setting().get("language.type")
         self.cb_lang.addItem(cur_lang)
@@ -27,6 +28,7 @@ class LanguageChooser(QWidget, Ui_LanguageChooser):
             if lang != cur_lang:
                 self.cb_lang.addItem(lang)
         self.cb_lang.setCurrentText(cur_lang)
+        self.cb_lang.currentTextChanged.connect(self.changeLanguage)
 
     def changeLanguage(self, lang):
         Setting().set("language.type", lang)

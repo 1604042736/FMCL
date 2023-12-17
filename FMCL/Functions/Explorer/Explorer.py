@@ -2,7 +2,7 @@ import qtawesome as qta
 from Events import *
 from Kernel import Kernel
 from PyQt5.QtCore import QEvent, QObject, QPoint, Qt
-from PyQt5.QtGui import QShowEvent
+from PyQt5.QtGui import QShowEvent, QResizeEvent
 from PyQt5.QtWidgets import QAction, QPushButton, QStackedWidget, QWidget, qApp
 from qfluentwidgets import RoundMenu, TransparentTogglePushButton
 from Setting import Setting
@@ -14,7 +14,7 @@ from .Start import Start
 class Explorer(QStackedWidget):
     def __init__(self):
         super().__init__()
-        self.resize(Setting()["launcher.width"], Setting()["launcher.height"])
+        self.resize(Setting()["explorer.width"], Setting()["explorer.height"])
         self.setWindowTitle("Functional Minecraft Launcher")
         self.caught_widgets: dict[QWidget, QPushButton] = {}  # 被捕获的QWidget
         self.currentChanged.connect(self.__currentChanged)
@@ -206,3 +206,10 @@ QPushButton:checked{
             self.addWidget(start)
         else:
             self.removeWidget(widget)
+
+    def resizeEvent(self, a0: QResizeEvent | None) -> None:
+        setting = Setting()
+        if setting["explorer.auto_sync_size"]:
+            setting["explorer.width"] = self.width()
+            setting["explorer.height"] = self.height()
+        return super().resizeEvent(a0)

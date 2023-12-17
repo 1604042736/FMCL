@@ -3,8 +3,6 @@ from PyQt5.QtCore import pyqtSignal
 
 
 class SettingCard(QWidget):
-    Changed = pyqtSignal()
-
     def __new__(cls, id, setting):
         if cls == SettingCard:
             from .BoolSettingCard import BoolSettingCard
@@ -35,7 +33,6 @@ class SettingCard(QWidget):
 
     def sync(self):
         self.setting.sync()
-        self.Changed.emit()
 
     def refresh(self):
         pass

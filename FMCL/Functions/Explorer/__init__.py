@@ -17,6 +17,9 @@ def defaultSetting() -> dict:
         "explorer.desktop.item_rightclicked_actions": [],
         "explorer.desktop.quick_switch_gamedir": True,
         "explorer.title_rightclicked_actions": [],
+        "explorer.width": 1000,
+        "explorer.height": 618,
+        "explorer.auto_sync_size": True,
     }
 
 
@@ -34,6 +37,9 @@ def defaultSettingAttr() -> dict:
         "explorer.title_rightclicked_actions": {
             "name": _translate("Explorer", "标题栏右键操作")
         },
+        "explorer.width": {"name": _translate("Explorer", "启动器高度")},
+        "explorer.height": {"name": _translate("Explorer", "启动器宽度")},
+        "explorer.auto_sync_size": {"name": _translate("Explorer", "自动同步启动器大小")},
     }
 
 

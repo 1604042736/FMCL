@@ -19,5 +19,7 @@ class StrSettingCard(SettingCard):
         return super().sync()
 
     def refresh(self):
+        self.w_value.editingFinished.disconnect(self.sync)
         self.w_value.setText(self.setting.get(self.id))
+        self.w_value.editingFinished.connect(self.sync)
         return super().refresh()

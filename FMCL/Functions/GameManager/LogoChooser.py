@@ -42,6 +42,7 @@ class LogoChooser(QWidget, Ui_LogoChooser):
         self.refresh()
 
     def refresh(self):
+        self.cb_logo.currentTextChanged.disconnect(self.changeLogo)
         self.cb_logo.clear()
         cur_logo = self.game.setting.get("logo")
         self.cb_logo.addItem(cur_logo)
@@ -50,12 +51,13 @@ class LogoChooser(QWidget, Ui_LogoChooser):
             if i != cur_logo:
                 self.cb_logo.addItem(i)
         self.cb_logo.setCurrentText(cur_logo)
-        self.changeLogo(cur_logo)
+        self.cb_logo.currentTextChanged.connect(self.changeLogo)
+        self.changeLogo(cur_logo, pixmap_only=True)
 
-    def changeLogo(self, text):
-        if text:  # clear时text为空
+    def changeLogo(self, text, pixmap_only=False):
+        if not pixmap_only:  # 在刷新的时侯不能更改,避免递归调用
             self.game.setting.set("logo", text)
-            self.l_logo.setPixmap(self.game.get_pixmap().scaled(32, 32))
+        self.l_logo.setPixmap(self.game.get_pixmap().scaled(32, 32))
 
     @pyqtSlot(bool)
     def on_pb_add_clicked(self, _):
