@@ -53,8 +53,8 @@ class GameManager(QWidget, Ui_GameManager):
         self.game.generate_setting()
         self.gamesetting = SettingEditor(self.game.setting)
 
-        self.modmanager = ModManager(self.name)
-        self.savemanager = SaveManager(self.name)
+        self.modmanager = None
+        self.savemanager = None
 
         self.pb_gameinfo.setChecked(True)
         self.setUi(self.gameinfo)
@@ -80,11 +80,15 @@ class GameManager(QWidget, Ui_GameManager):
 
     @pyqtSlot(bool)
     def on_pb_modmanager_clicked(self, _):
+        if self.modmanager == None:
+            self.modmanager = ModManager(self.name)
         self.pb_modmanager.setChecked(True)
         self.setUi(self.modmanager)
 
     @pyqtSlot(bool)
     def on_pb_savemanager_clicked(self, _):
+        if self.savemanager == None:
+            self.savemanager = SaveManager(self.name)
         self.pb_savemanager.setChecked(True)
         self.setUi(self.savemanager)
 
