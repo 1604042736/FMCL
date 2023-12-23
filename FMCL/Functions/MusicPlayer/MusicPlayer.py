@@ -62,8 +62,9 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
         self.hs_music.sliderMoved.connect(self.player.setPosition)
         self.player.setPlaylist(self.playlist)
         self.player.setVolume(100)
+        self.playlist.currentIndexChanged.connect(self.syncStartIndex)
         self.playlist.setPlaybackMode(QMediaPlaylist.PlaybackMode.Loop)
-        self.playlist.setCurrentIndex(0)
+        self.playlist.setCurrentIndex(Setting()["musicplayer.startindex"])
 
         for i in Setting()["musicplayer.musiclist"]:
             self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(i)))
@@ -142,7 +143,7 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
     @pyqtSlot(bool)
     def on_pb_control_clicked(self, _):
         if self.player.state() == QMediaPlayer.State.PlayingState:
-            self.player.stop()
+            self.player.pause()
         else:
             self.player.play()
 
@@ -194,3 +195,10 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
                 qApp.topLevelWindows()[0], RemoveFromTitleEvent(self.pb_music)
             )
             self.pb_music.hide()
+
+    def syncStartIndex(self, i):
+        setting = Setting()
+        if setting["musicplayer.auto_sync_startindex"]:
+            setting.set("musicplayer.startindex", i)
+        else:
+            setting.set("musicplayer.startindex", 0)

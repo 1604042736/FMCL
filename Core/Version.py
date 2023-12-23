@@ -68,8 +68,9 @@ class Version:
                 "name": _translate("Version", "游戏图标"),
             },
             "game": {
-                "enable_condition": lambda setting: setting.get("specific", False)
-                == True
+                "enable_condition": (
+                    lambda setting: setting.get("specific", False) == True
+                )
             },
         }
         self.DEFAULT_SETTING = {"specific": False, "isolation": False, "logo": ""}
