@@ -1,6 +1,6 @@
 import json
 import os
-
+from typing import Any, Literal, TypedDict, Callable
 from PyQt5.QtCore import QCoreApplication
 from qfluentwidgets import Theme, setTheme, setThemeColor
 
@@ -34,7 +34,25 @@ DEFAULT_SETTING = {
 }
 
 
-def defaultSettingAttr():
+class Link(TypedDict):
+    name: str  # 链接名称
+    action: Callable  # 链接操作
+
+
+class SettingAttr(TypedDict):
+    """设置属性类型"""
+
+    name: str  # 名称
+    callback: list[Callable[[Any], None]]  # 回调函数, 在对应设置项被修改后调用
+    enable_condition: Callable[["Setting"], bool]  # 启用条件, 禁用后, 它的子设置也会被禁用
+    link: Link  # 链接
+    # 一下类型将用于List设置项
+    static: bool  # 是否为静态(不可更改, 当成tuple)
+    type: Literal["directory", "file", "input"]  # 列表中每项的类型
+    atleast: int  # 至少要有几项
+
+
+def defaultSettingAttr() -> SettingAttr:
     return {
         "system": {"name": _translate("Setting", "系统")},
         "system.startup_functions": {"name": _translate("Setting", "启动项")},
@@ -120,7 +138,7 @@ class Setting:
     def __init__(self, setting_path: str = DEFAULT_SETTING_PATH):
         if Setting.new_count[setting_path] > 1:  # 防止重复初始化
             return
-        self.attrs = {}
+        self.attrs: SettingAttr = {}
         self.setting_path = setting_path
         self.modifiedsetting = {}  # 修改过的设置
         self.defaultsetting = {}  # 默认设置
@@ -141,7 +159,7 @@ class Setting:
             if id not in self.attrs:  # 防止以前加载过[Version可能会频繁执行此操作(调用generate_setting)]
                 self.attrs[id] = {"name": id}
 
-    def addAttr(self, attr: dict):
+    def addAttr(self, attr: SettingAttr):
         """添加设置属性"""
         for key, val in attr.items():
             if key not in self.attrs:
