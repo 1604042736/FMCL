@@ -1,4 +1,6 @@
+import logging
 import os
+import traceback
 
 import qtawesome as qta
 from Core.Version import Version
@@ -93,11 +95,15 @@ class Desktop(ListWidget):
         if not os.path.exists(os.path.join(path, "versions")):
             os.makedirs(os.path.join(path, "versions"))
         for game_name in os.listdir(os.path.join(path, "versions")):
-            item = QListWidgetItem()
-            item.setSizeHint(QSize(80, 80))
-            item.setText(game_name)
-            item.setIcon(Version(game_name).get_icon())
-            self.addItem(item)
+            try:
+                item = QListWidgetItem()
+                item.setSizeHint(QSize(80, 80))
+                item.setText(game_name)
+                item.setIcon(Version(game_name).get_icon())
+                self.addItem(item)
+            except:
+                logging.error(f"无法加载版本{game_name}")
+                logging.error(traceback.format_exc())
         self.repaint()
 
     def event(self, e: QEvent) -> bool:
