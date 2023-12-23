@@ -1,9 +1,11 @@
+Pillow==9.4.0
+PyQt-Fluent-Widgets
+PyQt5
+PyQt5_Frameless_Window
+Python-NBT
+QtAwesome
 minecraft_launcher_lib
 multitasking
-Pillow==9.4.0
-PyQt5
-PyQt-Fluent-Widgets
-PyQt5_Frameless_Window
-QtAwesome
+psutil
 requests
 toml

@@ -1,9 +1,10 @@
 import logging
 import time
+import psutil
 
 import qtawesome as qta
 from Core import Version, Task
-from PyQt5.QtCore import QProcess, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import QProcess, pyqtSignal, pyqtSlot, QTimer
 from PyQt5.QtWidgets import QWidget
 
 from .ui_Launcher import Ui_Launcher
@@ -59,6 +60,11 @@ class Launcher(QWidget, Ui_Launcher):
         self.process.start(program, args)
         self.pb_kill.setEnabled(True)
 
+        self.process_info = psutil.Process(self.process.processId())
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.showInfo)
+        self.timer.start(1000)
+
     def outputStandard(self):
         try:
             text = self.process.readAllStandardOutput().data().decode("utf-8")
@@ -86,5 +92,20 @@ class Launcher(QWidget, Ui_Launcher):
     @pyqtSlot(bool)
     def on_pb_kill_clicked(self, _):
         self.process.kill()
-        self.output(self.tr("游戏结束"))
+        self.afterKilling()
         logging.info(f"{self.name}被用户终止")
+
+    def afterKilling(self):
+        self.timer.stop()
+        self.pb_kill.setEnabled(False)
+        self.l_info.setText(self.tr("游戏已停止"))
+
+    def showInfo(self):
+        if self.process.state() == QProcess.ProcessState.NotRunning:
+            self.afterKilling()
+            return
+        info = [
+            f"{self.tr('CPU使用率')}: {self.process_info.cpu_percent()}%",
+            f"{self.tr('内存使用率')}: {self.process_info.memory_percent()}%({self.process_info.memory_info().rss/1024/1024}MB)",
+        ]
+        self.l_info.setText(", ".join(info))
