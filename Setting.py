@@ -1,7 +1,7 @@
 import json
 import os
 
-from PyQt5.QtCore import QCoreApplication, QObject, pyqtSignal
+from PyQt5.QtCore import QCoreApplication
 from qfluentwidgets import Theme, setTheme, setThemeColor
 
 _translate = QCoreApplication.translate
@@ -40,11 +40,11 @@ def defaultSettingAttr():
         "system.startup_functions": {"name": _translate("Setting", "启动项")},
         "system.theme_color": {
             "name": _translate("Setting", "主题颜色"),
-            "callback": lambda a: setThemeColor(a),
+            "callback": [lambda a: setThemeColor(a)],
         },
         "system.theme": {
             "name": _translate("Setting", "主题"),
-            "callback": lambda a: setThemeFromStr(a[0]),
+            "callback": [lambda a: setThemeFromStr(a[0])],
             "static": True,
         },
         "game": {"name": _translate("Setting", "游戏")},
@@ -104,10 +104,8 @@ class ListSettingTrace(list):
         self.setting.set(self.id, self)
 
 
-class Setting(QObject):
+class Setting:
     """管理设置文件"""
-
-    itemChanged = pyqtSignal(str)
 
     instances = {}
     new_count = {}
@@ -122,7 +120,6 @@ class Setting(QObject):
     def __init__(self, setting_path: str = DEFAULT_SETTING_PATH):
         if Setting.new_count[setting_path] > 1:  # 防止重复初始化
             return
-        super().__init__()
         self.attrs = {}
         self.setting_path = setting_path
         self.modifiedsetting = {}  # 修改过的设置
@@ -141,11 +138,16 @@ class Setting(QObject):
                 self.defaultsetting[key] = val
 
         for id in new_setting:
-            self.attrs[id] = {"name": id}
+            if id not in self.attrs:  # 防止以前加载过[Version可能会频繁执行此操作(调用generate_setting)]
+                self.attrs[id] = {"name": id}
 
     def addAttr(self, attr: dict):
         """添加设置属性"""
-        self.attrs |= attr
+        for key, val in attr.items():
+            if key not in self.attrs:
+                self.attrs[key] = val
+            else:  # 防止之前已经加载过
+                self.attrs[key] |= val
 
     def getAttr(self, id: str, attr: str, default=None):
         """获取设置项的属性"""
@@ -169,7 +171,8 @@ class Setting(QObject):
     def callback(self, id: str, val=None):
         if val == None:
             val = self.get(id)
-        self.getAttr(id, "callback", lambda _: ...)(val)
+        for i in self.getAttr(id, "callback", tuple()):
+            i(val)
 
     def loadFunctionSetting(self):
         """加载功能的设置"""
@@ -211,4 +214,3 @@ class Setting(QObject):
         self.modifiedsetting[key] = value
         if key in self.defaultsetting and self.defaultsetting[key] == value:
             self.modifiedsetting.pop(key)
-        self.itemChanged.emit(key)

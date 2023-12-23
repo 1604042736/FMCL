@@ -210,6 +210,6 @@ QPushButton:checked{
     def resizeEvent(self, a0: QResizeEvent | None) -> None:
         setting = Setting()
         if setting["explorer.auto_sync_size"]:
-            setting["explorer.width"] = self.width()
-            setting["explorer.height"] = self.height()
+            setting.set("explorer.width", self.width())
+            setting.set("explorer.height", self.height())
         return super().resizeEvent(a0)

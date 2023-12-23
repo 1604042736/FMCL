@@ -200,5 +200,3 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
         setting = Setting()
         if setting["musicplayer.auto_sync_startindex"]:
             setting.set("musicplayer.startindex", i)
-        else:
-            setting.set("musicplayer.startindex", 0)

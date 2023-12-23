@@ -65,6 +65,10 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                     self.gl_setting.addWidget(button, row, 2)
                 row += 1
 
+            if "callback" not in setting.attrs[id]:
+                setting.attrs[id]["callback"] = []
+            setting.attrs[id]["callback"].append(lambda *_: self.refresh())
+
             settingcard = self.setting.getAttr(
                 id, "settingcard", lambda id=id: SettingCard(id, self.setting)
             )()
@@ -78,7 +82,6 @@ class SettingEditor(QWidget, Ui_SettingEditor):
         self.pb_refresh.clicked.connect(lambda: self.refresh())
 
         self.checkCondition()
-        self.setting.itemChanged.connect(self.refresh)
 
     def addTreeItem(self, root: QTreeWidgetItem | None, item: QTreeWidgetItem):
         if root == None:

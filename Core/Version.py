@@ -82,12 +82,12 @@ class Version:
     def sync_default_setting(self):
         globalsetting = Setting()
         for key, val in globalsetting.items():
-            if key.find("game") == 0:
+            if key.find("game.") == 0 or key=="game":
                 self.DEFAULT_SETTING[key] = val
                 if hasattr(self, "setting"):
                     self.setting.defaultsetting[key] = val
         for key, val in globalsetting.attrs.items():
-            if key.find("game") == 0:
+            if key.find("game.") == 0 or key=="game":
                 if key not in self.DEFAULT_SETTING_ATTR:
                     self.DEFAULT_SETTING_ATTR[key] = {}
                 self.DEFAULT_SETTING_ATTR[key] |= val
