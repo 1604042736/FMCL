@@ -1,7 +1,7 @@
 import qtawesome as qta
 from Events import *
 from PyQt5.QtCore import pyqtSlot, QEvent
-from PyQt5.QtWidgets import QLabel, QTreeWidgetItem, QWidget, qApp
+from PyQt5.QtWidgets import QLabel, QTreeWidgetItem, QWidget, qApp, QHeaderView
 from qfluentwidgets import TransparentToolButton, PrimaryPushButton
 from Setting import Setting
 
@@ -27,7 +27,11 @@ class SettingEditor(QWidget, Ui_SettingEditor):
         self.setupUi(self)
         self.resize(1000, 618)
         self.setWindowIcon(qta.icon("ri.settings-5-line"))
-        self.splitter.setSizes([100, 500])
+        self.splitter.setSizes([200, 500])
+
+        self.tw_setting.header().setSectionResizeMode(
+            0, QHeaderView.ResizeMode.ResizeToContents
+        )
 
         self.setting = setting
         self.items = {}
@@ -46,6 +50,13 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                 text = self.setting.getAttr(totalid, "name")
                 item.setText(0, text)
                 self.addTreeItem(root, item)
+                pb_restore = TransparentToolButton()
+                pb_restore.setIcon(qta.icon("mdi.refresh"))
+                pb_restore.setToolTip(self.tr("恢复默认设置"))
+                pb_restore.clicked.connect(
+                    lambda _, id=totalid: self.setting.restore(id)
+                )
+                self.tw_setting.setItemWidget(item, 1, pb_restore)
                 self.items[totalid] = item
 
                 widget = QLabel()

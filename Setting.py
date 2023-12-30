@@ -217,3 +217,7 @@ class Setting:
         self.modifiedsetting[key] = value
         if key in self.defaultsetting and self.defaultsetting[key] == value:
             self.modifiedsetting.pop(key)
+
+    def restore(self, id):
+        """恢复默认设置"""
+        self.set(id, self.defaultsetting[id])
