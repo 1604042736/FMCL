@@ -7,22 +7,12 @@ from qfluentwidgets import Theme, setTheme, setThemeColor
 _translate = QCoreApplication.translate
 
 
-def setThemeFromStr(theme: str):
-    if theme == "Light":
-        setTheme(Theme.LIGHT)
-    elif theme == "Dark":
-        setTheme(Theme.DARK)
-    elif theme == "Auto":
-        setTheme(Theme.AUTO)
-
-
 # 默认设置路径
 DEFAULT_SETTING_PATH = os.path.join("FMCL", "settings.json")
 # 默认设置
 DEFAULT_SETTING = {
     "system.startup_functions": [],
     "system.theme_color": "#00ff00",
-    "system.theme": ["Light", "Dark"],
     "game.directories": [".minecraft"],
     "game.java_path": "java",
     "game.width": 1000,
@@ -59,11 +49,6 @@ def defaultSettingAttr() -> SettingAttr:
         "system.theme_color": {
             "name": _translate("Setting", "主题颜色"),
             "callback": [lambda a: setThemeColor(a)],
-        },
-        "system.theme": {
-            "name": _translate("Setting", "主题"),
-            "callback": [lambda a: setThemeFromStr(a[0])],
-            "static": True,
         },
         "game": {"name": _translate("Setting", "游戏")},
         "game.directories": {
