@@ -21,10 +21,7 @@ class LanguageChooser(QWidget, Ui_LanguageChooser):
         self.cb_lang.clear()
         cur_lang = Setting().get("language.type")
         self.cb_lang.addItem(cur_lang)
-        for name in Kernel.getAllLanguages():
-            lang, ext = os.path.splitext(name)
-            if ext != ".qm":
-                continue
+        for lang in Kernel.getAllLanguages():
             if lang != cur_lang:
                 self.cb_lang.addItem(lang)
         self.cb_lang.setCurrentText(cur_lang)

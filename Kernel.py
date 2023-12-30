@@ -73,16 +73,11 @@ class Kernel(QApplication):
         """分离控件"""
         self.showWidget(widget)
 
-    def loadTranslation(self):
-        """加载翻译"""
-        logging.info("加载翻译...")
-        lang = Setting().get("language.type") + ".qm"
-        self.__translators = []  # 防止Translator被销毁
-        # QTranslator优先搜索最新安装的文件
+    @staticmethod
+    def getTranslationPath():
         default_path = "FMCL/Default/FMCL"
-        for i in (
-            ["FMCL/Default/FMCL/Translations"]
-            + (
+        return (
+            (
                 (
                     [
                         f"{default_path}/Functions/{i}/Translations"
@@ -92,7 +87,6 @@ class Kernel(QApplication):
                 if os.path.exists("{default_path}/Functions")
                 else []
             )
-            + ["FMCL/Translations"]
             + (
                 (
                     [
@@ -103,7 +97,17 @@ class Kernel(QApplication):
                 if os.path.exists("FMCL/Functions")
                 else []
             )
-        ):
+            + ["FMCL/Default/FMCL/Translations"]
+            + ["FMCL/Translations"]
+        )
+
+    def loadTranslation(self):
+        """加载翻译"""
+        logging.info("加载翻译...")
+        lang = Setting().get("language.type") + ".qm"
+        self.__translators = []  # 防止Translator被销毁
+        # QTranslator优先搜索最新安装的文件
+        for i in self.getTranslationPath():
             file = f"{i}/{lang}"
             if not os.path.exists(file):
                 continue
@@ -230,10 +234,14 @@ class Kernel(QApplication):
     def getAllLanguages():
         """获取所有语言"""
         lang = []
-        default_path = "FMCL/Default/FMCL/Translations"
-        if os.path.exists(default_path):
-            lang += os.listdir(default_path)
-        path = "FMCL/Translations"
-        if os.path.exists(path):
-            lang += os.listdir(path)
+        for path in Kernel.getTranslationPath():
+            if not os.path.exists(path):
+                continue
+            for i in os.listdir(path):
+                full_path = os.path.join(path, i)
+                if os.path.isdir(full_path):
+                    continue
+                name, ext = os.path.splitext(i)
+                if ext == ".qm":
+                    lang.append(name)
         return set(lang)
