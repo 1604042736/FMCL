@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'AboutItem.ui'
+# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\About\AboutItem.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -22,14 +22,9 @@ class Ui_AboutItem(object):
 "}")
         self.gridLayout = QtWidgets.QGridLayout(AboutItem)
         self.gridLayout.setObjectName("gridLayout")
-        self.l_desctiption = QtWidgets.QLabel(AboutItem)
-        font = QtGui.QFont()
-        font.setFamily("Microsoft YaHei")
-        font.setPointSize(9)
-        self.l_desctiption.setFont(font)
-        self.l_desctiption.setText("")
-        self.l_desctiption.setObjectName("l_desctiption")
-        self.gridLayout.addWidget(self.l_desctiption, 1, 1, 1, 1)
+        self.hl_operators = QtWidgets.QHBoxLayout()
+        self.hl_operators.setObjectName("hl_operators")
+        self.gridLayout.addLayout(self.hl_operators, 0, 3, 2, 1)
         self.l_name = QtWidgets.QLabel(AboutItem)
         font = QtGui.QFont()
         font.setFamily("Microsoft YaHei")
@@ -38,27 +33,25 @@ class Ui_AboutItem(object):
         self.l_name.setText("")
         self.l_name.setObjectName("l_name")
         self.gridLayout.addWidget(self.l_name, 0, 1, 1, 1)
-        self.pb_operator = PushButton(AboutItem)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pb_operator.sizePolicy().hasHeightForWidth())
-        self.pb_operator.setSizePolicy(sizePolicy)
-        self.pb_operator.setMinimumSize(QtCore.QSize(0, 0))
-        self.pb_operator.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.pb_operator.setText("")
-        self.pb_operator.setObjectName("pb_operator")
-        self.gridLayout.addWidget(self.pb_operator, 0, 2, 2, 1)
+        self.l_desctiption = QtWidgets.QLabel(AboutItem)
+        font = QtGui.QFont()
+        font.setFamily("Microsoft YaHei")
+        font.setPointSize(9)
+        self.l_desctiption.setFont(font)
+        self.l_desctiption.setText("")
+        self.l_desctiption.setObjectName("l_desctiption")
+        self.gridLayout.addWidget(self.l_desctiption, 1, 1, 1, 1)
         self.l_icon = QtWidgets.QLabel(AboutItem)
         self.l_icon.setMinimumSize(QtCore.QSize(32, 32))
         self.l_icon.setMaximumSize(QtCore.QSize(32, 32))
         self.l_icon.setText("")
         self.l_icon.setObjectName("l_icon")
         self.gridLayout.addWidget(self.l_icon, 0, 0, 2, 1)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem, 0, 2, 2, 1)
 
         self.retranslateUi(AboutItem)
         QtCore.QMetaObject.connectSlotsByName(AboutItem)
 
     def retranslateUi(self, AboutItem):
         pass
-from qfluentwidgets import PushButton

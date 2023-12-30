@@ -1,11 +1,18 @@
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QFrame
+from qfluentwidgets import PrimaryPushButton
 
 from .ui_AboutItem import Ui_AboutItem
 
 
 class AboutItem(QFrame, Ui_AboutItem):
-    def __init__(self, name: str, description: str = "", icon: QPixmap = None, operator: tuple = None):
+    def __init__(
+        self,
+        name: str,
+        description: str = "",
+        icon: QPixmap = None,
+        operators: tuple[tuple] = None,
+    ):
         super().__init__()
         self.setupUi(self)
 
@@ -16,8 +23,9 @@ class AboutItem(QFrame, Ui_AboutItem):
             self.l_icon.setPixmap(icon.scaled(self.l_icon.size()))
         else:
             self.l_icon.hide()
-        if operator:
-            self.pb_operator.clicked.connect(lambda: operator[0]())
-            self.pb_operator.setText(operator[1])
-        else:
-            self.pb_operator.hide()
+        if operators:
+            for operator in operators:
+                button = PrimaryPushButton()
+                button.setText(operator[1])
+                button.clicked.connect(lambda _, op=operator: op[0]())
+                self.hl_operators.addWidget(button)

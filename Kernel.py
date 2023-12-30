@@ -3,13 +3,21 @@ import os
 import shutil
 import sys
 import traceback
+import webbrowser
 from importlib import import_module
 from zipfile import *
+import multitasking
+import PIL
+import qfluentwidgets
+import qframelesswindow
+import requests
+import toml
+import python_nbt
 
 import qtawesome as qta
-from PyQt5.QtCore import QCoreApplication, QEvent, QObject, Qt, QTranslator
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QDialog, QMessageBox, QWidget
+from PyQt5.QtCore import QCoreApplication, QEvent, QObject, Qt, QTranslator, qVersion
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtWidgets import QApplication, QDialog, QMessageBox, QWidget, qApp
 from qfluentwidgets import RoundMenu, setThemeColor
 
 from Events import *
@@ -248,3 +256,225 @@ class Kernel(QApplication):
                 if ext == ".qm":
                     lang.append(name)
         return set(lang)
+
+    @staticmethod
+    def getAbout():
+        return {
+            "launcher": [
+                (
+                    f"Functional Minecraft Launcher",
+                    f"v{qApp.applicationVersion()}",
+                    QPixmap(":/Image/icon.png"),
+                    (
+                        (
+                            lambda: webbrowser.open(
+                                "https://github.com/1604042736/FMCL"
+                            ),
+                            "GitHub",
+                        ),
+                    ),
+                )
+            ],
+            "thanks": [
+                (
+                    "bangbang93",
+                    _translate("About", "提供镜像源"),
+                    QPixmap(":/Image/bangbang93.jpg"),
+                    (
+                        (
+                            lambda: webbrowser.open(
+                                "https://bmclapidoc.bangbang93.com/"
+                            ),
+                            _translate("About", "官网"),
+                        ),
+                        (
+                            lambda: webbrowser.open("https://afdian.net/a/bangbang93"),
+                            _translate("About", "赞助"),
+                        ),
+                    ),
+                ),
+                (
+                    "HMCL",
+                    _translate("About", "提供技术帮助"),
+                    QPixmap(":/Image/hmcl.png"),
+                    (
+                        (
+                            lambda: webbrowser.open("https://hmcl.huangyuhui.net/"),
+                            _translate("About", "官网"),
+                        ),
+                        (
+                            lambda: webbrowser.open(
+                                "https://afdian.net/a/huanghongxun"
+                            ),
+                            _translate("About", "赞助"),
+                        ),
+                        (
+                            lambda: webbrowser.open(
+                                "https://github.com/huanghongxun/HMCL"
+                            ),
+                            "GitHub",
+                        ),
+                    ),
+                ),
+                (
+                    "PCL",
+                    _translate("About", "提供技术帮助"),
+                    QPixmap(":/Image/pcl.png"),
+                    (
+                        (
+                            lambda: webbrowser.open("https://afdian.net/a/LTCat"),
+                            _translate("About", "赞助"),
+                        ),
+                        (
+                            lambda: webbrowser.open(
+                                "https://github.com/Hex-Dragon/PCL2"
+                            ),
+                            "GitHub",
+                        ),
+                    ),
+                ),
+            ],
+            "3rdparty": [
+                (
+                    "Python",
+                    sys.version,
+                    None,
+                    (
+                        (
+                            lambda: webbrowser.open("https://www.python.org"),
+                            _translate("About", "官网"),
+                        ),
+                        (
+                            lambda: webbrowser.open(
+                                "https://github.com/python/cpython"
+                            ),
+                            "Github",
+                        ),
+                    ),
+                ),
+                (
+                    "minecraft_launcher_lib",
+                    "v6.1",
+                    None,
+                    (
+                        (
+                            lambda: webbrowser.open(
+                                "https://github.com/BobDotCom/minecraft-launcher-lib"
+                            ),
+                            "GitHub",
+                        ),
+                    ),
+                ),
+                (
+                    "multitasking",
+                    "v" + multitasking.__version__,
+                    None,
+                    (
+                        (
+                            lambda: webbrowser.open(
+                                "https://github.com/ranaroussi/multitasking"
+                            ),
+                            "GitHub",
+                        ),
+                    ),
+                ),
+                (
+                    "Pillow",
+                    "v" + PIL.__version__,
+                    None,
+                    (
+                        (
+                            lambda: webbrowser.open(
+                                "https://github.com/python-pillow/Pillow"
+                            ),
+                            "GitHub",
+                        ),
+                    ),
+                ),
+                (
+                    "PyQt5",
+                    "v" + qVersion(),
+                    None,
+                    (
+                        (qApp.aboutQt, _translate("About", "关于Qt")),
+                        (
+                            lambda: webbrowser.open("https://www.qt.io"),
+                            _translate("About", "官网"),
+                        ),
+                    ),
+                ),
+                (
+                    "PyQt-Fluent-Widgets",
+                    "v" + qfluentwidgets.__version__,
+                    None,
+                    (
+                        (
+                            lambda: webbrowser.open("https://afdian.net/a/zhiyiYo"),
+                            _translate("About", "赞助"),
+                        ),
+                        (
+                            lambda: webbrowser.open("https://qfluentwidgets.com/"),
+                            _translate("About", "官网"),
+                        ),
+                        (
+                            lambda: webbrowser.open(
+                                "https://github.com/zhiyiYo/PyQt-Fluent-Widgets"
+                            ),
+                            "GitHub",
+                        ),
+                    ),
+                ),
+                (
+                    "PyQt5_Frameless_Window",
+                    "v" + qframelesswindow.__version__,
+                    None,
+                    (
+                        (
+                            lambda: webbrowser.open("https://afdian.net/a/zhiyiYo"),
+                            _translate("About", "赞助"),
+                        ),
+                        (
+                            lambda: webbrowser.open(
+                                "https://github.com/zhiyiYo/PyQt-Frameless-Window"
+                            ),
+                            "GitHub",
+                        ),
+                    ),
+                ),
+                (
+                    "requests",
+                    "v" + requests.__version__,
+                    None,
+                    (
+                        (
+                            lambda: webbrowser.open("https://github.com/psf/requests"),
+                            "GitHub",
+                        ),
+                    ),
+                ),
+                (
+                    "toml",
+                    "v" + toml.__version__,
+                    None,
+                    (
+                        (
+                            lambda: webbrowser.open("https://github.com/uiri/toml"),
+                            "GitHub",
+                        ),
+                    ),
+                ),
+                (
+                    "Python-NBT",
+                    "v" + ".".join(map(str, python_nbt.VERSION)),
+                    None,
+                    (
+                        (
+                            lambda: webbrowser.open(
+                                "https://github.com/TowardtheStars/Python-NBT"
+                            ),
+                            "GitHub",
+                        ),
+                    ),
+                ),
+            ],
+        }

@@ -2,7 +2,6 @@ import logging
 import os
 import sys
 import traceback
-import webbrowser as _  # 打包exe需要
 
 import multitasking
 import PyQt5.QtMultimedia as _  # 打包exe需要
@@ -20,9 +19,7 @@ _translate = QCoreApplication.translate
 def except_hook(*args):
     sys.__excepthook__(*args)
     exception = "".join(traceback.format_exception(*args)).strip()
-    QMessageBox.critical(None,
-                         _translate("Main", "启动器发生了严重错误"),
-                         exception)
+    QMessageBox.critical(None, _translate("Main", "启动器发生了严重错误"), exception)
     logging.critical(exception)
     logging.info(f"{sys.path=}")
 
@@ -33,8 +30,9 @@ def init():
     if not os.path.exists("FMCL/Functions"):
         os.makedirs("FMCL/Functions")
 
-    log_formatter = logging.Formatter(fmt='[%(asctime)s] [%(levelname)s]: %(message)s',
-                                      datefmt='%Y-%m-%d,%H:%M:%S')
+    log_formatter = logging.Formatter(
+        fmt="[%(asctime)s] [%(levelname)s]: %(message)s", datefmt="%Y-%m-%d,%H:%M:%S"
+    )
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
     sh = logging.StreamHandler()
@@ -50,7 +48,7 @@ def init():
 def main():
     init()
     try:
-        index = sys.argv.index("--update")+1
+        index = sys.argv.index("--update") + 1
         os.remove(sys.argv[index])
     except:
         pass
