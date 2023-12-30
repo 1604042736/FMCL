@@ -23,6 +23,7 @@ def defaultSetting() -> dict:
         "musicplayer.musiclist": [],
         "musicplayer.auto_sync_startindex": True,
         "musicplayer.startindex": 0,
+        "musicplayer.volume": 100,
     }
 
 
@@ -53,6 +54,7 @@ def defaultSettingAttr() -> dict:
                 lambda setting: setting.get("musicplayer.auto_sync_startindex") == False
             ),
         },
+        "musicplayer.volume": {"name": _translate("MusicPlayer", "音量")},
     }
 
 

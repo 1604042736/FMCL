@@ -53,6 +53,7 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
         self.pb_music.setIcon(qta.icon("ei.music"))
         self.pb_music.clicked.connect(lambda: Kernel.execFunction("MusicPlayer"))
 
+        setting = Setting()
         self.playlist = QMediaPlaylist(self)
         self.player = QMediaPlayer(self)
         self.player.currentMediaChanged.connect(self.setMusicName)
@@ -61,12 +62,13 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
         self.player.stateChanged.connect(self.setButton)
         self.hs_music.sliderMoved.connect(self.player.setPosition)
         self.player.setPlaylist(self.playlist)
-        self.player.setVolume(100)
+        self.player.setVolume(setting["musicplayer.volume"])
+        self.hs_sound.setValue(setting["musicplayer.volume"])
         self.playlist.currentIndexChanged.connect(self.syncStartIndex)
         self.playlist.setPlaybackMode(QMediaPlaylist.PlaybackMode.Loop)
-        self.playlist.setCurrentIndex(Setting()["musicplayer.startindex"])
+        self.playlist.setCurrentIndex(setting["musicplayer.startindex"])
 
-        for i in Setting()["musicplayer.musiclist"]:
+        for i in setting["musicplayer.musiclist"]:
             self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(i)))
 
     def refresh(self):
@@ -78,6 +80,7 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
             self.lw_musiclist.addItem(music)
             musiclist.append(music)
         Setting().set("musicplayer.musiclist", musiclist)
+        self.hs_sound.setValue(Setting()["musicplayer.volume"])
 
     def event(self, a0: QEvent) -> bool:
         if a0.type() == QEvent.Type.Show:
@@ -150,6 +153,7 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
     @pyqtSlot(int)
     def on_hs_sound_valueChanged(self, value):
         self.player.setVolume(value)
+        Setting().set("musicplayer.volume", value)
 
     @pyqtSlot(bool)
     def on_pb_next_clicked(self, _):
