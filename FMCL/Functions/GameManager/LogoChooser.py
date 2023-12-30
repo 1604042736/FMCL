@@ -1,6 +1,7 @@
 import qtawesome as qta
 from Core import Version
 from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QFileDialog, QWidget
 
 from .ui_LogoChooser import Ui_LogoChooser
@@ -45,19 +46,16 @@ class LogoChooser(QWidget, Ui_LogoChooser):
         self.cb_logo.currentTextChanged.disconnect(self.changeLogo)
         self.cb_logo.clear()
         cur_logo = self.game.setting.get("logo")
-        self.cb_logo.addItem(cur_logo)
+        self.cb_logo.addItem(QIcon(cur_logo), cur_logo)
 
         for i in self.logos:
             if i != cur_logo:
-                self.cb_logo.addItem(i)
+                self.cb_logo.addItem(QIcon(i), i)
         self.cb_logo.setCurrentText(cur_logo)
         self.cb_logo.currentTextChanged.connect(self.changeLogo)
-        self.changeLogo(cur_logo, pixmap_only=True)
 
-    def changeLogo(self, text, pixmap_only=False):
-        if not pixmap_only:  # 在刷新的时侯不能更改,避免递归调用
-            self.game.setting.set("logo", text)
-        self.l_logo.setPixmap(self.game.get_pixmap().scaled(32, 32))
+    def changeLogo(self, text):
+        self.game.setting.set("logo", text)
 
     @pyqtSlot(bool)
     def on_pb_add_clicked(self, _):
