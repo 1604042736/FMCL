@@ -190,7 +190,10 @@ class Kernel(QApplication):
             if not os.path.exists(functions_path):
                 continue
             for function_name in os.listdir(functions_path):
-                functions[function_name] = Kernel.getFunction(function_name)
+                try:
+                    functions[function_name] = Kernel.getFunction(function_name)
+                except:
+                    logging.warning(f"功能{function_name}将被忽略:\n{traceback.format_exc()}")
         return functions.values()
 
     @staticmethod
