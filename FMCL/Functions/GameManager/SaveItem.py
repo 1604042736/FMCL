@@ -29,7 +29,11 @@ class SaveItem(QWidget, Ui_SaveItem):
             self.save.delete()
             self.saveDeleted.emit()
 
-        box = MessageBox(self.tr("删除"), self.tr("确认删除") + "?", self.window())
+        box = MessageBox(
+            self.tr("你确定要删除这个世界吗") + "?",
+            f'"{self.save.levelname}"将会失去很久! (真的很久!)',
+            self.window(),
+        )
         box.yesSignal.connect(confirmDelete)
         box.exec()
 
