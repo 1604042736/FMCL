@@ -9,6 +9,8 @@ from PyQt5.QtWidgets import QWidget
 
 from .ui_Launcher import Ui_Launcher
 
+CPU_COUNT = psutil.cpu_count()
+
 
 class Launcher(QWidget, Ui_Launcher):
     __commandGot = pyqtSignal(str, list)
@@ -105,7 +107,7 @@ class Launcher(QWidget, Ui_Launcher):
             self.afterKilling()
             return
         info = [
-            f"{self.tr('CPU使用率')}: {self.process_info.cpu_percent()}%",
-            f"{self.tr('内存使用率')}: {self.process_info.memory_percent()}%({self.process_info.memory_info().rss/1024/1024}MB)",
+            f"{self.tr('CPU使用率')}: {round(self.process_info.cpu_percent()/CPU_COUNT,1)}%",
+            f"{self.tr('内存使用率')}: {round(self.process_info.memory_percent(),1)}%({round(self.process_info.memory_info().rss/1024/1024,1)}MB)",
         ]
         self.l_info.setText(", ".join(info))
