@@ -1,8 +1,15 @@
 import qtawesome as qta
 from Events import *
 from PyQt5.QtCore import pyqtSlot, QEvent
-from PyQt5.QtWidgets import QLabel, QTreeWidgetItem, QWidget, qApp, QHeaderView
-from qfluentwidgets import TransparentToolButton, PrimaryPushButton
+from PyQt5.QtWidgets import (
+    QLabel,
+    QTreeWidgetItem,
+    QWidget,
+    QHBoxLayout,
+    QSizePolicy,
+    QSpacerItem,
+)
+from qfluentwidgets import TransparentToolButton
 from Setting import Setting
 
 from .SettingCards import SettingCard
@@ -27,15 +34,11 @@ class SettingEditor(QWidget, Ui_SettingEditor):
         self.setupUi(self)
         self.resize(1000, 618)
         self.setWindowIcon(qta.icon("ri.settings-5-line"))
-        self.splitter.setSizes([200, 500])
-
-        self.tw_setting.header().setSectionResizeMode(
-            0, QHeaderView.ResizeMode.ResizeToContents
-        )
+        self.splitter.setSizes([100, 500])
 
         self.setting = setting
         self.items = {}
-        self.item_widget_id = []
+        self.item_widget_id_layout = []
         self.setting_cards = {}
         row = 1
         for id, val in self.setting.items():
@@ -50,13 +53,6 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                 text = self.setting.getAttr(totalid, "name")
                 item.setText(0, text)
                 self.addTreeItem(root, item)
-                pb_restore = TransparentToolButton()
-                pb_restore.setIcon(qta.icon("mdi.refresh"))
-                pb_restore.setToolTip(self.tr("恢复默认设置"))
-                pb_restore.clicked.connect(
-                    lambda _, id=totalid: self.setting.restore(id)
-                )
-                self.tw_setting.setItemWidget(item, 1, pb_restore)
                 self.items[totalid] = item
 
                 widget = QLabel()
@@ -66,14 +62,29 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                 font.setPixelSize(16 - i * 2)
                 widget.setFont(font)
                 self.gl_setting.addWidget(widget, row, 1)
-                self.item_widget_id.append((item, widget, totalid))
 
-                link = self.setting.getAttr(totalid, "link", None)
-                if link:
-                    button = PrimaryPushButton()
-                    button.setText(link["name"])
-                    button.clicked.connect(lambda _, l=link: l["action"]())
-                    self.gl_setting.addWidget(button, row, 2)
+                spaceritem = QSpacerItem(
+                    0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+                )
+                self.gl_setting.addItem(spaceritem, row, 2)
+                layout_widget = QWidget()
+                self.gl_setting.addWidget(layout_widget, row, 3)
+                hboxlayout = QHBoxLayout(layout_widget)
+                side_widgets = self.setting.getAttr(totalid, "side_widgets", tuple())
+                for i in side_widgets:
+                    hboxlayout.addWidget(i())
+
+                pb_restore = TransparentToolButton()
+                pb_restore.setIcon(qta.icon("mdi.refresh"))
+                pb_restore.setToolTip(self.tr("恢复默认设置"))
+                pb_restore.clicked.connect(
+                    lambda _, id=totalid: self.setting.restore(id)
+                )
+                hboxlayout.addWidget(pb_restore)
+                self.item_widget_id_layout.append(
+                    (item, widget, totalid, layout_widget)
+                )
+
                 row += 1
 
             if "callback" not in setting.attrs[id]:
@@ -83,7 +94,7 @@ class SettingEditor(QWidget, Ui_SettingEditor):
             settingcard = self.setting.getAttr(
                 id, "settingcard", lambda id=id: SettingCard(id, self.setting)
             )()
-            self.gl_setting.addWidget(settingcard, row, 1, 1, 2)
+            self.gl_setting.addWidget(settingcard, row, 1, 1, 3)
             self.setting_cards[id] = settingcard
             row += 1
 
@@ -97,13 +108,13 @@ class SettingEditor(QWidget, Ui_SettingEditor):
 
     @pyqtSlot(QTreeWidgetItem, int)
     def on_tw_setting_itemClicked(self, item, _):
-        for item_, widget, _ in self.item_widget_id:
+        for item_, widget, _, _ in self.item_widget_id_layout:
             if item_ == item:
                 self.sa_setting.verticalScrollBar().setValue(widget.pos().y())
                 break
 
     def turnTo(self, id):
-        for _, widget, id_ in self.item_widget_id:
+        for _, widget, id_, _ in self.item_widget_id_layout:
             if id_ == id:
                 self.sa_setting.verticalScrollBar().setValue(widget.pos().y())
                 break
@@ -137,7 +148,8 @@ class SettingEditor(QWidget, Ui_SettingEditor):
             for key, val in self.setting.attrs.items():
                 if key.find(id) == 0:
                     enable[key] = False
-        for _, widget, id in self.item_widget_id:
+        for _, widget, id, layout in self.item_widget_id_layout:
             widget.setEnabled(enable[id])
+            layout.setEnabled(enable[id])
             if id in self.setting_cards:
                 self.setting_cards[id].setEnabled(enable[id])

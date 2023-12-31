@@ -2,7 +2,7 @@ import qtawesome as qta
 from Core import Version
 from FMCL.Functions.SettingEditor import SettingEditor
 from Kernel import Kernel
-from PyQt5.QtCore import QEvent, pyqtSlot
+from PyQt5.QtCore import QEvent, pyqtSlot, QObject
 from PyQt5.QtWidgets import QWidget
 
 from .GameInfo import GameInfo
@@ -10,6 +10,17 @@ from .LogoChooser import LogoChooser
 from .ModManager import ModManager
 from .SaveManager import SaveManager
 from .ui_GameManager import Ui_GameManager
+
+
+class AutoSyncDefaultSettingFilter(QObject):
+    def __init__(self, name: str):
+        super().__init__()
+        self.name = name
+
+    def eventFilter(self, a0: QObject | None, a1: QEvent | None) -> bool:
+        if a1.type() in (QEvent.Type.Show, QEvent.Type.WindowActivate):
+            Version(self.name).generate_setting()
+        return super().eventFilter(a0, a1)
 
 
 class GameManager(QWidget, Ui_GameManager):
@@ -52,6 +63,8 @@ class GameManager(QWidget, Ui_GameManager):
         )
         self.game.generate_setting()
         self.gamesetting = SettingEditor(self.game.setting)
+        self.settingfilter = AutoSyncDefaultSettingFilter(self.name)
+        self.gamesetting.installEventFilter(self.settingfilter)
 
         self.modmanager = None
         self.savemanager = None

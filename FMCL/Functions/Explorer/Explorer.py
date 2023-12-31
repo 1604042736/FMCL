@@ -2,7 +2,6 @@ import qtawesome as qta
 from Events import *
 from Kernel import Kernel
 from PyQt5.QtCore import QEvent, QObject, QPoint, Qt
-from PyQt5.QtGui import QShowEvent, QResizeEvent
 from PyQt5.QtWidgets import QAction, QPushButton, QStackedWidget, QWidget, qApp
 from qfluentwidgets import RoundMenu, TransparentTogglePushButton
 from Setting import Setting

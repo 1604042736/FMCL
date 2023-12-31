@@ -13,6 +13,7 @@ import toml
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import qApp
+from qfluentwidgets import PrimaryPushButton
 from Setting import Setting
 
 from Core.Download import Download
@@ -53,13 +54,15 @@ class Version:
         self.name = name
         self.directory = Setting().get("game.directories")[0]
 
+        self.pb_goglobalsetting = PrimaryPushButton()
+        self.pb_goglobalsetting.setText(_translate("Version", "前往全局设置"))
+        self.pb_goglobalsetting.clicked.connect(
+            lambda: Kernel.execFunction("SettingEditor", id="game")
+        )
         self.DEFAULT_SETTING_ATTR = {
             "specific": {
                 "name": _translate("Version", "特定设置"),
-                "link": {
-                    "name": _translate("Version", "前往全局设置"),
-                    "action": lambda: Kernel.execFunction("SettingEditor", id="game"),
-                },
+                "side_widgets": [lambda: self.pb_goglobalsetting],
             },
             "isolation": {
                 "name": _translate("Version", "版本隔离"),
@@ -82,12 +85,12 @@ class Version:
     def sync_default_setting(self):
         globalsetting = Setting()
         for key, val in globalsetting.items():
-            if key.find("game.") == 0 or key=="game":
+            if key.find("game.") == 0 or key == "game":
                 self.DEFAULT_SETTING[key] = val
                 if hasattr(self, "setting"):
                     self.setting.defaultsetting[key] = val
         for key, val in globalsetting.attrs.items():
-            if key.find("game.") == 0 or key=="game":
+            if key.find("game.") == 0 or key == "game":
                 if key not in self.DEFAULT_SETTING_ATTR:
                     self.DEFAULT_SETTING_ATTR[key] = {}
                 self.DEFAULT_SETTING_ATTR[key] |= val

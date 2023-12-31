@@ -2,7 +2,8 @@ import json
 import os
 from typing import Any, Literal, TypedDict, Callable
 from PyQt5.QtCore import QCoreApplication
-from qfluentwidgets import Theme, setTheme, setThemeColor
+from PyQt5.QtWidgets import QWidget, QFileDialog
+from qfluentwidgets import setThemeColor, PrimaryPushButton
 
 _translate = QCoreApplication.translate
 
@@ -24,18 +25,14 @@ DEFAULT_SETTING = {
 }
 
 
-class Link(TypedDict):
-    name: str  # 链接名称
-    action: Callable  # 链接操作
-
-
 class SettingAttr(TypedDict):
     """设置属性类型"""
 
     name: str  # 名称
     callback: list[Callable[[Any], None]]  # 回调函数, 在对应设置项被修改后调用
     enable_condition: Callable[["Setting"], bool]  # 启用条件, 禁用后, 它的子设置也会被禁用
-    link: Link  # 链接
+    settingcard: Callable[[], QWidget]  # 设置卡片, 默认由SettingEditor设置
+    side_widgets: list[Callable[[], QWidget]]  # 放在标签旁边的控件
     # 一下类型将用于List设置项
     static: bool  # 是否为静态(不可更改, 当成tuple)
     type: Literal["directory", "file", "input"]  # 列表中每项的类型
@@ -43,6 +40,19 @@ class SettingAttr(TypedDict):
 
 
 def defaultSettingAttr() -> SettingAttr:
+    def choosefile():
+        file, _ = QFileDialog.getOpenFileName(
+            None, _translate("Setting", "选择Java"), filter="Java (java.*)"
+        )
+        if file:
+            Setting().set("game.java_path", file)
+
+    def choosefilebutton():
+        pb_choosefile = PrimaryPushButton()
+        pb_choosefile.setText(_translate("Setting", "选择文件"))
+        pb_choosefile.clicked.connect(choosefile)
+        return pb_choosefile
+
     return {
         "system": {"name": _translate("Setting", "系统")},
         "system.startup_functions": {"name": _translate("Setting", "启动项")},
@@ -56,7 +66,10 @@ def defaultSettingAttr() -> SettingAttr:
             "type": "directory",
             "atleast": 1,
         },
-        "game.java_path": {"name": _translate("Setting", "Java路径")},
+        "game.java_path": {
+            "name": _translate("Setting", "Java路径"),
+            "side_widgets": [choosefilebutton],
+        },
         "game.width": {"name": _translate("Setting", "游戏窗口宽度")},
         "game.height": {"name": _translate("Setting", "游戏窗口高度")},
         "game.maxmem": {"name": _translate("Setting", "最大内存")},
@@ -140,9 +153,12 @@ class Setting:
             if key not in self.defaultsetting:
                 self.defaultsetting[key] = val
 
-        for id in new_setting:
-            if id not in self.attrs:  # 防止以前加载过[Version可能会频繁执行此操作(调用generate_setting)]
-                self.attrs[id] = {"name": id}
+        for item_id in new_setting:
+            splitid = item_id.split(".")
+            for i in range(len(splitid)):
+                id = ".".join(splitid[: i + 1])
+                if id not in self.attrs:
+                    self.attrs[id] = {"name": id}
 
     def addAttr(self, attr: SettingAttr):
         """添加设置属性"""
