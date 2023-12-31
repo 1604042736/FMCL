@@ -9,6 +9,7 @@ from .GameInfo import GameInfo
 from .LogoChooser import LogoChooser
 from .ModManager import ModManager
 from .SaveManager import SaveManager
+from .ScreenshotManager import ScreenshotManager
 from .ui_GameManager import Ui_GameManager
 
 
@@ -46,6 +47,7 @@ class GameManager(QWidget, Ui_GameManager):
         self.pb_gamesetting.setIcon(qta.icon("ri.settings-5-line"))
         self.pb_modmanager.setIcon(qta.icon("mdi.puzzle-outline"))
         self.pb_savemanager.setIcon(qta.icon("fa.save"))
+        self.pb_screenshotmanager.setIcon(qta.icon("ei.picture"))
         self.name = name
         self.game = Version(name)
         self.refresh()
@@ -68,6 +70,7 @@ class GameManager(QWidget, Ui_GameManager):
 
         self.modmanager = None
         self.savemanager = None
+        self.screenshotmanager = None
 
         self.pb_gameinfo.setChecked(True)
         self.setUi(self.gameinfo)
@@ -104,3 +107,10 @@ class GameManager(QWidget, Ui_GameManager):
             self.savemanager = SaveManager(self.name)
         self.pb_savemanager.setChecked(True)
         self.setUi(self.savemanager)
+
+    @pyqtSlot(bool)
+    def on_pb_screenshotmanager_clicked(self, _):
+        if self.screenshotmanager == None:
+            self.screenshotmanager = ScreenshotManager(self.name)
+        self.pb_screenshotmanager.setChecked(True)
+        self.setUi(self.screenshotmanager)

@@ -351,6 +351,18 @@ class Version:
             path = os.path.join(self.directory, "versions", self.name, "saves")
         else:
             path = os.path.join(self.directory, "saves")
+        if not os.path.exists(path):
+            os.makedirs(path)
+        return path
+
+    def get_screenshot_path(self):
+        self.generate_setting()
+        if self.setting.get("isolation"):
+            path = os.path.join(self.directory, "versions", self.name, "screenshots")
+        else:
+            path = os.path.join(self.directory, "screenshots")
+        if not os.path.exists(path):
+            os.makedirs(path)
         return path
 
     def mod_avaiable(self):
@@ -415,6 +427,26 @@ class Version:
             if os.path.exists(p):
                 os.remove(p)
                 logging.info(f"删除{p}")
+
+    def deleteScreenshots(self, screenshots: list | str):
+        if isinstance(screenshots, str):
+            screenshots = [screenshots]
+        path = self.get_screenshot_path()
+        for screenshot in screenshots:
+            p = os.path.join(path, screenshot)
+            if os.path.exists(p):
+                os.remove(p)
+                logging.info(f"删除{p}")
+
+    def renameScreenshot(self, old, new):
+        path = self.get_screenshot_path()
+        pold = os.path.join(path, old)
+        pnew = os.path.join(path, new)
+        os.rename(pold, pnew)
+
+    def openScreenshot(self, screenshot):
+        path = os.path.join(self.get_screenshot_path(), screenshot)
+        os.popen(f"start {path}")
 
     def generate_setting(self):
         if not hasattr(self, "setting"):
