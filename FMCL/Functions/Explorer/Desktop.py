@@ -97,6 +97,7 @@ class Desktop(ListWidget):
         for game_name in os.listdir(os.path.join(path, "versions")):
             try:
                 item = QListWidgetItem()
+                item.setToolTip(game_name)
                 item.setSizeHint(QSize(80, 80))
                 item.setText(game_name)
                 item.setIcon(Version(game_name).get_icon())
