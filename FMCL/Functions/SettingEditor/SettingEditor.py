@@ -87,11 +87,6 @@ class SettingEditor(QWidget, Ui_SettingEditor):
             self.setting_cards[id] = settingcard
             row += 1
 
-        self.pb_refresh = TransparentToolButton()
-        self.pb_refresh.resize(46, 32)
-        self.pb_refresh.setIcon(qta.icon("mdi.refresh"))
-        self.pb_refresh.clicked.connect(lambda: self.refresh())
-
         self.checkCondition()
 
     def addTreeItem(self, root: QTreeWidgetItem | None, item: QTreeWidgetItem):
@@ -126,11 +121,9 @@ class SettingEditor(QWidget, Ui_SettingEditor):
 
     def event(self, a0: QEvent) -> bool:
         if a0.type() == QEvent.Type.Show:
-            qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_refresh, "right"))
             self.refresh()
-        elif a0.type() == QEvent.Type.Hide:
-            qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_refresh))
-            self.pb_refresh.setParent(self)
+        elif a0.type() == QEvent.Type.WindowActivate:
+            self.refresh()
         return super().event(a0)
 
     def checkCondition(self):

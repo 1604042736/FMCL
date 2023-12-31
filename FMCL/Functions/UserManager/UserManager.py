@@ -33,11 +33,6 @@ class UserManager(QWidget, Ui_UserManager):
         self.pb_add.resize(46, 32)
         self.pb_add.clicked.connect(lambda: Kernel.execFunction("CreateUser"))
 
-        self.pb_refresh = TransparentToolButton()
-        self.pb_refresh.resize(46, 32)
-        self.pb_refresh.setIcon(qta.icon("mdi.refresh"))
-        self.pb_refresh.clicked.connect(lambda: self.refresh())
-
         self.userinfo: list[UserInfo] = []
         self.refresh()
 
@@ -71,11 +66,10 @@ class UserManager(QWidget, Ui_UserManager):
     def event(self, a0: QEvent) -> bool:
         if a0.type() == QEvent.Type.Show:
             qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_add, "right"))
-            qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_refresh, "right"))
             self.refresh()
         elif a0.type() == QEvent.Type.Hide:
             qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_add))
-            qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_refresh))
             self.pb_add.setParent(self)
-            self.pb_refresh.setParent(self)
+        elif a0.type() == QEvent.Type.WindowActivate:
+            self.refresh()
         return super().event(a0)

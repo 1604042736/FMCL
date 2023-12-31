@@ -1,9 +1,8 @@
 import qtawesome as qta
 from Core import Version
-from Events import *
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QEvent
-from PyQt5.QtWidgets import QLabel, QWidget, qApp
-from qfluentwidgets import MessageBox, TransparentToolButton
+from PyQt5.QtWidgets import QLabel, QWidget
+from qfluentwidgets import MessageBox
 
 from .ui_GameInfo import Ui_GameInfo
 
@@ -24,11 +23,6 @@ class GameInfo(QWidget, Ui_GameInfo):
             "fabric_version": self.tr("Fabric版本"),
         }
         self.game = Version(name)
-
-        self.pb_refresh = TransparentToolButton()
-        self.pb_refresh.resize(46, 32)
-        self.pb_refresh.setIcon(qta.icon("mdi.refresh"))
-        self.pb_refresh.clicked.connect(lambda: self.refresh())
 
         self.refresh()
 
@@ -81,9 +75,7 @@ class GameInfo(QWidget, Ui_GameInfo):
 
     def event(self, a0: QEvent) -> bool:
         if a0.type() == QEvent.Type.Show:
-            qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_refresh, "right"))
             self.refresh()
-        elif a0.type() == QEvent.Type.Hide:
-            qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_refresh))
-            self.pb_refresh.setParent(self)
+        elif a0.type() == QEvent.Type.WindowActivate:
+            self.refresh()
         return super().event(a0)

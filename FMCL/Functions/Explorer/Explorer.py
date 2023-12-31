@@ -56,18 +56,6 @@ QPushButton:checked{
 
         self.showDesktop()
 
-    def showEvent(self, a0: QShowEvent) -> None:
-        qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_start, index=0))
-        for _, button in self.caught_widgets.items():  # 恢复
-            qApp.sendEvent(self.window(), AddToTitleEvent(button, "right", -1))
-
-        for action in self.title_rightclicked_actions:
-            qApp.sendEvent(self.window(), AddToTitleMenuEvent(action))
-
-        if isinstance(self.currentWidget(), (Start, Desktop)):
-            self.currentWidget().refresh()
-        return super().showEvent(a0)
-
     def addWidget(self, widget: QWidget):
         """添加控件"""
         if widget == self:
@@ -207,9 +195,17 @@ QPushButton:checked{
         else:
             self.removeWidget(widget)
 
-    def resizeEvent(self, a0: QResizeEvent | None) -> None:
-        setting = Setting()
-        if setting["explorer.auto_sync_size"]:
-            setting.set("explorer.width", self.width())
-            setting.set("explorer.height", self.height())
-        return super().resizeEvent(a0)
+    def event(self, e: QEvent | None) -> bool:
+        if e.type() == QEvent.Type.Show:
+            qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_start, index=0))
+            for _, button in self.caught_widgets.items():  # 恢复
+                qApp.sendEvent(self.window(), AddToTitleEvent(button, "right", -1))
+
+            for action in self.title_rightclicked_actions:
+                qApp.sendEvent(self.window(), AddToTitleMenuEvent(action))
+        elif e.type() == QEvent.Type.Resize:
+            setting = Setting()
+            if setting["explorer.auto_sync_size"]:
+                setting.set("explorer.width", self.width())
+                setting.set("explorer.height", self.height())
+        return super().event(e)

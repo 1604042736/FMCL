@@ -43,11 +43,6 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
             lambda: Kernel.execFunction("SettingEditor", id="musicplayer")
         )
 
-        self.pb_refresh = TransparentToolButton()
-        self.pb_refresh.resize(46, 32)
-        self.pb_refresh.setIcon(qta.icon("mdi.refresh"))
-        self.pb_refresh.clicked.connect(lambda: self.refresh())
-
         self.pb_music = TransparentToolButton()
         self.pb_music.resize(46, 32)
         self.pb_music.setIcon(qta.icon("ei.music"))
@@ -85,13 +80,12 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
     def event(self, a0: QEvent) -> bool:
         if a0.type() == QEvent.Type.Show:
             qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_gosetting, "right"))
-            qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_refresh, "right"))
             self.refresh()
         elif a0.type() == QEvent.Type.Hide:
             qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_gosetting))
-            qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_refresh))
             self.pb_gosetting.setParent(self)
-            self.pb_refresh.setParent(self)
+        elif a0.type() == QEvent.Type.WindowActivate:
+            self.refresh()
         return super().event(a0)
 
     @pyqtSlot(bool)

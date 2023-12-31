@@ -91,11 +91,3 @@ class GameManager(QWidget, Ui_GameManager):
             self.savemanager = SaveManager(self.name)
         self.pb_savemanager.setChecked(True)
         self.setUi(self.savemanager)
-
-    def event(self, a0: QEvent) -> bool:
-        if a0.type() == QEvent.Type.Show:
-            self.gameinfo.refresh()  # 这里的方法调用会调用Version.sync_default_setting
-            self.gamesetting.refresh()
-            # 由于ModManger和SaveManager刷新可能会导致卡顿
-            # 所以这里不自动刷新
-        return super().event(a0)
