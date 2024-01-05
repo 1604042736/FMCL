@@ -5,15 +5,15 @@ from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import QInputDialog
 from Setting import Setting
 
-from .Launcher import Launcher
+from .GameLauncher import GameLauncher
 
 _translate = QCoreApplication.translate
 
 
 def functionInfo():
     return {
-        "name": _translate("Launcher", "启动游戏"),
-        "icon": qta.icon("mdi.rocket-launch-outline")
+        "name": _translate("GameLauncher", "启动游戏"),
+        "icon": qta.icon("mdi.rocket-launch-outline"),
     }
 
 
@@ -21,8 +21,8 @@ def defaultSetting() -> dict:
     setting = Setting()
     if "explorer.desktop.item_rightclicked_actions" in setting.defaultsetting:
         a = setting.defaultsetting["explorer.desktop.item_rightclicked_actions"]
-        if "Launcher" not in a:
-            a.insert(0, "Launcher")
+        if "GameLauncher" not in a:
+            a.insert(0, "GameLauncher")
     return {}
 
 
@@ -30,10 +30,12 @@ def main(name=None):
     if not name:
         name, ok = QInputDialog.getItem(
             None,
-            _translate("Launcher", "选择游戏"),
-            _translate("Launcher", "游戏列表"),
-            os.listdir(os.path.join(Setting()["game.directories"][0], "versions")), editable=False)
+            _translate("GameLauncher", "选择游戏"),
+            _translate("GameLauncher", "游戏列表"),
+            os.listdir(os.path.join(Setting()["game.directories"][0], "versions")),
+            editable=False,
+        )
         if not ok:
             return
-    launcher = Launcher(name)
-    launcher.show()
+    gamelauncher = GameLauncher(name)
+    gamelauncher.show()

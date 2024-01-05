@@ -70,6 +70,9 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                 layout_widget = QWidget()
                 self.gl_setting.addWidget(layout_widget, row, 3)
                 hboxlayout = QHBoxLayout(layout_widget)
+                hboxlayout.setSpacing(0)
+                hboxlayout.setContentsMargins(0, 0, 0, 0)
+
                 side_widgets = self.setting.getAttr(totalid, "side_widgets", tuple())
                 for i in side_widgets:
                     hboxlayout.addWidget(i())

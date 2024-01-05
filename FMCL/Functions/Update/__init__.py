@@ -8,10 +8,7 @@ _translate = QCoreApplication.translate
 
 
 def functionInfo():
-    return {
-        "name": _translate("Update", "更新"),
-        "icon": qta.icon("mdi6.update")
-    }
+    return {"name": _translate("Update", "更新"), "icon": qta.icon("mdi6.update")}
 
 
 def defaultSetting() -> dict:
@@ -28,6 +25,8 @@ fisrt_run = True
 
 def main():
     global fisrt_run
+    if "Update" not in Setting().get("system.startup_functions", tuple()):
+        fisrt_run = False
     if fisrt_run:
         update = Update()
         fisrt_run = False

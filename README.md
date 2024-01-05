@@ -38,7 +38,7 @@ python Pack.py
 
 ## 依赖
 
-详见`FMCL/Functions/About/About.py`
+详见`Kernel.py`中的`Kernel.getAbout`函数
 
 ## 命令行参数
 

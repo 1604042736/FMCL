@@ -13,6 +13,7 @@ import qframelesswindow
 import requests
 import toml
 import python_nbt
+import psutil
 
 import qtawesome as qta
 from PyQt5.QtCore import QCoreApplication, QEvent, QObject, Qt, QTranslator, qVersion
@@ -28,6 +29,8 @@ _translate = QCoreApplication.translate
 
 
 class Kernel(QApplication):
+    HELPINDEX_KEYWORD = ("name", "page")  # 帮助索引中的关键字
+
     widgets = set()
 
     def __init__(self, argv: list[str] = sys.argv) -> None:
@@ -105,8 +108,24 @@ class Kernel(QApplication):
                 if os.path.exists("FMCL/Functions")
                 else []
             )
-            + ["FMCL/Default/FMCL/Translations"]
-            + ["FMCL/Translations"]
+            + (
+                [
+                    f"{default_path}/Translations/{i}"
+                    for i in os.listdir(f"{default_path}/Translations")
+                    if os.path.isdir(os.path.join(f"{default_path}/Translations", i))
+                ]
+                if os.path.exists(f"{default_path}/Translations")
+                else []
+            )
+            + (
+                [
+                    f"FMCL/Translations/{i}"
+                    for i in os.listdir("FMCL/Translations")
+                    if os.path.isdir(os.path.join("FMCL/Translations", i))
+                ]
+                if os.path.exists("FMCL/Translations")
+                else []
+            )
         )
 
     def loadTranslation(self):
@@ -133,30 +152,17 @@ class Kernel(QApplication):
         if os.path.exists("FMCL/Default"):
             shutil.rmtree("FMCL/Default")
         # 由Scripts/Pack.py生成打包文件
-        logging.info("解压默认功能...")
+        logging.info("解压...")
         try:
-            from Pack.Functions import zipfile_bytes
+            from Pack.Default import zipfile_bytes
         except ImportError:
             pass
         else:
             zip = ZipFile(zipfile_bytes)
             for path in zip.namelist():
-                functions_path = "FMCL/Default/FMCL/Functions"
+                functions_path = "FMCL/Default/FMCL"
                 logging.info(f"解压:{path}")
                 zip.extract(path, functions_path)
-            zip.close()
-
-        logging.info("解压默认翻译...")
-        try:
-            from Pack.Translations import zipfile_bytes
-        except ImportError:
-            pass
-        else:
-            zip = ZipFile(zipfile_bytes)
-            for path in zip.namelist():
-                translation_path = "FMCL/Default/FMCL/Translations"
-                logging.info(f"解压:{path}")
-                zip.extract(path, translation_path)
             zip.close()
 
     @staticmethod
@@ -225,6 +231,57 @@ class Kernel(QApplication):
         for function in Kernel.getAllFunctions():
             function_info.append(Kernel.getFunctionInfo(function))
         return function_info
+
+    @staticmethod
+    def getFunctionHelpIndex(function) -> dict:
+        """获得功能的帮助索引"""
+        return getattr(function, "helpIndex", lambda: {})()
+
+    @staticmethod
+    def getAllFunctionHelpIndex() -> list:
+        """获取全部功能的帮助索引"""
+        function_helpindex = []
+        for function in Kernel.getAllFunctions():
+            function_helpindex.append(Kernel.getFunctionHelpIndex(function))
+        return function_helpindex
+
+    @staticmethod
+    def getHelpIndex() -> dict:
+        """获取帮助索引"""
+
+        def merge(a: dict, b: dict):
+            for key, val in b.items():
+                if key not in a:
+                    a[key] = val
+                elif isinstance(val, dict) and isinstance(a[key], dict):
+                    merge(a[key], val)
+                elif isinstance(val, list) and isinstance(a[key], list):
+                    a[key].extend(val)
+                else:
+                    a[key] = val
+
+        helpindex = {}
+        for root in ("FMCL/Help", "FMCL/Default/FMCL/Help"):
+            if not os.path.exists(root):
+                continue
+            for i in os.listdir(root):
+                try:
+                    module = import_module(f"FMCL.Help.{i}")
+                    merge(helpindex, getattr(module, "helpIndex", lambda: {})())
+                except:
+                    logging.error(traceback.format_exc())
+        for i in Kernel.getAllFunctionHelpIndex():
+            merge(helpindex, i)
+        return helpindex
+
+    @staticmethod
+    def getHelpIndexAttr(helpindex: dict, id: str):
+        """通过id获得帮助索引中的属性"""
+        splitid = id.split(".")
+        val = helpindex
+        for i in splitid:
+            val = val[i]
+        return val
 
     @staticmethod
     def activateWidget(widget: QWidget):
@@ -475,5 +532,39 @@ class Kernel(QApplication):
                         ),
                     ),
                 ),
+                (
+                    "qtawesome",
+                    f"v{qta.__version__}",
+                    None,
+                    (
+                        (
+                            lambda: webbrowser.open(
+                                "https://github.com/spyder-ide/qtawesome"
+                            ),
+                            "GitHub",
+                        ),
+                    ),
+                ),
+                (
+                    "psutil",
+                    f"v{psutil.__version__}",
+                    None,
+                    (
+                        (
+                            lambda: webbrowser.open(
+                                "https://github.com/giampaolo/psutil"
+                            ),
+                            "GitHub",
+                        ),
+                    ),
+                ),
             ],
         }
+
+    @staticmethod
+    def getWidgetFromUi(ui_object):
+        """通过Ui文件生成代码得到QWidget"""
+        widget = QWidget()
+        ui = ui_object()
+        ui.setupUi(widget)
+        return widget

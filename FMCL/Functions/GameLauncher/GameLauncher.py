@@ -7,12 +7,12 @@ from Core import Version, Task
 from PyQt5.QtCore import QProcess, pyqtSignal, pyqtSlot, QTimer
 from PyQt5.QtWidgets import QWidget
 
-from .ui_Launcher import Ui_Launcher
+from .ui_GameLauncher import Ui_GameLauncher
 
 CPU_COUNT = psutil.cpu_count()
 
 
-class Launcher(QWidget, Ui_Launcher):
+class GameLauncher(QWidget, Ui_GameLauncher):
     __commandGot = pyqtSignal(str, list)
 
     def __init__(self, game_name: str):

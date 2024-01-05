@@ -1,9 +1,30 @@
 from PyQt5.QtCore import QCoreApplication
 from Setting import Setting
+from Kernel import Kernel
 
 from .Explorer import Explorer
+from .Help.ui_Launcher import Ui_Launcher
+from .Help.ui_Desktop import Ui_Desktop
+from .Help.ui_Start import Ui_Start
 
 _translate = QCoreApplication.translate
+
+
+def helpIndex():
+    return {
+        "launcher": {
+            "name": _translate("ExplorerHelp", "启动器"),
+            "page": lambda: Kernel.getWidgetFromUi(Ui_Launcher),
+            "desktop": {
+                "name": _translate("ExplorerHelp", "桌面"),
+                "page": lambda: Kernel.getWidgetFromUi(Ui_Desktop),
+            },
+            "start": {
+                "name": _translate("ExplorerHelp", "开始"),
+                "page": lambda: Kernel.getWidgetFromUi(Ui_Start),
+            },
+        }
+    }
 
 
 def defaultSetting() -> dict:

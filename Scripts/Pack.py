@@ -2,24 +2,24 @@ import os
 import re
 from zipfile import *
 
-root=os.path.abspath("..")
+root = os.path.abspath("..")
 
 tasks = [
     {
-        "target": "Functions",
-        "path": f"{root}/FMCL/Functions",
+        "target": "Default",
+        "path": f"{root}/FMCL",
         "filter": [
             r".*?\.ui",
             r".*?\.ts",
-            r".*?__pycache__.*?"
-        ]
-    },
-    {
-        "target": "Translations",
-        "path": f"{root}/FMCL/Translations",
-        "filter": [
-            r".*?\.ts"
-        ]
+            r".*?latest.log",
+            r".*?settings.json",
+            r".*?/__pycache__.*?",
+            r".*?/Skin.*?",
+            r".*?/Default.*?",
+            r".*?\\__pycache__.*?",
+            r".*?\\Skin.*?",
+            r".*?\\Default.*?",
+        ],
     }
 ]
 
@@ -38,16 +38,19 @@ def dotask(task: dict):
                 zipfilepath = filepath.replace(task["path"], "")[1:]
                 zipfile.write(filepath, zipfilepath)
     zipfile.close()
-    with open(f"{root}/Pack/{task['target']}.py", mode="w")as file:
+    with open(f"{root}/Pack/{task['target']}.py", mode="w") as file:
         file.write(
             f"""import io
-zipfile_bytes=io.BytesIO({open(zippath,mode='rb').read()})""")
+zipfile_bytes=io.BytesIO({open(zippath,mode='rb').read()})"""
+        )
 
 
 def main():
+    with open(f"{root}/Pack/__init__.py", mode="w") as file:
+        file.write("")
     for task in tasks:
         dotask(task)
-        print("="*64)
+        print("=" * 64)
 
 
 if __name__ == "__main__":

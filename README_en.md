@@ -17,7 +17,7 @@ You can do things below or more:
 
 - Add more functions
 - Fix Bugs
-- Translation
+- Translate
 - Improve Help
 
 ### Preparation
@@ -38,7 +38,7 @@ python Pack.py
 
 ## Dependency
 
-Please refer to `FMCL/Functions/About/About.py` for details
+For details, see the `Kernel.getAbout` function in `Kernel.py`
 
 ## Command line parameters
 

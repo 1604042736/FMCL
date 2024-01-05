@@ -1,28 +1,37 @@
 import os
 
-root=os.path.abspath("..")
+root = os.path.abspath("..")
 
-tasks = [
-    {
-        "scanpath": [
-            f"{root}/Core",
-            f"{root}/Events"
-        ],
-        "scanfile":[
-            f"{root}/Kernel.py",
-            f"{root}/Main.py",
-            f"{root}/Setting.py",
-            f"{root}/Window.py"
-        ],
-        "targetpath":f"{root}/FMCL/Translations"
-    }
-]+[
-    {
-        "scanpath": [f"{root}/FMCL/Functions/{i}"],
-        "scanfile":[],
-        "targetpath":f"{root}/FMCL/Functions/{i}/Translations"
-    }for i in os.listdir(f"{root}/FMCL/Functions")
-]
+tasks = (
+    [
+        {
+            "scanpath": [f"{root}/Core", f"{root}/Events"],
+            "scanfile": [
+                f"{root}/Kernel.py",
+                f"{root}/Main.py",
+                f"{root}/Setting.py",
+                f"{root}/Window.py",
+            ],
+            "targetpath": f"{root}/FMCL/Translations/System",
+        }
+    ]
+    + [
+        {
+            "scanpath": [f"{root}/FMCL/Functions/{i}"],
+            "scanfile": [],
+            "targetpath": f"{root}/FMCL/Functions/{i}/Translations",
+        }
+        for i in os.listdir(f"{root}/FMCL/Functions")
+    ]
+    + [
+        {
+            "scanpath": [f"{root}/FMCL/Help/{i}"],
+            "scanfile": [],
+            "targetpath": f"{root}/FMCL/Help/{i}/Translations",
+        }
+        for i in os.listdir(f"{root}/FMCL/Help")
+    ]
+)
 
 
 def check_file(name: str):
@@ -38,7 +47,7 @@ def dotask(task: dict):
         for root, _, filenames in os.walk(path):
             for filename in filenames:
                 if check_file(filename):
-                    files.append(root+"/"+filename)
+                    files.append(root + "/" + filename)
     files = list(map(os.path.abspath, files))
     print("\n".join(files))
     for lang in ("简体中文", "English"):
@@ -47,7 +56,7 @@ def dotask(task: dict):
             " ".join(files),
             "-ts",
             f"{task['targetpath']}/{lang}.ts",
-            "-noobsolete"
+            "-noobsolete",
         ]
         os.system(" ".join(args))
 
@@ -55,7 +64,7 @@ def dotask(task: dict):
 def main():
     for task in tasks:
         dotask(task)
-        print("="*64)
+        print("=" * 64)
 
 
 if __name__ == "__main__":

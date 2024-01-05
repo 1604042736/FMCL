@@ -28,7 +28,7 @@ DEFAULT_SETTING = {
 class SettingAttr(TypedDict):
     """设置属性类型"""
 
-    name: str  # 名称
+    name: str  # 名称, 默认与id一样
     callback: list[Callable[[Any], None]]  # 回调函数, 在对应设置项被修改后调用
     enable_condition: Callable[["Setting"], bool]  # 启用条件, 禁用后, 它的子设置也会被禁用
     settingcard: Callable[[], QWidget]  # 设置卡片, 默认由SettingEditor设置
@@ -39,7 +39,7 @@ class SettingAttr(TypedDict):
     atleast: int  # 至少要有几项
 
 
-def defaultSettingAttr() -> SettingAttr:
+def defaultSettingAttr() -> dict[str, SettingAttr]:
     def choosefile():
         file, _ = QFileDialog.getOpenFileName(
             None, _translate("Setting", "选择Java"), filter="Java (java.*)"
@@ -136,7 +136,7 @@ class Setting:
     def __init__(self, setting_path: str = DEFAULT_SETTING_PATH):
         if Setting.new_count[setting_path] > 1:  # 防止重复初始化
             return
-        self.attrs: SettingAttr = {}
+        self.attrs: dict[str, SettingAttr] = {}
         self.setting_path = setting_path
         self.modifiedsetting = {}  # 修改过的设置
         self.defaultsetting = {}  # 默认设置
@@ -160,7 +160,7 @@ class Setting:
                 if id not in self.attrs:
                     self.attrs[id] = {"name": id}
 
-    def addAttr(self, attr: SettingAttr):
+    def addAttr(self, attr: dict[str, SettingAttr]):
         """添加设置属性"""
         for key, val in attr.items():
             if key not in self.attrs:

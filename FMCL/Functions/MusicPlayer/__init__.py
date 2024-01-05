@@ -64,9 +64,7 @@ fisrt_run = True  # 用于判断是否是自启动的
 def main():
     global fisrt_run
     setting = Setting()
-    if "MusicPlayer" not in setting.defaultsetting.get(
-        "system.startup_functions", tuple()
-    ):
+    if "MusicPlayer" not in setting.get("system.startup_functions", tuple()):
         fisrt_run = False
     if setting.get("musicplayer.playatstartup") == False:
         if fisrt_run != False:  # 是启动项但在启动时不播放

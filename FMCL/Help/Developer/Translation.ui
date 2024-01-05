@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>UserManager</class>
- <widget class="QWidget" name="UserManager">
+ <class>Translation</class>
+ <widget class="QWidget" name="Translation">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,26 +11,11 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>用户管理</string>
+   <string>翻译</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="leftMargin">
-    <number>4</number>
-   </property>
-   <property name="topMargin">
-    <number>4</number>
-   </property>
-   <property name="rightMargin">
-    <number>4</number>
-   </property>
-   <property name="bottomMargin">
-    <number>4</number>
-   </property>
-   <property name="spacing">
-    <number>0</number>
-   </property>
-   <item row="0" column="0" colspan="2">
-    <widget class="ScrollArea" name="scrollArea">
+   <item row="0" column="0">
+    <widget class="ScrollArea" name="ScrollArea">
      <property name="styleSheet">
       <string notr="true">QScrollArea{
 	border:none;
@@ -44,27 +29,12 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>992</width>
-        <height>610</height>
+        <width>982</width>
+        <height>600</height>
        </rect>
       </property>
-      <layout class="QGridLayout">
-       <property name="leftMargin">
-        <number>16</number>
-       </property>
-       <property name="topMargin">
-        <number>16</number>
-       </property>
-       <property name="rightMargin">
-        <number>16</number>
-       </property>
-       <property name="bottomMargin">
-        <number>16</number>
-       </property>
-       <item row="0" column="0">
-        <layout class="QGridLayout" name="gl_userinfo"/>
-       </item>
-       <item row="1" column="0">
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="2" column="0">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -76,6 +46,26 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="0" column="0">
+        <widget class="BodyLabel" name="BodyLabel">
+         <property name="text">
+          <string>将翻译文件（&quot;语言家&quot;生成的qm文件）放入&quot;FMCL/Translations&quot;下的一个文件夹即可</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="BodyLabel" name="BodyLabel_2">
+         <property name="text">
+          <string>该翻译文件的文件名要与它对应语言类型相符，这与&quot;自定义功能&quot;中的步骤4要求相同</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -89,6 +79,11 @@
    <extends>QScrollArea</extends>
    <header>qfluentwidgets</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>BodyLabel</class>
+   <extends>QLabel</extends>
+   <header>qfluentwidgets</header>
   </customwidget>
  </customwidgets>
  <resources/>
