@@ -4,7 +4,6 @@ import logging
 import os
 import re
 import shutil
-import tempfile
 from copy import deepcopy
 from zipfile import ZipFile
 from Kernel import Kernel
@@ -111,7 +110,7 @@ class Version:
                 r = Requests.get(f"{api}/artifact/latest.json").json()
 
                 url = r["download_url"]
-                tempdir = os.path.join(tempfile.gettempdir(), "FMCL")
+                tempdir = Setting()["system.temp_dir"]
                 if not os.path.exists(tempdir):
                     os.makedirs(tempdir)
                 filename = url.split("/")[-1]

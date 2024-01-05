@@ -14,6 +14,7 @@ DEFAULT_SETTING_PATH = os.path.join("FMCL", "settings.json")
 DEFAULT_SETTING = {
     "system.startup_functions": [],
     "system.theme_color": "#00ff00",
+    "system.temp_dir": "FMCL/Temp",
     "game.directories": [".minecraft"],
     "game.java_path": "java",
     "game.width": 1000,
@@ -40,18 +41,29 @@ class SettingAttr(TypedDict):
 
 
 def defaultSettingAttr() -> dict[str, SettingAttr]:
-    def choosefile():
+    def choosejava():
         file, _ = QFileDialog.getOpenFileName(
             None, _translate("Setting", "选择Java"), filter="Java (java.*)"
         )
         if file:
             Setting().set("game.java_path", file)
 
-    def choosefilebutton():
-        pb_choosefile = PrimaryPushButton()
-        pb_choosefile.setText(_translate("Setting", "选择文件"))
-        pb_choosefile.clicked.connect(choosefile)
-        return pb_choosefile
+    def choosetempdir():
+        dir = QFileDialog.getExistingDirectory(None, _translate("Setting", "选择缓存文件夹"))
+        if dir:
+            Setting().set("system.temp_dir",dir)
+
+    def choosejavabutton():
+        pb_choosejava = PrimaryPushButton()
+        pb_choosejava.setText(_translate("Setting", "选择文件"))
+        pb_choosejava.clicked.connect(choosejava)
+        return pb_choosejava
+
+    def choosetempdirbutton():
+        pb_choosetempdir = PrimaryPushButton()
+        pb_choosetempdir.setText(_translate("Setting", "选择文件夹"))
+        pb_choosetempdir.clicked.connect(choosetempdir)
+        return pb_choosetempdir
 
     return {
         "system": {"name": _translate("Setting", "系统")},
@@ -59,6 +71,10 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
         "system.theme_color": {
             "name": _translate("Setting", "主题颜色"),
             "callback": [lambda a: setThemeColor(a)],
+        },
+        "system.temp_dir": {
+            "name": _translate("Setting", "缓存文件夹"),
+            "side_widgets": [choosetempdirbutton],
         },
         "game": {"name": _translate("Setting", "游戏")},
         "game.directories": {
@@ -68,7 +84,7 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
         },
         "game.java_path": {
             "name": _translate("Setting", "Java路径"),
-            "side_widgets": [choosefilebutton],
+            "side_widgets": [choosejavabutton],
         },
         "game.width": {"name": _translate("Setting", "游戏窗口宽度")},
         "game.height": {"name": _translate("Setting", "游戏窗口高度")},
