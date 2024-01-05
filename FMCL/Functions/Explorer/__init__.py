@@ -1,4 +1,6 @@
 from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtWidgets import QFileDialog
+from qfluentwidgets import PrimaryPushButton
 from Setting import Setting
 from Kernel import Kernel
 
@@ -36,6 +38,7 @@ def defaultSetting() -> dict:
     return {
         "explorer.desktop.background_image": "",
         "explorer.desktop.item_rightclicked_actions": [],
+        "explorer.desktop.rightclicked_actions": [],
         "explorer.desktop.quick_switch_gamedir": True,
         "explorer.title_rightclicked_actions": [],
         "explorer.width": 1000,
@@ -45,12 +48,31 @@ def defaultSetting() -> dict:
 
 
 def defaultSettingAttr() -> dict:
+    def chooseimage():
+        file, _ = QFileDialog.getOpenFileName(
+            None, _translate("Explorer", "选择图片"), filter="Image File (*.png;*.jpg)"
+        )
+        if file:
+            Setting().set("explorer.desktop.background_image", file)
+
+    def chooseimagebutton():
+        pb_chooseimage = PrimaryPushButton()
+        pb_chooseimage.setText(_translate("Explorer", "选择图片"))
+        pb_chooseimage.clicked.connect(chooseimage)
+        return pb_chooseimage
+
     return {
         "explorer": {"name": "Explorer"},
         "explorer.desktop": {"name": _translate("Explorer", "桌面")},
-        "explorer.desktop.background_image": {"name": _translate("Explorer", "背景图片")},
+        "explorer.desktop.background_image": {
+            "name": _translate("Explorer", "背景图片"),
+            "side_widgets": [chooseimagebutton],
+        },
         "explorer.desktop.item_rightclicked_actions": {
             "name": _translate("Explorer", "游戏右键操作")
+        },
+        "explorer.desktop.rightclicked_actions": {
+            "name": _translate("Explorer", "右键(空白处)操作")
         },
         "explorer.desktop.quick_switch_gamedir": {
             "name": _translate("Explorer", "快捷更改游戏目录")

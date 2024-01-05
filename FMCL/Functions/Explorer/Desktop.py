@@ -84,6 +84,18 @@ class Desktop(ListWidget):
             menu.addAction(a_refresh)
             menu.addAction(a_background_image)
 
+            action_functions = Setting()["explorer.desktop.rightclicked_actions"]
+            for action_function in action_functions:
+                function = Kernel.getFunction(action_function)
+                info = Kernel.getFunctionInfo(function)
+                action = QAction(self)
+                action.setText(info["name"])
+                action.setIcon(info["icon"])
+                action.triggered.connect(
+                    lambda _, f=action_function: Kernel.execFunction(f)
+                )
+                menu.addAction(action)
+
         menu.exec(QCursor.pos())
 
     def refresh(self):
