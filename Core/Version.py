@@ -5,10 +5,8 @@ import os
 import re
 import shutil
 from copy import deepcopy
-from zipfile import ZipFile
 from Kernel import Kernel
 import minecraft_launcher_lib as mll
-import toml
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import qApp
@@ -17,6 +15,7 @@ from Setting import Setting
 
 from Core.Download import Download
 from Core.Requests import Requests
+from Core.Mod import Mod
 
 from .Task import Task
 from .User import User
@@ -368,14 +367,11 @@ class Version:
         self.get_info()
         return self.info["forge_version"] or self.info["fabric_version"]
 
-    def get_mods(self, keyword="") -> list[tuple[bool, str]]:
+    def get_mods(self, keyword="") -> list[Mod]:
         """获取Mod
 
         Args:
             keyword (str): 查找关键字. Defaults to "".
-
-        Returns:
-            list[tuple[bool,str]]: Mod列表, 每个元组的第一个元素代表是否启用, 第二个元素代表Mod名称
         """
         if not self.mod_avaiable():
             return []
@@ -387,45 +383,11 @@ class Version:
             if keyword not in i:
                 continue
             if ".jar" in i:
-                if i.endswith(".disabled"):
-                    result.append((False, i.replace(".disabled", "")))
-                elif i.endswith(".jar"):
-                    result.append((True, i))
+                result.append(Mod(os.path.join(path, i)))
         return result
 
     def open_directory(self):
         os.startfile(os.path.join(self.directory, "versions", self.name))
-
-    def setModEnabled(self, enabled: bool, names: str | list):
-        """
-        设置Mod启用/禁用
-        names不包含文件最后的.disabled
-        """
-        if isinstance(names, str):
-            names = [names]
-        path = self.get_mod_path()
-        for name in names:
-            enabled_path = os.path.join(path, name)
-            disabled_path = os.path.join(path, f"{name}.disabled")
-            if enabled:
-                if os.path.exists(disabled_path):  # 防止重复设置
-                    os.rename(disabled_path, enabled_path)
-            else:
-                if os.path.exists(enabled_path):
-                    os.rename(enabled_path, disabled_path)
-
-    def deleteMods(self, mods: list | str):
-        """
-        mods包含文件最后的.disabled
-        """
-        if isinstance(mods, str):
-            mods = [mods]
-        path = self.get_mod_path()
-        for mod in mods:
-            p = os.path.join(path, mod)
-            if os.path.exists(p):
-                os.remove(p)
-                logging.info(f"删除{p}")
 
     def deleteScreenshots(self, screenshots: list | str):
         if isinstance(screenshots, str):
@@ -476,71 +438,3 @@ class Version:
     def get_icon(self):
         self.generate_setting()
         return QIcon(self.setting.get("logo"))
-
-    def get_mod_info(self, mod_name: str, enabled=True) -> list:
-        path = self.get_mod_path()
-        if not enabled:
-            mod_name = mod_name + ".disabled"
-        mod_path = os.path.join(path, mod_name)
-
-        info = {"name": "", "description": "", "version": "", "authors": [], "url": ""}
-        # 很多时侯报错是由于多行字符串
-        zipfile = ZipFile(mod_path)
-        for zipinfo in zipfile.filelist:
-            if "fabric.mod.json" == zipinfo.filename:
-                config = json.loads(zipfile.open("fabric.mod.json").read())
-                info["name"] = config["name"]
-                info["description"] = config.get("description", "")
-                info["version"] = config["version"]
-                for i in config.get("authors", []) + config.get("contributors", []):
-                    if isinstance(i, dict):
-                        info["authors"].append(i["name"])
-                    else:
-                        info["authors"].append(i)
-                if "contact" in config and "homepage" in config["contact"]:
-                    info["url"] = config["contact"]["homepage"]
-                break
-            elif "mods.toml" in zipinfo.filename:
-                config = toml.loads(
-                    zipfile.open(zipinfo.filename).read().decode("utf-8")
-                )
-                info["name"] = config["mods"][0]["displayName"]
-                info["version"] = config["mods"][0]["version"]
-                info["description"] = config["mods"][0].get("description", "")
-                try:
-                    info["authors"] = [config["mods"][0]["authors"]]
-                except KeyError:
-                    info["authors"] = [config.get("authors", "")]
-
-                info["url"] = config["mods"][0].get("displayURL", "")
-
-                if "${file.jarVersion}" in info["version"]:
-                    MANIFESTMF = (
-                        zipfile.open("META-INF/MANIFEST.MF")
-                        .read()
-                        .decode("utf-8")
-                        .split("\n")
-                    )
-                    for i in MANIFESTMF:
-                        if "Implementation-Version" in i:
-                            info["version"] = info["version"].replace(
-                                "${file.jarVersion}", i.split(":")[-1].strip()
-                            )
-                            break
-                break
-            elif ".info" in zipinfo.filename:
-                config = json.loads(zipfile.open(zipinfo.filename).read())
-                if isinstance(config, list):
-                    config = config[0]
-                else:
-                    config = config["modList"][0]
-                info["name"] = config.get("name", "")
-                info["version"] = config.get("version", "")
-                info["description"] = config.get("description", "")
-                if "authorList" in config:
-                    info["authors"] = config["authorList"]
-                elif "authors" in config:
-                    info["authors"] = config["authors"]
-                info["url"] = config.get("url", "")
-                break
-        return info

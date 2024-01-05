@@ -63,7 +63,7 @@
          <bool>true</bool>
         </property>
         <property name="text">
-         <string>启动</string>
+         <string>启用</string>
         </property>
        </widget>
       </item>

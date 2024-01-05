@@ -1,7 +1,7 @@
 import os
 
 import qtawesome as qta
-from Core import Version
+from Core import Mod, Version
 from Events import *
 from PyQt5.QtCore import pyqtSlot, QEvent
 from PyQt5.QtWidgets import QListWidgetItem, QWidget, qApp
@@ -40,11 +40,11 @@ class ModManager(QWidget, Ui_ModManager):
         mods = self.game.get_mods(keyword)
         self.total = len(mods)
         self.enabled_num = 0
-        for enabled, name in mods:
-            if enabled:
+        for mod in mods:
+            if mod.enabled:
                 self.enabled_num += 1
             item = QListWidgetItem()
-            widget = ModItem(self.game, enabled, name)
+            widget = ModItem(self.game, mod)
             widget.enabledChanged.connect(self.singlemodEnabledChanged)
             item.setSizeHint(widget.size())
             self.lw_mods.addItem(item)
@@ -85,13 +85,13 @@ class ModManager(QWidget, Ui_ModManager):
 
     @pyqtSlot(bool)
     def on_pb_del_clicked(self, _):
-        mods = [
-            self.lw_mods.itemWidget(item).getModFileName()
-            for item in self.lw_mods.selectedItems()
+        mods: list[Mod] = [
+            self.lw_mods.itemWidget(item).mod for item in self.lw_mods.selectedItems()
         ]
 
         def confirmDelete():
-            self.game.deleteMods(mods)
+            for mod in mods:
+                mod.delete()
             self.refresh()
 
         box = MessageBox(
@@ -102,20 +102,20 @@ class ModManager(QWidget, Ui_ModManager):
 
     @pyqtSlot(bool)
     def on_pb_enabled_clicked(self, _):
-        mods = [
-            self.lw_mods.itemWidget(item).modname
-            for item in self.lw_mods.selectedItems()
+        mods: list[Mod] = [
+            self.lw_mods.itemWidget(item).mod for item in self.lw_mods.selectedItems()
         ]
-        self.game.setModEnabled(True, mods)
+        for mod in mods:
+            mod.set_enabled(True)
         self.refresh()
 
     @pyqtSlot(bool)
     def on_pb_disabled_clicked(self, _):
-        mods = [
-            self.lw_mods.itemWidget(item).modname
-            for item in self.lw_mods.selectedItems()
+        mods: list[Mod] = [
+            self.lw_mods.itemWidget(item).mod for item in self.lw_mods.selectedItems()
         ]
-        self.game.setModEnabled(False, mods)
+        for mod in mods:
+            mod.set_enabled(False)
         self.refresh()
 
     def event(self, a0: QEvent) -> bool:
