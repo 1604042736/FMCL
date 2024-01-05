@@ -16,9 +16,11 @@ tasks = [
             r".*?/__pycache__.*?",
             r".*?/Skin.*?",
             r".*?/Default.*?",
+            r".*?/Temp.*?",
             r".*?\\__pycache__.*?",
             r".*?\\Skin.*?",
             r".*?\\Default.*?",
+            r".*?\\Temp.*?",
         ],
     }
 ]
