@@ -389,7 +389,7 @@ class Version:
     def open_directory(self):
         os.startfile(os.path.join(self.directory, "versions", self.name))
 
-    def deleteScreenshots(self, screenshots: list | str):
+    def delete_screenshots(self, screenshots: list | str):
         if isinstance(screenshots, str):
             screenshots = [screenshots]
         path = self.get_screenshot_path()
@@ -399,13 +399,13 @@ class Version:
                 os.remove(p)
                 logging.info(f"删除{p}")
 
-    def renameScreenshot(self, old, new):
+    def rename_screenshot(self, old, new):
         path = self.get_screenshot_path()
         pold = os.path.join(path, old)
         pnew = os.path.join(path, new)
         os.rename(pold, pnew)
 
-    def openScreenshot(self, screenshot):
+    def open_screenshot(self, screenshot):
         path = os.path.join(self.get_screenshot_path(), screenshot)
         os.popen(f"start {path}")
 

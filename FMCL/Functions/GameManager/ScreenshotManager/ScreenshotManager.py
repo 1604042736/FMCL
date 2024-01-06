@@ -83,7 +83,7 @@ class ScreenshotManager(QWidget, Ui_ScreenshotManager):
         name = item.text()
 
         def confirmDelete():
-            self.game.deleteScreenshots(name)
+            self.game.delete_screenshots(name)
             self.refresh()
 
         box = MessageBox(
@@ -102,7 +102,7 @@ class ScreenshotManager(QWidget, Ui_ScreenshotManager):
             None, self.tr("重命名"), self.tr("请输入新的名称"), text=old_name
         )
         if ok:
-            self.game.renameScreenshot(old_name, new_name)
+            self.game.rename_screenshot(old_name, new_name)
             self.refresh()
 
     @pyqtSlot(bool)
@@ -111,4 +111,4 @@ class ScreenshotManager(QWidget, Ui_ScreenshotManager):
         if item == None:
             return
         name = item.text()
-        self.game.openScreenshot(name)
+        self.game.open_screenshot(name)
