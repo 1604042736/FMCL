@@ -3,9 +3,9 @@ import os
 import qtawesome as qta
 from Core import Mod, Version
 from Events import *
-from PyQt5.QtCore import pyqtSlot, QEvent
+from PyQt5.QtCore import pyqtSlot, QEvent, Qt
 from PyQt5.QtWidgets import QListWidgetItem, QWidget, qApp
-from qfluentwidgets import MessageBox, TransparentToolButton
+from qfluentwidgets import MessageBox, TransparentToolButton, InfoBar, InfoBarPosition
 
 from .ModItem import ModItem
 from .ui_ModManager import Ui_ModManager
@@ -32,7 +32,17 @@ class ModManager(QWidget, Ui_ModManager):
         self.refresh()
 
     def refresh(self):
+        self.setEnabled(True)
         if not self.game.mod_avaiable():
+            InfoBar.info(
+                title=self.tr("该版本不支持模组"),
+                content="",
+                orient=Qt.Horizontal,
+                isClosable=True,
+                position=InfoBarPosition.TOP,
+                duration=2000,
+                parent=self.window(),
+            )
             self.setEnabled(False)
             return
         keyword = self.le_search.text()
