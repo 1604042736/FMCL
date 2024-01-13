@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>256</width>
-    <height>82</height>
+    <width>512</width>
+    <height>128</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,16 +16,22 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QLabel" name="l_icon">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="minimumSize">
       <size>
-       <width>64</width>
-       <height>64</height>
+       <width>100</width>
+       <height>100</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>64</width>
-       <height>64</height>
+       <width>100</width>
+       <height>100</height>
       </size>
      </property>
      <property name="text">
@@ -35,6 +41,25 @@
    </item>
    <item row="0" column="1">
     <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="QLabel" name="l_levelname">
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="l_info2">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="l_info1">
        <property name="minimumSize">
@@ -51,36 +76,24 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="l_info2">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="l_levelname">
-       <property name="font">
-        <font>
-         <pointsize>11</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1" rowspan="3">
-      <widget class="PushButton" name="pb_openfolder">
-       <property name="text">
-        <string>打开存档文件夹</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2" rowspan="3">
+     <item row="0" column="1">
       <widget class="PushButton" name="pb_del">
        <property name="text">
         <string>删除</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="PushButton" name="pb_openfolder">
+       <property name="text">
+        <string>打开文件夹</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="PushButton" name="pb_viewnbt">
+       <property name="text">
+        <string>查看NBT</string>
        </property>
       </widget>
      </item>

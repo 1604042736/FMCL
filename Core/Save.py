@@ -10,6 +10,11 @@ _translate = QCoreApplication.translate
 class Save:
     """对游戏存档的管理"""
 
+    @staticmethod
+    def get_nbt(file: str, full_json=True):
+        """获取文件的nbt"""
+        return nbt.read_from_nbt_file(file).json_obj(full_json=full_json)
+
     def __init__(self, path):
         self.path = path
         self.icon = QPixmap(os.path.join(path, "icon.png"))

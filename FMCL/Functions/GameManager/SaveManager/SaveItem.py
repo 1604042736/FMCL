@@ -3,8 +3,10 @@ import time
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import pyqtSlot, pyqtSignal
 from qfluentwidgets import MessageBox
-from .ui_SaveItem import Ui_SaveItem
 from Core import Save
+
+from .ui_SaveItem import Ui_SaveItem
+from ..NBTViewer import NBTViewer
 
 
 class SaveItem(QWidget, Ui_SaveItem):
@@ -15,7 +17,7 @@ class SaveItem(QWidget, Ui_SaveItem):
         self.setupUi(self)
         self.path = path
         self.save = Save(path)
-        self.l_icon.setPixmap(self.save.icon)
+        self.l_icon.setPixmap(self.save.icon.scaled(self.l_icon.size()))
         self.l_levelname.setText(self.save.levelname)
         self.refresh()
 
@@ -36,6 +38,10 @@ class SaveItem(QWidget, Ui_SaveItem):
         )
         box.yesSignal.connect(confirmDelete)
         box.exec()
+
+    @pyqtSlot(bool)
+    def on_pb_viewnbt_clicked(self, _):
+        NBTViewer(self.save.path).show()
 
     def refresh(self):
         dir_name = self.path.replace("\\", "/").split("/")[-1]

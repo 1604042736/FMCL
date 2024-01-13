@@ -23,17 +23,7 @@ def defaultSetting() -> dict:
         a = setting.defaultsetting["explorer.desktop.item_rightclicked_actions"]
         if "GameManager" not in a:
             a.insert(1, "GameManager")
-    return {"gamemanager.savemanager.show_full_save_info": False}
-
-
-def defaultSettingAttr() -> dict:
-    return {
-        "gamemanager": {"name": _translate("GameManager", "游戏管理")},
-        "gamemanager.savemanager": {"name": _translate("GameManager", "存档管理")},
-        "gamemanager.savemanager.show_full_save_info": {
-            "name": _translate("GameManager", "显示完整存档信息")
-        },
-    }
+    return {}
 
 
 def main(name=None):

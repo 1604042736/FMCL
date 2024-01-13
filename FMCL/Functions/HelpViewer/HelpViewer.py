@@ -7,12 +7,11 @@ from PyQt5.QtWidgets import (
     QWidget,
     QTreeWidgetItem,
     QHBoxLayout,
-    QLabel,
     qApp,
     QAction,
     QHeaderView,
 )
-from qfluentwidgets import TransparentToolButton, TabItem, RoundMenu
+from qfluentwidgets import TransparentToolButton, RoundMenu
 
 from Kernel import Kernel
 
@@ -43,6 +42,11 @@ class HelpViewer(QWidget, Ui_HelpViewer):
         self.item_id: list[tuple[QTreeWidgetItem, str]] = []
         self.page_instance = {}
 
+        self.pb_refresh = TransparentToolButton()
+        self.pb_refresh.resize(46, 32)
+        self.pb_refresh.setIcon(qta.icon("mdi.refresh"))
+        self.pb_refresh.clicked.connect(lambda: self.refresh())
+
         self.tb_pages.setAddButtonVisible(False)
 
         self.refresh()
@@ -53,7 +57,7 @@ class HelpViewer(QWidget, Ui_HelpViewer):
 
         self.tw_helpindex.clear()
         while self.sw_pages.count():
-            self.sw_pages.removeWidget(self.sw_pages.currentWidget())
+            self.deletePage(self.sw_pages.currentWidget())
         helpindex = self.helpindex = Kernel.getHelpIndex()
 
         def sethelpindex(root: QTreeWidgetItem | None, data: dict, id: str):
@@ -183,6 +187,7 @@ class HelpViewer(QWidget, Ui_HelpViewer):
             tabitem.customContextMenuRequested.connect(
                 lambda: self.showRightMenu(widget, tabitem)
             )
+            tabitem.setToolTip(widget.windowTitle())
             widget.installEventFilter(self)
         self.tb_pages.setCurrentTab(widget.objectName())
 
@@ -210,3 +215,11 @@ class HelpViewer(QWidget, Ui_HelpViewer):
             elif a1.type() == QEvent.Type.Show:
                 self.sw_pages.setCurrentWidget(a0)
         return super().eventFilter(a0, a1)
+
+    def event(self, a0: QEvent | None) -> bool:
+        if a0.type() == QEvent.Type.Show:
+            qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_refresh, "right"))
+        elif a0.type() == QEvent.Type.Hide:
+            qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_refresh))
+            self.pb_refresh.setParent(self)
+        return super().event(a0)
