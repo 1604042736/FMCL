@@ -16,9 +16,9 @@ class GameDownloader(QWidget, Ui_GameDownloader):
         super().__init__()
         self.setupUi(self)
         self.setWindowIcon(qta.icon("ph.download-simple"))
+        self.default_name = ""
         self.setVersions()
         self.setFabric()
-        self.default_name = ""
 
     @multitasking.task
     def setVersions(self):

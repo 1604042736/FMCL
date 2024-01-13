@@ -1,9 +1,9 @@
-Pillow==9.4.0
+Pillow==9.5.0
 PyQt-Fluent-Widgets
 PyQt5
 PyQt5_Frameless_Window
 Python-NBT
-QtAwesome==1.2.3
+QtAwesome
 minecraft_launcher_lib
 multitasking
 psutil

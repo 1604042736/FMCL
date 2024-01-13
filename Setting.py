@@ -1,5 +1,7 @@
 import json
 import os
+import multitasking
+
 from typing import Any, Literal, TypedDict, Callable
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import QWidget, QFileDialog
@@ -16,7 +18,8 @@ DEFAULT_SETTING = {
     "system.theme_color": "#00ff00",
     "system.temp_dir": "FMCL/Temp",
     "game.directories": [".minecraft"],
-    "game.java_path": "java",
+    "game.auto_choose_java": True,
+    "game.java_paths": [],
     "game.width": 1000,
     "game.height": 618,
     "game.maxmem": 2048,
@@ -45,19 +48,34 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
         file, _ = QFileDialog.getOpenFileName(
             None, _translate("Setting", "选择Java"), filter="Java (java.*)"
         )
-        if file:
-            Setting().set("game.java_path", file)
+        if file and file not in Setting()["game.java_paths"]:
+            Setting()["game.java_paths"].append(file)
 
     def choosetempdir():
         dir = QFileDialog.getExistingDirectory(None, _translate("Setting", "选择缓存文件夹"))
         if dir:
-            Setting().set("system.temp_dir",dir)
+            Setting().set("system.temp_dir", dir)
 
     def choosejavabutton():
         pb_choosejava = PrimaryPushButton()
-        pb_choosejava.setText(_translate("Setting", "选择文件"))
+        pb_choosejava.setText(_translate("Setting", "手动添加Java"))
         pb_choosejava.clicked.connect(choosejava)
         return pb_choosejava
+
+    @multitasking.task
+    def autofindjava():
+        from Core import Java
+
+        java_paths = Java.auto_find_java()
+        Setting().set(
+            "game.java_paths", list(set(Setting()["game.java_paths"] + java_paths))
+        )
+
+    def autofindjavabutton():
+        pb_autofindjava = PrimaryPushButton()
+        pb_autofindjava.setText(_translate("Setting", "自动查找Java"))
+        pb_autofindjava.clicked.connect(lambda: autofindjava())
+        return pb_autofindjava
 
     def choosetempdirbutton():
         pb_choosetempdir = PrimaryPushButton()
@@ -82,9 +100,11 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
             "type": "directory",
             "atleast": 1,
         },
-        "game.java_path": {
+        "game.auto_choose_java": {"name": _translate("Setting", "自动选择Java")},
+        "game.java_paths": {
             "name": _translate("Setting", "Java路径"),
-            "side_widgets": [choosejavabutton],
+            "side_widgets": [choosejavabutton, autofindjavabutton],
+            "static": True,
         },
         "game.width": {"name": _translate("Setting", "游戏窗口宽度")},
         "game.height": {"name": _translate("Setting", "游戏窗口高度")},

@@ -20,13 +20,10 @@ class ModDownloader(QWidget, Ui_ModDownloader):
         self.setWindowIcon(qta.icon("mdi.puzzle-outline"))
         self.mod = Mod()
         self.cb_downloadsource.addItems(self.mod.get_all_downloadsources())
-        self.cb_downloadsource.setCurrentText(
-            self.mod.get_all_downloadsources()[0])
+        self.cb_downloadsource.setCurrentText(self.mod.get_all_downloadsources()[0])
         self.cb_sort.addItems(self.mod.get_all_sortmethod())
-        self.cb_downloadsource.currentTextChanged.connect(
-            self.mod.set_downloadsource)
-        self.cb_downloadsource.currentTextChanged.connect(
-            self.setSort)
+        self.cb_downloadsource.currentTextChanged.connect(self.mod.set_downloadsource)
+        self.cb_downloadsource.currentTextChanged.connect(self.setSort)
         self.__modFound.connect(self.addMod)
 
     def setSort(self):
@@ -93,8 +90,9 @@ class ModDownloader(QWidget, Ui_ModDownloader):
         version = versionitem.text(0)
         widget = self.tw_mods.itemWidget(self.tw_mods.currentItem(), 0)
         url = widget.foundmod["files"][version][filename]["url"]
-        path = QFileDialog.getSaveFileName(
-            self, self.tr("下载"), f"./{filename}")[0]
+        path = QFileDialog.getSaveFileName(self, self.tr("下载"), f"./{filename}")[0]
         if path:
-            Task(self.tr("下载")+filename,
-                 lambda callback: Download(url, path, callback).start()).start()
+            Task(
+                self.tr("下载") + filename,
+                taskfunc=lambda callback: Download(url, path, callback).start(),
+            ).start()

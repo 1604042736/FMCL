@@ -68,7 +68,7 @@ class Update(QWidget, Ui_Update):
     def prepare(self):
         self.pb_handupdate.setEnabled(True)
         self.pb_update.setEnabled(True)
-        t = self.tr('更新')
+        t = self.tr("更新")
         self.setWindowTitle(f"{t}:{self.info['tag_name']}")
         self.te_changelog.setText(self.info["body"])
         self.show()
@@ -78,7 +78,7 @@ class Update(QWidget, Ui_Update):
         name = f"FMCL_{self.info['tag_name']}.{self.system_postfix}"
         url = self.info["assets"][0]["browser_download_url"]  # 默认pyzw的下载地址
         for i in self.info["assets"]:
-            if i["name"].endswith('.'+self.system_postfix):
+            if i["name"].endswith("." + self.system_postfix):
                 url = i["browser_download_url"]
                 break
 
@@ -89,7 +89,7 @@ class Update(QWidget, Ui_Update):
 
     @pyqtSlot(bool)
     def on_pb_update_clicked(self, _):
-        Task(self.tr("下载更新"), lambda callback: self.update_(callback)).start()
+        Task(self.tr("下载更新"), taskfunc=lambda callback: self.update_(callback)).start()
 
     @pyqtSlot(bool)
     def on_pb_check_clicked(self, _):

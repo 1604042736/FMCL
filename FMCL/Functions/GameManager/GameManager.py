@@ -4,6 +4,7 @@ from FMCL.Functions.SettingEditor import SettingEditor
 from Kernel import Kernel
 from PyQt5.QtCore import QEvent, pyqtSlot, QObject
 from PyQt5.QtWidgets import QWidget
+from Setting import Setting
 
 from .GameInfo import GameInfo
 from .LogoChooser import LogoChooser
@@ -29,14 +30,19 @@ class GameManager(QWidget, Ui_GameManager):
     __new_count = {}
 
     def __new__(cls, name: str):
-        if name not in cls.__instances:
-            cls.__instances[name] = super().__new__(cls)
-            cls.__new_count[name] = 0
-        cls.__new_count[name] += 1
-        return cls.__instances[name]
+        # 防止不同目录的同名版本
+        dir = Setting()["game.directories"][0]
+        key = f"{dir}/{name}"
+        if key not in cls.__instances:
+            cls.__instances[key] = super().__new__(cls)
+            cls.__new_count[key] = 0
+        cls.__new_count[key] += 1
+        return cls.__instances[key]
 
     def __init__(self, name: str):
-        if self.__new_count[name] > 1:
+        dir = Setting()["game.directories"][0]
+        key = f"{dir}/{name}"
+        if self.__new_count[key] > 1:
             return
         super().__init__()
         self.setupUi(self)

@@ -1,61 +1,156 @@
+import logging
+import threading
 import time
+from typing import Callable
+from PyQt5.QtCore import QObject, QThread, pyqtSignal
 
-from PyQt5.QtCore import QThread
+SLEEP_TIME = 0.005  # 循环等待时间(秒)
+
+
+class TaskExceptionPass(QObject):
+    """负责传递Task的异常(在主线程中)"""
+
+    def __init__(self, task: "Task") -> None:
+        super().__init__()
+        self.task = task
+        task.occurException.connect(self.handleException)
+
+    def handleException(self, e: Exception, exception_handler: list):
+        if isinstance(self.task.parent(), Task):  # 一级一级上报
+            self.task.parent().occurException.emit(
+                e, self.task.parent().exception_handler + exception_handler
+            )
+        else:
+            self.task.terminate()
+            flag = False
+            for handler in exception_handler:
+                if handler(e):
+                    flag = True
+            if not flag:  # 如果错误处理过了就不raise
+                raise e  # 在主线程里raise
+
+
+class TaskCreator(QObject):
+    """负责在主线程中创建Task"""
+
+    __createTask = pyqtSignal(tuple, str)
+
+    instance = None
+    new_count = 0
+
+    def __new__(cls):
+        if TaskCreator.instance == None:
+            TaskCreator.instance = super().__new__(cls)
+        TaskCreator.new_count += 1
+        return TaskCreator.instance
+
+    def __init__(self):
+        if TaskCreator.new_count > 1:
+            return
+        super().__init__()
+        self.created_tasks: dict[str, Task] = {}
+        self.__createTask.connect(self.createTask)
+
+    def createTask(self, args, hash):
+        self.created_tasks[hash] = Task(*args)
+
+    def newTask(self, args) -> "Task":
+        hash = f"{time.time()}{threading.get_ident()}"
+        args = tuple(args)
+        self.__createTask.emit(args, hash)
+        while hash not in self.created_tasks:
+            time.sleep(SLEEP_TIME)
+        return self.created_tasks[hash]
 
 
 class Task(QThread):
-    """任务
-    一个任务呈树形结构
-    """
+    occurException = pyqtSignal(Exception, list)
     # started和finished信号的回调函数
     startedCallback = []
     finishedCallback = []
 
-    def __init__(self, name, taskfunc=None, children: list["Task"] = None, waittasks: list[int] = None) -> None:
-        super().__init__()
-        self.name = name  # 任务名称
-        self.children: list[Task] = children if children else []  # 子任务
-        # 需要先等待哪几个兄弟任务完成
-        self.waittasks: list[int] = waittasks if waittasks else []
-        self.taskfunc = taskfunc  # 执行任务的函数
+    @staticmethod
+    def waitTasks(*args):
+        while True:
+            for task in args:
+                if not task.isFinished():
+                    break
+            else:
+                break
+            time.sleep(SLEEP_TIME)
 
-        for child in self.children:
-            child.setParent(self)
-
+    def __init__(
+        self,
+        name: str = "",
+        parent: QObject | None = None,
+        taskfunc=None,
+        waittasks: list["Task"] = None,
+        exception_handler: list[Callable[[Exception], bool]] = None,
+    ) -> None:
+        super().__init__(parent)
+        self.taskfunc = taskfunc  # 要运行的函数
+        self.waittasks: list[Task] = waittasks if waittasks != None else []  # 等待的任务
+        self.name: str = name  # 名称
         self.status: str = ""  # 状态
         self.progress: int = 0  # 进度
         self.maxprogress: int = 0  # 最大进度
 
-        self.started.connect(lambda: list(callback(self)
-                             for callback in Task.startedCallback))
-        self.finished.connect(lambda: list(callback(self)
-                              for callback in Task.finishedCallback))
+        self.exceptionpass = TaskExceptionPass(self)
+        self.exception_handler = (
+            exception_handler if exception_handler != None else []
+        )  # 异常处理
 
-    def run(self):
-        if self.taskfunc:
-            self.taskfunc({
-                "setStatus": lambda a: setattr(self, "status", a),
-                "setProgress": lambda a: setattr(self, "progress", a),
-                "setMax": lambda a: setattr(self, "maxprogress", a)
-            })
+        self.started.connect(
+            lambda: list(callback(self) for callback in Task.startedCallback)
+        )
+        self.finished.connect(
+            lambda: list(callback(self) for callback in Task.finishedCallback)
+        )
+
+    def run(self) -> None:
+        self.status = self.tr("等待任务执行")
+        while True:
+            for task in self.waittasks:
+                if not task.isFinished():
+                    break
+            else:
+                break
+            time.sleep(SLEEP_TIME)
+
+        self.status = self.tr("启动子任务")
+        for task in self.children():
+            if isinstance(task, Task):
+                task.start()
 
         self.status = ""
-        self.maxprogress = len(self.children)
-        self.progress = 0
+        if self.taskfunc:
+            try:
+                self.taskfunc(
+                    {
+                        "setStatus": lambda a: setattr(self, "status", a),
+                        "setProgress": lambda a: setattr(self, "progress", a),
+                        "setMax": lambda a: setattr(self, "maxprogress", a),
+                        "getCurTask": lambda: self,
+                    }
+                )
+            except Exception as e:
+                logging.warning(f"产生错误:{e}")
+                self.occurException.emit(e, self.exception_handler)  # 交给主线程来raise
 
-        tasks_left = len(self.children)  # 剩下的任务
-        while tasks_left:
-            tasks_left = len(self.children)
-            for child in self.children:
-                if child.isFinished():
-                    tasks_left -= 1
-                    continue
-                if child.isRunning():
-                    continue
-                for i in child.waittasks:
-                    if not self.children[i].isFinished():
-                        break
-                else:
-                    child.start()
-            self.progress = len(self.children)-tasks_left
-            time.sleep(0.01)  # 太快会卡死
+        self.status = self.tr("等待子任务执行完成")
+        while True:
+            for task in self.children():
+                if isinstance(task, Task) and not task.isFinished():
+                    break
+            else:
+                break
+            time.sleep(SLEEP_TIME)
+
+    def terminate(self) -> None:
+        for task in self.children():
+            if isinstance(task, Task):
+                task.terminate()
+        return super().terminate()
+
+    def __repr__(self):
+        return f'Task("{self.name}")'

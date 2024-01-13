@@ -16,6 +16,8 @@ from Setting import Setting
 from Core.Download import Download
 from Core.Requests import Requests
 from Core.Mod import Mod
+from Core.Java import Java
+from Core.Installer import Installer
 
 from .Task import Task
 from .User import User
@@ -113,7 +115,7 @@ class Version:
                 if not os.path.exists(tempdir):
                     os.makedirs(tempdir)
                 filename = url.split("/")[-1]
-                path = os.path.join(tempdir, filename)
+                path = os.path.abspath(os.path.join(tempdir, filename))
                 logging.info(f"下载{url}到{path}")
                 Download(url, path, callback).check()
                 logging.info("下载完成")
@@ -146,14 +148,15 @@ class Version:
         command = deepcopy(self.precommand)
 
         options = deepcopy(User.get_cur_user())
+        if options == None:
+            raise Exception(_translate("Version", "未选择用户"))
         options["launcherName"] = "FMCL"
         options["launcherVersion"] = qApp.applicationVersion()
         options["gameDirectory"] = absdir
         options["customResolution"] = True
         options["resolutionWidth"] = str(setting.get("game.width"))
         options["resolutionHeight"] = str(setting.get("game.height"))
-        options["executablePath"] = setting.get("game.java_path")
-        options["executablePath"] = setting.get("game.java_path")
+        options["executablePath"] = Java(setting).get_executable_path()
         options["jvmArguments"] = [f"-Xmx{setting.get('game.maxmem')}m"]
         self.generate_setting()
         if self.setting.get("isolation"):
@@ -173,38 +176,40 @@ class Version:
         return options["gameDirectory"], command
 
     def install_forge(self, forge_version, callback):
-        logging.info(f"下载Forge({forge_version})")
-        mll.forge.install_forge_version(forge_version, self.directory, callback)
+        logging.info(f"安装Forge({forge_version})")
+        Installer().install_forge_version(forge_version, self.directory, callback)
         version, forge = forge_version.split("-")
         Version(f"{version}-forge-{forge}").rename(self.name)
 
     def install_fabric(self, version, fabric_version, callback):
-        logging.info(f"下载Fabric({version},{fabric_version})")
-        mll.fabric.install_fabric(version, self.directory, fabric_version, callback)
+        logging.info(f"安装Fabric({version},{fabric_version})")
+        Installer().install_fabric(version, self.directory, fabric_version, callback)
         fabric_minecraft_version = f"fabric-loader-{fabric_version}-{version}"
         Version(fabric_minecraft_version).rename(self.name)
 
     def install_mc(self, version, callback):
-        logging.info(f"下载Minecraft({version})")
-        mll.install.install_minecraft_version(version, self.directory, callback)
+        logging.info(f"安装Minecraft({version})")
+        Installer().install_minecraft_version(version, self.directory, callback)
         Version(version).rename(self.name)
 
     def install(self, version, forge_version, fabric_version):
-        logging.info(f"下载({version},{forge_version},{fabric_version})")
+        logging.info(f"安装({version},{forge_version},{fabric_version})")
         if forge_version:
             Task(
-                _translate("Version", "下载") + self.name,
-                lambda callback: self.install_forge(forge_version, callback),
+                _translate("Version", "安装") + self.name,
+                taskfunc=lambda callback: self.install_forge(forge_version, callback),
             ).start()
         elif fabric_version:
             Task(
-                _translate("Version", "下载") + self.name,
-                lambda callback: self.install_fabric(version, fabric_version, callback),
+                _translate("Version", "安装") + self.name,
+                taskfunc=lambda callback: self.install_fabric(
+                    version, fabric_version, callback
+                ),
             ).start()
         else:
             Task(
-                _translate("Version", "下载") + self.name,
-                lambda callback: self.install_mc(version, callback),
+                _translate("Version", "安装") + self.name,
+                taskfunc=lambda callback: self.install_mc(version, callback),
             ).start()
 
     def rename(self, new_name):

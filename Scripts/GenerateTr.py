@@ -22,6 +22,7 @@ tasks = (
             "targetpath": f"{root}/FMCL/Functions/{i}/Translations",
         }
         for i in os.listdir(f"{root}/FMCL/Functions")
+        if i != "Test"
     ]
     + [
         {
@@ -51,6 +52,8 @@ def dotask(task: dict):
     files = list(map(os.path.abspath, files))
     print("\n".join(files))
     for lang in ("简体中文", "English"):
+        if not os.path.exists(task["targetpath"]):
+            os.makedirs(task["targetpath"])
         args = [
             "pylupdate5",
             " ".join(files),

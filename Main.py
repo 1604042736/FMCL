@@ -8,7 +8,8 @@ import PyQt5.QtMultimedia as _  # 打包exe需要
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import QMessageBox
 
-import Core as _  # 打包exe需要
+from Core import TaskCreator
+
 import Resources as _
 from Kernel import Kernel
 from Setting import Setting
@@ -31,7 +32,8 @@ def init():
         os.makedirs("FMCL/Functions")
 
     log_formatter = logging.Formatter(
-        fmt="[%(asctime)s] [%(levelname)s]: %(message)s", datefmt="%Y-%m-%d,%H:%M:%S"
+        fmt="[%(asctime)s][%(levelname)s][%(threadName)s]: %(message)s",
+        datefmt="%Y-%m-%d,%H:%M:%S",
     )
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
@@ -53,6 +55,7 @@ def main():
     except:
         pass
     app = Kernel(sys.argv)
+    TaskCreator()
     logging.info(f"退出代码: {app.exec()}")
     Setting().sync()
     multitasking.killall(None, None)

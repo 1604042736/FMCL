@@ -14,13 +14,6 @@
    <string>任务管理器</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="1">
-    <widget class="PushButton" name="pb_stop">
-     <property name="text">
-      <string>结束</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0">
     <spacer name="horizontalSpacer">
      <property name="orientation">
@@ -34,20 +27,36 @@
      </property>
     </spacer>
    </item>
+   <item row="1" column="1">
+    <widget class="PushButton" name="pb_stop">
+     <property name="text">
+      <string>结束</string>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0" colspan="2">
     <widget class="TreeWidget" name="tw_tasks">
-     <property name="editTriggers">
-      <set>QAbstractItemView::NoEditTriggers</set>
+     <property name="columnCount">
+      <number>4</number>
      </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-     <attribute name="headerVisible">
-      <bool>false</bool>
-     </attribute>
      <column>
       <property name="text">
-       <string notr="true">1</string>
+       <string>名称</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>状态</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>进度</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>是否在运行</string>
       </property>
      </column>
     </widget>

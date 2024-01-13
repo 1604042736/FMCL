@@ -1,11 +1,12 @@
 import logging
-import time
+import traceback
 import psutil
 
 import qtawesome as qta
 from Core import Version, Task
 from PyQt5.QtCore import QProcess, pyqtSignal, pyqtSlot, QTimer
 from PyQt5.QtWidgets import QWidget
+from qfluentwidgets import MessageBox
 
 from .ui_GameLauncher import Ui_GameLauncher
 
@@ -27,30 +28,36 @@ class GameLauncher(QWidget, Ui_GameLauncher):
 
         t = self.tr("启动游戏")
         self.game = Version(self.name)
-        Task(
-            f"{t}:{game_name}",
-            children=[
-                Task(self.tr("检查外置登录"), self.game.check_authlibinjector),
-                Task(
-                    self.tr("获取命令行参数"),
-                    lambda _: setattr(
-                        self, "dir_command", self.game.get_launch_command()
-                    ),
-                    waittasks=[0],
-                ),
-                Task(
-                    self.tr("启动"),
-                    lambda _: (
-                        time.sleep(0.1),  # 防止执行太快来不及显示
-                        self.show(),
-                        self.__commandGot.emit(
-                            self.dir_command[0], self.dir_command[1]
-                        ),
-                    ),
-                    waittasks=[1],
-                ),
-            ],
-        ).start()
+        self.root = Task(f"{t}:{game_name}")
+        self.check = Task(
+            self.tr("检查外置登录"),
+            parent=self.root,
+            taskfunc=self.game.check_authlibinjector,
+            exception_handler=[self.showError],
+        )
+        self.getcommmand = Task(
+            self.tr("获取命令行参数"),
+            parent=self.root,
+            taskfunc=lambda _: (
+                setattr(self, "dir_command", self.game.get_launch_command())
+            ),
+            waittasks=[self.check],
+            exception_handler=[self.showError],
+        )
+        self.launch = Task(
+            self.tr("启动"),
+            parent=self.root,
+            taskfunc=lambda _: (
+                self.show(),
+                self.__commandGot.emit(self.dir_command[0], self.dir_command[1]),
+            ),
+            waittasks=[self.getcommmand],
+        )
+        self.root.start()
+
+    def showError(self, e: Exception):
+        MessageBox(self.tr("启动游戏失败"), str(e), self.window()).exec()
+        return True
 
     def __start(self, dir, command):
         logging.info(command)
@@ -106,8 +113,11 @@ class GameLauncher(QWidget, Ui_GameLauncher):
         if self.process.state() == QProcess.ProcessState.NotRunning:
             self.afterKilling()
             return
-        info = [
-            f"{self.tr('CPU使用率')}: {round(self.process_info.cpu_percent()/CPU_COUNT,1)}%",
-            f"{self.tr('内存使用率')}: {round(self.process_info.memory_percent(),1)}%({round(self.process_info.memory_info().rss/1024/1024,1)}MB)",
-        ]
-        self.l_info.setText(", ".join(info))
+        try:  # 游戏可能在执行这部分的时侯停止
+            info = [
+                f"{self.tr('CPU使用率')}: {round(self.process_info.cpu_percent()/CPU_COUNT,1)}%",
+                f"{self.tr('内存使用率')}: {round(self.process_info.memory_percent(),1)}%({round(self.process_info.memory_info().rss/1024/1024,1)}MB)",
+            ]
+            self.l_info.setText(", ".join(info))
+        except:
+            logging.error(traceback.format_exc())

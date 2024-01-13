@@ -8,10 +8,7 @@ _translate = QCoreApplication.translate
 
 
 def functionInfo():
-    return {
-        "name": _translate("TaskManager", "任务管理器"),
-        "icon": qta.icon("fa.tasks")
-    }
+    return {"name": _translate("TaskManager", "任务管理器"), "icon": qta.icon("fa.tasks")}
 
 
 def defaultSetting() -> dict:
@@ -23,8 +20,9 @@ def defaultSetting() -> dict:
     return {}
 
 
-Task.startedCallback.append(TaskManager.taskStarted)
-Task.finishedCallback.append(TaskManager.taskFinished)
+# 通过信号和槽保证TaskManager在处理时位于主线程
+Task.startedCallback.append(lambda task: TaskManager().on_taskStarted(task))
+Task.finishedCallback.append(lambda task: TaskManager().on_taskFinished(task))
 
 
 def main():
