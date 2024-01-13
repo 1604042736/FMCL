@@ -13,8 +13,8 @@ class Links(QWidget, Ui_Links):
         self.setupUi(self)
 
     @pyqtSlot(bool)
-    def on_pb_officialweb_clicked(self, _):
-        webbrowser.open("https://www.minecraft.net")
+    def on_pb_mcofficialweb_clicked(self, _):
+        webbrowser.open("https://www.minecraft.net/")
 
     @pyqtSlot(bool)
     def on_pb_wiki_clicked(self, _):
@@ -27,6 +27,26 @@ class Links(QWidget, Ui_Links):
     @pyqtSlot(bool)
     def on_pb_plugin_clicked(self, _):
         webbrowser.open("https://mineplugin.org/")
+
+    @pyqtSlot(bool)
+    def on_pb_javaofficialweb_clicked(self, _):
+        webbrowser.open("https://www.java.com/")
+
+    @pyqtSlot(bool)
+    def on_pb_openjdk_clicked(self, _):
+        webbrowser.open("https://openjdk.org/")
+
+    @pyqtSlot(bool)
+    def on_pb_azul_clicked(self, _):
+        webbrowser.open("https://www.azul.com/")
+
+    @pyqtSlot(bool)
+    def on_pb_dragonwell_clicked(self, _):
+        webbrowser.open("https://dragonwell-jdk.io/")
+
+    @pyqtSlot(bool)
+    def on_pb_graalvm_clicked(self, _):
+        webbrowser.open("https://www.graalvm.org/")
 
 
 def helpIndex():

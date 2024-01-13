@@ -80,7 +80,7 @@ QPushButton:checked{
         button.setToolTip(widget.windowTitle())
         button.clicked.connect(self.taskButtonClicked)
         button.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-        button.customContextMenuRequested.connect(self.showRightMenu)
+        button.customContextMenuRequested.connect(lambda: self.showRightMenu(widget))
         qApp.sendEvent(
             self.window(), AddToTitleEvent(button, "right", -1)
         )  # 相当于添加到左边的最后面
@@ -126,7 +126,7 @@ QPushButton:checked{
     def eventFilter(self, a0: QObject, a1: QEvent) -> bool:
         if a0 in self.caught_widgets:
             if a1.type() in (QEvent.Type.Close, QEvent.Type.DeferredDelete):
-                a0.setParent(None)
+                a0.setParent(None)  # 会产生QEvent.Type.ParentChange
             elif a1.type() == QEvent.Type.ParentChange and a0.parent() != self:
                 self.removeTask(a0)
             elif a1.type() == QEvent.Type.Show:
@@ -144,31 +144,28 @@ QPushButton:checked{
             qApp.sendEvent(self.window(), RemoveFromTitleEvent(button))
             button.deleteLater()
 
-    def showRightMenu(self):
+    def showRightMenu(self, widget):
         """显示任务栏按钮的右键菜单"""
-        sender = self.sender()
-        for widget, button in self.caught_widgets.items():
-            if button == sender:
-                menu = RoundMenu(self)
-                a_separate = QAction(self)
-                a_separate.setText(self.tr("分离"))
-                a_separate.setIcon(qta.icon("ph.arrow-square-out-light"))
-                a_separate.triggered.connect(lambda: self.separateCaughtWidget(widget))
-                menu.addAction(a_separate)
+        if widget not in self.caught_widgets:
+            return
+        button = self.caught_widgets[widget]
+        menu = RoundMenu(self)
+        a_separate = QAction(self)
+        a_separate.setText(self.tr("分离"))
+        a_separate.setIcon(qta.icon("ph.arrow-square-out-light"))
+        a_separate.triggered.connect(lambda: self.separateCaughtWidget(widget))
+        menu.addAction(a_separate)
 
-                a_close = QAction(self)
-                a_close.setText(self.tr("关闭"))
-                a_close.setIcon(qta.icon("mdi6.close"))
-                a_close.triggered.connect(widget.close)
-                menu.addAction(a_close)
-                menu.exec(
-                    button.mapToGlobal(
-                        QPoint(
-                            (button.width() - menu.view.width()) // 2, button.height()
-                        )
-                    )
-                )
-                break
+        a_close = QAction(self)
+        a_close.setText(self.tr("关闭"))
+        a_close.setIcon(qta.icon("mdi6.close"))
+        a_close.triggered.connect(widget.close)
+        menu.addAction(a_close)
+        menu.exec(
+            button.mapToGlobal(
+                QPoint((button.width() - menu.view.width()) // 2, button.height())
+            )
+        )
 
     def separateCaughtWidget(self, widget: QWidget):
         qApp.sendEvent(self, SeparateWidgetEvent(widget))

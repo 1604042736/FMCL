@@ -34,25 +34,47 @@
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="1" column="0">
-        <widget class="PushButton" name="pb_wiki">
-         <property name="text">
-          <string>Minecraft Wiki</string>
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+           <bold>true</bold>
+          </font>
          </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="PushButton" name="pb_mcmod">
-         <property name="text">
-          <string>MC 百科</string>
+         <property name="title">
+          <string>Minecraft</string>
          </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="PushButton" name="pb_plugin">
-         <property name="text">
-          <string>插件百科</string>
-         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="1" column="0">
+           <widget class="PushButton" name="pb_wiki">
+            <property name="text">
+             <string>Minecraft Wiki</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="PushButton" name="pb_mcofficialweb">
+            <property name="text">
+             <string>官网</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="PushButton" name="pb_mcmod">
+            <property name="text">
+             <string>MC 百科</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="PushButton" name="pb_plugin">
+            <property name="text">
+             <string>插件百科</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item row="4" column="0">
@@ -68,11 +90,54 @@
          </property>
         </spacer>
        </item>
-       <item row="0" column="0">
-        <widget class="PushButton" name="pb_officialweb">
-         <property name="text">
-          <string>官网</string>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+           <bold>true</bold>
+          </font>
          </property>
+         <property name="title">
+          <string>Java</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="1" column="0">
+           <widget class="PushButton" name="pb_openjdk">
+            <property name="text">
+             <string>OpenJDK</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="PushButton" name="pb_dragonwell">
+            <property name="text">
+             <string>Dragonwell</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="PushButton" name="pb_javaofficialweb">
+            <property name="text">
+             <string>官网</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="PushButton" name="pb_azul">
+            <property name="text">
+             <string>Azul</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="PushButton" name="pb_graalvm">
+            <property name="text">
+             <string>GraalVM</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>

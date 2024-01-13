@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>帮助</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
@@ -52,12 +52,42 @@
        </property>
       </column>
      </widget>
-     <widget class="QStackedWidget" name="sw_pages"/>
+     <widget class="QWidget" name="widget" native="true">
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="TabBar" name="tb_pages">
+         <property name="movable">
+          <bool>true</bool>
+         </property>
+         <property name="scrollable">
+          <bool>true</bool>
+         </property>
+         <property name="tabMaxWidth" stdset="0">
+          <number>200</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QStackedWidget" name="sw_pages"/>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>SingleDirectionScrollArea</class>
+   <extends>QScrollArea</extends>
+   <header>qfluentwidgets</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TabBar</class>
+   <extends>SingleDirectionScrollArea</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
   <customwidget>
    <class>TreeWidget</class>
    <extends>QTreeWidget</extends>

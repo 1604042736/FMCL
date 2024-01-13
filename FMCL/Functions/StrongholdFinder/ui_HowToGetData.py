@@ -37,7 +37,7 @@ class Ui_HowToGetData(object):
         self.BodyLabel_4.setWordWrap(True)
         self.BodyLabel_4.setObjectName("BodyLabel_4")
         self.gridLayout_2.addWidget(self.BodyLabel_4, 3, 0, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(20, 404, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.gridLayout_2.addItem(spacerItem, 7, 0, 1, 1)
         self.BodyLabel_3 = BodyLabel(self.scrollAreaWidgetContents)
         self.BodyLabel_3.setWordWrap(True)
