@@ -51,6 +51,10 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
         if file and file not in Setting()["game.java_paths"]:
             Setting()["game.java_paths"].append(file)
 
+    def checktempdir(temp_dir):
+        if not os.path.exists(temp_dir):
+            os.makedirs(temp_dir)
+
     def choosetempdir():
         dir = QFileDialog.getExistingDirectory(None, _translate("Setting", "选择缓存文件夹"))
         if dir:
@@ -93,6 +97,7 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
         "system.temp_dir": {
             "name": _translate("Setting", "缓存文件夹"),
             "side_widgets": [choosetempdirbutton],
+            "callback": [checktempdir],
         },
         "game": {"name": _translate("Setting", "游戏")},
         "game.directories": {
