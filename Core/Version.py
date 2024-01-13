@@ -300,9 +300,6 @@ class Version:
                 if patch.get("id", "") == "game" and "version" in patch:
                     info["version"] = patch["version"]
                     return info
-        if "id" in config:
-            info["version"] = config["id"]
-            return info
         # 从 Forge Arguments 中获取版本号
         if "arguments" in config and "game" in config["arguments"]:
             mark = False
@@ -336,6 +333,9 @@ class Version:
         # 从 jar 项中获取版本号
         if "jar" in config:
             info["version"] = config["jar"]
+            return info
+        if "id" in config:
+            info["version"] = config["id"]
             return info
         logging.error(f"无法确定{self.name}的版本")
         return info
