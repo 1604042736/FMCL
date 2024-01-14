@@ -1,6 +1,6 @@
 from .Download import Download
 from .Version import Version
-from .Mod import Mod
+from .Mod import Mod, ApiModInfo
 from .Network import Network
 from .Task import Task, TaskCreator
 from .User import User

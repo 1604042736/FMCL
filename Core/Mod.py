@@ -1,6 +1,8 @@
+from datetime import datetime
 import logging
 import os
 import traceback
+from typing import TypedDict
 import toml
 import json
 from zipfile import ZipFile
@@ -13,8 +15,63 @@ from Core.Network import Network
 _translate = QCoreApplication.translate
 
 
+class ApiModInfo(TypedDict):
+    """Api模组信息"""
+
+    api_name: str  # API名称
+
+    client_side: str  # 对客户端要求
+    server_side: str  # 对服务端要求
+    game_versions: list[str]  # 游戏版本
+    id: str
+    title: str
+    description: str
+    updated: str  # 更新日期
+    downloads: int  # 下载量
+    categories: list[str]  # 分类
+    loaders: list[str]  # 加载器
+    icon_url: str  # 图标网址
+    issues_url: str  # 反馈网址
+    source_url: str  # 源码网址
+    wiki_url: str  # Wiki网址
+
+
+class Dependency(TypedDict):
+    """依赖"""
+
+    project_id: str
+    dependency_type: str
+
+
+class FileInfo(TypedDict):
+    """模组文件信息"""
+
+    url: str
+    filename: str
+
+
+class VersionInfo(TypedDict):
+    """模组版本信息"""
+
+    game_versions: str  # 游戏版本
+    loaders: str  # 加载器
+    id: str
+    name: str
+    version_number: str
+    date_published: str  # 发布日期
+    downloads: str  # 下载量
+    version_type: str  # 版本类型
+    files: list[FileInfo]  # 文件
+    dependencies: list[Dependency]  # 依赖
+
+
 class Mod:
     project_cache = {}
+
+    @staticmethod
+    def get_time(utc_time):
+        update_time = datetime.strptime(utc_time, "%Y-%m-%dT%H:%M:%S.%fZ")
+        return update_time.strftime("%Y-%m-%d")
 
     def __init__(self, path="") -> None:
         self.downloadsource = "Modrinth"
@@ -25,6 +82,38 @@ class Mod:
             _translate("Mod", "按关注者数量排序"): "follows",
             _translate("Mod", "按创建时间排序"): "newest",
             _translate("Mod", "按更新时间排序"): "updated",
+        }
+
+        self.tr_categories = {
+            "adventure": _translate("Mod", "冒险"),
+            "cursed": _translate("Mod", "杂项"),
+            "decoration": _translate("Mod", "装饰"),
+            "economy": _translate("Mod", "经济"),
+            "equipment": _translate("Mod", "装备"),
+            "food": _translate("Mod", "食物"),
+            "game-mechanics": _translate("Mod", "游戏机制"),
+            "library": _translate("Mod", "支持库"),
+            "magic": _translate("Mod", "魔法"),
+            "management": _translate("Mod", "改良"),
+            "minigame": _translate("Mod", "迷你游戏"),
+            "mobs": _translate("Mod", "生物"),
+            "optimization": _translate("Mod", "优化"),
+            "social": _translate("Mod", "社交"),
+            "storage": _translate("Mod", "存储"),
+            "technology": _translate("Mod", "科技"),
+            "transportation": _translate("Mod", "运输"),
+            "utility": _translate("Mod", "实用"),
+            "worldgen": _translate("Mod", "世界生成"),
+        }
+
+        self.tr_versiontype = {
+            "release": _translate("Mod", "正式版"),
+            "beta": _translate("Mod", "测试版"),
+        }
+
+        self.tr_dependencytype = {
+            "required": _translate("Mod", "必需"),
+            "optional": _translate("Mod", "可选"),
         }
 
         self.path = path
@@ -87,7 +176,6 @@ class Mod:
             "url": "",
             "icon": None,
         }
-        # 很多时侯报错是由于多行字符串
         zipfile = ZipFile(mod_path)
         for zipinfo in zipfile.filelist:
             if (
@@ -175,55 +263,30 @@ class Mod:
             sort = "relevance"
         if self.downloadsource == "Modrinth":
             if not yield_:
-                return [i for i in self.search_modrinth_yield(name, sort)]
+                return [i for i in self.search_modrinth_iter(name, sort)]
             else:
-                for i in self.search_modrinth_yield(name, sort):
+                for i in self.search_modrinth_iter(name, sort):
                     yield i
 
-    def search_modrinth_yield(self, name, sort):
+    def search_modrinth_iter(self, name, sort):
         url = f"https://api.modrinth.com/v2/search?query={name}&index={sort}&limit=100"
         r = Network().get(url).json()
         for i in r["hits"]:
             yield self.get_modrinth_modinfo(i["project_id"])
 
-    def get_modrinth_modinfo(self, project_id):
+    def get_modrinth_modinfo(self, project_id) -> ApiModInfo:
         if project_id in Mod.project_cache:
             return Mod.project_cache[project_id]
-        result = {
-            "icon_url": "",
-            "title": "",
-            "description": "",
-            "project_id": project_id,
-            "files": {},
-            "dependencies": [],
-        }
+
         url = f"https://api.modrinth.com/v2/project/{project_id}"
-        r = Network().get(url).json()
-        result["icon_url"] = r["icon_url"]
-        result["title"] = r["title"]
-        result["description"] = r["description"]
+        r: ApiModInfo = Network().get(url).json()
+        r["api_name"] = "Modrinth"
+        Mod.project_cache[project_id] = r
+        return r
 
-        url = f"https://api.modrinth.com/v2/project/{project_id}/version"
-        r = Network().get(url).json()
-        dependencies_id = []
-        for version in r:
-            for file in version["files"]:
-                for game_version in version["game_versions"]:
-                    if game_version not in result["files"]:
-                        result["files"][game_version] = {}
-                    result["files"][game_version][file["filename"]] = file
-
-            for dependence in version["dependencies"]:
-                if (
-                    dependence["project_id"]
-                    and dependence["project_id"] not in dependencies_id
-                ):
-                    result["dependencies"].append(
-                        self.get_modrinth_modinfo(dependence["project_id"])
-                    )
-                    dependencies_id.append(dependence["project_id"])
-        Mod.project_cache[project_id] = result
-        return result
+    def get_apimodinfo(self, apimodinfo: ApiModInfo, project_id) -> ApiModInfo:
+        if apimodinfo["api_name"] == "Modrinth":
+            return self.get_modrinth_modinfo(project_id)
 
     def get_all_downloadsources(self) -> list[str]:
         return ["Modrinth"]
@@ -239,7 +302,18 @@ class Mod:
     def set_downloadsource(self, ds):
         self.downloadsource = ds
 
+    def get_mod_versions(self, apimodinfo: ApiModInfo) -> list[VersionInfo]:
+        """获得模组的版本"""
+        if apimodinfo["api_name"] == "Modrinth":
+            return self.get_modrinth_modversions(apimodinfo)
+        return []
+
+    def get_modrinth_modversions(self, apimodinfo: ApiModInfo) -> list[VersionInfo]:
+        url = f"https://api.modrinth.com/v2/project/{apimodinfo['id']}/version"
+        r: list[VersionInfo] = Network().get(url).json()
+        return r
+
     def __repr__(self) -> str:
         if self.path:
-            return self.name
+            return f"Mod({self.name})"
         return super().__repr__()
