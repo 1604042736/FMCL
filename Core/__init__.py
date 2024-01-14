@@ -1,7 +1,7 @@
 from .Download import Download
 from .Version import Version
 from .Mod import Mod
-from .Requests import Requests
+from .Network import Network
 from .Task import Task, TaskCreator
 from .User import User
 from .Save import Save

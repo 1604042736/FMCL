@@ -11,9 +11,10 @@ from PyQt5.QtGui import QImage
 from Setting import Setting
 
 from Core.Download import Download
-from Core.Requests import Requests
+from Core.Network import Network
 
-_translate=QCoreApplication.translate
+_translate = QCoreApplication.translate
+
 
 class User:
     @staticmethod
@@ -43,18 +44,21 @@ class User:
             "username": username,
             "password": password,
             "requestUser": True,
-            "agent": {
-                "name": "Minecraft",
-                "version": 1
-            }
+            "agent": {"name": "Minecraft", "version": 1},
         }
-        r = Requests.post(f"{api}/authserver/authenticate",
-                          json=data,
-                          headers={"Content-Type": "application/json"}).json()
+        r = (
+            Network()
+            .post(
+                f"{api}/authserver/authenticate",
+                json=data,
+                headers={"Content-Type": "application/json"},
+            )
+            .json()
+        )
         if "errorMessage" in r:
             return r["errorMessage"]
         if not r["selectedProfile"]:
-            return _translate("User","没有选择的角色")
+            return _translate("User", "没有选择的角色")
 
         globalsetting = Setting()
         setting = {}
@@ -67,15 +71,22 @@ class User:
         setting["token"] = r["accessToken"]
         setting["mode"] = "LittleSkin"
 
-        prole = Requests.get(
-            f'{api}/sessionserver/session/minecraft/profile/{r["selectedProfile"]["id"]}').json()
+        prole = (
+            Network()
+            .get(
+                f'{api}/sessionserver/session/minecraft/profile/{r["selectedProfile"]["id"]}'
+            )
+            .json()
+        )
         setting["profileProperties"] = prole["properties"]
 
         for i in range(len(globalsetting["users"])):
             user = globalsetting["users"][i]
-            if (user["type"] == setting["type"]
+            if (
+                user["type"] == setting["type"]
                 and user["username"] == setting["username"]
-                    and user["mode"] == setting["mode"]):  # 如果是重登录只需覆盖
+                and user["mode"] == setting["mode"]
+            ):  # 如果是重登录只需覆盖
                 globalsetting["users"][i] = setting
                 break
         else:
@@ -106,11 +117,17 @@ class User:
             logging.info("刷新")
             data = {
                 "accessToken": user["accessToken"],
-                "clientToken": user["clientToken"]
+                "clientToken": user["clientToken"],
             }
-            r = Requests.post(f"{api}/authserver/refresh",
-                              json=data,
-                              headers={"Content-Type": "application/json"}).json()
+            r = (
+                Network()
+                .post(
+                    f"{api}/authserver/refresh",
+                    json=data,
+                    headers={"Content-Type": "application/json"},
+                )
+                .json()
+            )
             if "error" in r:
                 return r
             user["accessToken"] = r["accessToken"]
@@ -134,8 +151,9 @@ class User:
                 if not os.path.exists("FMCL/Skin"):
                     os.makedirs("FMCL/Skin")
                 logging.info("下载皮肤")
-                Download(url, path, {"setMax": logging.info,
-                         "setProgress": logging.info}).check()
+                Download(
+                    url, path, {"setMax": logging.info, "setProgress": logging.info}
+                ).check()
                 img = Image.open(path)
                 head = img.crop((8, 8, 16, 16))
                 head = ImageQt.ImageQt(head)

@@ -46,9 +46,9 @@ class Kernel(QApplication):
         if default_path not in sys.path:
             sys.path.insert(1, default_path)
 
-        temp_dir = Setting()["system.temp_dir"]
-        if not os.path.exists(temp_dir):
-            os.makedirs(temp_dir)
+        tempdir = Setting()["system.temp_dir"]
+        if not os.path.exists(tempdir):
+            os.makedirs(tempdir)
 
         self.unpack()
 

@@ -8,7 +8,7 @@ from zipfile import ZipFile
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QPixmap, QImage
 
-from .Requests import Requests
+from Core.Network import Network
 
 _translate = QCoreApplication.translate
 
@@ -182,7 +182,7 @@ class Mod:
 
     def search_modrinth_yield(self, name, sort):
         url = f"https://api.modrinth.com/v2/search?query={name}&index={sort}&limit=100"
-        r = Requests.get(url, try_time=-1, timeout=5).json()
+        r = Network().get(url).json()
         for i in r["hits"]:
             yield self.get_modrinth_modinfo(i["project_id"])
 
@@ -198,13 +198,13 @@ class Mod:
             "dependencies": [],
         }
         url = f"https://api.modrinth.com/v2/project/{project_id}"
-        r = Requests.get(url, try_time=-1, timeout=5).json()
+        r = Network().get(url).json()
         result["icon_url"] = r["icon_url"]
         result["title"] = r["title"]
         result["description"] = r["description"]
 
         url = f"https://api.modrinth.com/v2/project/{project_id}/version"
-        r = Requests.get(url, try_time=-1, timeout=5).json()
+        r = Network().get(url).json()
         dependencies_id = []
         for version in r:
             for file in version["files"]:

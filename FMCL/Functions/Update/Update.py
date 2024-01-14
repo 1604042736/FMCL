@@ -6,7 +6,7 @@ import webbrowser
 
 import multitasking
 import qtawesome as qta
-from Core import Download, Requests, Task
+from Core import Download, Network, Task
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget, qApp
 
@@ -51,7 +51,7 @@ class Update(QWidget, Ui_Update):
         self.pb_check.setEnabled(False)
         try:
             url = "https://api.github.com/repos/1604042736/FMCL/releases/latest"
-            r = Requests.get(url, try_time=-1, cache=False, verify=False)
+            r = Network().get(url, verify=False)
             self.info = json.loads(r.content)
 
             if self.info["tag_name"] != self.tag_name:

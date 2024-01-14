@@ -77,10 +77,13 @@ class TaskManager(QWidget, Ui_TaskManager):
             return
         item.setText(0, task.name)
         item.setText(1, task.status)
-        item.setText(
-            2,
-            f"{task.progress}/{task.maxprogress}({round(task.progress/task.maxprogress if task.maxprogress!=0 else 0,3)*100}%)",
-        )
+        if task.maxprogress != 0:
+            item.setText(
+                2,
+                f"{task.progress}/{task.maxprogress}({round(task.progress/task.maxprogress,3)*100}%)",
+            )
+        else:
+            item.setText(2, "")
         item.setText(3, str(task.isRunning()))
         for child in task.children():
             if not child.isFinished():

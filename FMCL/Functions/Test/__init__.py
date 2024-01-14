@@ -86,5 +86,31 @@ def test_task3():
     a.start()
 
 
+def test_download1():
+    from Core import Download, Task
+
+    url = "https://authlib-injector.yushi.moe/artifact/52/authlib-injector-1.2.4.jar"
+    task = Task(
+        "test_download1",
+        taskfunc=lambda callback: Download(
+            url, "FMCL/Temp/test_download1.jar", callback=callback
+        ).start(),
+    )
+    task.start()
+
+
+def test_download2():
+    from Core import Download, Task
+
+    url = "https://issuecdn.baidupcs.com/issue/netdisk/yunguanjia/BaiduNetdisk_7.2.8.9.exe"
+    task = Task(
+        "test_download2",
+        taskfunc=lambda callback: Download(
+            url, "FMCL/Temp/test_download2.exe", callback=callback
+        ).start(),
+    )
+    task.start()
+
+
 def main():
-    test_task3()
+    test_download2()

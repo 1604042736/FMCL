@@ -14,7 +14,7 @@ from qfluentwidgets import PrimaryPushButton
 from Setting import Setting
 
 from Core.Download import Download
-from Core.Requests import Requests
+from Core.Network import Network
 from Core.Mod import Mod
 from Core.Java import Java
 from Core.Installer import Installer
@@ -108,7 +108,7 @@ class Version:
             logging.info(f"外置登录: {cur_user['mode']}")
             if cur_user["mode"] == "LittleSkin":
                 api = "https://authlib-injector.yushi.moe"
-                r = Requests.get(f"{api}/artifact/latest.json").json()
+                r = Network().get(f"{api}/artifact/latest.json").json()
 
                 url = r["download_url"]
                 tempdir = Setting()["system.temp_dir"]
@@ -124,7 +124,7 @@ class Version:
                 setProgress(0)
                 setStatus("获取元数据编码")
                 api = "https://littleskin.cn/api/yggdrasil"
-                meta = Requests.get(api).content
+                meta = Network().get(api).content
                 metab64 = base64.b64encode(meta)
                 metab64 = str(metab64)[2:-1]
                 logging.info(f"元数据Base64编码: {metab64}")

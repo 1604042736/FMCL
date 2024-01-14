@@ -1,5 +1,5 @@
 import multitasking
-from Core import Requests
+from Core import Network
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QWidget
 
@@ -17,7 +17,7 @@ class ModFound(QWidget, Ui_ModFound):
 
     @multitasking.task
     def setIcon(self):
-        r = Requests.get(self.foundmod["icon_url"], try_time=-1, timeout=5)
+        r = Network().get(self.foundmod["icon_url"])
         image = QImage.fromData(r.content)
         pixmap = QPixmap.fromImage(image)
         self.l_icon.setPixmap(pixmap.scaled(64, 64))
