@@ -1,5 +1,6 @@
 import json
 import os
+import shutil
 import multitasking
 
 from typing import Any, Literal, TypedDict, Callable
@@ -60,6 +61,11 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
         if dir:
             Setting().set("system.temp_dir", dir)
 
+    def cleantempdir():
+        temp_dir = Setting()["system.temp_dir"]
+        shutil.rmtree(temp_dir)
+        os.makedirs(temp_dir)
+
     def choosejavabutton():
         pb_choosejava = PrimaryPushButton()
         pb_choosejava.setText(_translate("Setting", "手动添加Java"))
@@ -87,6 +93,12 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
         pb_choosetempdir.clicked.connect(choosetempdir)
         return pb_choosetempdir
 
+    def cleantempdirbutton():
+        pb_cleantempdir = PrimaryPushButton()
+        pb_cleantempdir.setText(_translate("Setting", "清理"))
+        pb_cleantempdir.clicked.connect(cleantempdir)
+        return pb_cleantempdir
+
     return {
         "system": {"name": _translate("Setting", "系统")},
         "system.startup_functions": {"name": _translate("Setting", "启动项")},
@@ -96,7 +108,7 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
         },
         "system.temp_dir": {
             "name": _translate("Setting", "缓存文件夹"),
-            "side_widgets": [choosetempdirbutton],
+            "side_widgets": [cleantempdirbutton, choosetempdirbutton],
             "callback": [checktempdir],
         },
         "game": {"name": _translate("Setting", "游戏")},
