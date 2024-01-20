@@ -99,7 +99,7 @@ class Download:
         self.callback["setStatus"](_translate("Download", "等待各部分文件下载完成"))
         self.callback["setMax"](0)
         self.callback["setProgress"](0)
-        Task.waitTasks(*download_tasks)
+        Task.waitTasks(download_tasks,self.callback)
 
         self.callback["setStatus"](_translate("Download", "合并文件"))
         self.callback["setMax"](part)

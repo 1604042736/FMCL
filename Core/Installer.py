@@ -303,8 +303,11 @@ class Installer:
         task_install_libraries.start()
         task_install_assets.start()
         Task.waitTasks(
-            task_install_libraries,
-            task_install_assets,
+            (
+                task_install_libraries,
+                task_install_assets,
+            ),
+            callback,
         )
 
         # Download logging config
@@ -441,7 +444,7 @@ class Installer:
             ]
         )
         task_install_mc.start()
-        Task.waitTasks(task_install_mc)
+        Task.waitTasks((task_install_mc,), callback)
 
         # Install all needed libs from install_profile.json
         if "libraries" in version_data:
@@ -449,7 +452,7 @@ class Installer:
                 minecraft_version, version_data["libraries"], str(path), callback
             )
             task_install_libraries.start()
-            Task.waitTasks(task_install_libraries)
+            Task.waitTasks((task_install_libraries,), callback)
 
         # Extract the version.json
         version_json_path = os.path.join(
@@ -526,7 +529,7 @@ class Installer:
             ]
         )
         task_install_mc.start()
-        Task.waitTasks(task_install_mc)
+        Task.waitTasks((task_install_mc,), callback)
 
         # Run the processors
         if "processors" in version_data:
@@ -579,7 +582,7 @@ class Installer:
             ]
         )
         task_install_mc.start()
-        Task.waitTasks(task_install_mc)
+        Task.waitTasks((task_install_mc,), callback)
 
         # Get installer version
         installer_version = get_latest_installer_version()
@@ -630,4 +633,4 @@ class Installer:
             ]
         )
         task_install_mc.start()
-        Task.waitTasks(task_install_mc)
+        Task.waitTasks((task_install_mc,), callback)

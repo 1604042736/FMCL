@@ -2,7 +2,9 @@ import logging
 import threading
 import time
 from typing import Callable
-from PyQt5.QtCore import QObject, QThread, pyqtSignal
+from PyQt5.QtCore import QObject, QThread, pyqtSignal, QCoreApplication
+
+_translate = QCoreApplication.translate
 
 SLEEP_TIME = 0.005  # 循环等待时间(秒)
 
@@ -70,10 +72,13 @@ class Task(QThread):
     finishedCallback = []
 
     @staticmethod
-    def waitTasks(*args):
+    def waitTasks(tasks, callback):
         while True:
-            for task in args:
+            for task in tasks:
                 if not task.isFinished():
+                    callback.get("setStatus", lambda _: None)(
+                        f'{_translate("Task","等待")} {task.name}'
+                    )
                     break
             else:
                 break
@@ -100,6 +105,13 @@ class Task(QThread):
             exception_handler if exception_handler != None else []
         )  # 异常处理
 
+        self.callback = {
+            "setStatus": lambda a: setattr(self, "status", a),
+            "setProgress": lambda a: setattr(self, "progress", a),
+            "setMax": lambda a: setattr(self, "maxprogress", a),
+            "getCurTask": lambda: self,
+        }
+
         self.started.connect(
             lambda: list(callback(self) for callback in Task.startedCallback)
         )
@@ -108,14 +120,7 @@ class Task(QThread):
         )
 
     def run(self) -> None:
-        self.status = self.tr("等待任务执行")
-        while True:
-            for task in self.waittasks:
-                if not task.isFinished():
-                    break
-            else:
-                break
-            time.sleep(SLEEP_TIME)
+        self.waitTasks(self.waittasks, self.callback)
 
         self.status = self.tr("启动子任务")
         for task in self.children():
@@ -125,21 +130,14 @@ class Task(QThread):
         self.status = ""
         if self.taskfunc:
             try:
-                self.taskfunc(
-                    {
-                        "setStatus": lambda a: setattr(self, "status", a),
-                        "setProgress": lambda a: setattr(self, "progress", a),
-                        "setMax": lambda a: setattr(self, "maxprogress", a),
-                        "getCurTask": lambda: self,
-                    }
-                )
+                self.taskfunc(self.callback)
             except Exception as e:
                 logging.warning(f"产生错误:{e}")
                 self.occurException.emit(e, self.exception_handler)  # 交给主线程来raise
 
         self.status = self.tr("等待子任务执行完成")
         while True:
-            for task in self.children():
+            for task in self.children():  # children会变所以不能用Task.waitTasks
                 if isinstance(task, Task) and not task.isFinished():
                     break
             else:
