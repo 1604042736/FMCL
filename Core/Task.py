@@ -107,6 +107,7 @@ class Task(QThread):
         self.status: str = ""  # 状态
         self.progress: int = 0  # 进度
         self.maxprogress: int = 0  # 最大进度
+        self.terminated: bool = False  # 是否被终止
 
         self.exceptionpass = TaskExceptionPass(self)
         self.exception_handler = (
@@ -153,6 +154,7 @@ class Task(QThread):
             time.sleep(SLEEP_TIME)
 
     def terminate(self) -> None:
+        self.terminated = True
         for task in self.children():
             if isinstance(task, Task):
                 task.terminate()

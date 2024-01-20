@@ -41,8 +41,6 @@ class TaskManager(QWidget, Ui_TaskManager):
         self.task_item[task] = item
         if root:
             root.addChild(item)
-            item.setExpanded(True)
-            root.setExpanded(True)
         else:
             self.tw_tasks.addTopLevelItem(item)
             self.show()
@@ -58,7 +56,19 @@ class TaskManager(QWidget, Ui_TaskManager):
         else:
             self.tw_tasks.takeTopLevelItem(self.tw_tasks.indexOfTopLevelItem(item))
             for i in qApp.topLevelWidgets():
-                if i.isVisible():
+                if not i.isVisible():
+                    continue
+                if task.terminated:
+                    InfoBar.error(
+                        title=f'{self.tr("被终止")} {task.name}',
+                        content="",
+                        orient=Qt.Horizontal,
+                        isClosable=True,
+                        position=InfoBarPosition.TOP,
+                        duration=2000,
+                        parent=i,  # 在任务完成的时侯TaskManager可能并没有显示
+                    )
+                else:
                     InfoBar.info(
                         title=f'{self.tr("完成")} {task.name}',
                         content="",
@@ -68,7 +78,7 @@ class TaskManager(QWidget, Ui_TaskManager):
                         duration=2000,
                         parent=i,  # 在任务完成的时侯TaskManager可能并没有显示
                     )
-                    break
+                break
 
     def sync(self, item, task):
         if task.isFinished():
