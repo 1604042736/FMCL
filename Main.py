@@ -8,7 +8,7 @@ import PyQt5.QtMultimedia as _  # 打包exe需要
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import QMessageBox
 
-from Core import TaskCreator
+from Core.Task import TaskCreator
 
 import Resources as _
 from Kernel import Kernel

@@ -4,7 +4,7 @@ import os
 from PyQt5.QtCore import QCoreApplication
 from Setting import Setting
 from Core.Network import Network
-from Core.Task import TaskCreator, Task
+from Core.Task import  Task
 
 _translate = QCoreApplication.translate
 
@@ -79,17 +79,15 @@ class Download:
             if e_pos >= filesize:
                 e_pos = filesize - 1
 
-            download_task = TaskCreator().newTask(
-                [
-                    f'{_translate("Download","下载")} Part{part}',
-                    self.callback["getCurTask"](),
-                    lambda callback, part=part, s_pos=s_pos, e_pos=e_pos: Download(
-                        self.url,
-                        f"{basepath}/{basename}.part{part}",
-                        range=(s_pos, e_pos),
-                        callback=callback,
-                    ).start(),
-                ]
+            download_task = Task(
+                f'{_translate("Download","下载")} Part{part}',
+                self.callback["getCurTask"](),
+                lambda callback, part=part, s_pos=s_pos, e_pos=e_pos: Download(
+                    self.url,
+                    f"{basepath}/{basename}.part{part}",
+                    range=(s_pos, e_pos),
+                    callback=callback,
+                ).start(),
             )
             download_tasks.append(download_task)
             download_task.start()
@@ -99,7 +97,7 @@ class Download:
         self.callback["setStatus"](_translate("Download", "等待各部分文件下载完成"))
         self.callback["setMax"](0)
         self.callback["setProgress"](0)
-        Task.waitTasks(download_tasks,self.callback)
+        Task.waitTasks(download_tasks, self.callback)
 
         self.callback["setStatus"](_translate("Download", "合并文件"))
         self.callback["setMax"](part)

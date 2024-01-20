@@ -35,7 +35,7 @@ class TaskExceptionPass(QObject):
 class TaskCreator(QObject):
     """负责在主线程中创建Task"""
 
-    __createTask = pyqtSignal(tuple, str)
+    __createTask = pyqtSignal(tuple, dict, str)
 
     instance = None
     new_count = 0
@@ -53,13 +53,13 @@ class TaskCreator(QObject):
         self.created_tasks: dict[str, Task] = {}
         self.__createTask.connect(self.createTask)
 
-    def createTask(self, args, hash):
-        self.created_tasks[hash] = Task(*args)
+    def createTask(self, args, kwargs, hash):
+        self.created_tasks[hash] = Task(*args, **kwargs)
 
-    def newTask(self, args) -> "Task":
+    def newTask(self, args, kwargs) -> "Task":
         hash = f"{time.time()}{threading.get_ident()}"
         args = tuple(args)
-        self.__createTask.emit(args, hash)
+        self.__createTask.emit(args, kwargs, hash)
         while hash not in self.created_tasks:
             time.sleep(SLEEP_TIME)
         return self.created_tasks[hash]
@@ -84,6 +84,12 @@ class Task(QThread):
                 break
             time.sleep(SLEEP_TIME)
 
+    def __new__(cls, *args, **kwargs):
+        if threading.current_thread().getName() == "MainThread":
+            return super().__new__(cls)
+        else:
+            return TaskCreator().newTask(args, kwargs)
+
     def __init__(
         self,
         name: str = "",
@@ -92,6 +98,8 @@ class Task(QThread):
         waittasks: list["Task"] = None,
         exception_handler: list[Callable[[Exception], bool]] = None,
     ) -> None:
+        if threading.current_thread().getName() != "MainThread":  # 子线程的Task已在主线程中初始化过
+            return
         super().__init__(parent)
         self.taskfunc = taskfunc  # 要运行的函数
         self.waittasks: list[Task] = waittasks if waittasks != None else []  # 等待的任务

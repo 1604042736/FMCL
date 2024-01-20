@@ -44,7 +44,7 @@ from PyQt5.QtCore import QCoreApplication
 
 from Setting import Setting
 
-from Core.Task import Task, TaskCreator
+from Core.Task import Task
 
 _translate = QCoreApplication.translate
 
@@ -62,11 +62,9 @@ class Installer:
         """
         Install all libraries
         """
-        task = TaskCreator().newTask(
-            [
-                _translate("Installer", "下载库"),
-                callback.get("getCurTask", lambda _: None)(),
-            ]
+        task = Task(
+            _translate("Installer", "下载库"),
+            callback.get("getCurTask", lambda _: None)(),
         )
 
         session = requests.session()
@@ -161,12 +159,10 @@ class Installer:
                                 i["extract"],
                             )
 
-                task_work = TaskCreator().newTask(
-                    [
-                        f'{_translate("Installer","处理")}{i["name"]}',
-                        task,
-                        lambda callback, c=count, i=i: work(c, i, callback),
-                    ]
+                task_work = Task(
+                    f'{_translate("Installer","处理")}{i["name"]}',
+                    task,
+                    lambda callback, c=count, i=i: work(c, i, callback),
                 )
                 if count - MAX_POOL_SIZE >= 0:
                     task_work.waittasks.append(tasks[count - MAX_POOL_SIZE])
@@ -174,7 +170,7 @@ class Installer:
                 task_work.start()
                 callback.get("setProgress", empty)(count + 1)
 
-        task_get = TaskCreator().newTask([_translate("Installer", "获取库"), task, get])
+        task_get = Task(_translate("Installer", "获取库"), task, get)
         return task
 
     def install_assets(
@@ -183,11 +179,9 @@ class Installer:
         """
         Install all assets
         """
-        task = TaskCreator().newTask(
-            [
-                _translate("Installer", "下载资源"),
-                callback.get("getCurTask", lambda _: None)(),
-            ]
+        task = Task(
+            _translate("Installer", "下载资源"),
+            callback.get("getCurTask", lambda _: None)(),
         )
         # Old versions don't have this
         if "assetIndex" not in data:
@@ -212,40 +206,36 @@ class Installer:
             ) as f:
                 assets_data = json.load(f)
 
-        task_prepare = TaskCreator().newTask(
-            [
-                _translate("Installer", "准备工作"),
-                task,
-                prepare,
-            ]
+        task_prepare = Task(
+            _translate("Installer", "准备工作"),
+            task,
+            prepare,
         )
 
         def work(callback):
             callback.get("setMax", empty)(len(assets_data["objects"].values()))
             tasks = []
             for i, value in enumerate(assets_data["objects"].values()):
-                task_download = TaskCreator().newTask(
-                    [
-                        f'{_translate("Installer","下载")}{value["hash"]}',
-                        task,
-                        lambda callback, value=value: download_file(
-                            "https://resources.download.minecraft.net/"
-                            + value["hash"][:2]
-                            + "/"
-                            + value["hash"],
-                            os.path.join(
-                                path,
-                                "assets",
-                                "objects",
-                                value["hash"][:2],
-                                value["hash"],
-                            ),
-                            callback,
-                            sha1=value["hash"],
-                            session=session,
-                            minecraft_directory=path,
+                task_download = Task(
+                    f'{_translate("Installer","下载")}{value["hash"]}',
+                    task,
+                    lambda callback, value=value: download_file(
+                        "https://resources.download.minecraft.net/"
+                        + value["hash"][:2]
+                        + "/"
+                        + value["hash"],
+                        os.path.join(
+                            path,
+                            "assets",
+                            "objects",
+                            value["hash"][:2],
+                            value["hash"],
                         ),
-                    ]
+                        callback,
+                        sha1=value["hash"],
+                        session=session,
+                        minecraft_directory=path,
+                    ),
                 )
                 if i - MAX_POOL_SIZE >= 0:
                     task_download.waittasks.append(tasks[i - MAX_POOL_SIZE])
@@ -253,9 +243,7 @@ class Installer:
                 task_download.start()
                 callback.get("setProgress", empty)(i + 1)
 
-        task_work = TaskCreator().newTask(
-            [_translate("Installer", "获取资源"), task, work, [task_prepare]]
-        )
+        task_work = Task(_translate("Installer", "获取资源"), task, work, [task_prepare])
         return task
 
     def do_version_install(
@@ -434,14 +422,12 @@ class Installer:
 
         # Make sure, the base version is installed
         callback.get("setStatus", empty)("")
-        task_install_mc = TaskCreator().newTask(
-            [
-                f'{_translate("Installer","安装")}{minecraft_version}',
-                callback.get("getCurTask", lambda _: None)(),
-                lambda callback: self.install_minecraft_version(
-                    minecraft_version, path, callback=callback
-                ),
-            ]
+        task_install_mc = Task(
+            f'{_translate("Installer","安装")}{minecraft_version}',
+            callback.get("getCurTask", lambda _: None)(),
+            lambda callback: self.install_minecraft_version(
+                minecraft_version, path, callback=callback
+            ),
         )
         task_install_mc.start()
         Task.waitTasks((task_install_mc,), callback)
@@ -519,14 +505,12 @@ class Installer:
 
         # Install the rest with the vanilla function
         callback.get("setStatus", empty)("")
-        task_install_mc = TaskCreator().newTask(
-            [
-                f'{_translate("Installer","安装")}{forge_version_id}',
-                callback.get("getCurTask", lambda _: None)(),
-                lambda callback: self.install_minecraft_version(
-                    forge_version_id, str(path), callback=callback
-                ),
-            ]
+        task_install_mc = Task(
+            f'{_translate("Installer","安装")}{forge_version_id}',
+            callback.get("getCurTask", lambda _: None)(),
+            lambda callback: self.install_minecraft_version(
+                forge_version_id, str(path), callback=callback
+            ),
         )
         task_install_mc.start()
         Task.waitTasks((task_install_mc,), callback)
@@ -572,14 +556,12 @@ class Installer:
             loader_version = get_latest_loader_version()
 
         # Make sure the Minecraft version is installed
-        task_install_mc = TaskCreator().newTask(
-            [
-                f'{_translate("Installer","安装")}{minecraft_version}',
-                callback.get("getCurTask", lambda _: None)(),
-                lambda callback: self.install_minecraft_version(
-                    minecraft_version, path, callback=callback
-                ),
-            ]
+        task_install_mc = Task(
+            f'{_translate("Installer","安装")}{minecraft_version}',
+            callback.get("getCurTask", lambda _: None)(),
+            lambda callback: self.install_minecraft_version(
+                minecraft_version, path, callback=callback
+            ),
         )
         task_install_mc.start()
         Task.waitTasks((task_install_mc,), callback)
@@ -623,14 +605,12 @@ class Installer:
         # Install all libs of fabric
         fabric_minecraft_version = f"fabric-loader-{loader_version}-{minecraft_version}"
 
-        task_install_mc = TaskCreator().newTask(
-            [
-                f'{_translate("Installer","安装")}{fabric_minecraft_version}',
-                callback.get("getCurTask", lambda _: None)(),
-                lambda callback: self.install_minecraft_version(
-                    fabric_minecraft_version, path, callback=callback
-                ),
-            ]
+        task_install_mc = Task(
+            f'{_translate("Installer","安装")}{fabric_minecraft_version}',
+            callback.get("getCurTask", lambda _: None)(),
+            lambda callback: self.install_minecraft_version(
+                fabric_minecraft_version, path, callback=callback
+            ),
         )
         task_install_mc.start()
         Task.waitTasks((task_install_mc,), callback)
