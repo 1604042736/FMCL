@@ -31,8 +31,6 @@ _translate = QCoreApplication.translate
 class Kernel(QApplication):
     HELPINDEX_KEYWORD = ("name", "page")  # 帮助索引中的关键字
 
-    widgets = set()
-
     def __init__(self, argv: list[str] = sys.argv) -> None:
         super().__init__(argv)
         self.setWindowIcon(QIcon(":/Icon/FMCL.ico"))
@@ -62,11 +60,6 @@ class Kernel(QApplication):
         self.execStartupFunctions()
 
     def notify(self, a0: QObject, a1: QEvent) -> bool:
-        if a1.type() == QEvent.Type.Show:
-            Kernel.widgets.add(a0)
-        elif a1.type() in (QEvent.Type.Close, QEvent.Type.DeferredDelete):
-            if a0 in Kernel.widgets:
-                Kernel.widgets.remove(a0)
         if a1.type() == SeparateWidgetEvent.EventType:
             a1.widget.resize(a1.size)
             self.separateWidget(a1.widget)

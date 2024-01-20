@@ -3,10 +3,9 @@ import logging
 import sys
 
 import qtawesome as qta
-from Kernel import Kernel
 from PyQt5.QtCore import QObject, QTimer, pyqtSlot
 from PyQt5.QtGui import QCloseEvent, QShowEvent
-from PyQt5.QtWidgets import QHeaderView, QTreeWidgetItem, QWidget
+from PyQt5.QtWidgets import QTreeWidgetItem, QWidget, qApp
 
 from .ui_WidgetManager import Ui_WidgetManager
 
@@ -22,25 +21,28 @@ def get_size(obj, seen=None):
     # Important mark as seen *before* entering recursion to gracefully handle
     # self-referential objects
     seen.add(obj_id)
-    if hasattr(obj, '__dict__'):
+    if hasattr(obj, "__dict__"):
         for cls in obj.__class__.__mro__:
-            if '__dict__' in cls.__dict__:
-                d = cls.__dict__['__dict__']
+            if "__dict__" in cls.__dict__:
+                d = cls.__dict__["__dict__"]
                 if inspect.isgetsetdescriptor(d) or inspect.ismemberdescriptor(d):
                     size += get_size(obj.__dict__, seen)
                 break
     if isinstance(obj, dict):
         size += sum((get_size(v, seen) for v in obj.values()))
         size += sum((get_size(k, seen) for k in obj.keys()))
-    elif hasattr(obj, '__iter__') and not isinstance(obj, (str, bytes, bytearray)):
+    elif hasattr(obj, "__iter__") and not isinstance(obj, (str, bytes, bytearray)):
         try:
             size += sum((get_size(i, seen) for i in obj))
         except TypeError:
             logging.exception(
-                "Unable to get size of %r. This may lead to incorrect sizes. Please report this error.", obj)
-    if hasattr(obj, '__slots__'):  # can have __slots__ with __dict__
-        size += sum(get_size(getattr(obj, s), seen)
-                    for s in obj.__slots__ if hasattr(obj, s))
+                "Unable to get size of %r. This may lead to incorrect sizes. Please report this error.",
+                obj,
+            )
+    if hasattr(obj, "__slots__"):  # can have __slots__ with __dict__
+        size += sum(
+            get_size(getattr(obj, s), seen) for s in obj.__slots__ if hasattr(obj, s)
+        )
 
     return size
 
@@ -62,10 +64,10 @@ class WidgetManager(QWidget, Ui_WidgetManager):
         self.setupUi(self)
         self.setWindowIcon(qta.icon("mdi.widgets"))
         self.widget_attr = {
-            self.tr("对象"): lambda obj: obj.objectName(),
+            self.tr("对象名称"): lambda obj: obj.objectName(),
             self.tr("类"): lambda obj: obj.__class__.__name__,
             self.tr("标题"): lambda obj: obj.windowTitle(),
-            self.tr("内存"): lambda obj: f"{get_size(obj)}B"
+            self.tr("内存"): lambda obj: f"{get_size(obj)}B",
         }
         self.tw_widgets.setColumnCount(len(self.widget_attr))
         self.tw_widgets.setHeaderLabels(self.widget_attr.keys())
@@ -92,17 +94,23 @@ class WidgetManager(QWidget, Ui_WidgetManager):
                 item.parent().removeChild(item)
             else:
                 self.tw_widgets.takeTopLevelItem(
-                    self.tw_widgets.indexOfTopLevelItem(item))
+                    self.tw_widgets.indexOfTopLevelItem(item)
+                )
         except RuntimeError:
             pass
 
     def refresh(self):
-        widgets = list(Kernel.widgets)
+        widgets = qApp.allWidgets()
         # 移除不存在的widget
         for widget in tuple(self.widget_item.keys()):
             if widget not in widgets:
                 item = self.widget_item.pop(widget)
                 self.removeItem(item)
+        # 为新的widget创建item
+        for widget in widgets:
+            if widget not in self.widget_item:
+                item = QTreeWidgetItem()
+                self.widget_item[widget] = item
         for widget in widgets:
             try:
                 # 更改QTreeWidgetItem, 而不是删除之后再创建
@@ -110,29 +118,22 @@ class WidgetManager(QWidget, Ui_WidgetManager):
                 root = None
                 if widget.parent() in self.widget_item:
                     root = self.widget_item[widget.parent()]
-                if widget in self.widget_item:
-                    child = self.widget_item[widget]
-                else:
-                    child = QTreeWidgetItem(self.tw_widgets)
+                child = self.widget_item[widget]
                 self.setItemAttr(widget, child)
                 if root:
                     if root.indexOfChild(child) == -1:
-                        self.removeItem(child)  # 防止child出现在别的地方
                         root.addChild(child)
-                        child.setExpanded(True)
-                        root.setExpanded(True)
                 else:
                     self.tw_widgets.addTopLevelItem(child)
-                self.widget_item[widget] = child
             except RuntimeError:
                 if widget in self.widget_item:
                     self.widget_item.pop(widget)
 
     @pyqtSlot(bool)
-    def on_pb_stop_clicked(self, _):
+    def on_pb_delete_clicked(self, _):
         for widget, item in self.widget_item.items():
             if self.tw_widgets.currentItem() == item:
-                widget.close()
+                widget.deleteLater()
                 self.refresh()
                 break
 
