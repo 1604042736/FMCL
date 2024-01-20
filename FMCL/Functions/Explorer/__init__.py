@@ -86,6 +86,10 @@ def defaultSettingAttr() -> dict:
     }
 
 
+explorer = None
+
+
 def main():
+    global explorer  # 防止函数退出后explorer被删除
     explorer = Explorer()
     explorer.show()

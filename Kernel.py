@@ -18,7 +18,13 @@ import psutil
 import qtawesome as qta
 from PyQt5.QtCore import QCoreApplication, QEvent, QObject, Qt, QTranslator, qVersion
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import QApplication, QDialog, QMessageBox, QWidget, qApp
+from PyQt5.QtWidgets import (
+    QApplication,
+    QDialog,
+    QMessageBox,
+    QWidget,
+    qApp,
+)
 from qfluentwidgets import RoundMenu, setThemeColor
 
 from Events import *

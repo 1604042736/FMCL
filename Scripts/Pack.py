@@ -18,11 +18,6 @@ tasks = [
             r".*?/Default.*?",
             r".*?/Temp.*?",
             r".*?/Test.*?",
-            r".*?\\__pycache__.*?",
-            r".*?\\Skin.*?",
-            r".*?\\Default.*?",
-            r".*?\\Temp.*?",
-            r".*?\\Test.*?",
         ],
     }
 ]
@@ -35,7 +30,7 @@ def dotask(task: dict):
         for file in files:
             filepath = f"{dirpath}/{file}"
             for f in task["filter"]:
-                if re.match(f, filepath):
+                if re.match(f, filepath.replace("\\", "/")):
                     break
             else:
                 print(filepath)
