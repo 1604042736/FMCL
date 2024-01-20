@@ -189,9 +189,7 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
             self.pb_music.show()
         else:
             self.pb_control.setIcon(qta.icon("fa.play"))
-            qApp.sendEvent(
-                qApp.topLevelWindows()[0], RemoveFromTitleEvent(self.pb_music)
-            )
+            qApp.sendEvent(self.pb_music.window(), RemoveFromTitleEvent(self.pb_music))
             self.pb_music.hide()
 
     def syncStartIndex(self, i):

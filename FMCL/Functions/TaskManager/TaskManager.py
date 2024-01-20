@@ -1,9 +1,11 @@
 import qtawesome as qta
+from Events import *
 
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QTimer, Qt
 from PyQt5.QtWidgets import QWidget, QTreeWidgetItem, qApp
-from qfluentwidgets import InfoBar, InfoBarPosition
+from qfluentwidgets import InfoBar, InfoBarPosition, TransparentToolButton
 
+from Kernel import Kernel
 from Core.Task import Task
 
 from .ui_TaskManager import Ui_TaskManager
@@ -30,6 +32,12 @@ class TaskManager(QWidget, Ui_TaskManager):
         self.setWindowIcon(qta.icon("fa.tasks"))
         self.task_item: dict[Task, QTreeWidgetItem] = {}
         self.task_timer: dict[Task, QTimer] = {}
+
+        self.pb_taskmanager = TransparentToolButton()
+        self.pb_taskmanager.setIcon(qta.icon("fa.tasks"))
+        self.pb_taskmanager.resize(46, 32)
+        self.pb_taskmanager.clicked.connect(lambda: Kernel.execFunction("TaskManager"))
+
         self.taskStarted.connect(self.on_taskStarted)
         self.taskFinished.connect(self.on_taskFinished)
 
@@ -43,7 +51,10 @@ class TaskManager(QWidget, Ui_TaskManager):
             root.addChild(item)
         else:
             self.tw_tasks.addTopLevelItem(item)
-            self.show()
+            qApp.sendEvent(
+                qApp.topLevelWindows()[0], AddToTitleEvent(self.pb_taskmanager, "right")
+            )
+            self.pb_taskmanager.show()
         timer = QTimer(self)
         self.task_timer[task] = timer
         timer.timeout.connect(lambda: self.sync(item, task))
@@ -55,6 +66,12 @@ class TaskManager(QWidget, Ui_TaskManager):
             item.parent().removeChild(item)
         else:
             self.tw_tasks.takeTopLevelItem(self.tw_tasks.indexOfTopLevelItem(item))
+            if len(self.task_item) == 0:
+                qApp.sendEvent(
+                    self.pb_taskmanager.window(),
+                    RemoveFromTitleEvent(self.pb_taskmanager),
+                )
+                self.pb_taskmanager.hide()
             for i in qApp.topLevelWidgets():
                 if not i.isVisible():
                     continue
