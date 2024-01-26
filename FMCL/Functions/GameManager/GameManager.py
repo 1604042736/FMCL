@@ -102,21 +102,30 @@ class GameManager(QWidget, Ui_GameManager):
 
     @pyqtSlot(bool)
     def on_pb_modmanager_clicked(self, _):
+        self.pb_modmanager.setChecked(True)
         if self.modmanager == None:
             self.modmanager = ModManager(self.name)
-        self.pb_modmanager.setChecked(True)
-        self.setUi(self.modmanager)
+            self.setUi(self.modmanager)
+            self.modmanager.refresh()
+        else:
+            self.setUi(self.modmanager)
 
     @pyqtSlot(bool)
     def on_pb_savemanager_clicked(self, _):
+        self.pb_savemanager.setChecked(True)
         if self.savemanager == None:
             self.savemanager = SaveManager(self.name)
-        self.pb_savemanager.setChecked(True)
-        self.setUi(self.savemanager)
+            self.setUi(self.savemanager)
+            self.savemanager.refresh()
+        else:
+            self.setUi(self.savemanager)
 
     @pyqtSlot(bool)
     def on_pb_screenshotmanager_clicked(self, _):
+        self.pb_screenshotmanager.setChecked(True)
         if self.screenshotmanager == None:
             self.screenshotmanager = ScreenshotManager(self.name)
-        self.pb_screenshotmanager.setChecked(True)
-        self.setUi(self.screenshotmanager)
+            self.setUi(self.screenshotmanager)
+            self.screenshotmanager.refresh()
+        else:
+            self.setUi(self.screenshotmanager)

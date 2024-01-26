@@ -5,7 +5,13 @@ from Core import Mod, Version
 from Events import *
 from PyQt5.QtCore import pyqtSlot, QEvent, Qt
 from PyQt5.QtWidgets import QListWidgetItem, QWidget, qApp
-from qfluentwidgets import MessageBox, TransparentToolButton, InfoBar, InfoBarPosition
+from qfluentwidgets import (
+    MessageBox,
+    TransparentToolButton,
+    InfoBar,
+    InfoBarPosition,
+    StateToolTip,
+)
 
 from .ModItem import ModItem
 from .ui_ModManager import Ui_ModManager
@@ -29,7 +35,8 @@ class ModManager(QWidget, Ui_ModManager):
         self.total = 0
         self.enabled_num = 0
 
-        self.refresh()
+        # 交给GameManager刷新
+        # self.refresh()
 
     def refresh(self):
         self.setEnabled(True)
@@ -45,12 +52,18 @@ class ModManager(QWidget, Ui_ModManager):
             )
             self.setEnabled(False)
             return
+        statetooltip = StateToolTip(self.tr("正在加载模组"), "", self)
+        statetooltip.move(statetooltip.getSuitablePos())
+        statetooltip.show()
+
         keyword = self.le_search.text()
         self.lw_mods.clear()
         mods = self.game.get_mods(keyword)
         self.total = len(mods)
         self.enabled_num = 0
-        for mod in mods:
+
+        n = len(mods)
+        for i, mod in enumerate(mods):
             if mod.enabled:
                 self.enabled_num += 1
             item = QListWidgetItem()
@@ -59,7 +72,13 @@ class ModManager(QWidget, Ui_ModManager):
             item.setSizeHint(widget.size())
             self.lw_mods.addItem(item)
             self.lw_mods.setItemWidget(item, widget)
+
+            statetooltip.setContent(f"{i+1}/{n}({round((i+1)/n*100,1)}%)")
+            qApp.processEvents()
         self.setStatistics()
+
+        statetooltip.setContent(self.tr("加载完成"))
+        statetooltip.setState(True)
 
     def singlemodEnabledChanged(self, enabled):
         if enabled:

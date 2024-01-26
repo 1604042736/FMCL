@@ -7,7 +7,7 @@ from Events import *
 from PyQt5.QtCore import QObject, QSize, QEvent, pyqtSlot
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QListWidgetItem, QInputDialog, qApp
-from qfluentwidgets import MessageBox, TransparentToolButton
+from qfluentwidgets import MessageBox, TransparentToolButton, StateToolTip
 from Core import Version
 
 from .ui_ScreenshotManager import Ui_ScreenshotManager
@@ -28,22 +28,35 @@ class ScreenshotManager(QWidget, Ui_ScreenshotManager):
         self.pb_refresh.setIcon(qta.icon("mdi.refresh"))
         self.pb_refresh.clicked.connect(lambda: self.refresh())
 
-        self.refresh()
+        # 交给GameManager刷新
+        # self.refresh()
 
     def refresh(self):
+        statetooltip = StateToolTip(self.tr("正在加载截图"), "", self)
+        statetooltip.move(statetooltip.getSuitablePos())
+        statetooltip.show()
+
         self.lw_overview.clear()
         screenshot_path = self.game.get_screenshot_path()
-        for i in os.listdir(screenshot_path):
-            path = os.path.join(screenshot_path, i)
+
+        n = len(os.listdir(screenshot_path))
+        for i, file in enumerate(os.listdir(screenshot_path)):
+            path = os.path.join(screenshot_path, file)
             try:
                 item = QListWidgetItem()
                 item.setIcon(QIcon(path))
-                item.setText(i)
+                item.setText(file)
                 item.setToolTip(path)
                 item.setSizeHint(QSize(256, 190))
                 self.lw_overview.addItem(item)
             except:
                 logging.error(f"无法加载截图{path}:\n{traceback.format_exc()}")
+
+            statetooltip.setContent(f"{i+1}/{n}({round((i+1)/n*100,1)}%)")
+            qApp.processEvents()
+
+        statetooltip.setContent(self.tr("加载完成"))
+        statetooltip.setState(True)
 
     def eventFilter(self, a0: QObject | None, a1: QEvent | None) -> bool:
         if a0 == self.lw_overview:

@@ -1,9 +1,11 @@
 import minecraft_launcher_lib as mll
 import multitasking
 import qtawesome as qta
+
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QResizeEvent
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, qApp
+from qfluentwidgets import StateToolTip
 
 from .NewsInfo import NewsInfo
 from .ui_News import Ui_News
@@ -30,12 +32,22 @@ class News(QWidget, Ui_News):
         self.__NewsGot.emit(r["article_grid"])
 
     def setNewsInfo(self, news):
-        for i in news:
-            widget = NewsInfo(i)
+        statetooltip = StateToolTip(self.tr("正在加载新闻"), "", self)
+        statetooltip.move(statetooltip.getSuitablePos())
+        statetooltip.show()
+
+        n = len(news)
+        for i, info in enumerate(news):
+            widget = NewsInfo(info)
             widget.setFixedSize(widget.size())
             if widget not in self.newsinfo:
                 self.newsinfo.append(widget)
                 self.addWidget(widget)
+            statetooltip.setContent(f"{i+1}/{n}({round((i+1)/n*100,1)}%)")
+            qApp.processEvents()
+
+        statetooltip.setContent(self.tr("加载完成"))
+        statetooltip.setState(True)
 
     def addWidget(self, widget: QWidget):
         self.gl_news.addWidget(widget, self.cur_row, self.cur_col)
@@ -46,7 +58,7 @@ class News(QWidget, Ui_News):
 
     def resizeEvent(self, a0: QResizeEvent) -> None:
         self.cur_col = self.cur_row = 0
-        self.max_col = self.width()//256
+        self.max_col = self.width() // 256
         for newsinfo in self.newsinfo:
             self.addWidget(newsinfo)
         return super().resizeEvent(a0)
