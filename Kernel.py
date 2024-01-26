@@ -17,13 +17,14 @@ import psutil
 
 import qtawesome as qta
 from PyQt5.QtCore import QCoreApplication, QEvent, QObject, Qt, QTranslator, qVersion
-from PyQt5.QtGui import QIcon, QPixmap, QWindow
+from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (
     QApplication,
     QDialog,
     QMessageBox,
     QWidget,
     qApp,
+    QSplashScreen,
 )
 from qfluentwidgets import RoundMenu, setThemeColor
 
@@ -54,6 +55,10 @@ class Kernel(QApplication):
         if not os.path.exists(tempdir):
             os.makedirs(tempdir)
 
+        splash = QSplashScreen(QPixmap(":/Image/icon.png").scaled(64, 64))
+        splash.show()
+        self.processEvents()
+
         self.unpack()
 
         logging.info("初始化功能...")
@@ -65,6 +70,8 @@ class Kernel(QApplication):
         logging.info("运行启动项...")
         self.execStartupFunctions()
 
+        splash.close()
+
     def notify(self, a0: QObject, a1: QEvent) -> bool:
         if a1.type() == SeparateWidgetEvent.EventType:
             a1.widget.resize(a1.size)
@@ -74,6 +81,7 @@ class Kernel(QApplication):
             and not isinstance(a0, Window)
             and not isinstance(a0, QDialog)
             and not isinstance(a0, RoundMenu)
+            and not isinstance(a0, QSplashScreen)
             and a0.windowType() != Qt.WindowType.ToolTip
         ):
             if a1.type() == QEvent.Type.Show:

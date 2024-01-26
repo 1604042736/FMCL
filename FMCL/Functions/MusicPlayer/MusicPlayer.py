@@ -186,9 +186,7 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
     def setButton(self, state):
         if state == QMediaPlayer.State.PlayingState:
             self.pb_control.setIcon(qta.icon("mdi6.pause"))
-            qApp.sendEvent(
-                qApp.topLevelWindows()[0], AddToTitleEvent(self.pb_music, "right")
-            )
+            qApp.sendEvent(qApp.activeWindow(), AddToTitleEvent(self.pb_music, "right"))
         else:
             self.pb_control.setIcon(qta.icon("fa.play"))
             qApp.sendEvent(self.pb_music.window(), RemoveFromTitleEvent(self.pb_music))

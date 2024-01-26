@@ -53,8 +53,9 @@ class TaskManager(QWidget, Ui_TaskManager):
         else:
             self.tw_tasks.addTopLevelItem(item)
             qApp.sendEvent(
-                qApp.topLevelWindows()[0], AddToTitleEvent(self.pb_taskmanager, "right")
+                qApp.activeWindow(), AddToTitleEvent(self.pb_taskmanager, "right")
             )
+            self.pb_taskmanager.show()
         timer = QTimer(self)
         self.task_timer[task] = timer
         timer.timeout.connect(lambda: self.sync(item, task))
@@ -71,7 +72,7 @@ class TaskManager(QWidget, Ui_TaskManager):
                     self.pb_taskmanager.window(),
                     RemoveFromTitleEvent(self.pb_taskmanager),
                 )
-                self.pb_taskmanager.setParent(self)
+                self.pb_taskmanager.hide()
             for i in qApp.topLevelWidgets():
                 if not i.isVisible():
                     continue
