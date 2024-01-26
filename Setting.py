@@ -195,7 +195,9 @@ class Setting:
         self.defaultsetting = {}  # 默认设置
         if setting_path == DEFAULT_SETTING_PATH:
             self.add(DEFAULT_SETTING)
+            self.addAttr(defaultSettingAttr())
             self.loadFunctionSetting()
+            self.loadFunctionSettingAttr()
         if os.path.exists(setting_path):
             for key, val in json.load(open(setting_path, encoding="utf-8")).items():
                 self.modifiedsetting[key] = val

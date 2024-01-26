@@ -1,5 +1,6 @@
 import logging
 import os
+import json
 import shutil
 import sys
 import traceback
@@ -29,7 +30,7 @@ from PyQt5.QtWidgets import (
 from qfluentwidgets import RoundMenu, setThemeColor
 
 from Events import *
-from Setting import Setting, defaultSettingAttr
+from Setting import Setting, DEFAULT_SETTING_PATH
 from Window import Window
 
 _translate = QCoreApplication.translate
@@ -51,19 +52,23 @@ class Kernel(QApplication):
         if default_path not in sys.path:
             sys.path.insert(1, default_path)
 
-        tempdir = Setting()["system.temp_dir"]
-        if not os.path.exists(tempdir):
-            os.makedirs(tempdir)
-
         splash = QSplashScreen(QPixmap(":/Image/icon.png").scaled(64, 64))
         splash.show()
         self.processEvents()
 
+        # 在未加载翻译之前不能使用Setting
+        tempdir = json.load(open(DEFAULT_SETTING_PATH, encoding="utf-8")).get(
+            "system.temp_dir", "FMCL/Temp"
+        )
+        if not os.path.exists(tempdir):
+            os.makedirs(tempdir)
+
         self.unpack()
+
+        self.loadTranslation()
 
         logging.info("初始化功能...")
         self.getAllFunctions()
-        self.loadTranslation()
 
         setThemeColor(Setting().get("system.theme_color"))
 
@@ -148,7 +153,13 @@ class Kernel(QApplication):
     def loadTranslation(self):
         """加载翻译"""
         logging.info("加载翻译...")
-        lang = Setting().get("language.type") + ".qm"
+        # 在未加载翻译之前不能使用Setting
+        lang = (
+            json.load(open(DEFAULT_SETTING_PATH, encoding="utf-8")).get(
+                "language.type", "简体中文"
+            )
+            + ".qm"
+        )
         self.__translators = []  # 防止Translator被销毁
         # QTranslator优先搜索最新安装的文件
         for i in self.getTranslationPath():
@@ -160,9 +171,8 @@ class Kernel(QApplication):
                 if self.installTranslator(translator):
                     logging.info(f"已加载{file}")
                     self.__translators.append(translator)
-        # 加载翻译后更新attr的值，因为之前加进去的attr没有翻译过
-        Setting().addAttr(defaultSettingAttr())
-        Setting().loadFunctionSettingAttr()
+                else:
+                    logging.error(f"无法加载{file}")
 
     @staticmethod
     def unpack():
