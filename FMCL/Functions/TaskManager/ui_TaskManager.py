@@ -19,9 +19,9 @@ class Ui_TaskManager(object):
         self.gridLayout.setObjectName("gridLayout")
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout.addItem(spacerItem, 1, 0, 1, 1)
-        self.pb_stop = PushButton(TaskManager)
-        self.pb_stop.setObjectName("pb_stop")
-        self.gridLayout.addWidget(self.pb_stop, 1, 1, 1, 1)
+        self.pb_terminate = PushButton(TaskManager)
+        self.pb_terminate.setObjectName("pb_terminate")
+        self.gridLayout.addWidget(self.pb_terminate, 1, 1, 1, 1)
         self.tw_tasks = TreeWidget(TaskManager)
         self.tw_tasks.setColumnCount(4)
         self.tw_tasks.setObjectName("tw_tasks")
@@ -33,7 +33,7 @@ class Ui_TaskManager(object):
     def retranslateUi(self, TaskManager):
         _translate = QtCore.QCoreApplication.translate
         TaskManager.setWindowTitle(_translate("TaskManager", "任务管理器"))
-        self.pb_stop.setText(_translate("TaskManager", "结束"))
+        self.pb_terminate.setText(_translate("TaskManager", "终止"))
         self.tw_tasks.headerItem().setText(0, _translate("TaskManager", "名称"))
         self.tw_tasks.headerItem().setText(1, _translate("TaskManager", "状态"))
         self.tw_tasks.headerItem().setText(2, _translate("TaskManager", "进度"))

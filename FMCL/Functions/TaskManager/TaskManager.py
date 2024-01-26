@@ -77,7 +77,7 @@ class TaskManager(QWidget, Ui_TaskManager):
                     continue
                 if task.terminated:
                     InfoBar.error(
-                        title=f'{self.tr("被终止")} {task.name}',
+                        title=f'{self.tr("终止")} {task.name}',
                         content="",
                         orient=Qt.Horizontal,
                         isClosable=True,
@@ -117,7 +117,7 @@ class TaskManager(QWidget, Ui_TaskManager):
                 self.on_taskStarted(child)
 
     @pyqtSlot(bool)
-    def on_pb_stop_clicked(self, _):
+    def on_pb_terminate_clicked(self, _):
         _item = self.tw_tasks.currentItem()
         if _item == None:
             return

@@ -28,9 +28,9 @@
     </spacer>
    </item>
    <item row="1" column="1">
-    <widget class="PushButton" name="pb_stop">
+    <widget class="PushButton" name="pb_terminate">
      <property name="text">
-      <string>结束</string>
+      <string>终止</string>
      </property>
     </widget>
    </item>
