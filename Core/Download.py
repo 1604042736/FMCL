@@ -4,7 +4,7 @@ import os
 from PyQt5.QtCore import QCoreApplication
 from Setting import Setting
 from Core.Network import Network
-from Core.Task import  Task
+from Core.Task import Task
 
 _translate = QCoreApplication.translate
 
@@ -44,9 +44,13 @@ class Download:
 
         if filesize <= self.max_filesize or self.range != None:  # 直接下载
             self.callback["setStatus"](
-                f'{_translate("Download","下载")} {self.url} {_translate("Download","到")} {self.save_file}'
+                _translate("Download", "下载 {url} 到 {file}").format(
+                    url=self.url, file=self.save_file
+                )
             )
-            self.callback["setMax"](filesize)
+            self.callback["setMax"](
+                self.range[1] - self.range[0] + 1 if self.range else filesize
+            )
             self.callback["setProgress"](0)
 
             res = Network().get(self.url, headers=headers, stream=True)
@@ -80,7 +84,7 @@ class Download:
                 e_pos = filesize - 1
 
             download_task = Task(
-                f'{_translate("Download","下载")} Part{part}',
+                _translate("Download", "下载第{part}部分").format(part=part),
                 self.callback["getCurTask"](),
                 lambda callback, part=part, s_pos=s_pos, e_pos=e_pos: Download(
                     self.url,
