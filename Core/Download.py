@@ -11,7 +11,7 @@ _translate = QCoreApplication.translate
 
 class Download:
     def __init__(
-        self, url: str, save_file: str, callback=None, range: tuple = None
+        self, url: str, save_file: str, callback=None, range: tuple = None, network=None
     ) -> None:
         self.max_filesize = 1024 * 1024  # 单个下载任务最大的文件大小
         self.chunk_size = 64 * 1024
@@ -32,10 +32,12 @@ class Download:
             else self.default_callback
         )
 
+        self.network = network if network != None else Network()
+
     def start(self):
         """开始下载"""
         logging.info(f"开始下载{self.url}到{self.save_file}")
-        res = Network().head(self.url)
+        res = self.network.head(self.url)
         filesize = int(res.headers["Content-Length"])
 
         headers = {}
@@ -53,7 +55,7 @@ class Download:
             )
             self.callback["setProgress"](0)
 
-            res = Network().get(self.url, headers=headers, stream=True)
+            res = self.network.get(self.url, headers=headers, stream=True)
             progress = 0
             if not os.path.exists(os.path.dirname(self.save_file)):
                 os.makedirs(os.path.dirname(self.save_file))
@@ -91,6 +93,7 @@ class Download:
                     f"{basepath}/{basename}.part{part}",
                     range=(s_pos, e_pos),
                     callback=callback,
+                    network=self.network,
                 ).start(),
             )
             download_tasks.append(download_task)

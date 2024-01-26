@@ -1,11 +1,13 @@
 import requests
 from requests.adapters import HTTPAdapter
 
+from PyQt5.QtWidgets import qApp
+
 
 class Network:
     @staticmethod
     def get_default_headers():
-        return {"user-agent": "FMCL"}
+        return {"user-agent": f"1604042736/FMCL/{qApp.applicationVersion()}"}
 
     def __init__(self, session: requests.Session = None, retry_time: int = 3):
         self.session = session if session != None else requests.session()
