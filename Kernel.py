@@ -17,7 +17,7 @@ import psutil
 
 import qtawesome as qta
 from PyQt5.QtCore import QCoreApplication, QEvent, QObject, Qt, QTranslator, qVersion
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon, QPixmap, QWindow
 from PyQt5.QtWidgets import (
     QApplication,
     QDialog,
@@ -81,6 +81,12 @@ class Kernel(QApplication):
                     self.sendEvent(self, WidgetCaughtEvent(a0))
                     if a0.parent() == None:  # 使用默认方法
                         self.showWidget(a0)
+        if (
+            isinstance(a0, QWidget)
+            and a0.window() == a0
+            and a1.type() == QEvent.Type.WindowActivate
+        ):
+            self.sendEvent(self, WindowActivatedEvent(a0))
         return super().notify(a0, a1)
 
     def separateWidget(self, widget: QWidget):

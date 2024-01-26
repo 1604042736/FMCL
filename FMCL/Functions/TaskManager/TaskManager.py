@@ -1,7 +1,7 @@
 import qtawesome as qta
 from Events import *
 
-from PyQt5.QtCore import pyqtSlot, pyqtSignal, QTimer, Qt
+from PyQt5.QtCore import pyqtSlot, pyqtSignal, QTimer, Qt, QObject, QEvent
 from PyQt5.QtWidgets import QWidget, QTreeWidgetItem, qApp
 from qfluentwidgets import InfoBar, InfoBarPosition, TransparentToolButton
 
@@ -32,6 +32,7 @@ class TaskManager(QWidget, Ui_TaskManager):
         self.setWindowIcon(qta.icon("fa.tasks"))
         self.task_item: dict[Task, QTreeWidgetItem] = {}
         self.task_timer: dict[Task, QTimer] = {}
+        qApp.installEventFilter(self)
 
         self.pb_taskmanager = TransparentToolButton()
         self.pb_taskmanager.setIcon(qta.icon("fa.tasks"))
@@ -54,7 +55,6 @@ class TaskManager(QWidget, Ui_TaskManager):
             qApp.sendEvent(
                 qApp.topLevelWindows()[0], AddToTitleEvent(self.pb_taskmanager, "right")
             )
-            self.pb_taskmanager.show()
         timer = QTimer(self)
         self.task_timer[task] = timer
         timer.timeout.connect(lambda: self.sync(item, task))
@@ -71,7 +71,7 @@ class TaskManager(QWidget, Ui_TaskManager):
                     self.pb_taskmanager.window(),
                     RemoveFromTitleEvent(self.pb_taskmanager),
                 )
-                self.pb_taskmanager.hide()
+                self.pb_taskmanager.setParent(self)
             for i in qApp.topLevelWidgets():
                 if not i.isVisible():
                     continue
@@ -125,3 +125,9 @@ class TaskManager(QWidget, Ui_TaskManager):
             if item == _item:
                 task.terminate()
                 break
+
+    def eventFilter(self, a0: QObject, a1: QEvent) -> bool:
+        if a1.type() == WindowActivatedEvent.EventType:
+            if len(self.task_item) != 0:
+                qApp.sendEvent(a1.widget, AddToTitleEvent(self.pb_taskmanager, "right"))
+        return super().eventFilter(a0, a1)

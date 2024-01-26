@@ -1,10 +1,12 @@
 import qtawesome as qta
 from Events import *
 from Kernel import Kernel
-from PyQt5.QtCore import QUrl, pyqtSlot, QEvent
+
+from PyQt5.QtCore import QObject, QUrl, pyqtSlot, QEvent
 from PyQt5.QtMultimedia import QMediaContent, QMediaPlayer, QMediaPlaylist
 from PyQt5.QtWidgets import QFileDialog, QListWidgetItem, QWidget, qApp
 from qfluentwidgets import MessageBox, TransparentToolButton
+
 from Setting import Setting
 
 from .ui_MusicPlayer import Ui_MusicPlayer
@@ -26,6 +28,7 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
         super().__init__()
         self.setWindowIcon(qta.icon("ei.music"))
         self.setupUi(self)
+        qApp.installEventFilter(self)
 
         self.pb_add.setIcon(qta.icon("msc.add"))
         self.pb_remove.setIcon(qta.icon("msc.remove"))
@@ -186,13 +189,18 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
             qApp.sendEvent(
                 qApp.topLevelWindows()[0], AddToTitleEvent(self.pb_music, "right")
             )
-            self.pb_music.show()
         else:
             self.pb_control.setIcon(qta.icon("fa.play"))
             qApp.sendEvent(self.pb_music.window(), RemoveFromTitleEvent(self.pb_music))
-            self.pb_music.hide()
+            self.pb_music.setParent(self)
 
     def syncStartIndex(self, i):
         setting = Setting()
         if setting["musicplayer.auto_sync_startindex"]:
             setting.set("musicplayer.startindex", i)
+
+    def eventFilter(self, a0: QObject, a1: QEvent) -> bool:
+        if a1.type() == WindowActivatedEvent.EventType:
+            if self.player.state() == QMediaPlayer.State.PlayingState:
+                qApp.sendEvent(a1.widget, AddToTitleEvent(self.pb_music, "right"))
+        return super().eventFilter(a0, a1)
