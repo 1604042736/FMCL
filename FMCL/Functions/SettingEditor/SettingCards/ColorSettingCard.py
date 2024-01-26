@@ -1,5 +1,4 @@
-from Kernel import Kernel
-from PyQt5.QtWidgets import QColorDialog, QLabel
+from PyQt5.QtWidgets import QLabel
 from qfluentwidgets import ColorDialog, PushButton
 
 from .SettingCard import SettingCard
@@ -10,8 +9,7 @@ class ColorSettingCard(SettingCard):
         super().__init__(id, setting)
         self.color = self.setting.get(id)
         self.l_color = QLabel()
-        self.l_color.setStyleSheet(
-            f"QLabel{{background-color:{self.color};}}")
+        self.l_color.setStyleSheet(f"QLabel{{background-color:{self.color};}}")
         self._layout.addWidget(self.l_color, 0, 0)
 
         self.pb_choosecolor = PushButton()
@@ -25,17 +23,15 @@ class ColorSettingCard(SettingCard):
 
     def refresh(self):
         self.color = self.setting.get(self.id)
-        self.l_color.setStyleSheet(
-            f"QLabel{{background-color:{self.color};}}")
+        self.l_color.setStyleSheet(f"QLabel{{background-color:{self.color};}}")
         return super().refresh()
 
     def chooseColor(self):
         def changeColor(color):
             self.color = color.name()
-            self.l_color.setStyleSheet(
-                f"QLabel{{background-color:{self.color};}}")
+            self.l_color.setStyleSheet(f"QLabel{{background-color:{self.color};}}")
             self.sync()
-        colordialog = ColorDialog(
-            self.color, self.tr("选择颜色"), self.window())
+
+        colordialog = ColorDialog(self.color, self.tr("选择颜色"), self.window())
         colordialog.colorChanged.connect(changeColor)
         colordialog.exec()

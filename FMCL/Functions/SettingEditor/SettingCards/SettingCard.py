@@ -12,13 +12,13 @@ class SettingCard(QWidget):
             from .StrSettingCard import StrSettingCard
 
             value = setting.get(id)
-            if isinstance(value, bool):
+            if setting.getAttr(id, "type") == "color":
+                return ColorSettingCard(id, setting)
+            elif isinstance(value, bool):
                 return BoolSettingCard(id, setting)
             elif isinstance(value, int):
                 return IntSettingCard(id, setting)
             elif isinstance(value, str):
-                if len(value) == 7 and value[0] == "#":
-                    return ColorSettingCard(id, setting)
                 return StrSettingCard(id, setting)
             elif isinstance(value, list):
                 return ListSettingCard(id, setting)

@@ -38,9 +38,9 @@ class SettingAttr(TypedDict):
     enable_condition: Callable[["Setting"], bool]  # 启用条件, 禁用后, 它的子设置也会被禁用
     settingcard: Callable[[], QWidget]  # 设置卡片, 默认由SettingEditor设置
     side_widgets: list[Callable[[], QWidget]]  # 放在标签旁边的控件
+    type: Literal["directory", "file", "color"]  # 非基本类型
     # 一下类型将用于List设置项
     static: bool  # 是否为静态(不可更改, 当成tuple)
-    type: Literal["directory", "file", "input"]  # 列表中每项的类型
     atleast: int  # 至少要有几项
 
 
@@ -105,6 +105,7 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
         "system.theme_color": {
             "name": _translate("Setting", "主题颜色"),
             "callback": [lambda a: setThemeColor(a)],
+            "type": "color",
         },
         "system.temp_dir": {
             "name": _translate("Setting", "缓存文件夹"),
