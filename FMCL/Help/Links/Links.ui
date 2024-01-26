@@ -46,17 +46,17 @@
           <string>Minecraft</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
-          <item row="1" column="0">
-           <widget class="PushButton" name="pb_wiki">
-            <property name="text">
-             <string>Minecraft Wiki</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="0">
            <widget class="PushButton" name="pb_mcofficialweb">
             <property name="text">
              <string>官网</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="PushButton" name="pb_plugin">
+            <property name="text">
+             <string>插件百科</string>
             </property>
            </widget>
           </item>
@@ -67,10 +67,24 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
-           <widget class="PushButton" name="pb_plugin">
+          <item row="1" column="0">
+           <widget class="PushButton" name="pb_wiki">
             <property name="text">
-             <string>插件百科</string>
+             <string>Minecraft Wiki</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="PushButton" name="pb_modrinth">
+            <property name="text">
+             <string>Modrinth</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="PushButton" name="pb_curseforge">
+            <property name="text">
+             <string>Curseforge</string>
             </property>
            </widget>
           </item>

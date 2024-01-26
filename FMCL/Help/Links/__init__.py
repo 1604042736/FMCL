@@ -48,6 +48,14 @@ class Links(QWidget, Ui_Links):
     def on_pb_graalvm_clicked(self, _):
         webbrowser.open("https://www.graalvm.org/")
 
+    @pyqtSlot(bool)
+    def on_pb_modrinth_clicked(self, _):
+        webbrowser.open("https://modrinth.com/")
+
+    @pyqtSlot(bool)
+    def on_pb_curseforge_clicked(self, _):
+        webbrowser.open("https://www.curseforge.com/minecraft/")
+
 
 def helpIndex():
     return {
