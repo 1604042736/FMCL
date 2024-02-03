@@ -56,7 +56,7 @@ class GameLauncher(QWidget, Ui_GameLauncher):
         self.root.start()
 
     def showError(self, e: Exception):
-        MessageBox(self.tr("启动游戏失败"), str(e), self.window()).exec()
+        MessageBox(self.tr("启动游戏失败"), str(e), self).exec()
         return True
 
     def __start(self, dir, command):

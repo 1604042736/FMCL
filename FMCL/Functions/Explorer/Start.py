@@ -9,8 +9,12 @@ from Kernel import Kernel
 from PyQt5.QtCore import QEvent, QPoint, pyqtSignal
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QAction, QHBoxLayout, QStackedWidget, QWidget, qApp
-from qfluentwidgets import (NavigationInterface, NavigationItemPosition,
-                            NavigationPushButton, RoundMenu)
+from qfluentwidgets import (
+    NavigationInterface,
+    NavigationItemPosition,
+    NavigationPushButton,
+    RoundMenu,
+)
 
 from .AllFunctions import AllFunctions
 
@@ -42,43 +46,46 @@ class Start(QWidget):
         self.widgetLayout.addWidget(self.stackedWidget)
 
         self.all_functions = AllFunctions()
-        self.addSubInterface(self.all_functions,
-                             qta.icon("mdi.format-list-checkbox"),
-                             self.tr("所有应用"))
+        self.addSubInterface(
+            self.all_functions,
+            qta.icon("mdi.format-list-checkbox"),
+            self.tr("所有应用"),
+        )
         self.switchTo(self.all_functions)
         self.navigationInterface.setCurrentItem("AllFunctions")
 
-        self.pb_user = NavigationPushButton(qta.icon("ph.user-circle"),
-                                            self.tr("未选择用户"),
-                                            False)
-        self.pb_user.clicked.connect(
-            lambda: Kernel.execFunction("UserManager"))
+        self.pb_user = NavigationPushButton(
+            qta.icon("ph.user-circle"), self.tr("未选择用户"), False
+        )
+        self.pb_user.clicked.connect(lambda: Kernel.execFunction("UserManager"))
         self.navigationInterface.addWidget(
-            routeKey='user',
-            widget=self.pb_user,
-            position=NavigationItemPosition.BOTTOM
+            routeKey="user", widget=self.pb_user, position=NavigationItemPosition.BOTTOM
         )
 
-        self.pb_software = NavigationPushButton(qta.icon("mdi.application"),
-                                                self.tr("软件"),
-                                                False)
+        self.pb_software = NavigationPushButton(
+            qta.icon("mdi.application"), self.tr("软件"), False
+        )
         self.pb_software.clicked.connect(self.showSoftwareMenu)
         self.navigationInterface.addWidget(
-            routeKey='software',
+            routeKey="software",
             widget=self.pb_software,
-            position=NavigationItemPosition.BOTTOM
+            position=NavigationItemPosition.BOTTOM,
         )
 
         self.__headGot.connect(self.__setHead)
 
-    def addSubInterface(self, interface: QWidget, icon, text: str,
-                        position=NavigationItemPosition.TOP, parent=None):
+    def addSubInterface(
+        self,
+        interface: QWidget,
+        icon,
+        text: str,
+        position=NavigationItemPosition.TOP,
+        parent=None,
+    ):
         if not interface.objectName():
-            raise ValueError(
-                "The object name of `interface` can't be empty string.")
+            raise ValueError("The object name of `interface` can't be empty string.")
         if parent and not parent.objectName():
-            raise ValueError(
-                "The object name of `parent` can't be empty string.")
+            raise ValueError("The object name of `parent` can't be empty string.")
 
         self.stackedWidget.addWidget(interface)
 
@@ -91,7 +98,7 @@ class Start(QWidget):
             onClick=lambda: self.switchTo(interface),
             position=position,
             tooltip=text,
-            parentRouteKey=parent.objectName() if parent else None
+            parentRouteKey=parent.objectName() if parent else None,
         )
         return item
 
@@ -106,10 +113,11 @@ class Start(QWidget):
     def refresh(self):
         user = User.get_cur_user()
         if user:
-            multitasking.task(lambda: self.__headGot.emit(
-                QPixmap.fromImage(User.get_head(user))))()
             self.pb_user.setIcon(qta.icon("ph.user-circle"))  # 过渡
             self.pb_user.setText(user["username"])
+            multitasking.task(
+                lambda: self.__headGot.emit(QPixmap.fromImage(User.get_head(user)))
+            )()
         else:
             self.pb_user.setIcon(qta.icon("ph.user-circle"))
             self.pb_user.setText(self.tr("未选择用户"))
@@ -121,7 +129,7 @@ class Start(QWidget):
         self.pb_user.setIcon(head)
 
     def restart(self):
-        os.popen(f'start {sys.argv[0]}')
+        os.popen(f"start {sys.argv[0]}")
         qApp.quit()
 
     def showSoftwareMenu(self):
@@ -138,5 +146,4 @@ class Start(QWidget):
         menu.addAction(a_quit)
         menu.addAction(a_restart)
 
-        menu.exec_(self.pb_software.mapToGlobal(
-            QPoint(0, -menu.view.height())))
+        menu.exec_(self.pb_software.mapToGlobal(QPoint(0, -menu.view.height())))

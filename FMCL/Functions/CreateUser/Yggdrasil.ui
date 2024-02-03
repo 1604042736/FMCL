@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>LittleSkin</class>
- <widget class="QWidget" name="LittleSkin">
+ <class>Yggdrasil</class>
+ <widget class="QWidget" name="Yggdrasil">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>LittleSkin</string>
+   <string>Yggdrasil</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="2" column="0">
@@ -27,7 +27,27 @@
      </property>
     </spacer>
    </item>
-   <item row="0" column="1">
+   <item row="1" column="2">
+    <layout class="QHBoxLayout" name="hl_links">
+     <item>
+      <widget class="TransparentToolButton" name="pb_delete"/>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="2">
     <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -40,47 +60,7 @@
      </property>
     </spacer>
    </item>
-   <item row="4" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="2" column="1">
-    <widget class="PasswordLineEdit" name="le_password">
-     <property name="echoMode">
-      <enum>QLineEdit::Password</enum>
-     </property>
-     <property name="placeholderText">
-      <string>密码</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="PushButton" name="pb_logon">
-     <property name="text">
-      <string>登录</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="LineEdit" name="le_username">
-     <property name="inputMask">
-      <string/>
-     </property>
-     <property name="placeholderText">
-      <string>邮箱</string>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="2">
+   <item row="2" column="3">
     <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -93,6 +73,46 @@
      </property>
     </spacer>
    </item>
+   <item row="2" column="2">
+    <widget class="LineEdit" name="le_username"/>
+   </item>
+   <item row="3" column="2">
+    <widget class="PasswordLineEdit" name="le_password"/>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLabel" name="l_username">
+     <property name="text">
+      <string>用户名</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLabel" name="l_password">
+     <property name="text">
+      <string>密码</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="2">
+    <widget class="PushButton" name="pb_login">
+     <property name="text">
+      <string>登录</string>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -102,13 +122,23 @@
    <header>qfluentwidgets</header>
   </customwidget>
   <customwidget>
+   <class>ToolButton</class>
+   <extends>QToolButton</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
+   <class>TransparentToolButton</class>
+   <extends>ToolButton</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
    <class>LineEdit</class>
    <extends>QLineEdit</extends>
    <header>qfluentwidgets</header>
   </customwidget>
   <customwidget>
    <class>PasswordLineEdit</class>
-   <extends>QLineEdit</extends>
+   <extends>LineEdit</extends>
    <header>qfluentwidgets</header>
   </customwidget>
  </customwidgets>

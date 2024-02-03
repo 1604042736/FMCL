@@ -5,8 +5,6 @@ Pipfile
 Pipfile.lock
 FMCL/latest.log
 FMCL/settings.json
-FMCL/users.json
-FMCL/Skin
 FunctionPack.zip
 .vscode/
 Pack/

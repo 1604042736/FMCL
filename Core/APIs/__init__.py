@@ -4,3 +4,4 @@ from .ModrinthAPI import (
     ModrinthVersionModel,
     ModrinthVersionFile,
 )
+from .YggdrasilAPI import YggdrasilAPI

@@ -110,7 +110,7 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
             self.playlist.removeMedia(index)
             self.refresh()
 
-        box = MessageBox("", self.tr("确认删除") + "?", self.window())
+        box = MessageBox("", self.tr("确认删除") + "?", self)
         box.yesSignal.connect(confirmDeleted)
         box.exec()
 

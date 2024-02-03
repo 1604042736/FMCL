@@ -100,7 +100,7 @@ class ScreenshotManager(QWidget, Ui_ScreenshotManager):
             self.refresh()
 
         box = MessageBox(
-            self.tr("删除"), self.tr("确认删除") + str(name) + "?", self.window()
+            self.tr("删除"), self.tr("确认删除") + str(name) + "?", self
         )
         box.yesSignal.connect(confirmDelete)
         box.exec()

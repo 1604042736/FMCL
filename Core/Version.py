@@ -114,33 +114,30 @@ class Version:
 
         cur_user = deepcopy(User.get_cur_user())
         if cur_user["type"] == "authlibInjector":
-            logging.info(f"外置登录: {cur_user['mode']}")
-            if cur_user["mode"] == "LittleSkin":
-                api = "https://authlib-injector.yushi.moe"
-                r = Network().get(f"{api}/artifact/latest.json").json()
+            logging.info(f"外置登录")
+            api = "https://authlib-injector.yushi.moe"
+            r = Network().get(f"{api}/artifact/latest.json").json()
 
-                url = r["download_url"]
-                tempdir = Setting()["system.temp_dir"]
-                if not os.path.exists(tempdir):
-                    os.makedirs(tempdir)
-                filename = url.split("/")[-1]
-                path = os.path.abspath(os.path.join(tempdir, filename))
-                logging.info(f"下载{url}到{path}")
-                Download(url, path, callback).check()
-                logging.info("下载完成")
+            url = r["download_url"]
+            tempdir = Setting()["system.temp_dir"]
+            if not os.path.exists(tempdir):
+                os.makedirs(tempdir)
+            filename = url.split("/")[-1]
+            path = os.path.abspath(os.path.join(tempdir, filename))
+            logging.info(f"下载{url}到{path}")
+            Download(url, path, callback).check()
+            logging.info("下载完成")
 
-                setMax(0)
-                setProgress(0)
-                setStatus("获取元数据编码")
-                api = "https://littleskin.cn/api/yggdrasil"
-                meta = Network().get(api).content
-                metab64 = base64.b64encode(meta)
-                metab64 = str(metab64)[2:-1]
-                logging.info(f"元数据Base64编码: {metab64}")
-                self.precommand.append(f"-javaagent:{path}={api}")
-                self.precommand.append(
-                    f"-Dauthlibinjector.yggdrasil.prefetched={metab64}"
-                )
+            setMax(0)
+            setProgress(0)
+            setStatus("获取元数据编码")
+            api = cur_user["serverbaseurl"]
+            meta = Network().get(api).content
+            metab64 = base64.b64encode(meta)
+            metab64 = str(metab64)[2:-1]
+            logging.info(f"元数据Base64编码: {metab64}")
+            self.precommand.append(f"-javaagent:{path}={api}")
+            self.precommand.append(f"-Dauthlibinjector.yggdrasil.prefetched={metab64}")
 
     def get_launch_command(self) -> tuple[str, str]:
         """

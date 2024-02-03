@@ -26,6 +26,7 @@ DEFAULT_SETTING = {
     "game.maxmem": 2048,
     "users": [],
     "users.selectindex": 0,
+    "users.authlibinjector_servers": [],
     "language.type": "简体中文",
 }
 
@@ -129,6 +130,7 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
         "game.maxmem": {"name": _translate("Setting", "最大内存")},
         "users": {"name": _translate("Setting", "用户")},
         "users.selectindex": {"name": _translate("Setting", "选择用户索引")},
+        "users.authlibinjector_servers": {"name": _translate("Setting", "认证服务器")},
         "language": {
             "name": _translate("Setting", "语言"),
         },

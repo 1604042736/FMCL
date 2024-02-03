@@ -1,5 +1,3 @@
-import base64
-import json
 import logging
 import os
 
@@ -8,25 +6,26 @@ import qtawesome as qta
 from PIL import Image, ImageQt
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QImage
+from PyQt5.QtWidgets import QInputDialog
 from Setting import Setting
 
 from Core.Download import Download
-from Core.Network import Network
+from Core.APIs.YggdrasilAPI import YggdrasilAPI
 
 _translate = QCoreApplication.translate
 
 
 class User:
     @staticmethod
-    def create_offline(username: str):
+    def create_offline(username: str, uuid: str = ""):
         """创建离线登录用户"""
-        globalsetting = Setting()
         setting = {}
         setting = mll.utils.generate_test_options()
         setting["type"] = "offline"
         setting["username"] = username
-        globalsetting["users"].append(setting)
-        globalsetting.sync()
+        if uuid:
+            setting["uuid"] = uuid
+        User.add_user(setting)
 
     @staticmethod
     def create_microsoft():
@@ -34,64 +33,62 @@ class User:
         # FIXME
 
     @staticmethod
-    def create_littleskin(username: str, password: str):
-        """创建LitteSkin账户"""
-        logging.info("开始创建LittleSkin用户")
-        api = "https://littleskin.cn/api/yggdrasil"
+    def create_yggdrasil(base_url: str, username: str, password: str):
+        """创建Yggdrasil账户"""
+        logging.info(f"开始创建{base_url}用户")
+        api = YggdrasilAPI(base_url)
 
         logging.info("登录")
-        data = {
-            "username": username,
-            "password": password,
-            "requestUser": True,
-            "agent": {"name": "Minecraft", "version": 1},
-        }
-        r = (
-            Network()
-            .post(
-                f"{api}/authserver/authenticate",
-                json=data,
-                headers={"Content-Type": "application/json"},
-            )
-            .json()
-        )
-        if "errorMessage" in r:
-            return r["errorMessage"]
-        if not r["selectedProfile"]:
-            return _translate("User", "没有选择的角色")
+        userinfo: dict = api.login(username, password)
 
-        globalsetting = Setting()
+        availableProfiles = userinfo.pop("availableProfiles")
+        if len(availableProfiles) == 0:
+            raise Exception(_translate("User", "请先创建角色"))
+        if len(availableProfiles) == 1:
+            selectedProfile = availableProfiles[0]
+        else:
+            name, ok = QInputDialog.getItem(
+                None,
+                _translate("User", "创建用户"),
+                _translate("User", "选择角色"),
+                [i["name"] for i in availableProfiles],
+                editable=False,
+            )
+            if not ok:
+                return
+            for i in availableProfiles:
+                if i["name"] == name:
+                    selectedProfile = i
+                    break
+
         setting = {}
-        name = r["selectedProfile"]["name"]
         setting["type"] = "authlibInjector"
-        setting["username"] = name
-        setting["uuid"] = r["selectedProfile"]["id"]
-        setting["clientToken"] = r["clientToken"]
-        setting["accessToken"] = r["accessToken"]
-        setting["token"] = r["accessToken"]
-        setting["mode"] = "LittleSkin"
+        setting["username"] = selectedProfile["name"]
+        setting["uuid"] = selectedProfile["id"]
+        setting["clientToken"] = userinfo["clientToken"]
+        setting["accessToken"] = userinfo["accessToken"]
+        setting["token"] = userinfo["accessToken"]
+        setting["serverbaseurl"] = base_url
 
-        prole = (
-            Network()
-            .get(
-                f'{api}/sessionserver/session/minecraft/profile/{r["selectedProfile"]["id"]}'
-            )
-            .json()
-        )
-        setting["profileProperties"] = prole["properties"]
+        setting["profile"] = api.get_profile(selectedProfile["id"])
 
-        for i in range(len(globalsetting["users"])):
-            user = globalsetting["users"][i]
+        User.add_user(setting)
+
+    @staticmethod
+    def add_user(user: dict):
+        globalsetting = Setting()
+        for _user in globalsetting["users"]:
             if (
-                user["type"] == setting["type"]
-                and user["username"] == setting["username"]
-                and user["mode"] == setting["mode"]
-            ):  # 如果是重登录只需覆盖
-                globalsetting["users"][i] = setting
+                _user.get("serverbaseurl") == user.get("serverbaseurl")
+                and _user["uuid"] == user["uuid"]
+                and _user["type"] == user["type"]
+                and _user["username"] == user["username"]
+            ):
+                _user |= user  # 覆盖
+                Setting().sync()
                 break
         else:
-            globalsetting["users"].append(setting)
-        globalsetting.sync()
+            globalsetting["users"].append(user)
 
     @staticmethod
     def delete(user: dict):
@@ -112,47 +109,36 @@ class User:
 
     @staticmethod
     def refresh(user: dict):
-        if user["type"] == "authlibInjector" and user["mode"] == "LittleSkin":
-            api = "https://littleskin.cn/api/yggdrasil"
-            logging.info("刷新")
-            data = {
-                "accessToken": user["accessToken"],
-                "clientToken": user["clientToken"],
-            }
-            r = (
-                Network()
-                .post(
-                    f"{api}/authserver/refresh",
-                    json=data,
-                    headers={"Content-Type": "application/json"},
-                )
-                .json()
-            )
-            if "error" in r:
-                return r
-            user["accessToken"] = r["accessToken"]
-            user["clientToken"] = r["clientToken"]
+        if user["type"] == "authlibInjector":
+            api = YggdrasilAPI(user["serverbaseurl"])
+            api.refresh(user)
             Setting().sync()
 
     @staticmethod
     def get_head(user: dict):
         """获取头像"""
-        if user["type"] == "authlibInjector" and user["mode"] == "LittleSkin":
-            for i in user["profileProperties"]:
-                if i["name"] == "textures":
-                    textures = json.loads(base64.b64decode(i["value"]))
-                    break
-            else:
+        if user["type"] == "authlibInjector":
+            api = YggdrasilAPI(user["serverbaseurl"])
+            try:
+                textures = api.get_texture(user["profile"])
+            except:
                 return qta.icon("ph.user-circle")  # 找不到材质
             if "SKIN" in textures["textures"]:
                 url = textures["textures"]["SKIN"]["url"]
                 name = url.split("/")[-1]
-                path = f"FMCL/Skin/{name}.png"
-                if not os.path.exists("FMCL/Skin"):
-                    os.makedirs("FMCL/Skin")
+                temp_dir = Setting()["system.temp_dir"]
+                path = f"{temp_dir}/Skin/{name}.png"
+                if not os.path.exists(f"{temp_dir}/Skin"):
+                    os.makedirs(f"{temp_dir}/Skin")
                 logging.info("下载皮肤")
                 Download(
-                    url, path, {"setMax": logging.info, "setProgress": logging.info}
+                    url,
+                    path,
+                    {
+                        "setMax": logging.info,
+                        "setProgress": logging.info,
+                        "setStatus": logging.info,
+                    },
                 ).check()
                 img = Image.open(path)
                 head = img.crop((8, 8, 16, 16))
@@ -160,3 +146,15 @@ class User:
                 img.close()
                 return head
         return QImage(":/Image/defaulthead.png")
+
+    @staticmethod
+    def get_servername(user: dict):
+        """获取认证服务器名称"""
+        if user["type"] != "authlibInjector":
+            return ""
+        for server in Setting()["users.authlibinjector_servers"]:
+            if server["url"] == user["serverbaseurl"]:
+                return server["meta"]["serverName"]
+        return YggdrasilAPI(server["serverbaseurl"]).get_metadata()["meta"][
+            "serverName"
+        ]

@@ -1,18 +1,21 @@
+import logging
+import traceback
 import multitasking
-from Core.User import User
-from Kernel import Kernel
+
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QFrame
 from qfluentwidgets import InfoBar, InfoBarPosition, MessageBox
 
+from Core.User import User
+
 from .ui_UserInfo import Ui_UserInfo
 
 
 class UserInfo(QFrame, Ui_UserInfo):
+    __headGot = pyqtSignal(QPixmap)
     userSelectChanged = pyqtSignal(dict)
     userDeleted = pyqtSignal(dict)
-    __headGot = pyqtSignal(QPixmap)
 
     def __init__(self, userinfo: dict) -> None:
         super().__init__()
@@ -23,17 +26,23 @@ class UserInfo(QFrame, Ui_UserInfo):
         _type = userinfo["type"]
         if _type == "offline":
             self.l_type.setText(self.tr("离线登录"))
+            self.pb_changeprofile.hide()
         elif _type == "authlibInjector":
             self.l_type.setText(self.tr("外置登录"))
-            self.l_mode.setText(userinfo["mode"])
+            self.l_mode.setText(User.get_servername(userinfo))
 
-        multitasking.task(lambda: self.__headGot.emit(
-            QPixmap.fromImage(User.get_head(userinfo))))()
+        self.__headGot.connect(self.__setHead)
 
         if userinfo == User.get_cur_user():
             self.rb_select.setChecked(True)
 
-        self.__headGot.connect(self.__setHead)
+        self.__getHead()
+
+    @multitasking.task
+    def __getHead(self):
+        head = User.get_head(self.userinfo)
+        pixmap = QPixmap.fromImage(head)
+        self.__headGot.emit(pixmap)
 
     def __setHead(self, head):
         head = head.scaled(32, 32)
@@ -50,39 +59,15 @@ class UserInfo(QFrame, Ui_UserInfo):
         def confirmDeleted():
             User.delete(self.userinfo)
             self.userDeleted.emit(self.userinfo)
-        box = MessageBox("",
-                         self.tr("确认删除")+"?",
-                         self.window())
+
+        box = MessageBox("", self.tr("确认删除") + "?", self.window())
         box.yesSignal.connect(confirmDeleted)
         box.exec()
 
     @pyqtSlot(bool)
     def on_pb_refresh_clicked(self, _):
-        result = User.refresh(self.userinfo)
-        if result != None:
-            if result["error"] == "ForbiddenOperationException":
-                Kernel.execFunction(
-                    "CreateUser", self.userinfo["mode"].lower())
-                InfoBar.warning(
-                    title=self.tr("请重新登录"),
-                    content="",
-                    orient=Qt.Horizontal,
-                    isClosable=True,
-                    position=InfoBarPosition.TOP,
-                    duration=2000,
-                    parent=self.window()
-                )
-            else:
-                InfoBar.error(
-                    title=self.tr("刷新失败"),
-                    content="",
-                    orient=Qt.Horizontal,
-                    isClosable=True,
-                    position=InfoBarPosition.TOP,
-                    duration=2000,
-                    parent=self.window()
-                )
-        else:
+        try:
+            User.refresh(self.userinfo)
             InfoBar.success(
                 title=self.tr("刷新成功"),
                 content="",
@@ -90,5 +75,16 @@ class UserInfo(QFrame, Ui_UserInfo):
                 isClosable=True,
                 position=InfoBarPosition.TOP,
                 duration=2000,
-                parent=self.window()
+                parent=self.window(),
+            )
+        except:
+            logging.error(traceback.format_exc())
+            InfoBar.error(
+                title=self.tr("刷新失败,请尝试重新登录或看启动器日志"),
+                content="",
+                orient=Qt.Horizontal,
+                isClosable=True,
+                position=InfoBarPosition.TOP,
+                duration=2000,
+                parent=self.window(),
             )

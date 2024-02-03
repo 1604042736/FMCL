@@ -124,7 +124,7 @@ class ModManager(QWidget, Ui_ModManager):
             self.refresh()
 
         box = MessageBox(
-            self.tr("删除"), self.tr("确认删除") + str(mods) + "?", self.window()
+            self.tr("删除"), self.tr("确认删除") + str(mods) + "?", self
         )
         box.yesSignal.connect(confirmDelete)
         box.exec()

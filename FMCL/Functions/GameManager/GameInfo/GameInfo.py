@@ -57,7 +57,7 @@ class GameInfo(QWidget, Ui_GameInfo):
             self.gameDeleted.emit()
             self.close()
 
-        box = MessageBox(self.tr("删除"), self.tr("确定删除?"), self.window())
+        box = MessageBox(self.tr("删除"), self.tr("确定删除?"), self)
         box.yesSignal.connect(confirmDelete)
         box.exec()
 
