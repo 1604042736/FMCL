@@ -3,11 +3,17 @@ import os
 import traceback
 
 import qtawesome as qta
-from Core.Version import Version
 from Kernel import Kernel
 from PyQt5.QtCore import QEvent, QSize, Qt, QPoint
 from PyQt5.QtGui import QCursor, QPainter, QPixmap
-from PyQt5.QtWidgets import QAction, QListView, QListWidgetItem, qApp
+from PyQt5.QtWidgets import (
+    QAction,
+    QListView,
+    QListWidgetItem,
+    qApp,
+    QInputDialog,
+    QFileDialog,
+)
 from qfluentwidgets import (
     RoundMenu,
     ListWidget,
@@ -15,6 +21,9 @@ from qfluentwidgets import (
     TransparentToolButton,
     Action,
 )
+
+
+from Core import Version
 from Setting import Setting
 from Events import *
 
@@ -81,8 +90,13 @@ class Desktop(ListWidget):
                 )
             )
 
+            a_install_modpack = QAction(self.tr("安装整合包"), self)
+            a_install_modpack.setIcon(qta.icon("mdi6.package-variant-closed"))
+            a_install_modpack.triggered.connect(lambda: self.installModPack())
+
             menu.addAction(a_refresh)
             menu.addAction(a_background_image)
+            menu.addAction(a_install_modpack)
 
             action_functions = Setting()["explorer.desktop.rightclicked_actions"]
             for action_function in action_functions:
@@ -97,6 +111,22 @@ class Desktop(ListWidget):
                 menu.addAction(action)
 
         menu.exec(QCursor.pos())
+
+    def installModPack(self):
+        filepath, _ = QFileDialog.getOpenFileName(
+            self, self.tr("选择整合包"), filter="Modpack (*.mrpack)"
+        )
+        if not filepath:
+            return
+        name, ok = QInputDialog.getText(
+            self,
+            self.tr("输入版本名"),
+            "",
+            text=os.path.splitext(os.path.basename(filepath))[0],
+        )
+        if not ok:
+            return
+        Version(name).install_modpack(filepath, os.path.basename(filepath))
 
     def refresh(self):
         self.background_image = (

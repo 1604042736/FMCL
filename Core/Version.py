@@ -5,11 +5,12 @@ import os
 import re
 import shutil
 from copy import deepcopy
+import traceback
 from Kernel import Kernel
 import minecraft_launcher_lib as mll
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import qApp
+from PyQt5.QtWidgets import qApp, QMessageBox
 from qfluentwidgets import PrimaryPushButton
 from Setting import Setting
 
@@ -18,6 +19,7 @@ from Core.Network import Network
 from Core.Mod import Mod
 from Core.Java import Java
 from Core.Installer import Installer
+from Core.APIs.ModrinthAPI import ModrinthAPI
 
 from .Task import Task
 from .User import User
@@ -47,6 +49,13 @@ class Version:
     def get_fabric():
         result = []
         for i in mll.fabric.get_all_loader_versions():
+            result.append(i["version"])
+        return result
+
+    @staticmethod
+    def get_quilt():
+        result = []
+        for i in mll.quilt.get_all_loader_versions():
             result.append(i["version"])
         return result
 
@@ -187,12 +196,18 @@ class Version:
         fabric_minecraft_version = f"fabric-loader-{fabric_version}-{version}"
         Version(fabric_minecraft_version).rename(self.name)
 
+    def install_quilt(self, version, quilt_version, callback):
+        logging.info(f"安装Quilt({version},{quilt_version})")
+        Installer().install_quilt(version, self.directory, quilt_version, callback)
+        quilt_minecraft_version = f"quilt-loader-{quilt_version}-{version}"
+        Version(quilt_minecraft_version).rename(self.name)
+
     def install_mc(self, version, callback):
         logging.info(f"安装Minecraft({version})")
         Installer().install_minecraft_version(version, self.directory, callback)
         Version(version).rename(self.name)
 
-    def install(self, version, forge_version, fabric_version):
+    def install(self, version, forge_version="", fabric_version="", quilt_version=""):
         logging.info(f"安装({version},{forge_version},{fabric_version})")
         if forge_version:
             Task(
@@ -206,10 +221,123 @@ class Version:
                     version, fabric_version, callback
                 ),
             ).start()
+        elif quilt_version:
+            Task(
+                _translate("Version", "安装") + self.name,
+                taskfunc=lambda callback: self.install_quilt(
+                    version, quilt_version, callback
+                ),
+            ).start()
         else:
             Task(
                 _translate("Version", "安装") + self.name,
                 taskfunc=lambda callback: self.install_mc(version, callback),
+            ).start()
+
+    def install_mod_fromfile(self, filepath, filename):
+        root_path = self.get_mod_path()
+        shutil.copy(filepath, os.path.join(root_path, os.path.basename(filename)))
+
+    def install_mod_fromurl(self, url, filename, callback=None):
+        root_path = self.get_mod_path()
+        filepath = os.path.join(root_path, os.path.basename(filename))
+        Download(url, filepath, callback).start()
+
+    def install_mod(self, filepath_or_url, filename):
+        if "https://" in filepath_or_url or "http://" in filepath_or_url:
+            Task(
+                _translate("Version", "从{url}中安装模组").format(url=filepath_or_url),
+                taskfunc=lambda callback: self.install_mod_fromurl(
+                    filepath_or_url, filename, callback
+                ),
+            ).start()
+        else:
+            self.install_mod_fromfile(filepath_or_url, filename)
+
+    def install_resourcepack_fromfile(self, filepath, filename):
+        root_path = self.get_resourcepacks_path()
+        shutil.copy(filepath, os.path.join(root_path, os.path.basename(filename)))
+
+    def install_resourcepack_fromurl(self, url, filename, callback=None):
+        root_path = self.get_resourcepacks_path()
+        filepath = os.path.join(root_path, os.path.basename(filename))
+        Download(url, filepath, callback).start()
+
+    def install_resourcepack(self, filepath_or_url, filename):
+        if "https://" in filepath_or_url or "http://" in filepath_or_url:
+            Task(
+                _translate("Version", "从{url}中安装资源包").format(url=filepath_or_url),
+                taskfunc=lambda callback: self.install_resourcepack_fromurl(
+                    filepath_or_url, filename, callback
+                ),
+            ).start()
+        else:
+            self.install_resourcepack_fromfile(filepath_or_url, filename)
+
+    def install_shaderpack_fromfile(self, filepath, filename):
+        root_path = self.get_shaderpacks_path()
+        shutil.copy(filepath, os.path.join(root_path, os.path.basename(filename)))
+
+    def install_shaderpack_fromurl(self, url, filename, callback=None):
+        root_path = self.get_shaderpacks_path()
+        filepath = os.path.join(root_path, os.path.basename(filename))
+        Download(url, filepath, callback).start()
+
+    def install_shaderpack(self, filepath_or_url, filename):
+        if "https://" in filepath_or_url or "http://" in filepath_or_url:
+            Task(
+                _translate("Version", "从{url}中安装光影包").format(url=filepath_or_url),
+                taskfunc=lambda callback: self.install_shaderpack_fromurl(
+                    filepath_or_url, filename, callback
+                ),
+            ).start()
+        else:
+            self.install_shaderpack_fromfile(filepath_or_url, filename)
+
+    def install_modpack_fromfile(self, filepath, callback=None):
+        exception = Exception("无法安装整合包, 请确保整合包文件格式正确")
+        try:
+            logging.info("尝试用Modrinth下载整合包")
+            callback.get("setStatues", lambda _: None)(
+                _translate("Version", "安装Modrinth整合包")
+            )
+            api = ModrinthAPI()
+            api.install_modpack(filepath, self, callback)
+
+            self.generate_setting()
+            self.setting.set("isolation", True)
+            return
+        except Exception as e:
+            exception = e
+        raise exception
+
+    def install_modpack_fromurl(self, url, filename, callback=None):
+        root_path = Setting()["system.temp_dir"]
+        filepath = os.path.join(root_path, os.path.basename(filename))
+        Download(url, filepath, callback).start()
+        self.install_modpack_fromfile(filepath, callback)
+
+    def install_modpack(self, filepath_or_url, filename):
+        def showError(e: Exception):
+            logging.error("".join(traceback.format_exception(e)))
+            QMessageBox.critical(None, _translate("Version", "安装整合包失败"), str(e))
+            return True
+
+        if "https://" in filepath_or_url or "http://" in filepath_or_url:
+            Task(
+                _translate("Version", "安装整合包") + f": {filepath_or_url}",
+                taskfunc=lambda callback: self.install_modpack_fromurl(
+                    filepath_or_url, filename, callback
+                ),
+                exception_handler=[showError],
+            ).start()
+        else:
+            Task(
+                _translate("Version", "安装整合包") + f": {filepath_or_url}",
+                taskfunc=lambda callback: self.install_modpack_fromfile(
+                    filepath_or_url, callback
+                ),
+                exception_handler=[showError],
             ).start()
 
     def rename(self, new_name):
@@ -219,12 +347,15 @@ class Version:
         old_path = f"{self.directory}/versions/{self.name}"
         new_path = f"{self.directory}/versions/{new_name}"
         if os.path.exists(new_path):  # 如果重命名之后的文件存在就覆盖原来的文件
+            logging.warning(f"{new_name}已经存在")
             # 移动新的文件
             shutil.copy(f"{old_path}/{self.name}.jar", new_path)
             shutil.copy(f"{old_path}/{self.name}.json", new_path)
             # 删除旧的文件
-            os.remove(f"{new_path}/{new_name}.jar")
-            os.remove(f"{new_path}/{new_name}.json")
+            if os.path.exists(f"{new_path}/{new_name}.jar"):
+                os.remove(f"{new_path}/{new_name}.jar")
+            if os.path.exists(f"{new_path}/{new_name}.jar"):
+                os.remove(f"{new_path}/{new_name}.json")
 
             # 重命名
             os.rename(f"{new_path}/{self.name}.jar", f"{new_path}/{new_name}.jar")
@@ -364,6 +495,26 @@ class Version:
             path = os.path.join(self.directory, "versions", self.name, "screenshots")
         else:
             path = os.path.join(self.directory, "screenshots")
+        if not os.path.exists(path):
+            os.makedirs(path)
+        return path
+
+    def get_resourcepacks_path(self):
+        self.generate_setting()
+        if self.setting.get("isolation"):
+            path = os.path.join(self.directory, "versions", self.name, "resourcepacks")
+        else:
+            path = os.path.join(self.directory, "resourcepacks")
+        if not os.path.exists(path):
+            os.makedirs(path)
+        return path
+
+    def get_shaderpacks_path(self):
+        self.generate_setting()
+        if self.setting.get("isolation"):
+            path = os.path.join(self.directory, "versions", self.name, "shaderpacks")
+        else:
+            path = os.path.join(self.directory, "shaderpacks")
         if not os.path.exists(path):
             os.makedirs(path)
         return path

@@ -19,6 +19,7 @@ class GameDownloader(QWidget, Ui_GameDownloader):
         self.default_name = ""
         self.setVersions()
         self.setFabric()
+        self.setQuilt()
 
     @multitasking.task
     def setVersions(self):
@@ -38,6 +39,12 @@ class GameDownloader(QWidget, Ui_GameDownloader):
         items = [""] + Version.get_forge(version)  # 同理
         self.cb_forge.clear()
         self.cb_forge.addItems(items)
+
+    @multitasking.task
+    def setQuilt(self):
+        items = [""] + Version.get_quilt()
+        self.cb_quilt.clear()
+        self.cb_quilt.addItems(items)
 
     @pyqtSlot(str)
     def on_cb_minecraft_currentTextChanged(self, text):
@@ -60,6 +67,10 @@ class GameDownloader(QWidget, Ui_GameDownloader):
             self.cb_fabric.setEnabled(True)
         self.set_name()
 
+    @pyqtSlot(str)
+    def on_cb_quilt_currentTextChanged(self, text):
+        self.set_name()
+
     @pyqtSlot(bool)
     def on_pb_install_clicked(self, _):
         name = self.le_name.text()
@@ -77,12 +88,14 @@ class GameDownloader(QWidget, Ui_GameDownloader):
 
     def get_versions(self):
         version = self.cb_minecraft.currentText()
-        forge_version = fabric_version = ""
+        forge_version = fabric_version = quilt_version = ""
         if self.cb_forge.currentText():
             forge_version = self.cb_forge.currentText()
         if self.cb_fabric.currentText():
             fabric_version = self.cb_fabric.currentText()
-        return version, forge_version, fabric_version
+        if self.cb_quilt.currentText():
+            quilt_version = self.cb_quilt.currentText()
+        return version, forge_version, fabric_version, quilt_version
 
     def set_name(self):
         versions = self.get_versions()
@@ -92,4 +105,6 @@ class GameDownloader(QWidget, Ui_GameDownloader):
                 self.default_name += f"-Forge{versions[1].split('-')[-1]}"
             if versions[2]:
                 self.default_name += f"-Fabric{versions[2]}"
+            if versions[3]:
+                self.default_name += f"-Quilt{versions[3]}"
             self.le_name.setText(self.default_name)

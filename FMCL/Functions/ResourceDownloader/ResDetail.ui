@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ModDetail</class>
- <widget class="QWidget" name="ModDetail">
+ <class>ResDetail</class>
+ <widget class="QWidget" name="ResDetail">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -34,61 +34,32 @@
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="1" column="0">
-        <widget class="TreeWidget" name="tw_versions">
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-         <property name="columnCount">
-          <number>5</number>
-         </property>
-         <attribute name="headerVisible">
-          <bool>true</bool>
-         </attribute>
-         <column>
-          <property name="text">
-           <string>版本或名称</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>加载器或需求</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>类型</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>下载量</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>更新时间</string>
-          </property>
-         </column>
-        </widget>
-       </item>
        <item row="0" column="0">
         <widget class="QWidget" name="widget" native="true">
          <layout class="QGridLayout" name="gridLayout_2">
+          <item row="1" column="0">
+           <layout class="QHBoxLayout" name="hl_operates"/>
+          </item>
           <item row="0" column="0">
-           <layout class="QVBoxLayout" name="vl_modinfo">
+           <layout class="QVBoxLayout" name="vl_resinfo">
             <property name="spacing">
              <number>0</number>
             </property>
            </layout>
           </item>
-          <item row="1" column="0">
-           <layout class="QHBoxLayout" name="hl_urls"/>
-          </item>
          </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="TreeWidget" name="tw_versions">
+         <attribute name="headerVisible">
+          <bool>false</bool>
+         </attribute>
+         <column>
+          <property name="text">
+           <string notr="true">1</string>
+          </property>
+         </column>
         </widget>
        </item>
       </layout>

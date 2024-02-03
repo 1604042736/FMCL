@@ -1,5 +1,6 @@
 import requests
 from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 from PyQt5.QtWidgets import qApp
 
@@ -9,10 +10,16 @@ class Network:
     def get_default_headers():
         return {"user-agent": f"1604042736/FMCL/{qApp.applicationVersion()}"}
 
-    def __init__(self, session: requests.Session = None, retry_time: int = 3):
+    def __init__(
+        self,
+        session: requests.Session = None,
+        retry_time: int = 3,
+        retry_delay: int = 0,
+    ):
         self.session = session if session != None else requests.session()
-        self.session.mount("https://", HTTPAdapter(max_retries=retry_time))
-        self.session.mount("http://", HTTPAdapter(max_retries=retry_time))
+        retry = Retry(total=retry_time, backoff_factor=retry_delay)
+        self.session.mount("https://", HTTPAdapter(max_retries=retry))
+        self.session.mount("http://", HTTPAdapter(max_retries=retry))
         self.retry_time = retry_time
 
     def get(self, url, **kwargs):

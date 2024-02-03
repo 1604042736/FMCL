@@ -1,15 +1,26 @@
 import logging
 import os
+import threading
 
 from PyQt5.QtCore import QCoreApplication
+
 from Setting import Setting
 from Core.Network import Network
 from Core.Task import Task
+from Core.MainThreadCreator import MainThreadCreator
 
 _translate = QCoreApplication.translate
 
+MAX_POOL_SIZE = 10
+
 
 class Download:
+    def __new__(cls, *args, **kwargs):
+        if threading.current_thread().getName() == "MainThread":
+            return super().__new__(cls)
+        else:
+            return MainThreadCreator().newObject(Download, args, kwargs)
+
     def __init__(
         self, url: str, save_file: str, callback=None, range: tuple = None, network=None
     ) -> None:
@@ -96,6 +107,10 @@ class Download:
                     network=self.network,
                 ).start(),
             )
+            if len(download_tasks) >= MAX_POOL_SIZE:
+                download_task.waittasks.append(
+                    download_tasks[len(download_tasks) - MAX_POOL_SIZE]
+                )
             download_tasks.append(download_task)
             download_task.start()
             part += 1

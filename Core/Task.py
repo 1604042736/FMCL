@@ -4,6 +4,8 @@ import time
 from typing import Callable
 from PyQt5.QtCore import QObject, QThread, pyqtSignal, QCoreApplication
 
+from Core.MainThreadCreator import MainThreadCreator
+
 _translate = QCoreApplication.translate
 
 SLEEP_TIME = 0.005  # 循环等待时间(秒)
@@ -32,39 +34,6 @@ class TaskExceptionPass(QObject):
                 raise e  # 在主线程里raise
 
 
-class TaskCreator(QObject):
-    """负责在主线程中创建Task"""
-
-    __createTask = pyqtSignal(tuple, dict, str)
-
-    instance = None
-    new_count = 0
-
-    def __new__(cls):
-        if TaskCreator.instance == None:
-            TaskCreator.instance = super().__new__(cls)
-        TaskCreator.new_count += 1
-        return TaskCreator.instance
-
-    def __init__(self):
-        if TaskCreator.new_count > 1:
-            return
-        super().__init__()
-        self.created_tasks: dict[str, Task] = {}
-        self.__createTask.connect(self.createTask)
-
-    def createTask(self, args, kwargs, hash):
-        self.created_tasks[hash] = Task(*args, **kwargs)
-
-    def newTask(self, args, kwargs) -> "Task":
-        hash = f"{time.time()}{threading.get_ident()}"
-        args = tuple(args)
-        self.__createTask.emit(args, kwargs, hash)
-        while hash not in self.created_tasks:
-            time.sleep(SLEEP_TIME)
-        return self.created_tasks[hash]
-
-
 class Task(QThread):
     occurException = pyqtSignal(Exception, list)
     # started和finished信号的回调函数
@@ -88,7 +57,7 @@ class Task(QThread):
         if threading.current_thread().getName() == "MainThread":
             return super().__new__(cls)
         else:
-            return TaskCreator().newTask(args, kwargs)
+            return MainThreadCreator().newObject(Task, args, kwargs)
 
     def __init__(
         self,

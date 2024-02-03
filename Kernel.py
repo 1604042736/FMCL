@@ -154,12 +154,15 @@ class Kernel(QApplication):
         """加载翻译"""
         logging.info("加载翻译...")
         # 在未加载翻译之前不能使用Setting
-        lang = (
-            json.load(open(DEFAULT_SETTING_PATH, encoding="utf-8")).get(
-                "language.type", "简体中文"
+        if os.path.exists(DEFAULT_SETTING_PATH):
+            lang = (
+                json.load(open(DEFAULT_SETTING_PATH, encoding="utf-8")).get(
+                    "language.type", "简体中文"
+                )
+                + ".qm"
             )
-            + ".qm"
-        )
+        else:
+            lang = "简体中文.qm"
         self.__translators = []  # 防止Translator被销毁
         # QTranslator优先搜索最新安装的文件
         for i in self.getTranslationPath():

@@ -2,7 +2,6 @@
 import logging
 import random
 import subprocess
-import tempfile
 import requests
 import shutil
 import json
@@ -13,15 +12,15 @@ from minecraft_launcher_lib._helper import (
     download_file,
     parse_rule_list,
     inherit_json,
-    empty,
-    get_user_agent,
     check_path_inside_minecraft_directory,
     extract_file_from_zip,
+    get_user_agent,
 )
 from minecraft_launcher_lib._internal_types.shared_types import (
     ClientJson,
     ClientJsonLibrary,
 )
+from minecraft_launcher_lib._internal_types.mrpack_types import MrpackIndex
 from minecraft_launcher_lib.natives import extract_natives_file, get_natives
 from minecraft_launcher_lib._internal_types.install_types import AssetsJson
 from typing import List, Optional, Union
@@ -30,7 +29,7 @@ from minecraft_launcher_lib.exceptions import (
     UnsupportedVersion,
     ExternalProgramError,
 )
-from minecraft_launcher_lib.types import CallbackDict
+from minecraft_launcher_lib.types import CallbackDict, MrpackInstallOptions
 from minecraft_launcher_lib._internal_types.forge_types import ForgeInstallProfile
 from minecraft_launcher_lib.utils import is_version_valid
 from minecraft_launcher_lib.fabric import (
@@ -39,6 +38,7 @@ from minecraft_launcher_lib.fabric import (
     get_latest_installer_version,
 )
 from minecraft_launcher_lib.forge import forge_processors
+from minecraft_launcher_lib.mrpack import _filter_mrpack_files
 
 from PyQt5.QtCore import QCoreApplication
 
@@ -48,7 +48,11 @@ from Core.Task import Task
 
 _translate = QCoreApplication.translate
 
-MAX_POOL_SIZE = 5
+MAX_POOL_SIZE = 5  # 实际上是10, 因为会有2个任务同时进行多文件下载, 所以除以2
+
+
+def empty(*args):
+    pass
 
 
 class Installer:
@@ -365,10 +369,17 @@ class Installer:
         ):
             self.do_version_install(versionid, minecraft_directory, callback)
             return
-        version_list = requests.get(
-            "https://launchermeta.mojang.com/mc/game/version_manifest_v2.json",
-            headers={"user-agent": get_user_agent()},
-        ).json()
+        try:
+            version_list = requests.get(
+                "https://launchermeta.mojang.com/mc/game/version_manifest_v2.json",
+                headers={"user-agent": get_user_agent()},
+            ).json()
+        except:
+            logging.error("官方源失败, 尝试使用bangbang93")
+            version_list = requests.get(
+                "https://bmclapi2.bangbang93.com/mc/game/version_manifest_v2.json",
+                headers={"user-agent": get_user_agent()},
+            ).json()
         for i in version_list["versions"]:
             if i["id"] == versionid:
                 self.do_version_install(
@@ -421,7 +432,6 @@ class Installer:
         )
 
         # Make sure, the base version is installed
-        callback.get("setStatus", empty)("")
         task_install_mc = Task(
             f'{_translate("Installer","安装")}{minecraft_version}',
             callback.get("getCurTask", lambda _: None)(),
@@ -504,7 +514,6 @@ class Installer:
         zf.close()
 
         # Install the rest with the vanilla function
-        callback.get("setStatus", empty)("")
         task_install_mc = Task(
             f'{_translate("Installer","安装")}{forge_version_id}',
             callback.get("getCurTask", lambda _: None)(),
@@ -580,7 +589,7 @@ class Installer:
         download_file(installer_download_url, installer_path, callback=callback)
 
         # Run the installer see https://fabricmc.net/wiki/install#cli_installation
-        callback.get("setStatus", empty)("Running fabric installer")
+        callback.get("setStatus", empty)(_translate("Instaler", "运行Fabric安装器"))
         command = [
             "java" if java is None else str(java),
             "-jar",
@@ -614,3 +623,258 @@ class Installer:
         )
         task_install_mc.start()
         Task.waitTasks((task_install_mc,), callback)
+
+    def install_mrpack(
+        self,
+        path: Union[str, os.PathLike],
+        minecraft_directory: Union[str, os.PathLike],
+        modpack_directory: Optional[Union[str, os.PathLike]] = None,
+        callback: Optional[CallbackDict] = None,
+        mrpack_install_options: Optional[MrpackInstallOptions] = None,
+    ) -> None:
+        minecraft_directory = os.path.abspath(minecraft_directory)
+        path = os.path.abspath(path)
+
+        if modpack_directory is None:
+            modpack_directory = minecraft_directory
+        else:
+            modpack_directory = os.path.abspath(modpack_directory)
+
+        if callback is None:
+            callback = {}
+
+        if mrpack_install_options is None:
+            mrpack_install_options = {}
+
+        with zipfile.ZipFile(path, "r") as zf:
+            with zf.open("modrinth.index.json", "r") as f:
+                index: MrpackIndex = json.load(f)
+            download_tasks = []
+            # Download the files
+            callback.get("setStatus", empty)(_translate("Installer", "准备下载文件"))
+            file_list = _filter_mrpack_files(index["files"], mrpack_install_options)
+            callback.get("setMax", empty)(len(file_list))
+            for count, file in enumerate(file_list):
+
+                def download_taskfunc(callback, count, file):
+                    full_path = os.path.abspath(
+                        os.path.join(modpack_directory, file["path"])
+                    )
+
+                    check_path_inside_minecraft_directory(modpack_directory, full_path)
+
+                    download_file(
+                        file["downloads"][0],
+                        full_path,
+                        sha1=file["hashes"]["sha1"],
+                        callback=callback,
+                    )
+
+                download_task = Task(
+                    _translate("Installer", "下载") + file["downloads"][0],
+                    callback.get("getCurTask", empty)(),
+                    lambda callback, count=count, file=file: download_taskfunc(
+                        callback, count, file
+                    ),
+                )
+                if len(download_tasks) >= MAX_POOL_SIZE:
+                    download_task.waittasks.append(
+                        download_tasks[len(download_tasks) - MAX_POOL_SIZE]
+                    )
+                download_tasks.append(download_task)
+                download_task.start()
+
+                callback.get("setProgress", empty)(count + 1)
+
+            callback.get("setMax", empty)(0)
+            Task.waitTasks(download_tasks, callback)
+
+            # Extract the overrides
+            callback.get("setStatus", empty)(_translate("Installer", "解压overrides"))
+            for zip_name in zf.namelist():
+                # Check if the entry is in the overrides and if it is a file
+                if (
+                    not zip_name.startswith("overrides/")
+                    and not zip_name.startswith("client-overrides/")
+                ) or zf.getinfo(zip_name).file_size == 0:
+                    continue
+
+                # Remove the overrides at the start of the Name
+                # We don't have removeprefix() in Python 3.8
+                if zip_name.startswith("client-overrides/"):
+                    file_name = zip_name[len("client-overrides/") :]
+                else:
+                    file_name = zip_name[len("overrides/") :]
+
+                # Constructs the full Path
+                full_path = os.path.abspath(os.path.join(modpack_directory, file_name))
+
+                check_path_inside_minecraft_directory(modpack_directory, full_path)
+
+                callback.get("setStatus", empty)(
+                    f"{_translate('Installer','解压')} {zip_name}]"
+                )
+                zf.extract(zip_name, full_path)
+
+            if mrpack_install_options.get("skipDependenciesInstall"):
+                return
+
+            # Install dependencies
+            install_task = Task(
+                _translate("Installer", "安装")
+                + "Minecraft"
+                + index["dependencies"]["minecraft"],
+                callback.get("getCurTask", empty)(),
+                lambda callback: self.install_minecraft_version(
+                    index["dependencies"]["minecraft"],
+                    minecraft_directory,
+                    callback=callback,
+                ),
+            )
+            install_task.start()
+            Task.waitTasks((install_task,), callback)
+
+            if "forge" in index["dependencies"]:
+                forge_version = (
+                    index["dependencies"]["minecraft"]
+                    + "-"
+                    + index["dependencies"]["forge"]
+                )
+                install_task = Task(
+                    _translate("Installer", "安装") + "Forge" + forge_version,
+                    callback.get("getCurTask", empty)(),
+                    lambda callback: self.install_forge_version(
+                        forge_version, minecraft_directory, callback=callback
+                    ),
+                )
+                install_task.start()
+                Task.waitTasks((install_task,), callback)
+                callback.get("rename", empty)(
+                    f'{index["dependencies"]["minecraft"]}-forge-{index["dependencies"]["forge"]}'
+                )
+
+            if "fabric-loader" in index["dependencies"]:
+                name = _translate("Installer","为{minecraft_version}安装Fabric{fabric_loader}").format(
+                    minecraft_version=index["dependencies"]["minecraft"],
+                    fabric_loader=index["dependencies"]["fabric-loader"],
+                )
+                install_task = Task(
+                    name,
+                    callback.get("getCurTask", empty)(),
+                    lambda callback: self.install_fabric(
+                        index["dependencies"]["minecraft"],
+                        minecraft_directory,
+                        loader_version=index["dependencies"]["fabric-loader"],
+                        callback=callback,
+                    ),
+                )
+                install_task.start()
+                Task.waitTasks((install_task,), callback)
+                callback.get("rename", empty)(
+                    f'fabric-loader-{index["dependencies"]["fabric-loader"]}-{index["dependencies"]["minecraft"]}'
+                )
+
+            if "quilt-loader" in index["dependencies"]:
+                name = _translate("Installer","为{minecraft_version}安装Quilt{quilt_loader}").format(
+                    minecraft_version=index["dependencies"]["minecraft"],
+                    quilt_loader=index["dependencies"]["quilt-loader"],
+                )
+
+                install_task = Task(
+                    name,
+                    callback.get("getCurTask", empty)(),
+                    lambda callback: self.install_quilt(
+                        index["dependencies"]["minecraft"],
+                        minecraft_directory,
+                        loader_version=index["dependencies"]["quilt-loader"],
+                        callback=callback,
+                    ),
+                )
+                install_task.start()
+                Task.waitTasks((install_task,), callback)
+                callback.get("rename", empty)(
+                    f'quilt-loader-{index["dependencies"]["quilt-loader"]}-{index["dependencies"]["minecraft"]}'
+                )
+
+    def install_quilt(
+        self,
+        minecraft_version: str,
+        minecraft_directory: Union[str, os.PathLike],
+        loader_version: Optional[str] = None,
+        callback: Optional[CallbackDict] = None,
+        java: Optional[Union[str, os.PathLike]] = None,
+    ) -> None:
+        path = str(minecraft_directory)
+        if not callback:
+            callback = {}
+
+        # Check if the given version exists
+        if not is_version_valid(minecraft_version, minecraft_directory):
+            raise VersionNotFound(minecraft_version)
+
+        # Check if the given Minecraft version supported
+        if not is_minecraft_version_supported(minecraft_version):
+            raise UnsupportedVersion(minecraft_version)
+
+        # Get latest loader version if not given
+        if not loader_version:
+            loader_version = get_latest_loader_version()
+
+        # Make sure the Minecraft version is installed
+        task_install_mc = Task(
+            f'{_translate("Installer","安装")}{minecraft_version}',
+            callback.get("getCurTask", lambda _: None)(),
+            lambda callback: self.install_minecraft_version(
+                minecraft_version, path, callback=callback
+            ),
+        )
+        task_install_mc.start()
+        Task.waitTasks((task_install_mc,), callback)
+
+        # Get installer version
+        installer_version = get_latest_installer_version()
+        installer_download_url = f"https://maven.quiltmc.org/repository/release/org/quiltmc/quilt-installer/{installer_version}/quilt-installer-{installer_version}.jar"
+
+        # Generate a temporary path for downloading the installer
+        installer_path = os.path.join(
+            Setting()["system.temp_dir"],
+            f"quilt-installer-{random.randrange(100, 10000)}.tmp",
+        )
+
+        try:
+            # Download the installer
+            download_file(installer_download_url, installer_path, callback=callback)
+
+            # Run the installer
+            callback.get("setStatus", empty)(_translate("Installer", "运行Quilt安装器"))
+            command = [
+                "java" if java is None else str(java),
+                "-jar",
+                installer_path,
+                "install",
+                "client",
+                minecraft_version,
+                loader_version,
+                f"--install-dir={path}",
+                "--no-profile",
+            ]
+            result = subprocess.run(
+                command, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            )
+            if result.returncode != 0:
+                raise ExternalProgramError(command, result.stdout, result.stderr)
+        finally:
+            # Delete the installer as we don't need them anymore
+            if os.path.isfile(installer_path):
+                os.remove(installer_path)
+
+        # Install all libs of quilt
+        quilt_minecraft_version = f"quilt-loader-{loader_version}-{minecraft_version}"
+        task_install_mc = Task(
+            f'{_translate("Installer","安装")}{quilt_minecraft_version}',
+            callback.get("getCurTask", lambda _: None)(),
+            lambda callback: self.install_minecraft_version(
+                quilt_minecraft_version, path, callback=callback
+            ),
+        )
+        task_install_mc.start()

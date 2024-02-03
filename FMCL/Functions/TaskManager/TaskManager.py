@@ -131,4 +131,10 @@ class TaskManager(QWidget, Ui_TaskManager):
         if a1.type() == WindowActivatedEvent.EventType:
             if len(self.task_item) != 0:
                 qApp.sendEvent(a1.widget, AddToTitleEvent(self.pb_taskmanager, "right"))
+            else:
+                qApp.sendEvent(
+                    self.pb_taskmanager.window(),
+                    RemoveFromTitleEvent(self.pb_taskmanager),
+                )
+                self.pb_taskmanager.hide()
         return super().eventFilter(a0, a1)
