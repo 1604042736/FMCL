@@ -112,6 +112,7 @@ class User:
         if user["type"] == "authlibInjector":
             api = YggdrasilAPI(user["serverbaseurl"])
             api.refresh(user)
+            user["profile"] = api.get_profile(user["profile"]["id"])
             Setting().sync()
 
     @staticmethod

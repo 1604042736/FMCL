@@ -16,6 +16,7 @@ class UserInfo(QFrame, Ui_UserInfo):
     __headGot = pyqtSignal(QPixmap)
     userSelectChanged = pyqtSignal(dict)
     userDeleted = pyqtSignal(dict)
+    userRefreshed = pyqtSignal()
 
     def __init__(self, userinfo: dict) -> None:
         super().__init__()
@@ -77,6 +78,7 @@ class UserInfo(QFrame, Ui_UserInfo):
                 duration=2000,
                 parent=self.window(),
             )
+            self.userRefreshed.emit()
         except:
             logging.error(traceback.format_exc())
             InfoBar.error(
