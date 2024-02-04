@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import (
     QSpacerItem,
     qApp,
 )
-from qfluentwidgets import TransparentToolButton
+from qfluentwidgets import TransparentToolButton, StateToolTip
 from Setting import Setting
 
 from .SettingCards import SettingCard
@@ -146,10 +146,20 @@ class SettingEditor(QWidget, Ui_SettingEditor):
             self.turnTo(id)
 
     def refresh(self):
-        for i in self.setting_cards.values():
-            if hasattr(i, "refresh"):
-                i.refresh()
+        statetooltip = StateToolTip(self.tr("刷新中..."), "", self)
+        statetooltip.move(statetooltip.getSuitablePos())
+        statetooltip.show()
+
+        n = len(self.setting_cards.values())
+        for i, card in enumerate(self.setting_cards.values()):
+            if hasattr(card, "refresh"):
+                card.refresh()
+            statetooltip.setContent(f"{i+1}/{n}({round((i+1)/n*100,1)}%)")
+            qApp.processEvents()
         self.checkCondition()
+
+        statetooltip.setContent(self.tr("刷新完成"))
+        statetooltip.setState(True)
 
     def checkCondition(self):
         enable = {}

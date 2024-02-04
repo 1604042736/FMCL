@@ -1,7 +1,7 @@
 import qtawesome as qta
 
 from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QLabel, QInputDialog
+from PyQt5.QtWidgets import QLabel, QInputDialog, QSpacerItem, QSizePolicy
 from qfluentwidgets import TransparentToolButton
 
 from .SettingCard import SettingCard
@@ -15,23 +15,40 @@ class DictSettingCard(SettingCard, Ui_DictSettingCard):
         self.setupUi(self)
         self.pb_add.setIcon(qta.icon("msc.add"))
 
-        if self.attrgetter("element_type") == None:
-            self.attrsetter("element_type", dict())
+        if self.attrgetter("element_attrs") == None:
+            self.attrsetter("element_attrs", dict())  # 保存元素的属性
+
+        self.button_label_card_attrs = []
 
         self.refresh()
 
     def refresh(self):
+        element_attrs = self.attrgetter("element_attrs")
+        for i, (_, l_key, _, attrs) in enumerate(self.button_label_card_attrs):
+            element_attrs[l_key.text()] = attrs
+
         while self.gl_elements.count():
             item = self.gl_elements.takeAt(0)
             if item.widget() != None:
                 item.widget().deleteLater()
-        self.button_label_card = []
+
+        self.button_label_card_attrs = []
+
         for i, (key, val) in enumerate(self.getter().items()):
             pb_delete, l_key, settingcard = self.addItem(key)
 
-            self.gl_elements.addWidget(pb_delete, i, 0)
-            self.gl_elements.addWidget(l_key, i, 1)
-            self.gl_elements.addWidget(settingcard, i, 2)
+            self.gl_elements.addWidget(pb_delete, i * 2, 0)
+            self.gl_elements.addWidget(l_key, i * 2, 1)
+            self.gl_elements.addItem(
+                QSpacerItem(
+                    0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+                ),
+                i * 2 + 1,
+                0,
+                1,
+                2,
+            )
+            self.gl_elements.addWidget(settingcard, i * 2, 2, 2, 1)
         return super().refresh()
 
     def addItem(self, key):
@@ -41,10 +58,13 @@ class DictSettingCard(SettingCard, Ui_DictSettingCard):
         def attrsetter(attrs, attr, val):
             attrs[attr] = val
 
-        attrs = {}
-        _type = self.attrgetter("element_type").get(key)
+        element_attrs = self.attrgetter("element_attrs")
+        if key not in element_attrs:
+            element_attrs[key] = {}
+        attrs = element_attrs[key]
+        _type = self.attrgetter("type")
         if _type != None:
-            attrs["type"] = _type
+            attrs["type"] = _type  # 优先使用已指定的类型
 
         settingcard = SettingCard(
             lambda key=key: self.getter()[key],
@@ -60,21 +80,21 @@ class DictSettingCard(SettingCard, Ui_DictSettingCard):
         pb_delete.setIcon(qta.icon("mdi.delete"))
         pb_delete.clicked.connect(lambda _, card=settingcard: self.delete(card))
 
-        self.button_label_card.append((pb_delete, l_key, settingcard))
+        self.button_label_card_attrs.append((pb_delete, l_key, settingcard, attrs))
 
         return pb_delete, l_key, settingcard
 
     def value(self):
-        return {i[1].text(): i[2].value() for i in self.button_label_card}
+        return {i[1].text(): i[2].value() for i in self.button_label_card_attrs}
 
     def delete(self, settingcard):
-        for i, (_, _, card) in enumerate(self.button_label_card):
+        for i, (_, _, card, _) in enumerate(self.button_label_card_attrs):
             if card == settingcard:
                 break
         else:
             return
 
-        self.button_label_card.pop(i)
+        self.button_label_card_attrs.pop(i)
 
         self.on_valueChanged()
         self.refresh()
@@ -97,9 +117,10 @@ class DictSettingCard(SettingCard, Ui_DictSettingCard):
         _type = SettingCard.TYPE_MAP[_type_key]
 
         self.getter()[key] = _type()
-        element_type = self.attrgetter("element_type")
-        element_type[key] = _type_key
-        self.attrsetter("element_type", element_type)
+        element_attrs = self.attrgetter("element_attrs")
+        if key not in element_attrs:
+            element_attrs[key] = {}
+        element_attrs[key]["type"] = _type_key
         self.addItem(key)
 
         self.on_valueChanged()

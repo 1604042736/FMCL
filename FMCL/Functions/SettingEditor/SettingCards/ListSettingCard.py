@@ -1,7 +1,7 @@
 import qtawesome as qta
 
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
-from PyQt5.QtWidgets import QWidget, QInputDialog, QSpacerItem
+from PyQt5.QtWidgets import QWidget, QInputDialog, QSpacerItem, QSizePolicy
 from qfluentwidgets import MessageBox
 
 from .SettingCard import SettingCard
@@ -57,37 +57,47 @@ class ListSettingCard(SettingCard, Ui_ListSettingCard):
 
         self.gl_elements.setAlignment(Qt.AlignmentFlag.AlignTop)
 
+        if self.attrgetter("element_attrs") == None:
+            self.attrsetter("element_attrs", dict())  # 保存元素的属性
+
+        self.card_operator_attrs = []
+
         self.refresh()
 
     def refresh(self):
+        element_attrs = self.attrgetter("element_attrs")
+        for i, (_, _, attrs) in enumerate(self.card_operator_attrs):
+            element_attrs[i] = attrs
+
         while self.gl_elements.count():
             item = self.gl_elements.takeAt(0)
             if item.widget() != None:
                 item.widget().deleteLater()
 
-        self.settingcard_operator = []
+        self.card_operator_attrs = []
 
         for i, val in enumerate(self.getter()):
 
             def setter(i, val):
                 self.getter()[i] = val
 
-            attrs = {}
+            if i not in element_attrs:
+                element_attrs[i] = {}
+            attrs = element_attrs[i]
             _type = self.attrgetter("type")
             if _type != None:
-                attrs["type"] = _type
+                attrs["type"] = _type  # 优先使用已指定的类型
 
             def attrsetter(attrs, attr, val):
                 attrs[attr] = val
 
             settingcard = SettingCard(
                 lambda i=i: self.getter()[i],
-                # 列表中元素类型相同
                 lambda attr, default=None, attrs=attrs: attrs.get(attr, default),
                 lambda val, i=i: setter(i, val),
                 lambda attr, val, attrs=attrs: attrsetter(attrs, attr, val),
             )
-            settingcard.valueChanged.connect(lambda _: self.sync())
+            settingcard.valueChanged.connect(lambda _: self.on_valueChanged())
 
             w_operator = ListSettingCardOperator(settingcard)
             w_operator.addRequest.connect(self.addAfter)
@@ -101,89 +111,107 @@ class ListSettingCard(SettingCard, Ui_ListSettingCard):
                 w_operator.pb_add.setEnabled(False)
                 w_operator.pb_delete.setEnabled(False)
 
-            self.gl_elements.addWidget(w_operator, i, 0)
-            self.gl_elements.addWidget(settingcard, i, 1)
-            self.settingcard_operator.append((settingcard, w_operator))
-        self.gl_elements.addItem(QSpacerItem(0, 0), i, 0)
+            # 一个元素在布局里占2行
+            self.gl_elements.addWidget(w_operator, i * 2, 0)
+            self.gl_elements.addItem(
+                QSpacerItem(
+                    0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
+                ),
+                i * 2 + 1,
+                0,
+            )
+            self.gl_elements.addWidget(settingcard, i * 2, 1, 2, 1)
+            self.card_operator_attrs.append((settingcard, w_operator, attrs))
         return super().refresh()
 
     def value(self):
-        return [settingcard.value() for settingcard, _ in self.settingcard_operator]
+        return [settingcard.value() for settingcard, _, _ in self.card_operator_attrs]
 
     def moveDown(self, settingcard):
-        for i, (card, _) in enumerate(self.settingcard_operator):
-            if card == settingcard and i < len(self.settingcard_operator) - 1:
+        for i, (card, _, _) in enumerate(self.card_operator_attrs):
+            if card == settingcard and i < len(self.card_operator_attrs) - 1:
                 break
         else:
             return  # 下移的是列表的最后一个元素
 
-        self.settingcard_operator[i], self.settingcard_operator[i + 1] = (
-            self.settingcard_operator[i + 1],
-            self.settingcard_operator[i],
+        self.card_operator_attrs[i], self.card_operator_attrs[i + 1] = (
+            self.card_operator_attrs[i + 1],
+            self.card_operator_attrs[i],
         )
-
         self.on_valueChanged()
         self.sync()
         self.refresh()
 
     def moveUp(self, settingcard):
-        for i, (card, _) in enumerate(self.settingcard_operator):
+        for i, (card, _, _) in enumerate(self.card_operator_attrs):
             if card == settingcard and i > 0:
                 break
         else:
             return
 
-        self.settingcard_operator[i], self.settingcard_operator[i - 1] = (
-            self.settingcard_operator[i - 1],
-            self.settingcard_operator[i],
+        self.card_operator_attrs[i], self.card_operator_attrs[i - 1] = (
+            self.card_operator_attrs[i - 1],
+            self.card_operator_attrs[i],
         )
 
         self.on_valueChanged()
         self.refresh()
 
     def moveTop(self, settingcard):
-        for i, (card, _) in enumerate(self.settingcard_operator):
+        for i, (card, _, _) in enumerate(self.card_operator_attrs):
             if card == settingcard and i > 0:
                 break
         else:
             return
 
-        self.settingcard_operator[i], self.settingcard_operator[0] = (
-            self.settingcard_operator[0],
-            self.settingcard_operator[i],
-        )
+        t = self.card_operator_attrs.pop(i)
+        self.card_operator_attrs.insert(0, t)
 
         self.on_valueChanged()
         self.refresh()
 
     def delete(self, settingcard):
         atleast = self.attrgetter("atleast", 0)
-        if len(self.settingcard_operator) <= atleast:
+        if len(self.card_operator_attrs) <= atleast:
             MessageBox(
                 self.tr("无法删除"),
                 self.tr("至少要有{atleast}个元素").format(atleast=atleast),
                 self.window(),
             ).exec()
             return
-        for i, (card, _) in enumerate(self.settingcard_operator):
+        for i, (card, _, _) in enumerate(self.card_operator_attrs):
             if card == settingcard:
                 break
         else:
             return
 
-        self.settingcard_operator.pop(i)
+        self.card_operator_attrs.pop(i)
 
         self.on_valueChanged()  # 注意两个语句的先后顺序
         self.refresh()
 
     def addAfter(self, settingcard):
-        for i, (card, _) in enumerate(self.settingcard_operator):
+        for i, (card, _, _) in enumerate(self.card_operator_attrs):
             if card == settingcard:
                 break
         else:
             return
 
-        self.getter().insert(i + 1, settingcard.type()())
+        _type_key, ok = QInputDialog.getItem(
+            self,
+            self.tr("添加"),
+            self.tr("请选择类型"),
+            SettingCard.TYPE_MAP.keys(),
+            editable=False,
+        )
+        if not ok:
+            return
+
+        _type = SettingCard.TYPE_MAP[_type_key]
+
+        self.getter().insert(i + 1, _type())
+        element_attrs = self.attrgetter("element_attrs")
+        element_attrs[i + 1]["type"] = _type_key
 
         self.on_valueChanged()
         self.refresh()
@@ -191,9 +219,7 @@ class ListSettingCard(SettingCard, Ui_ListSettingCard):
     @pyqtSlot(bool)
     def on_pb_add_clicked(self, _):
         _type_key = ""
-        if len(self.settingcard_operator) > 0:
-            _type = self.settingcard_operator[0][0].type()
-        elif self.attrgetter("type") != None:
+        if self.attrgetter("type") != None:
             _type = SettingCard.TYPE_MAP[self.attrgetter("type")]
         else:
             _type_key, ok = QInputDialog.getItem(
@@ -209,8 +235,8 @@ class ListSettingCard(SettingCard, Ui_ListSettingCard):
 
         self.getter().append(_type())
 
+        element_attrs = self.attrgetter("element_attrs")
         if _type_key:
-            # 在列表为空的情况下选一个类型最为列表元素的类型
-            self.attrsetter("type", _type_key)
+            element_attrs[len(self.getter()) - 1]["type"] = _type_key
 
         self.refresh()

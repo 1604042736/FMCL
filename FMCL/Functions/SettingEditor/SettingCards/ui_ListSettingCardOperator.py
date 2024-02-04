@@ -14,7 +14,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_ListSettingCardOperator(object):
     def setupUi(self, ListSettingCardOperator):
         ListSettingCardOperator.setObjectName("ListSettingCardOperator")
-        ListSettingCardOperator.resize(400, 300)
+        ListSettingCardOperator.resize(222, 300)
+        ListSettingCardOperator.setMaximumSize(QtCore.QSize(16777215, 16777215))
         ListSettingCardOperator.setWindowTitle("")
         self.gridLayout = QtWidgets.QGridLayout(ListSettingCardOperator)
         self.gridLayout.setObjectName("gridLayout")

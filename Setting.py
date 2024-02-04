@@ -1,3 +1,4 @@
+from copy import deepcopy
 import json
 import os
 import shutil
@@ -167,58 +168,78 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
 class ListSettingTrace(list):
     """跟踪设置中的列表项, 在该列表被修改时同时更改设置"""
 
+    instances = {}
+    new_count = {}
+
+    def __new__(cls, l, id: str, setting: "Setting"):
+        if id not in ListSettingTrace.instances:
+            ListSettingTrace.instances[id] = super().__new__(cls)
+            ListSettingTrace.new_count[id] = 0
+        ListSettingTrace.new_count[id] += 1
+        return ListSettingTrace.instances[id]
+
     def __init__(self, l, id: str, setting: "Setting"):
+        if ListSettingTrace.new_count[id] > 1:
+            return
         super().__init__(l)
         self.id = id
         self.setting = setting
 
-    def __setitem__(self, key, val):
-        super().__setitem__(key, val)
-        self.setting.set(self.id, self)
-
     def append(self, __object) -> None:
         super().append(__object)
-        self.setting.set(self.id, self)
+        self.setting.set(self.id, list(self))
 
     def pop(self, __index=-1):
         ret = super().pop(__index)
-        self.setting.set(self.id, self)
+        self.setting.set(self.id, list(self))
         return ret
 
     def insert(self, __index, __object):
         super().insert(__index, __object)
-        self.setting.set(self.id, self)
+        self.setting.set(self.id, list(self))
 
     def extend(self, __iterable):
         super().extend(__iterable)
-        self.setting.set(self.id, self)
+        self.setting.set(self.id, list(self))
 
     def remove(self, __value):
         super().remove(__value)
-        self.setting.set(self.id, self)
+        self.setting.set(self.id, list(self))
 
     def sort(self, *args):
         super().sort(*args)
-        self.setting.set(self.id, self)
+        self.setting.set(self.id, list(self))
 
     def __setitem__(self, *args):
         super().__setitem__(*args)
-        self.setting.set(self.id, self)
+        self.setting.set(self.id, list(self))
 
 
 class DictSettingTrace(dict):
+    instances = {}
+    new_count = {}
+
+    def __new__(cls, d, id: str, setting: "Setting"):
+        if id not in DictSettingTrace.instances:
+            DictSettingTrace.instances[id] = super().__new__(cls)
+            DictSettingTrace.new_count[id] = 0
+        DictSettingTrace.new_count[id] += 1
+        return DictSettingTrace.instances[id]
+
     def __init__(self, d, id: str, setting: "Setting"):
+        if DictSettingTrace.new_count[id] > 1:
+            return
         super().__init__(d)
         self.id = id
         self.setting = setting
 
     def __setitem__(self, *args):
         super().__setitem__(*args)
-        self.setting.set(self.id, self)
+        self.setting.set(self.id, dict(self))
 
     def pop(self) -> tuple:
         super().pop()
-        self.setting.set(self.id, self)
+        self.setting.set(self.id, dict(self))
 
 
 class Setting:
@@ -324,9 +345,9 @@ class Setting:
         else:
             raise KeyError(key)
         if isinstance(val, list):  # 对list设置项的操作将会被捕捉
-            return ListSettingTrace(val, key, self)
+            return ListSettingTrace(deepcopy(val), key, self)
         elif isinstance(val, dict):
-            return DictSettingTrace(val, key, self)
+            return DictSettingTrace(deepcopy(val), key, self)
         return val
 
     def items(self):
@@ -336,6 +357,12 @@ class Setting:
         self.modifiedsetting[key] = value
         if key in self.defaultsetting and self.defaultsetting[key] == value:
             self.modifiedsetting.pop(key)
+        # 被更改后要重置
+        # 不然一直都是旧的值
+        if key in ListSettingTrace.instances:
+            ListSettingTrace.instances.pop(key)
+        if key in DictSettingTrace.instances:
+            DictSettingTrace.instances.pop(key)
 
     def restore(self, id):
         """恢复默认设置"""
