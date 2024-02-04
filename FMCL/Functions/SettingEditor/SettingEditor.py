@@ -8,6 +8,7 @@ from PyQt5.QtWidgets import (
     QHBoxLayout,
     QSizePolicy,
     QSpacerItem,
+    qApp,
 )
 from qfluentwidgets import TransparentToolButton
 from Setting import Setting
@@ -94,12 +95,29 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                 setting.attrs[id]["callback"] = []
             setting.attrs[id]["callback"].append(lambda *_: self.refresh())
 
-            settingcard = self.setting.getAttr(
-                id, "settingcard", lambda id=id: SettingCard(id, self.setting)
-            )()
+            settingcard = self.setting.getAttr(id, "settingcard", lambda: None)()
+            if settingcard == None:
+
+                def attrsetter(attr, val, id):
+                    self.setting.attrs[id][attr] = val
+
+                settingcard = SettingCard(
+                    lambda default=None, id=id: self.setting.get(id, default),
+                    lambda attr, default=None, id=id: self.setting.getAttr(
+                        id, attr, default
+                    ),
+                    lambda val, id=id: self.setting.set(id, val),
+                    lambda attr, val, id=id: attrsetter(attr, val, id),
+                )
+
             self.gl_setting.addWidget(settingcard, row, 1, 1, 3)
             self.setting_cards[id] = settingcard
             row += 1
+
+        self.pb_refresh = TransparentToolButton()
+        self.pb_refresh.resize(46, 32)
+        self.pb_refresh.setIcon(qta.icon("mdi.refresh"))
+        self.pb_refresh.clicked.connect(lambda: self.refresh())
 
         self.checkCondition()
 
@@ -133,13 +151,6 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                 i.refresh()
         self.checkCondition()
 
-    def event(self, a0: QEvent) -> bool:
-        if a0.type() == QEvent.Type.Show:
-            self.refresh()
-        elif a0.type() == QEvent.Type.WindowActivate:
-            self.refresh()
-        return super().event(a0)
-
     def checkCondition(self):
         enable = {}
         disable = []
@@ -156,3 +167,11 @@ class SettingEditor(QWidget, Ui_SettingEditor):
             layout.setEnabled(enable[id])
             if id in self.setting_cards:
                 self.setting_cards[id].setEnabled(enable[id])
+
+    def event(self, a0: QEvent) -> bool:
+        if a0.type() == QEvent.Type.Show:
+            qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_refresh, "right"))
+        elif a0.type() == QEvent.Type.Hide:
+            qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_refresh))
+            self.pb_refresh.setParent(self)
+        return super().event(a0)

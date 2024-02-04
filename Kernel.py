@@ -215,15 +215,16 @@ class Kernel(QApplication):
 
     def execStartupFunctions(self):
         """运行启动项"""
-        startup_functions = Setting()["system.startup_functions"]
-        for function_name in startup_functions:
-            try:
-                self.execFunction(function_name)
-            except:
-                title = _translate("Kernel", "无法运行") + function_name
-                msg = traceback.format_exc()
-                logging.error(f"{title}:\n{msg}")
-                QMessageBox.critical(None, title, msg)
+        actions = Setting()["system.startup_functions"]
+        for action in actions:
+            for command in action["commands"]:
+                try:
+                    self.runCommand(command)
+                except:
+                    title = _translate("Kernel", "无法运行") + command
+                    msg = traceback.format_exc()
+                    logging.error(f"{title}:\n{msg}")
+                    QMessageBox.critical(None, title, msg)
 
     @staticmethod
     def getAllFunctions():
@@ -236,7 +237,9 @@ class Kernel(QApplication):
                 try:
                     functions[function_name] = Kernel.getFunction(function_name)
                 except:
-                    logging.warning(f"功能{function_name}将被忽略:\n{traceback.format_exc()}")
+                    logging.warning(
+                        f"功能{function_name}将被忽略:\n{traceback.format_exc()}"
+                    )
         return functions.values()
 
     @staticmethod
@@ -342,6 +345,49 @@ class Kernel(QApplication):
                 if ext == ".qm":
                     lang.append(name)
         return set(lang)
+
+    @staticmethod
+    def runCommand(command: str):
+        function, *args = command.split(maxsplit=1)
+        pargs = []
+        kwargs = {}
+        args = " ".join(args)
+        s = ""
+        i = 0
+        while i < len(args):
+            if args[i] == " ":
+                if "=" in s:
+                    exec(s, kwargs)
+                else:
+                    pargs.append(eval(s))
+                while i < len(args) and args[i] == " ":
+                    i += 1
+                s = ""
+            elif args[i] == "'":
+                s += args[i]
+                i += 1
+                while i < len(args) and args[i] != "'":
+                    s += args[i]
+                    i += 1
+                s += args[i]
+                i += 1
+            elif i == '"':
+                s += args[i]
+                i += 1
+                while i < len(args) and args[i] != '"':
+                    s += args[i]
+                    i += 1
+                s += args[i]
+                i += 1
+            else:
+                s += args[i]
+                i += 1
+        if s != "":
+            if "=" in s:
+                exec(s, kwargs)
+            else:
+                pargs.append(eval(s))
+        Kernel.execFunction(function, *pargs, **kwargs)
 
     @staticmethod
     def getAbout():

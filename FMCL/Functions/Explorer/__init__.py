@@ -33,8 +33,9 @@ def defaultSetting() -> dict:
     setting = Setting()
     if "system.startup_functions" in setting.defaultsetting:
         a = setting.defaultsetting.get("system.startup_functions")
-        if "Explorer" not in a:
-            a.insert(0, "Explorer")
+        action = {"commands": ["Explorer"]}
+        if action not in a:
+            a.insert(0, action)
     return {
         "explorer.desktop.background_image": "",
         "explorer.desktop.item_rightclicked_actions": [],
@@ -82,7 +83,9 @@ def defaultSettingAttr() -> dict:
         },
         "explorer.width": {"name": _translate("Explorer", "启动器高度")},
         "explorer.height": {"name": _translate("Explorer", "启动器宽度")},
-        "explorer.auto_sync_size": {"name": _translate("Explorer", "自动同步启动器大小")},
+        "explorer.auto_sync_size": {
+            "name": _translate("Explorer", "自动同步启动器大小")
+        },
     }
 
 

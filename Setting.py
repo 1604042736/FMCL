@@ -6,6 +6,7 @@ import multitasking
 from typing import Any, Literal, TypedDict, Callable
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import QWidget, QFileDialog
+import psutil
 from qfluentwidgets import setThemeColor, PrimaryPushButton
 
 _translate = QCoreApplication.translate
@@ -36,13 +37,18 @@ class SettingAttr(TypedDict):
 
     name: str  # 名称, 默认与id一样
     callback: list[Callable[[Any], None]]  # 回调函数, 在对应设置项被修改后调用
-    enable_condition: Callable[["Setting"], bool]  # 启用条件, 禁用后, 它的子设置也会被禁用
+    enable_condition: Callable[
+        ["Setting"], bool
+    ]  # 启用条件, 禁用后, 它的子设置也会被禁用
     settingcard: Callable[[], QWidget]  # 设置卡片, 默认由SettingEditor设置
     side_widgets: list[Callable[[], QWidget]]  # 放在标签旁边的控件
     type: Literal["directory", "file", "color"]  # 非基本类型
-    # 一下类型将用于List设置项
+    # 以下属性将用于List设置项
     static: bool  # 是否为静态(不可更改, 当成tuple)
     atleast: int  # 至少要有几项
+    # 以下属性将用户Int或Float设置项
+    min_value: int | float  # 最小值
+    max_value: int | float  # 最大值
 
 
 def defaultSettingAttr() -> dict[str, SettingAttr]:
@@ -58,7 +64,9 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
             os.makedirs(temp_dir)
 
     def choosetempdir():
-        dir = QFileDialog.getExistingDirectory(None, _translate("Setting", "选择缓存文件夹"))
+        dir = QFileDialog.getExistingDirectory(
+            None, _translate("Setting", "选择缓存文件夹")
+        )
         if dir:
             Setting().set("system.temp_dir", dir)
 
@@ -66,6 +74,13 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
         temp_dir = Setting()["system.temp_dir"]
         shutil.rmtree(temp_dir)
         os.makedirs(temp_dir)
+
+    def choosegamedir():
+        dir = QFileDialog.getExistingDirectory(
+            None, _translate("Setting", "选择游戏文件夹")
+        )
+        if dir:
+            Setting().get("game.directories").append(dir)
 
     def choosejavabutton():
         pb_choosejava = PrimaryPushButton()
@@ -100,6 +115,12 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
         pb_cleantempdir.clicked.connect(cleantempdir)
         return pb_cleantempdir
 
+    def choosegamedirbutton():
+        pb_choosegamedir = PrimaryPushButton()
+        pb_choosegamedir.setText(_translate("Setting", "选择文件夹"))
+        pb_choosegamedir.clicked.connect(choosegamedir)
+        return pb_choosegamedir
+
     return {
         "system": {"name": _translate("Setting", "系统")},
         "system.startup_functions": {"name": _translate("Setting", "启动项")},
@@ -118,6 +139,7 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
             "name": _translate("Setting", "游戏目录"),
             "type": "directory",
             "atleast": 1,
+            "side_widgets": [choosegamedirbutton],
         },
         "game.auto_choose_java": {"name": _translate("Setting", "自动选择Java")},
         "game.java_paths": {
@@ -127,7 +149,11 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
         },
         "game.width": {"name": _translate("Setting", "游戏窗口宽度")},
         "game.height": {"name": _translate("Setting", "游戏窗口高度")},
-        "game.maxmem": {"name": _translate("Setting", "最大内存")},
+        "game.maxmem": {
+            "name": _translate("Setting", "最大内存"),
+            "min_value": 512,
+            "max_value": int(psutil.virtual_memory().total / 1024 / 1024),
+        },
         "users": {"name": _translate("Setting", "用户")},
         "users.selectindex": {"name": _translate("Setting", "选择用户索引")},
         "users.authlibinjector_servers": {"name": _translate("Setting", "认证服务器")},
@@ -173,6 +199,25 @@ class ListSettingTrace(list):
 
     def sort(self, *args):
         super().sort(*args)
+        self.setting.set(self.id, self)
+
+    def __setitem__(self, *args):
+        super().__setitem__(*args)
+        self.setting.set(self.id, self)
+
+
+class DictSettingTrace(dict):
+    def __init__(self, d, id: str, setting: "Setting"):
+        super().__init__(d)
+        self.id = id
+        self.setting = setting
+
+    def __setitem__(self, *args):
+        super().__setitem__(*args)
+        self.setting.set(self.id, self)
+
+    def pop(self) -> tuple:
+        super().pop()
         self.setting.set(self.id, self)
 
 
@@ -274,15 +319,15 @@ class Setting:
     def __getitem__(self, key):
         if key in self.modifiedsetting:
             val = self.modifiedsetting[key]
-            if isinstance(val, list):  # 对list设置项的操作将会被捕捉
-                return ListSettingTrace(val, key, self)
-            return val
         elif key in self.defaultsetting:
             val = self.defaultsetting[key]
-            if isinstance(val, list):  # 对list设置项的操作将会被捕捉
-                return ListSettingTrace(val, key, self)
-            return val
-        raise KeyError(key)
+        else:
+            raise KeyError(key)
+        if isinstance(val, list):  # 对list设置项的操作将会被捕捉
+            return ListSettingTrace(val, key, self)
+        elif isinstance(val, dict):
+            return DictSettingTrace(val, key, self)
+        return val
 
     def items(self):
         return (self.defaultsetting | self.modifiedsetting).items()

@@ -66,17 +66,17 @@ class Desktop(ListWidget):
         menu = RoundMenu(self)
 
         if item:
-            action_functions = Setting()["explorer.desktop.item_rightclicked_actions"]
-            for action_function in action_functions:
-                function = Kernel.getFunction(action_function)
-                info = Kernel.getFunctionInfo(function)
-                action = QAction(self)
-                action.setText(info["name"])
-                action.setIcon(info["icon"])
-                action.triggered.connect(
-                    lambda _, f=action_function: Kernel.execFunction(f, item.text())
+            actions = Setting()["explorer.desktop.item_rightclicked_actions"]
+            for action in actions:
+                menu_action = QAction(self)
+                menu_action.setText(action["name"])
+                menu_action.setIcon(eval(action["icon"]))
+                menu_action.triggered.connect(
+                    lambda _, a=action: list(
+                        Kernel.runCommand(i.format(name=item.text())) for i in a["commands"]
+                    )
                 )
-                menu.addAction(action)
+                menu.addAction(menu_action)
         else:
             a_refresh = QAction(self.tr("刷新"), self)
             a_refresh.setIcon(qta.icon("mdi.refresh"))
@@ -98,17 +98,17 @@ class Desktop(ListWidget):
             menu.addAction(a_background_image)
             menu.addAction(a_install_modpack)
 
-            action_functions = Setting()["explorer.desktop.rightclicked_actions"]
-            for action_function in action_functions:
-                function = Kernel.getFunction(action_function)
-                info = Kernel.getFunctionInfo(function)
-                action = QAction(self)
-                action.setText(info["name"])
-                action.setIcon(info["icon"])
-                action.triggered.connect(
-                    lambda _, f=action_function: Kernel.execFunction(f)
+            actions = Setting()["explorer.desktop.rightclicked_actions"]
+            for action in actions:
+                menu_action = QAction(self)
+                menu_action.setText(action["name"])
+                menu_action.setIcon(eval(action["icon"]))
+                menu_action.triggered.connect(
+                    lambda _, a=action: list(
+                        Kernel.runCommand(i) for i in a["commands"]
+                    )
                 )
-                menu.addAction(action)
+                menu.addAction(menu_action)
 
         menu.exec(QCursor.pos())
 

@@ -9,10 +9,7 @@ _translate = QCoreApplication.translate
 
 
 def functionInfo():
-    return {
-        "name": _translate("UserManager", "用户管理"),
-        "icon": qta.icon("ph.users")
-    }
+    return {"name": _translate("UserManager", "用户管理"), "icon": qta.icon("ph.users")}
 
 
 def defaultSettingAttr() -> dict:

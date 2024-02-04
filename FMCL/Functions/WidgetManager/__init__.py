@@ -10,7 +10,7 @@ _translate = QCoreApplication.translate
 def functionInfo():
     return {
         "name": _translate("WidgetManager", "控件管理器"),
-        "icon": qta.icon("mdi.widgets")
+        "icon": qta.icon("mdi.widgets"),
     }
 
 
@@ -18,8 +18,13 @@ def defaultSetting() -> dict:
     setting = Setting()
     if "explorer.title_rightclicked_actions" in setting.defaultsetting:
         a = setting.defaultsetting["explorer.title_rightclicked_actions"]
-        if "WidgetManager" not in a:
-            a.insert(0, "WidgetManager")
+        action = {
+            "name": _translate("WidgetManager", "控件管理器"),
+            "icon": 'qta.icon("mdi.widgets")',
+            "commands": ["WidgetManager"],
+        }
+        if action not in a:
+            a.insert(0, action)
     return {}
 
 

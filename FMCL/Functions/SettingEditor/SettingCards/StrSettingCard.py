@@ -1,25 +1,22 @@
-from Kernel import Kernel
-from qfluentwidgets import LineEdit
-
 from .SettingCard import SettingCard
 
+from .ui_StrSettingCard import Ui_StrSettingCard
 
-class StrSettingCard(SettingCard):
-    def __init__(self, id: str, setting) -> None:
-        super().__init__(id, setting)
-        self.w_value = LineEdit(self)
-        self.w_value.setText(self.setting.get(id))
-        self.w_value.editingFinished.connect(self.sync)
-        self._layout.addWidget(self.w_value)
+
+class StrSettingCard(SettingCard, Ui_StrSettingCard):
+    def __init__(self, getter, attrgetter, setter, attrsetter) -> None:
+        super().__init__(getter, attrgetter, setter, attrsetter)
+        self.setupUi(self)
+        self.le_val.setText(self.getter())
+        self.le_val.editingFinished.connect(self.on_valueChanged)
 
         self.setToolTip(self.tr("输入完后按回车键以保存"))
 
-    def sync(self):
-        self.setting.set(self.id, self.w_value.text())
-        return super().sync()
-
     def refresh(self):
-        self.w_value.editingFinished.disconnect(self.sync)
-        self.w_value.setText(self.setting.get(self.id))
-        self.w_value.editingFinished.connect(self.sync)
+        self.le_val.editingFinished.disconnect(self.on_valueChanged)
+        self.le_val.setText(self.getter())
+        self.le_val.editingFinished.connect(self.on_valueChanged)
         return super().refresh()
+
+    def value(self):
+        return self.le_val.text()

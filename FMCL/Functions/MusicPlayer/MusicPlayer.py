@@ -28,7 +28,6 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
         super().__init__()
         self.setWindowIcon(qta.icon("ei.music"))
         self.setupUi(self)
-        qApp.installEventFilter(self)
 
         self.pb_add.setIcon(qta.icon("msc.add"))
         self.pb_remove.setIcon(qta.icon("msc.remove"))
@@ -68,6 +67,8 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
 
         for i in setting["musicplayer.musiclist"]:
             self.playlist.addMedia(QMediaContent(QUrl.fromLocalFile(i)))
+
+        qApp.installEventFilter(self)
 
     def refresh(self):
         musiclist = []

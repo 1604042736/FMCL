@@ -44,14 +44,15 @@ QPushButton:checked{
 
         self.title_rightclicked_actions = [self.a_showdesktop]
 
-        for name in Setting().get("explorer.title_rightclicked_actions"):
-            action = QAction(self)
-            func = Kernel.getFunction(name)
-            info = Kernel.getFunctionInfo(func)
-            action.setText(info["name"])
-            action.setIcon(info["icon"])
-            action.triggered.connect(lambda _, n=name: Kernel.execFunction(n))
-            self.title_rightclicked_actions.append(action)
+        actions = Setting().get("explorer.title_rightclicked_actions")
+        for action in actions:
+            menu_action = QAction(self)
+            menu_action.setText(action["name"])
+            menu_action.setIcon(eval(action["icon"]))
+            menu_action.triggered.connect(
+                lambda _, a=action: list(Kernel.runCommand(i) for i in a["commands"])
+            )
+            self.title_rightclicked_actions.append(menu_action)
 
         self.showDesktop()
 

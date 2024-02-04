@@ -1,24 +1,22 @@
-from qfluentwidgets import SpinBox
-
 from .SettingCard import SettingCard
 
+from .ui_IntSettingCard import Ui_IntSettingCard
 
-class IntSettingCard(SettingCard):
-    def __init__(self, id: str, setting) -> None:
-        super().__init__(id, setting)
-        self.w_value = SpinBox(self)
-        self.w_value.setMaximum(2**31 - 1)
-        self.w_value.setMinimum(-(2**31))
-        self.w_value.setValue(self.setting.get(id))
-        self.w_value.valueChanged.connect(self.sync)
-        self._layout.addWidget(self.w_value)
 
-    def sync(self):
-        self.setting.set(self.id, self.w_value.value())
-        return super().sync()
+class IntSettingCard(SettingCard, Ui_IntSettingCard):
+    def __init__(self, getter, attrgetter, setter,attrsetter) -> None:
+        super().__init__(getter, attrgetter, setter,attrsetter)
+        self.setupUi(self)
+        self.sb_val.setMaximum(self.attrgetter("max_value", 2**31 - 1))
+        self.sb_val.setMinimum(self.attrgetter("min_value", -(2**31)))
+        self.sb_val.setValue(self.getter())
+        self.sb_val.valueChanged.connect(self.on_valueChanged)
 
     def refresh(self):
-        self.w_value.valueChanged.disconnect(self.sync)
-        self.w_value.setValue(self.setting.get(self.id))
-        self.w_value.valueChanged.connect(self.sync)
+        self.sb_val.valueChanged.disconnect(self.on_valueChanged)
+        self.sb_val.setValue(self.getter())
+        self.sb_val.valueChanged.connect(self.on_valueChanged)
         return super().refresh()
+
+    def value(self):
+        return self.sb_val.value()

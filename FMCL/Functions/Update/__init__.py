@@ -15,21 +15,15 @@ def defaultSetting() -> dict:
     setting = Setting()
     if "system.startup_functions" in setting.defaultsetting:
         a = setting.defaultsetting.get("system.startup_functions")
-        if "Update" not in a:
-            a.insert(1, "Update")
+        action = {"commands": ["Update True"]}
+        if action not in a:
+            a.insert(1, action)
     return {}
 
 
-fisrt_run = True
-
-
-def main():
-    global fisrt_run
-    if "Update" not in Setting().get("system.startup_functions", tuple()):
-        fisrt_run = False
-    if fisrt_run:
+def main(only_check=False):
+    if only_check:
         update = Update()
-        fisrt_run = False
     else:
         update = Update()
         update.show()
