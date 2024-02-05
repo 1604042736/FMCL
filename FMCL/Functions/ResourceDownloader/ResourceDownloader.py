@@ -106,18 +106,24 @@ class ResourceDownloader(QWidget, Ui_ResourceDownloader):
         self.search_task = Task(
             self.tr("搜索资源"),
             taskfunc=lambda _: self.search(
-                self.le_keyword.text(), sources, categories, sortby, project_type
+                self.le_keyword.text(),
+                sources,
+                categories,
+                sortby,
+                project_type,
+                self.sb_limit.value(),
+                self.sb_page.value(),
             ),
         )
         self.search_task.finished.connect(self.on_searchFinsihed)
         self.search_task.start()
 
-    def search(self, keyword, sources, categories, sortby, project_type):
+    def search(self, keyword, sources, categories, sortby, project_type, limit, page):
         result = []
         for source in sources:
             if source == "modrinth":
                 api = self.modrinthapi
-                args = {"query": keyword}
+                args = {"query": keyword, "limit": limit, "offset": (page - 1) * limit}
                 facets = []
                 if categories:
                     for category in categories:
