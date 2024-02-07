@@ -1,3 +1,4 @@
+import os
 import qtawesome as qta
 from Core import Version
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QEvent
@@ -49,6 +50,14 @@ class GameInfo(QWidget, Ui_GameInfo):
     @pyqtSlot(bool)
     def on_pb_opendir_clicked(self, _):
         self.game.open_directory()
+
+    @pyqtSlot(bool)
+    def on_pb_resourcepack_clicked(self, _):
+        os.startfile(self.game.get_resourcepacks_path())
+
+    @pyqtSlot(bool)
+    def on_pb_shaderpack_clicked(self, _):
+        os.startfile(self.game.get_shaderpacks_path())
 
     @pyqtSlot(bool)
     def on_pb_delete_clicked(self, _):
