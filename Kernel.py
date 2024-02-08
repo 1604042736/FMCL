@@ -56,6 +56,10 @@ class Kernel(QApplication):
         splash.show()
         self.processEvents()
 
+        if not os.path.exists(DEFAULT_SETTING_PATH):
+            with open(DEFAULT_SETTING_PATH, mode="w", encoding="utf-8") as file:
+                file.write("{}")
+
         # 在未加载翻译之前不能使用Setting
         tempdir = json.load(open(DEFAULT_SETTING_PATH, encoding="utf-8")).get(
             "system.temp_dir", "FMCL/Temp"
@@ -114,10 +118,10 @@ class Kernel(QApplication):
                 (
                     [
                         f"{default_path}/Functions/{i}/Translations"
-                        for i in os.listdir("{default_path}/Functions")
+                        for i in os.listdir(f"{default_path}/Functions")
                     ]
                 )
-                if os.path.exists("{default_path}/Functions")
+                if os.path.exists(f"{default_path}/Functions")
                 else []
             )
             + (
@@ -154,15 +158,12 @@ class Kernel(QApplication):
         """加载翻译"""
         logging.info("加载翻译...")
         # 在未加载翻译之前不能使用Setting
-        if os.path.exists(DEFAULT_SETTING_PATH):
-            lang = (
-                json.load(open(DEFAULT_SETTING_PATH, encoding="utf-8")).get(
-                    "language.type", "简体中文"
-                )
-                + ".qm"
+        lang = (
+            json.load(open(DEFAULT_SETTING_PATH, encoding="utf-8")).get(
+                "language.type", "简体中文"
             )
-        else:
-            lang = "简体中文.qm"
+            + ".qm"
+        )
         self.__translators = []  # 防止Translator被销毁
         # QTranslator优先搜索最新安装的文件
         for i in self.getTranslationPath():

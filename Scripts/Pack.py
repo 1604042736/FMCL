@@ -45,6 +45,8 @@ zipfile_bytes=io.BytesIO({open(zippath,mode='rb').read()})"""
 
 
 def main():
+    if not os.path.exists(f"{root}/Pack"):
+        os.makedirs(f"{root}/Pack")
     with open(f"{root}/Pack/__init__.py", mode="w") as file:
         file.write("")
     for task in tasks:

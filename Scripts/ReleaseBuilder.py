@@ -2,19 +2,17 @@ import os
 import shutil
 import sys
 import zipapp
-from typing import TextIO
 import traceback
 import minecraft_launcher_lib as mll
+from zipfile import ZipFile
 
 from Pack import main
 
-root=os.path.abspath("..")
+root = os.path.abspath("..")
 
 
-class ReleaseBuilder(TextIO):
+class ReleaseBuilder:
     """构建一个Release"""
-    stdout = sys.stdout  # 保存原来的stdout
-    indent = 0  # 当前的缩进
 
     def __init__(self, version) -> None:
         self.version = version
@@ -27,15 +25,13 @@ class ReleaseBuilder(TextIO):
         def wrap(*args):
             try:
                 print(f"{func.__doc__}...")
-                ReleaseBuilder.indent += 1
                 func(*args)
-                ReleaseBuilder.indent -= 1
                 print(f"{func.__doc__}完成")
             except:
-                ReleaseBuilder.indent -= 1
                 traceback.print_exc()
                 print(f"{func.__doc__}失败")
                 exit()
+
         return wrap
 
     @call_build
@@ -46,53 +42,60 @@ class ReleaseBuilder(TextIO):
     @call_build
     def build_pyz(self):
         """生成pyzw文件"""
+
         def pack_filter(path):
             """过滤函数"""
-            path_str = str(path).replace('\\', '/')
-            if path_str.endswith('.py') and "Scripts"not in path_str and "FMCL"not in path_str:
-                if os.path.isfile(root+"/"+path_str):
+            path_str = str(path).replace("\\", "/")
+            if (
+                path_str.endswith(".py")
+                and "Scripts" not in path_str
+                and "FMCL" not in path_str
+            ):
+                if os.path.isfile(root + "/" + path_str):
                     print(f'打包"{path_str}"')
                 return True
             else:
                 return False
 
-        zipapp.create_archive(root+"/",
-                              os.path.join(
-                                  self.release_path, f'FMCL_{self.version}.pyzw'),
-                              main='Main:main',
-                              filter=pack_filter)
+        zipapp.create_archive(
+            root + "/",
+            os.path.join(self.release_path, f"FMCL_{self.version}.pyzw"),
+            main="Main:main",
+            filter=pack_filter,
+        )
 
     @call_build
     def build_exe(self):
         """生成exe文件"""
-        icon_dir = os.path.abspath(f"{root}/Resources/Icon/FMCL.ico")
-        file = f"{root}/Main.py"
-        name = f'FMCL_{self.version}'
-        distpath = self.release_path
-        workpath = self.release_path+'/build'
-        print(sys.path)
-        arg = ' '.join([
-            "pyinstaller",
-            "-F",
-            file,
-            "-w",
-            "-i",
-            icon_dir,
-            "--specpath",
-            self.release_path,
-            "-n",
-            name,
-            "--distpath",
-            distpath,
-            "--workpath",
-            workpath,
-            "--add-data",
-            f"{mll.__path__[0]}\\version.txt;minecraft_launcher_lib"
-        ])
-        print(f"执行 {arg}")
-        os.system(arg)
-        os.remove(f"{self.release_path}/{name}.spec")
-        shutil.rmtree(workpath)
+        icon_path = os.path.join(root, "Resources", "Icon", "FMCL.ico")
+        pyzw_path = os.path.join(self.release_path, f"FMCL_{self.version}.pyzw")
+        extract_path = os.path.join(self.release_path, f"FMCL_{self.version}")
+        with ZipFile(pyzw_path) as zipfile:
+            zipfile.extractall(extract_path)
+        os.remove(f"{extract_path}/__main__.py")
+        args = [
+            f"cd {extract_path}",
+            "&",
+            "nuitka",
+            "--windows-disable-console",
+            "--standalone",
+            "--mingw64",
+            "--show-memory",
+            "--show-progress",
+            "--enable-plugin=pyqt5",
+            f"--windows-icon-from-ico={icon_path}",
+            "--output-dir=.",
+            "Main.py",
+        ]
+        print(f"执行 {' '.join(args)}")
+        os.system(" ".join(args))
+
+        if not os.path.exists(f"{extract_path}/Main.dist/minecraft_launcher_lib"):
+            os.makedirs(f"{extract_path}/Main.dist/minecraft_launcher_lib")
+        shutil.copy(
+            f"{mll.__path__[0]}/version.txt",
+            f"{extract_path}/Main.dist/minecraft_launcher_lib/version.txt",
+        )
 
     def build(self):
         """生成"""
@@ -100,11 +103,7 @@ class ReleaseBuilder(TextIO):
         self.build_pyz()
         self.build_exe()
 
-    def write(self, text):
-        self.stdout.write(f"{' '*4*self.indent}{text}")
-
 
 if __name__ == "__main__":
     builder = ReleaseBuilder(sys.argv[1])
-    sys.stdout = builder
     builder.build()
