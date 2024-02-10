@@ -43,7 +43,7 @@ class Kernel(QApplication):
         super().__init__(argv)
         self.setWindowIcon(QIcon(":/Icon/FMCL.ico"))
         self.setApplicationName("FMCL")
-        self.setApplicationVersion("3.3")
+        self.setApplicationVersion("3.4")
 
         cur_path = os.path.abspath(".")
         if cur_path not in sys.path:
