@@ -1,6 +1,7 @@
 """
 参考https://docs.modrinth.com/
 """
+
 from datetime import datetime
 import json
 import logging
@@ -65,9 +66,9 @@ class ModrinthProjectModel(TypedDict, total=False):
         "private",
         "unknown",
     ]  # required
-    requested_status: None | Literal[
-        "approved", "archived", "unlisted", "private", "draft"
-    ]
+    requested_status: (
+        None | Literal["approved", "archived", "unlisted", "private", "draft"]
+    )
     additional_categories: list[str]
     issues_url: str | None
     source_url: str | None
@@ -263,6 +264,7 @@ class ModrinthAPI:
         return {
             "release": _translate("ModrinthAPI", "正式版"),
             "beta": _translate("ModrinthAPI", "测试版"),
+            "alpha": _translate("ModrinthAPI", "预览版"),
             "required": _translate("ModrinthAPI", "必需"),
             "optional": _translate("ModrinthAPI", "可选"),
             "adventure": _translate("ModrinthAPI", "冒险"),
@@ -298,8 +300,6 @@ class ModrinthAPI:
             "resourcepack": _translate("ModrinthAPI", "资源包"),
             "shader": _translate("ModrinthAPI", "光影"),
             "release": _translate("ModrinthAPI", "正式版"),
-            "beta": _translate("ModrinthAPI", "测试版"),
-            "alpha": _translate("ModrinthAPI", "预览版"),
         }
 
     def get_sortby(self):

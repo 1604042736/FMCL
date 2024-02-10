@@ -54,5 +54,5 @@ class Ui_ResDetail(object):
 
     def retranslateUi(self, ResDetail):
         _translate = QtCore.QCoreApplication.translate
-        ResDetail.setWindowTitle(_translate("ResDetail", "模组详情"))
+        ResDetail.setWindowTitle(_translate("ResDetail", "资源详情"))
 from qfluentwidgets import ScrollArea, TreeWidget

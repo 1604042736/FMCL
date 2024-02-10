@@ -1,4 +1,5 @@
 """对minecraft_launcher_lib的部分函数进行改写, 以使用多线程"""
+
 import logging
 import random
 import subprocess
@@ -164,7 +165,7 @@ class Installer:
                             )
 
                 task_work = Task(
-                    f'{_translate("Installer","处理")}{i["name"]}',
+                    _translate("Installer", "处理") + i["name"],
                     task,
                     lambda callback, c=count, i=i: work(c, i, callback),
                 )
@@ -221,7 +222,7 @@ class Installer:
             tasks = []
             for i, value in enumerate(assets_data["objects"].values()):
                 task_download = Task(
-                    f'{_translate("Installer","下载")}{value["hash"]}',
+                    _translate("Installer", "下载") + value["hash"],
                     task,
                     lambda callback, value=value: download_file(
                         "https://resources.download.minecraft.net/"
@@ -247,7 +248,9 @@ class Installer:
                 task_download.start()
                 callback.get("setProgress", empty)(i + 1)
 
-        task_work = Task(_translate("Installer", "获取资源"), task, work, [task_prepare])
+        task_work = Task(
+            _translate("Installer", "获取资源"), task, work, [task_prepare]
+        )
         return task
 
     def do_version_install(
@@ -433,7 +436,7 @@ class Installer:
 
         # Make sure, the base version is installed
         task_install_mc = Task(
-            f'{_translate("Installer","安装")}{minecraft_version}',
+            _translate("Installer", "安装") + minecraft_version,
             callback.get("getCurTask", lambda _: None)(),
             lambda callback: self.install_minecraft_version(
                 minecraft_version, path, callback=callback
@@ -515,7 +518,7 @@ class Installer:
 
         # Install the rest with the vanilla function
         task_install_mc = Task(
-            f'{_translate("Installer","安装")}{forge_version_id}',
+            _translate("Installer", "安装") + forge_version_id,
             callback.get("getCurTask", lambda _: None)(),
             lambda callback: self.install_minecraft_version(
                 forge_version_id, str(path), callback=callback
@@ -566,7 +569,7 @@ class Installer:
 
         # Make sure the Minecraft version is installed
         task_install_mc = Task(
-            f'{_translate("Installer","安装")}{minecraft_version}',
+            _translate("Installer", "安装") + minecraft_version,
             callback.get("getCurTask", lambda _: None)(),
             lambda callback: self.install_minecraft_version(
                 minecraft_version, path, callback=callback
@@ -589,7 +592,7 @@ class Installer:
         download_file(installer_download_url, installer_path, callback=callback)
 
         # Run the installer see https://fabricmc.net/wiki/install#cli_installation
-        callback.get("setStatus", empty)(_translate("Instaler", "运行Fabric安装器"))
+        callback.get("setStatus", empty)(_translate("Installer", "运行Fabric安装器"))
         command = [
             "java" if java is None else str(java),
             "-jar",
@@ -615,7 +618,7 @@ class Installer:
         fabric_minecraft_version = f"fabric-loader-{loader_version}-{minecraft_version}"
 
         task_install_mc = Task(
-            f'{_translate("Installer","安装")}{fabric_minecraft_version}',
+            _translate("Installer", "安装") + fabric_minecraft_version,
             callback.get("getCurTask", lambda _: None)(),
             lambda callback: self.install_minecraft_version(
                 fabric_minecraft_version, path, callback=callback
@@ -754,7 +757,9 @@ class Installer:
                 )
 
             if "fabric-loader" in index["dependencies"]:
-                name = _translate("Installer","为{minecraft_version}安装Fabric{fabric_loader}").format(
+                name = _translate(
+                    "Installer", "为{minecraft_version}安装Fabric{fabric_loader}"
+                ).format(
                     minecraft_version=index["dependencies"]["minecraft"],
                     fabric_loader=index["dependencies"]["fabric-loader"],
                 )
@@ -775,7 +780,9 @@ class Installer:
                 )
 
             if "quilt-loader" in index["dependencies"]:
-                name = _translate("Installer","为{minecraft_version}安装Quilt{quilt_loader}").format(
+                name = _translate(
+                    "Installer", "为{minecraft_version}安装Quilt{quilt_loader}"
+                ).format(
                     minecraft_version=index["dependencies"]["minecraft"],
                     quilt_loader=index["dependencies"]["quilt-loader"],
                 )
@@ -822,7 +829,7 @@ class Installer:
 
         # Make sure the Minecraft version is installed
         task_install_mc = Task(
-            f'{_translate("Installer","安装")}{minecraft_version}',
+            _translate("Installer","安装")+minecraft_version,
             callback.get("getCurTask", lambda _: None)(),
             lambda callback: self.install_minecraft_version(
                 minecraft_version, path, callback=callback
@@ -871,7 +878,7 @@ class Installer:
         # Install all libs of quilt
         quilt_minecraft_version = f"quilt-loader-{loader_version}-{minecraft_version}"
         task_install_mc = Task(
-            f'{_translate("Installer","安装")}{quilt_minecraft_version}',
+            _translate("Installer","安装")+quilt_minecraft_version,
             callback.get("getCurTask", lambda _: None)(),
             lambda callback: self.install_minecraft_version(
                 quilt_minecraft_version, path, callback=callback

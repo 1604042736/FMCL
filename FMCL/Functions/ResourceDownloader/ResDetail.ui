@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>模组详情</string>
+   <string>资源详情</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">

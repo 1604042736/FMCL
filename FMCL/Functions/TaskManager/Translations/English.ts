@@ -4,14 +4,39 @@
 <context>
     <name>TaskManager</name>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/TaskManager/__init__.py" line="12"/>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/TaskManager/__init__.py" line="22"/>
         <source>任务管理器</source>
         <translation>Task Manager</translation>
     </message>
     <message>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/TaskManager/ui_TaskManager.py" line="36"/>
+        <source>终止</source>
+        <translation>Terminate</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/TaskManager/ui_TaskManager.py" line="37"/>
+        <source>名称</source>
+        <translation>Name</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/TaskManager/ui_TaskManager.py" line="38"/>
+        <source>状态</source>
+        <translation>Status</translation>
+    </message>
+    <message>
         <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/TaskManager/ui_TaskManager.py" line="39"/>
-        <source>结束</source>
-        <translation>Stop</translation>
+        <source>进度</source>
+        <translation>Progress</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/TaskManager/ui_TaskManager.py" line="40"/>
+        <source>是否在运行</source>
+        <translation>Whether it is running</translation>
+    </message>
+    <message>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/TaskManager/TaskManager.py" line="90"/>
+        <source>完成</source>
+        <translation>Complete</translation>
     </message>
 </context>
 </TS>

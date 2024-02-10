@@ -30,10 +30,12 @@ class ModrinthVersionItem(VersionItem):
         info = []
 
         info.append(translations[version["version_type"]])
-        info.append(f'{self.tr("下载量")}: {version["downloads"]}')
-        info.append(f'{self.tr("发布")}: {self.api.get_time(version["date_published"])}')
-        info.append(f'{self.tr("加载器")}: {"|".join(version["loaders"])}')
-        info.append(f'{self.tr("适用版本")}: {"|".join(version["game_versions"])}')
+        info.append(self.tr("下载量") + f': {version["downloads"]}')
+        info.append(
+            self.tr("发布日期") + f': {self.api.get_time(version["date_published"])}'
+        )
+        info.append(self.tr("加载器") + f': {"|".join(version["loaders"])}')
+        info.append(self.tr("适用版本") + f': {"|".join(version["game_versions"])}')
 
         self.l_info.setText(", ".join(info))
 

@@ -33,7 +33,9 @@ class SaveItem(QWidget, Ui_SaveItem):
 
         box = MessageBox(
             self.tr("你确定要删除这个世界吗") + "?",
-            f'"{self.save.levelname}"将会失去很久! (真的很久!)',
+            self.tr('"{levelname}"将会失去很久! (真的很久!)').format(
+                levelname=self.save.levelname
+            ),
             self.window(),
         )
         box.yesSignal.connect(confirmDelete)

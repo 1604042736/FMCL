@@ -46,7 +46,7 @@ class Task(QThread):
             for task in tasks:
                 if not task.isFinished():
                     callback.get("setStatus", lambda _: None)(
-                        f'{_translate("Task","等待")} {task.name}'
+                        _translate("Task", "等待") + f" {task.name}"
                     )
                     break
             else:
@@ -67,11 +67,15 @@ class Task(QThread):
         waittasks: list["Task"] = None,
         exception_handler: list[Callable[[Exception], bool]] = None,
     ) -> None:
-        if threading.current_thread().getName() != "MainThread":  # 子线程的Task已在主线程中初始化过
+        if (
+            threading.current_thread().getName() != "MainThread"
+        ):  # 子线程的Task已在主线程中初始化过
             return
         super().__init__(parent)
         self.taskfunc = taskfunc  # 要运行的函数
-        self.waittasks: list[Task] = waittasks if waittasks != None else []  # 等待的任务
+        self.waittasks: list[Task] = (
+            waittasks if waittasks != None else []
+        )  # 等待的任务
         self.name: str = name  # 名称
         self.status: str = ""  # 状态
         self.progress: int = 0  # 进度

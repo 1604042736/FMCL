@@ -1,7 +1,7 @@
 import multitasking
 
 from PyQt5.QtCore import Qt, QEvent
-from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QLabel
 
 from Setting import Setting
@@ -39,16 +39,16 @@ QLabel{
             self.hl_categories.addWidget(label)
 
         label = QLabel()
-        label.setText(f'{self.tr("加载器")}: {",".join(res["loaders"])}')
+        label.setText(self.tr("加载器") + f': {",".join(res["loaders"])}')
         self.hl_otherinfo.addWidget(label)
         label = QLabel()
-        label.setText(f'{self.tr("下载量")}: {res["downloads"]}')
+        label.setText(self.tr("下载量") + f': {res["downloads"]}')
         self.hl_otherinfo.addWidget(label)
         label = QLabel()
-        label.setText(f'{self.tr("更新日期")}: {api.get_time(res["updated"])}')
+        label.setText(self.tr("更新日期") + f': {api.get_time(res["updated"])}')
         self.hl_otherinfo.addWidget(label)
         label = QLabel()
-        label.setText(f'{self.tr("来自")}: Modrinth')
+        label.setText(self.tr("来自") + ": Modrinth")
         self.hl_otherinfo.addWidget(label)
 
     @multitasking.task

@@ -129,7 +129,7 @@ class NBTViewer(QWidget, Ui_NBTViewer):
             self.sw_viewer.setCurrentIndex(self.sw_viewer.count() - 1)
         except:
             logging.error(traceback.format_exc())
-            MessageBox("", f'{self.tr("无法打开")}{file}', self).exec()
+            MessageBox("", self.tr("无法打开") + f"{file}", self).exec()
 
     def separateViewer(self, widget):
         qApp.sendEvent(self, SeparateWidgetEvent(widget, self.size()))
@@ -152,7 +152,7 @@ class NBTViewer(QWidget, Ui_NBTViewer):
             self.separateViewer(viewer)
         except:
             logging.error(traceback.format_exc())
-            MessageBox("", f'{self.tr("无法打开")}{file}', self).exec()
+            MessageBox("", self.tr("无法打开") + f"{file}", self).exec()
 
     def deleteViewer(self, widget):
         self.removeViewer(widget)

@@ -13,6 +13,16 @@
         <source>加载更多内容</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/News/News.py" line="35"/>
+        <source>正在加载新闻</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/News/News.py" line="49"/>
+        <source>加载完成</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>NewsInfo</name>

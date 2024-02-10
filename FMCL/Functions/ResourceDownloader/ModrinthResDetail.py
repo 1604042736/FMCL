@@ -21,7 +21,7 @@ class ModrinthResDetail(ResDetail):
         if ResDetail.new_count[str(res)] > 1:
             return
         super().__init__(res)
-        self.setWindowTitle(f'{self.tr("资源详情")}: {res["title"]}')
+        self.setWindowTitle(self.tr("资源详情") + f': {res["title"]}')
         self.api = ModrinthAPI()
 
         from .ModrinthResItem import ModrinthResItem

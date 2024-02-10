@@ -4,31 +4,6 @@
 <context>
     <name>About</name>
     <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/About/About.py" line="40"/>
-        <source>提供镜像源</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/About/About.py" line="40"/>
-        <source>赞助</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/About/About.py" line="60"/>
-        <source>提供技术帮助</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/About/About.py" line="72"/>
-        <source>官网</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/About/About.py" line="111"/>
-        <source>关于Qt</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../../../../../../../������/PCG/FMCL/FMCL/Functions/About/__init__.py" line="11"/>
         <source>关于</source>
         <translation></translation>

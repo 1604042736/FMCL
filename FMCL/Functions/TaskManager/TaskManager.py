@@ -78,7 +78,7 @@ class TaskManager(QWidget, Ui_TaskManager):
                     continue
                 if task.terminated:
                     InfoBar.error(
-                        title=f'{self.tr("终止")} {task.name}',
+                        title=self.tr("终止") + f" {task.name}",
                         content="",
                         orient=Qt.Horizontal,
                         isClosable=True,
@@ -88,7 +88,7 @@ class TaskManager(QWidget, Ui_TaskManager):
                     )
                 else:
                     InfoBar.info(
-                        title=f'{self.tr("完成")} {task.name}',
+                        title=self.tr("完成") + f" {task.name}",
                         content="",
                         orient=Qt.Horizontal,
                         isClosable=True,
