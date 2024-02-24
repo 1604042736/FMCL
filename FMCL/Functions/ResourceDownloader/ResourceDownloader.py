@@ -1,6 +1,6 @@
 import qtawesome as qta
 
-from PyQt5.QtCore import QEvent, pyqtSlot, pyqtSignal
+from PyQt5.QtCore import pyqtSlot, pyqtSignal, QCoreApplication
 from PyQt5.QtWidgets import QWidget, qApp, QListWidgetItem
 from qfluentwidgets import TransparentTogglePushButton, StateToolTip
 
@@ -8,6 +8,74 @@ from Core import ModrinthAPI, Task
 
 from .ModrinthResItem import ModrinthResItem
 from .ui_ResourceDownloader import Ui_ResourceDownloader
+
+_translate = QCoreApplication.translate
+
+
+class SearchTask(Task):
+    searchFinished = pyqtSignal(list)
+
+    instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if SearchTask.instance != None:
+            SearchTask.instance.terminate()
+        SearchTask.instance = super().__new__(cls)
+        return SearchTask.instance
+
+    def __init__(
+        self,
+        keyword,
+        sources,
+        categories,
+        sortby,
+        project_type,
+        limit,
+        page,
+    ) -> None:
+        super().__init__(
+            _translate("SearchTask", "搜索") + ": " + keyword, taskfunc=self.taskfunc
+        )  # 还没初始化, 无法使用self.tr
+        self.keyword = keyword
+        self.sources = sources
+        self.categories = categories
+        self.sortby = sortby
+        self.project_type = project_type
+        self.limit = limit
+        self.page = page
+
+    def taskfunc(self, callback):
+        result = []
+        for source in self.sources:
+            if source == "modrinth":
+                callback.get("setStatus", lambda _: _)(self.tr("搜索Modrinth"))
+
+                api = ModrinthAPI()
+                args = {
+                    "query": self.keyword,
+                    "limit": self.limit,
+                    "offset": (self.page - 1) * self.limit,
+                }
+                facets = []
+                if self.categories:
+                    for category in self.categories:
+                        facets.append(f'["categories:{category}"]')
+                if self.sortby:
+                    args["index"] = self.sortby
+                if self.project_type:
+                    facets.append(f'["project_type:{self.project_type}"]')
+                if facets:
+                    args["facets"] = f'[{",".join(facets)}]'
+                result.append(api.search(**args))
+                contents = []
+
+                n = len(result[-1])
+                callback.get("setMax", lambda _: _)(n)
+                for i, val in enumerate(result[-1]):
+                    contents.append(api.get_project(val["project_id"]))
+                    callback.get("setProgress", lambda _: _)(i + 1)
+                result[-1] = {"api": "Modrinth", "contents": contents}
+        self.searchFinished.emit(result)
 
 
 class ResourceDownloader(QWidget, Ui_ResourceDownloader):
@@ -21,7 +89,6 @@ class ResourceDownloader(QWidget, Ui_ResourceDownloader):
 
         self.modrinthapi = ModrinthAPI()
         self.search_task: Task = None
-        self.statetooltip = None
 
         self.searchFinsihed.connect(self.setResults)
 
@@ -57,16 +124,6 @@ class ResourceDownloader(QWidget, Ui_ResourceDownloader):
 
     @pyqtSlot(bool)
     def on_pb_search_clicked(self, _):
-        if self.search_task != None:
-            self.search_task.terminate()
-        # 注意先后顺序
-        if self.statetooltip != None:
-            self.statetooltip.close()
-            self.statetooltip.setState(True)
-        self.statetooltip = StateToolTip(self.tr("正在搜索"), "", self)
-        self.statetooltip.move(self.statetooltip.getSuitablePos())
-        self.statetooltip.show()
-
         sources = []
         for i in range(self.hl_source.count()):
             item = self.hl_source.itemAt(i)
@@ -103,46 +160,24 @@ class ResourceDownloader(QWidget, Ui_ResourceDownloader):
             if name.startswith("pb_type_") and item.widget().isChecked():
                 project_type = name.split("_", maxsplit=2)[-1]
 
-        self.search_task = Task(
-            self.tr("搜索资源"),
-            taskfunc=lambda _: self.search(
-                self.le_keyword.text(),
-                sources,
-                categories,
-                sortby,
-                project_type,
-                self.sb_limit.value(),
-                self.sb_page.value(),
-            ),
+        self.search_task = SearchTask(
+            self.le_keyword.text(),
+            sources,
+            categories,
+            sortby,
+            project_type,
+            self.sb_limit.value(),
+            self.sb_page.value(),
         )
-        self.search_task.finished.connect(self.on_searchFinsihed)
+        self.search_task.searchFinished.connect(self.setResults)
         self.search_task.start()
-
-    def search(self, keyword, sources, categories, sortby, project_type, limit, page):
-        result = []
-        for source in sources:
-            if source == "modrinth":
-                api = self.modrinthapi
-                args = {"query": keyword, "limit": limit, "offset": (page - 1) * limit}
-                facets = []
-                if categories:
-                    for category in categories:
-                        facets.append(f'["categories:{category}"]')
-                if sortby:
-                    args["index"] = sortby
-                if project_type:
-                    facets.append(f'["project_type:{project_type}"]')
-                if facets:
-                    args["facets"] = f'[{",".join(facets)}]'
-                result.append(api.search(**args))
-                contents = []
-                for i in result[-1]:
-                    contents.append(api.get_project(i["project_id"]))
-                result[-1] = {"api": "Modrinth", "contents": contents}
-        self.searchFinsihed.emit(result)
 
     def setResults(self, results):
         self.pb_search.setEnabled(False)  # 防止在添加item时因按下搜索按钮导致出错
+
+        statetooltip = StateToolTip(self.tr("正在加载资源"), "", self)
+        statetooltip.move(statetooltip.getSuitablePos())
+        statetooltip.show()
 
         self.lw_result.clear()
         n = len(results)
@@ -157,21 +192,12 @@ class ResourceDownloader(QWidget, Ui_ResourceDownloader):
                 self.lw_result.addItem(item)
                 self.lw_result.setItemWidget(item, widget)
 
-                self.statetooltip.setContent(
+                statetooltip.setContent(
                     f"{i+1}/{n}({round((i+1)/n*100,1)}%)->{j+1}/{m}({round((j+1)/m*100,1)}%)"
                 )
                 qApp.processEvents()
 
-        self.statetooltip.setContent(self.tr("加载完成"))
-        self.statetooltip.setState(True)
-        self.statetooltip = None
+        statetooltip.setContent(self.tr("加载完成"))
+        statetooltip.setState(True)
 
         self.pb_search.setEnabled(True)
-
-    def on_searchFinsihed(self):
-        if self.statetooltip == None:
-            return
-        if self.search_task.terminated:
-            self.statetooltip.setContent(self.tr("加载取消"))
-            self.statetooltip.setState(True)
-            self.statetooltip = None

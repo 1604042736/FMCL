@@ -1,22 +1,78 @@
-import logging
-import traceback
 import webbrowser
-import multitasking
 
-from PyQt5.QtCore import pyqtSignal, QSize
+from PyQt5.QtCore import pyqtSignal, QSize, QCoreApplication
 from PyQt5.QtWidgets import qApp, QTreeWidgetItem
 from qfluentwidgets import PushButton, StateToolTip
 
-from Core import ModrinthProjectModel, ModrinthVersionModel, ModrinthAPI
+from Core import ModrinthProjectModel, ModrinthVersionModel, ModrinthAPI, Task
 
 from .ResDetail import ResDetail
 from .ModrinthVersionItem import ModrinthVersionItem
 
+_translate = QCoreApplication.translate
+
+
+class GetVersionTask(Task):
+    versionGot = pyqtSignal(list)
+    instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if GetVersionTask.instance != None:
+            GetVersionTask.instance.terminate()
+        GetVersionTask.instance = super().__new__(cls)
+        return GetVersionTask.instance
+
+    def __init__(self, res) -> None:
+        super().__init__(
+            _translate("GetVersionTask", "获取版本") + ": " + res["title"],
+            taskfunc=self.taskfunc,
+        )  # 还没初始化, 无法使用self.tr
+        self.res = res
+
+    def taskfunc(self, callback):
+        self.versionGot.emit(ModrinthAPI().get_project_versions(self.res["id"]))
+
+
+class GetDependenciesTask(Task):
+    dependenciesGot = pyqtSignal(ModrinthVersionItem, QTreeWidgetItem, list)
+    instances = {}
+
+    def __new__(cls, res, widget: ModrinthVersionItem, *args):
+        _hash = str(res) + str(widget.version)
+        if _hash in GetDependenciesTask.instances:
+            GetDependenciesTask.instances[_hash].terminate()
+        GetDependenciesTask.instances[_hash] = super().__new__(cls)
+        return GetDependenciesTask.instances[_hash]
+
+    def __init__(self, res, widget: ModrinthVersionItem, item: QTreeWidgetItem) -> None:
+        super().__init__(
+            _translate("GetDependenciesTask", "获取依赖")
+            + ": "
+            + res["title"]
+            + " "
+            + widget.version["name"],
+            taskfunc=self.taskfunc,
+        )  # 还没初始化, 无法使用self.tr
+        self.res = res
+        self.widget = widget
+        self.item = item
+        self.api = ModrinthAPI()
+
+    def taskfunc(self, callback):
+        version = self.widget.version
+        projects = []
+
+        n = len(version["dependencies"])
+        callback.get("setMax", lambda _: _)(n)
+        for i, dependency in enumerate(version["dependencies"]):
+            if dependency["project_id"] == None:
+                continue
+            projects.append(self.api.get_project(dependency["project_id"]))
+            callback.get("setProgress", lambda _: _)(i + 1)
+        self.dependenciesGot.emit(self.widget, self.item, projects)
+
 
 class ModrinthResDetail(ResDetail):
-    __versionsGot = pyqtSignal(list)
-    __dependenciesGot = pyqtSignal(QTreeWidgetItem, list)
-
     def __init__(self, res: ModrinthProjectModel) -> None:
         if ResDetail.new_count[str(res)] > 1:
             return
@@ -55,31 +111,27 @@ class ModrinthResDetail(ResDetail):
             button.clicked.connect(lambda _, key=key: webbrowser.open(res[key]))
             self.hl_operates.addWidget(button)
 
-        self.statetooltip = None
-        self.__versionsGot.connect(self.setVersions)
-
-        self.statetooltip_dep = None
-        self.__dependenciesGot.connect(self.setDependencies)
-
         self.refresh()
 
     def refresh(self):
-        if self.statetooltip != None:
-            self.statetooltip.close()
-            self.statetooltip.setState(True)
-        self.statetooltip = StateToolTip(self.tr("正在获取版本"), "", self)
-        self.statetooltip.move(self.statetooltip.getSuitablePos())
-        self.statetooltip.show()
-
-        self.tw_versions.clear()
-        self.__getVersions()
+        getversion_task = GetVersionTask(self.res)
+        getversion_task.versionGot.connect(self.setVersions)
+        getversion_task.start()
         return super().refresh()
 
-    @multitasking.task
-    def __getVersions(self):
-        self.__versionsGot.emit(self.api.get_project_versions(self.res["id"]))
-
     def setVersions(self, versions: list[ModrinthVersionModel]):
+        statetooltip = StateToolTip(self.tr("正在加载版本"), "", self)
+        statetooltip.move(statetooltip.getSuitablePos())
+        statetooltip.show()
+
+        self.tw_versions.clear()
+        # 加载版本之后VersionItem都变了
+        # 而之前GetDependenciesTask里保存的VersionItem还没变
+        # 为了防止出错要全部终止
+        for _, task in GetDependenciesTask.instances.items():
+            task.terminate()
+        GetDependenciesTask.instances = {}
+
         n = len(versions)
         for i, version in enumerate(versions):
             item = QTreeWidgetItem()
@@ -89,12 +141,11 @@ class ModrinthResDetail(ResDetail):
             self.tw_versions.addTopLevelItem(item)
             self.tw_versions.setItemWidget(item, 0, widget)
 
-            self.statetooltip.setContent(f"{i+1}/{n}({round((i+1)/n*100,1)}%)")
+            statetooltip.setContent(f"{i+1}/{n}({round((i+1)/n*100,1)}%)")
             qApp.processEvents()
 
-        self.statetooltip.setContent(self.tr("获取完成"))
-        self.statetooltip.setState(True)
-        self.statetooltip = None
+        statetooltip.setContent(self.tr("加载完成"))
+        statetooltip.setState(True)
 
     def showDependencies(self, widget: ModrinthVersionItem):
         for i in range(self.tw_versions.topLevelItemCount()):
@@ -105,37 +156,25 @@ class ModrinthResDetail(ResDetail):
             return
         if item.childCount() != 0:  # 说明已经加载过了
             return
-        version = widget.version
-        self.statetooltip_dep = StateToolTip(
-            self.tr("正在加载{name}的依赖").format(name=version["name"]), "", self
-        )
-        self.statetooltip_dep.move(self.statetooltip_dep.getSuitablePos())
-        self.statetooltip_dep.show()
-
-        self.getDependencies(widget, item)
-
-    @multitasking.task
-    def getDependencies(self, widget: ModrinthVersionItem, item: QTreeWidgetItem):
-        version = widget.version
-        projects = []
-        for i, dependency in enumerate(version["dependencies"]):
-            if dependency["project_id"] == None:
-                continue
-            projects.append(self.api.get_project(dependency["project_id"]))
-        try:
-            self.__dependenciesGot.emit(item, projects)
-        except:
-            logging.error(traceback.format_exc())
-            self.statetooltip_dep.setContent(self.tr("加载失败, 请尝试重新加载"))
-            self.statetooltip_dep.setState(True)  # 实际上并不会消失
-            self.statetooltip_dep = None
+        getdependencies_task = GetDependenciesTask(self.res, widget, item)
+        getdependencies_task.dependenciesGot.connect(self.setDependencies)
+        getdependencies_task.start()
 
     def setDependencies(
         self,
+        widget: ModrinthVersionItem,
         item: QTreeWidgetItem,
         projects: list[ModrinthProjectModel],
     ):
         from .ModrinthResItem import ModrinthResItem
+
+        statetooltip_dep = StateToolTip(
+            self.tr("正在加载{name}的依赖").format(name=widget.version["name"]),
+            "",
+            self,
+        )
+        statetooltip_dep.move(statetooltip_dep.getSuitablePos())
+        statetooltip_dep.show()
 
         n = len(projects)
         for i, project in enumerate(projects):
@@ -144,9 +183,8 @@ class ModrinthResDetail(ResDetail):
             dep_item.setSizeHint(0, QSize(dep_widget.width(), dep_widget.height() + 10))
             item.addChild(dep_item)
             self.tw_versions.setItemWidget(dep_item, 0, dep_widget)
-            self.statetooltip_dep.setContent(f"{i+1}/{n}({round((i+1)/n*100,1)}%)")
+            statetooltip_dep.setContent(f"{i+1}/{n}({round((i+1)/n*100,1)}%)")
             qApp.processEvents()
 
-        self.statetooltip_dep.setContent(self.tr("加载完成"))
-        self.statetooltip_dep.setState(True)
-        self.statetooltip_dep = None
+        statetooltip_dep.setContent(self.tr("加载完成"))
+        statetooltip_dep.setState(True)
