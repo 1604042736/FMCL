@@ -118,6 +118,10 @@ class SettingEditor(QWidget, Ui_SettingEditor):
 
                 row += 1
 
+            if self.setting.getAttr(id, "callback") == None:
+                self.setting.attrs[id]["callback"] = []
+            self.setting.attrs[id]["callback"].append(lambda *_: self.checkCondition())
+
             settingcard = self.setting.getAttr(id, "settingcard", lambda: None)()
             if settingcard == None:
 
