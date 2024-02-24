@@ -34,7 +34,7 @@ def defaultSetting() -> dict:
 def defaultSettingAttr() -> dict:
     button = PushButton()
     button.setText(_translate("MusicPlayer", "前往音乐播放器设置"))
-    button.clicked.connect(main)
+    button.clicked.connect(lambda: main())
 
     return {
         "musicplayer": {"name": _translate("MusicPlayer", "音乐播放器")},

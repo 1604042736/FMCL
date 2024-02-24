@@ -307,9 +307,10 @@ class Setting:
         )
 
     def set(self, id: str, val):
-        self[id] = val
-        self.sync()
-        self.callback(id, val)
+        if val != self[id]:
+            self[id] = val
+            self.sync()
+            self.callback(id, val)
 
     def callback(self, id: str, val=None):
         if val == None:

@@ -24,3 +24,4 @@ def main(setting_path=DEFAULT_SETTING_PATH, id=""):
     setting = Setting(setting_path)
     settingeditor = SettingEditor(setting)
     settingeditor.show(id)
+    settingeditor.load()

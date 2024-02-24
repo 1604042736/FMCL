@@ -237,6 +237,8 @@ class ListSettingCard(SettingCard, Ui_ListSettingCard):
 
         element_attrs = self.attrgetter("element_attrs")
         if _type_key:
+            if len(self.getter()) - 1 not in element_attrs:
+                element_attrs[len(self.getter()) - 1] = {}
             element_attrs[len(self.getter()) - 1]["type"] = _type_key
 
         self.refresh()

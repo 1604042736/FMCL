@@ -38,11 +38,33 @@ class SettingEditor(QWidget, Ui_SettingEditor):
         self.splitter.setSizes([100, 500])
 
         self.setting = setting
+
+        self.pb_refresh = TransparentToolButton()
+        self.pb_refresh.resize(46, 32)
+        self.pb_refresh.setIcon(qta.icon("mdi.refresh"))
+        self.pb_refresh.clicked.connect(lambda: self.refresh())
+
+    def load(self):
         self.items = {}
         self.item_widget_id_layout = []
         self.setting_cards = {}
+
+        statetooltip = StateToolTip(self.tr("加载中..."), "", self)
+        statetooltip.move(statetooltip.getSuitablePos())
+        statetooltip.show()
+
+        self.tw_setting.clear()
+        while self.gl_setting.count():
+            item = self.gl_setting.takeAt(0)
+            if item.widget() != None:
+                if isinstance(item.widget(), (QLabel, SettingCard)):
+                    item.widget().deleteLater()
+                else:  # 如果不是这两种, 那么很可能是用户自定义的控件
+                    item.widget().setParent(None)
+
         row = 1
-        for id, val in self.setting.items():
+        n = len(self.setting.items())
+        for k, (id, val) in enumerate(self.setting.items()):
             splitids = id.split(".")
             for i, splitid in enumerate(splitids):
                 totalid = ".".join(splitids[: i + 1])
@@ -91,10 +113,6 @@ class SettingEditor(QWidget, Ui_SettingEditor):
 
                 row += 1
 
-            if "callback" not in setting.attrs[id]:
-                setting.attrs[id]["callback"] = []
-            setting.attrs[id]["callback"].append(lambda *_: self.refresh())
-
             settingcard = self.setting.getAttr(id, "settingcard", lambda: None)()
             if settingcard == None:
 
@@ -114,12 +132,13 @@ class SettingEditor(QWidget, Ui_SettingEditor):
             self.setting_cards[id] = settingcard
             row += 1
 
-        self.pb_refresh = TransparentToolButton()
-        self.pb_refresh.resize(46, 32)
-        self.pb_refresh.setIcon(qta.icon("mdi.refresh"))
-        self.pb_refresh.clicked.connect(lambda: self.refresh())
+            statetooltip.setContent(f"{k+1}/{n}({round((k+1)/n*100,1)}%)")
+            qApp.processEvents()
 
         self.checkCondition()
+
+        statetooltip.setContent(self.tr("加载完成"))
+        statetooltip.setState(True)
 
     def addTreeItem(self, root: QTreeWidgetItem | None, item: QTreeWidgetItem):
         if root == None:
@@ -146,20 +165,7 @@ class SettingEditor(QWidget, Ui_SettingEditor):
             self.turnTo(id)
 
     def refresh(self):
-        statetooltip = StateToolTip(self.tr("刷新中..."), "", self)
-        statetooltip.move(statetooltip.getSuitablePos())
-        statetooltip.show()
-
-        n = len(self.setting_cards.values())
-        for i, card in enumerate(self.setting_cards.values()):
-            if hasattr(card, "refresh"):
-                card.refresh()
-            statetooltip.setContent(f"{i+1}/{n}({round((i+1)/n*100,1)}%)")
-            qApp.processEvents()
-        self.checkCondition()
-
-        statetooltip.setContent(self.tr("刷新完成"))
-        statetooltip.setState(True)
+        self.load()
 
     def checkCondition(self):
         enable = {}
