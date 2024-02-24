@@ -1,6 +1,5 @@
 """该功能只用来测试"""
 
-
 import time
 import qtawesome as qta
 
@@ -12,6 +11,10 @@ from Core import Task, Download
 
 def functionInfo():
     return {"name": "测试", "icon": qta.icon("ri.test-tube-line")}
+
+
+def defaultSetting():
+    return {"test.list": [], "test.dict": {}}
 
 
 def empty(*_):

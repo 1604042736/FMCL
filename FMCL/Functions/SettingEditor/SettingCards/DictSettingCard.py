@@ -116,11 +116,13 @@ class DictSettingCard(SettingCard, Ui_DictSettingCard):
 
         _type = SettingCard.TYPE_MAP[_type_key]
 
-        self.getter()[key] = _type()
         element_attrs = self.attrgetter("element_attrs")
         if key not in element_attrs:
             element_attrs[key] = {}
         element_attrs[key]["type"] = _type_key
+
+        self.getter()[key] = _type()
+
         self.addItem(key)
 
         self.on_valueChanged()

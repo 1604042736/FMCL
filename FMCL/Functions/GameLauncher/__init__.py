@@ -20,7 +20,7 @@ def functionInfo():
 def defaultSetting() -> dict:
     setting = Setting()
     if "explorer.desktop.item_rightclicked_actions" in setting.defaultsetting:
-        a = setting.defaultsetting["explorer.desktop.item_rightclicked_actions"]
+        a = list(setting.defaultsetting["explorer.desktop.item_rightclicked_actions"])
         action = {
             "name": _translate("GameLauncher", "启动游戏"),
             "icon": 'qta.icon("mdi.rocket-launch-outline")',
@@ -28,6 +28,9 @@ def defaultSetting() -> dict:
         }
         if action not in a:
             a.insert(0, action)
+            setting.defaultsetting["explorer.desktop.item_rightclicked_actions"] = (
+                tuple(a)
+            )
     return {}
 
 

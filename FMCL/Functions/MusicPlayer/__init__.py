@@ -18,10 +18,11 @@ def functionInfo():
 def defaultSetting() -> dict:
     setting = Setting()
     if "system.startup_functions" in setting.defaultsetting:
-        a = setting.defaultsetting.get("system.startup_functions")
+        a = list(setting.defaultsetting.get("system.startup_functions"))
         action = {"commands": ['MusicPlayer Setting()["musicplayer.playatstartup"]']}
         if action not in a:
             a.insert(2, action)
+            setting.defaultsetting["system.startup_functions"] = tuple(a)
     return {
         "musicplayer.playatstartup": True,
         "musicplayer.musiclist": [],

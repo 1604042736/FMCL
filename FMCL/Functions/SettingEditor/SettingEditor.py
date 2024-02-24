@@ -44,6 +44,11 @@ class SettingEditor(QWidget, Ui_SettingEditor):
         self.pb_refresh.setIcon(qta.icon("mdi.refresh"))
         self.pb_refresh.clicked.connect(lambda: self.refresh())
 
+        self.pb_save = TransparentToolButton()
+        self.pb_save.resize(46, 32)
+        self.pb_save.setIcon(qta.icon("fa.save"))
+        self.pb_save.clicked.connect(lambda: self.setting.sync())
+
     def load(self):
         self.items = {}
         self.item_widget_id_layout = []
@@ -104,7 +109,7 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                 pb_restore.setIcon(qta.icon("mdi.refresh"))
                 pb_restore.setToolTip(self.tr("恢复默认设置"))
                 pb_restore.clicked.connect(
-                    lambda _, id=totalid: self.setting.restore(id)
+                    lambda _, id=totalid: (self.setting.restore(id), self.load())
                 )
                 hboxlayout.addWidget(pb_restore)
                 self.item_widget_id_layout.append(
@@ -187,7 +192,10 @@ class SettingEditor(QWidget, Ui_SettingEditor):
     def event(self, a0: QEvent) -> bool:
         if a0.type() == QEvent.Type.Show:
             qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_refresh, "right"))
+            qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_save, "right"))
         elif a0.type() == QEvent.Type.Hide:
             qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_refresh))
             self.pb_refresh.setParent(self)
+            qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_save))
+            self.pb_save.setParent(self)
         return super().event(a0)

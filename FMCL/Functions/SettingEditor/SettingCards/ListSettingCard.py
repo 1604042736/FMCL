@@ -209,9 +209,9 @@ class ListSettingCard(SettingCard, Ui_ListSettingCard):
 
         _type = SettingCard.TYPE_MAP[_type_key]
 
-        self.getter().insert(i + 1, _type())
         element_attrs = self.attrgetter("element_attrs")
         element_attrs[i + 1]["type"] = _type_key
+        self.getter().insert(i + 1, _type())
 
         self.on_valueChanged()
         self.refresh()
@@ -233,12 +233,12 @@ class ListSettingCard(SettingCard, Ui_ListSettingCard):
                 return
             _type = SettingCard.TYPE_MAP[_type_key]
 
-        self.getter().append(_type())
-
         element_attrs = self.attrgetter("element_attrs")
         if _type_key:
-            if len(self.getter()) - 1 not in element_attrs:
-                element_attrs[len(self.getter()) - 1] = {}
-            element_attrs[len(self.getter()) - 1]["type"] = _type_key
+            if len(self.getter()) not in element_attrs:
+                element_attrs[len(self.getter()) ] = {}
+            element_attrs[len(self.getter())]["type"] = _type_key
+
+        self.getter().append(_type())
 
         self.refresh()

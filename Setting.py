@@ -1,9 +1,9 @@
-from copy import deepcopy
 import json
 import os
 import shutil
 import multitasking
 
+from types import MappingProxyType
 from typing import Any, Literal, TypedDict, Callable
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import QWidget, QFileDialog
@@ -166,84 +166,56 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
 
 
 class ListSettingTrace(list):
-    """跟踪设置中的列表项, 在该列表被修改时同时更改设置"""
-
-    instances = {}
-    new_count = {}
-
-    def __new__(cls, l, id: str, setting: "Setting"):
-        if id not in ListSettingTrace.instances:
-            ListSettingTrace.instances[id] = super().__new__(cls)
-            ListSettingTrace.new_count[id] = 0
-        ListSettingTrace.new_count[id] += 1
-        return ListSettingTrace.instances[id]
-
-    def __init__(self, l, id: str, setting: "Setting"):
-        if ListSettingTrace.new_count[id] > 1:
-            return
+    def __init__(self, l, op):
         super().__init__(l)
-        self.id = id
-        self.setting = setting
+        self.op = op  # 对象被更改后的操作
 
     def append(self, __object) -> None:
         super().append(__object)
-        self.setting.set(self.id, list(self))
+        self.op(list(self))
 
     def pop(self, __index=-1):
         ret = super().pop(__index)
-        self.setting.set(self.id, list(self))
+        self.op(list(self))
         return ret
 
     def insert(self, __index, __object):
         super().insert(__index, __object)
-        self.setting.set(self.id, list(self))
+        self.op(list(self))
 
     def extend(self, __iterable):
         super().extend(__iterable)
-        self.setting.set(self.id, list(self))
+        self.op(list(self))
 
     def remove(self, __value):
         super().remove(__value)
-        self.setting.set(self.id, list(self))
+        self.op(list(self))
 
     def sort(self, *args):
         super().sort(*args)
-        self.setting.set(self.id, list(self))
+        self.op(list(self))
 
     def __setitem__(self, *args):
         super().__setitem__(*args)
-        self.setting.set(self.id, list(self))
+        self.op(list(self))
 
 
 class DictSettingTrace(dict):
-    instances = {}
-    new_count = {}
-
-    def __new__(cls, d, id: str, setting: "Setting"):
-        if id not in DictSettingTrace.instances:
-            DictSettingTrace.instances[id] = super().__new__(cls)
-            DictSettingTrace.new_count[id] = 0
-        DictSettingTrace.new_count[id] += 1
-        return DictSettingTrace.instances[id]
-
-    def __init__(self, d, id: str, setting: "Setting"):
-        if DictSettingTrace.new_count[id] > 1:
-            return
+    def __init__(self, d, op):
         super().__init__(d)
-        self.id = id
-        self.setting = setting
+        self.op = op  # 对象被更改后的操作
 
     def __setitem__(self, *args):
         super().__setitem__(*args)
-        self.setting.set(self.id, dict(self))
+        self.op(dict(self))
 
     def pop(self) -> tuple:
         super().pop()
-        self.setting.set(self.id, dict(self))
+        self.op(dict(self))
 
 
 class Setting:
-    """管理设置文件"""
+    """设置"""
 
     instances = {}
     new_count = {}
@@ -260,8 +232,11 @@ class Setting:
             return
         self.attrs: dict[str, SettingAttr] = {}
         self.setting_path = setting_path
+        self.attr_path = os.path.splitext(setting_path)[0] + f".attrs.py"
+
         self.modifiedsetting = {}  # 修改过的设置
         self.defaultsetting = {}  # 默认设置
+
         if setting_path == DEFAULT_SETTING_PATH:
             self.add(DEFAULT_SETTING)
             self.addAttr(defaultSettingAttr())
@@ -270,11 +245,20 @@ class Setting:
         if os.path.exists(setting_path):
             for key, val in json.load(open(setting_path, encoding="utf-8")).items():
                 self.modifiedsetting[key] = val
+        if os.path.exists(self.attr_path):
+            for key, val in eval(open(self.attr_path, encoding="utf-8").read()).items():
+                if key not in self.attrs:
+                    self.attrs[key] = {}
+                self.attrs[key] |= val
 
     def add(self, new_setting: dict):
         """添加新的默认设置"""
         for key, val in new_setting.items():
             if key not in self.defaultsetting:
+                if isinstance(val, list):  # 让默认设置不可变
+                    val = tuple(val)
+                elif isinstance(val, dict):
+                    val = MappingProxyType(val)
                 self.defaultsetting[key] = val
 
         for item_id in new_setting:
@@ -289,8 +273,9 @@ class Setting:
         for key, val in attr.items():
             if key not in self.attrs:
                 self.attrs[key] = val
-            else:  # 防止之前已经加载过
-                self.attrs[key] |= val
+                continue
+            # 防止之前已经加载过
+            self.attrs[key] |= val
 
     def getAttr(self, id: str, attr: str, default=None):
         """获取设置项的属性"""
@@ -306,11 +291,39 @@ class Setting:
             indent=4,
         )
 
+        attrs = {}
+        for key, val in self.attrs.items():
+            for k, v in val.items():
+                if k in (
+                    "name",
+                    "callback",
+                    "enable_condition",
+                    "settingcard",
+                    "side_widgets",
+                    "type",
+                    "static",
+                    "atleast",
+                    "min_value",
+                    "max_value",
+                ):
+                    continue
+                if key not in attrs:
+                    attrs[key] = {}
+                attrs[key][k] = v
+
+        if attrs:
+            open(self.attr_path, mode="w", encoding="utf-8").write(str(attrs))
+
     def set(self, id: str, val):
-        if val != self[id]:
-            self[id] = val
-            self.sync()
-            self.callback(id, val)
+        if isinstance(val, list) and list(val) == list(self[id]):
+            return
+        if isinstance(val, dict) and dict(val) == dict(self[id]):
+            return
+        if val == self[id]:
+            return
+        self[id] = val
+        self.sync()
+        self.callback(id, val)
 
     def callback(self, id: str, val=None):
         if val == None:
@@ -345,10 +358,14 @@ class Setting:
             val = self.defaultsetting[key]
         else:
             raise KeyError(key)
-        if isinstance(val, list):  # 对list设置项的操作将会被捕捉
-            return ListSettingTrace(deepcopy(val), key, self)
+        if isinstance(val, tuple):
+            val = list(val)
+        elif isinstance(val, MappingProxyType):
+            val = dict(val)
+        if isinstance(val, list):
+            val = ListSettingTrace(val, lambda v: self.set(key, v))
         elif isinstance(val, dict):
-            return DictSettingTrace(deepcopy(val), key, self)
+            val = DictSettingTrace(val, lambda v: self.set(key, v))
         return val
 
     def items(self):
@@ -358,12 +375,6 @@ class Setting:
         self.modifiedsetting[key] = value
         if key in self.defaultsetting and self.defaultsetting[key] == value:
             self.modifiedsetting.pop(key)
-        # 被更改后要重置
-        # 不然一直都是旧的值
-        if key in ListSettingTrace.instances:
-            ListSettingTrace.instances.pop(key)
-        if key in DictSettingTrace.instances:
-            DictSettingTrace.instances.pop(key)
 
     def restore(self, id):
         """恢复默认设置"""

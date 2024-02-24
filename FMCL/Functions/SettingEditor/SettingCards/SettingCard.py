@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QWidget
 
 class SettingCard(QWidget):
     TYPE_MAP = {
-        "color": str,
+        "color": lambda: "#000000",
         "int": int,
         "float": float,
         "bool": bool,
