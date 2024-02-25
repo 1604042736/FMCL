@@ -1,7 +1,7 @@
 import qtawesome as qta
 from Events import *
 from Kernel import Kernel
-from PyQt5.QtCore import QEvent, QObject, QPoint, Qt
+from PyQt5.QtCore import QEvent, QObject, QPoint, Qt, QUrl
 from PyQt5.QtWidgets import QAction, QPushButton, QStackedWidget, QWidget, qApp
 from qfluentwidgets import RoundMenu, TransparentTogglePushButton
 from Setting import Setting
@@ -54,6 +54,7 @@ QPushButton:checked{
             )
             self.title_rightclicked_actions.append(menu_action)
 
+        self.setAcceptDrops(True)
         self.showDesktop()
 
     def addWidget(self, widget: QWidget):
@@ -134,6 +135,14 @@ QPushButton:checked{
                 self.setCurrentWidget(a0)
         elif a1.type() == WidgetCaughtEvent.EventType:
             self.addWidget(a1.widget)
+        elif a1.type() == QEvent.Type.DragEnter:
+            a1.accept()
+        elif a1.type() == QEvent.Type.DragMove:
+            a1.accept()
+        elif a1.type() == QEvent.Type.Drop:
+            Kernel.execFunction(
+                "NBTViewer", a1.mimeData().text().replace("file:///", "")
+            )
         return super().eventFilter(a0, a1)
 
     def removeTask(self, widget: QWidget):

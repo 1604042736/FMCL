@@ -4,9 +4,9 @@ from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import pyqtSlot, pyqtSignal
 from qfluentwidgets import MessageBox
 from Core import Save
+from Kernel import Kernel
 
 from .ui_SaveItem import Ui_SaveItem
-from ..NBTViewer import NBTViewer
 
 
 class SaveItem(QWidget, Ui_SaveItem):
@@ -43,7 +43,7 @@ class SaveItem(QWidget, Ui_SaveItem):
 
     @pyqtSlot(bool)
     def on_pb_viewnbt_clicked(self, _):
-        NBTViewer(self.save.path).show()
+        Kernel.execFunction("NBTViewer", self.save.path)
 
     def refresh(self):
         dir_name = self.path.replace("\\", "/").split("/")[-1]

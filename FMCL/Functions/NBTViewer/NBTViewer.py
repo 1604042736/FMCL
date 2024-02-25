@@ -1,3 +1,4 @@
+from genericpath import isfile
 import logging
 import traceback
 import qtawesome as qta
@@ -24,20 +25,36 @@ class NBTViewer(QWidget, Ui_NBTViewer):
     instances = {}
     new_count = {}
 
+    single_files = []  # 单独的文件
+
     def __new__(cls, path):
-        if path not in NBTViewer.instances:
-            NBTViewer.instances[path] = super().__new__(cls)
-            NBTViewer.new_count[path] = 0
-        NBTViewer.new_count[path] += 1
-        return NBTViewer.instances[path]
+        if os.path.isfile(path):
+            key = "_"
+            if path not in NBTViewer.single_files:
+                NBTViewer.single_files.append(path)
+        else:
+            key = path
+        if key not in NBTViewer.instances:
+            NBTViewer.instances[key] = super().__new__(cls)
+            NBTViewer.new_count[key] = 0
+        NBTViewer.new_count[key] += 1
+        return NBTViewer.instances[key]
 
     def __init__(self, path):
-        if NBTViewer.new_count[path] > 1:
+        if os.path.isfile(path):
+            key = "_"
+        else:
+            key = path
+        if NBTViewer.new_count[key] > 1:
+            if key == "_":
+                self.refresh()
             return
         super().__init__()
         self.setupUi(self)
         self.setWindowIcon(qta.icon("msc.preview"))
-        self.setWindowTitle(self.tr("NBT查看器") + f": {os.path.basename(path)}")
+        self.setWindowTitle(
+            self.tr("NBT查看器") + (f": {os.path.basename(path)}" if key != "_" else "")
+        )
         self.tb_viewer.setAddButtonVisible(False)
         self.splitter.setSizes([200, 500])
         self.tw_directory.header().setSectionResizeMode(
@@ -65,8 +82,13 @@ class NBTViewer(QWidget, Ui_NBTViewer):
             self.deleteViewer(self.sw_viewer.currentWidget())
 
         def setdirectory(root: QTreeWidgetItem, path):
-            for i in os.listdir(path):
-                full_path = os.path.join(path, i)
+            dirname = ""
+            if isinstance(path, str) and os.path.isdir(path):
+                dirname = path
+                path = os.listdir(path)
+            assert isinstance(path, list)
+            for i in path:
+                full_path = os.path.join(dirname, i)
                 item = QTreeWidgetItem()
                 item.setText(0, i)
                 w_operate = None
@@ -74,7 +96,7 @@ class NBTViewer(QWidget, Ui_NBTViewer):
                 if os.path.isdir(full_path):
                     setdirectory(item, full_path)
                 elif os.path.isfile(full_path):
-                    name, ext = os.path.splitext(i)
+                    _, ext = os.path.splitext(i)
                     if ext not in self.open_way:
                         continue
                     w_operate = QWidget()
@@ -101,12 +123,18 @@ class NBTViewer(QWidget, Ui_NBTViewer):
                     hboxlayout.addWidget(pb_open)
                     hboxlayout.addWidget(pb_separate)
 
-                if not os.path.isdir(full_path) or item.childCount() > 0:
+                if (
+                    not os.path.isdir(full_path)  # 不是文件夹
+                    or item.childCount() > 0  # 这个文件夹下有文件
+                ):
                     self.addTreeItem(root, item)
                     if w_operate != None:
                         self.tw_directory.setItemWidget(item, 1, w_operate)
 
-        setdirectory(None, self.path)
+        if os.path.isfile(self.path):
+            setdirectory(None, NBTViewer.single_files)
+        else:
+            setdirectory(None, self.path)
 
     def addTreeItem(self, root: QTreeWidgetItem | None, item: QTreeWidgetItem):
         if root == None:
@@ -226,7 +254,7 @@ class DefaultViewer(TreeWidget):
     def __init__(self, file):
         super().__init__()
         self.setObjectName(file)
-        self.setWindowTitle(os.path.basename(file))
+        self.setWindowTitle(file)
         self.setColumnCount(2)
         self.headerItem().setText(0, self.tr("键(或者索引)"))
         self.headerItem().setText(1, self.tr("值"))

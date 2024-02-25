@@ -58,6 +58,7 @@ class Desktop(ListWidget):
         self.pb_quickswitchgamedir.clicked.connect(self.showGameDirMenu)
 
         self.item_action = []
+        self.setAcceptDrops(True)
         self.refresh()
 
     def showRightMenu(self):
@@ -73,7 +74,8 @@ class Desktop(ListWidget):
                 menu_action.setIcon(eval(action["icon"]))
                 menu_action.triggered.connect(
                     lambda _, a=action: list(
-                        Kernel.runCommand(i.format(name=item.text())) for i in a["commands"]
+                        Kernel.runCommand(i.format(name=item.text()))
+                        for i in a["commands"]
                     )
                 )
                 menu.addAction(menu_action)
