@@ -53,6 +53,7 @@ class Kernel(QApplication):
             sys.path.insert(1, default_path)
 
         splash = QSplashScreen(QPixmap(":/Image/icon.png").scaled(64, 64))
+        splash.setWindowFlags(splash.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
         splash.show()
         self.processEvents()
 
