@@ -1,4 +1,5 @@
 import logging
+import re
 import os
 import json
 import shutil
@@ -354,37 +355,10 @@ class Kernel(QApplication):
         pargs = []
         kwargs = {}
         args = " ".join(args)
-        s = ""
-        i = 0
-        while i < len(args):
-            if args[i] == " ":
-                if "=" in s:
-                    exec(s, kwargs)
-                else:
-                    pargs.append(eval(s))
-                while i < len(args) and args[i] == " ":
-                    i += 1
-                s = ""
-            elif args[i] == "'":
-                s += args[i]
-                i += 1
-                while i < len(args) and args[i] != "'":
-                    s += args[i]
-                    i += 1
-                s += args[i]
-                i += 1
-            elif i == '"':
-                s += args[i]
-                i += 1
-                while i < len(args) and args[i] != '"':
-                    s += args[i]
-                    i += 1
-                s += args[i]
-                i += 1
-            else:
-                s += args[i]
-                i += 1
-        if s != "":
+        pattern = r"""'.*?'|".*?"|\S+"""
+        for s in re.findall(pattern, args):
+            if s == "":
+                continue
             if "=" in s:
                 exec(s, kwargs)
             else:
