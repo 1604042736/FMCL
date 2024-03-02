@@ -246,6 +246,18 @@ class Setting:
             for key, val in json.load(open(setting_path, encoding="utf-8")).items():
                 self.modifiedsetting[key] = val
         if os.path.exists(self.attr_path):
+
+            def merge(a, b):
+                for key, val in b.items():
+                    if key not in a:
+                        a[key] = val
+                    elif isinstance(val, dict):
+                        merge(a[key], val)
+                    elif isinstance(val, list):
+                        a[key].extends(val)
+                    else:
+                        a[key] = val
+
             for key, val in eval(open(self.attr_path, encoding="utf-8").read()).items():
                 if key not in self.attrs:
                     self.attrs[key] = {}
@@ -291,26 +303,34 @@ class Setting:
             indent=4,
         )
 
-        attrs = {}
-        for key, val in self.attrs.items():
-            for k, v in val.items():
-                if k in (
-                    "name",
-                    "callback",
-                    "enable_condition",
-                    "settingcard",
-                    "side_widgets",
-                    "type",
-                    "static",
-                    "atleast",
-                    "min_value",
-                    "max_value",
-                ):
-                    continue
-                if key not in attrs:
-                    attrs[key] = {}
-                attrs[key][k] = v
+        def clear(data: dict):
+            attrs = {}
+            for key, val in data.items():
+                for k, v in val.items():
+                    if k in (
+                        "name",
+                        "callback",
+                        "enable_condition",
+                        "settingcard",
+                        "side_widgets",
+                        "type",
+                        "static",
+                        "atleast",
+                        "min_value",
+                        "max_value",
+                    ):
+                        continue
+                    if key not in attrs:
+                        attrs[key] = {}
+                    if isinstance(v, dict):
+                        nv = clear(v)
+                        if nv:
+                            attrs[key][k] = nv
+                    else:
+                        attrs[key][k] = v
+            return attrs
 
+        attrs = clear(self.attrs)
         if attrs:
             open(self.attr_path, mode="w", encoding="utf-8").write(str(attrs))
 
@@ -378,4 +398,6 @@ class Setting:
 
     def restore(self, id):
         """恢复默认设置"""
-        self.set(id, self.defaultsetting[id])
+        for id_ in (self.defaultsetting | self.modifiedsetting).keys():
+            if id in id_:
+                self.set(id_, self.defaultsetting[id_])

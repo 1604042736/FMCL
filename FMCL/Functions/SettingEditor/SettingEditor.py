@@ -109,7 +109,7 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                 pb_restore.setIcon(qta.icon("mdi.refresh"))
                 pb_restore.setToolTip(self.tr("恢复默认设置"))
                 pb_restore.clicked.connect(
-                    lambda _, id=totalid: (self.setting.restore(id), self.load())
+                    lambda _, id=totalid: self.setting.restore(id)
                 )
                 hboxlayout.addWidget(pb_restore)
                 self.item_widget_id_layout.append(
@@ -117,6 +117,7 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                 )
 
                 row += 1
+                qApp.processEvents()
 
             if self.setting.getAttr(id, "callback") == None:
                 self.setting.attrs[id]["callback"] = []

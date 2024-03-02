@@ -32,6 +32,7 @@ class SettingCard(QWidget):
             from .ListSettingCard import ListSettingCard
             from .StrSettingCard import StrSettingCard
             from .DictSettingCard import DictSettingCard
+            from .FloatSettingCard import FloatSettingCard
 
             value = getter()
             type = attrgetter("type")
@@ -41,6 +42,8 @@ class SettingCard(QWidget):
                 return BoolSettingCard(getter, attrgetter, setter, attrsetter)
             elif isinstance(value, int):
                 return IntSettingCard(getter, attrgetter, setter, attrsetter)
+            elif isinstance(value, float):
+                return FloatSettingCard(getter, attrgetter, setter, attrsetter)
             elif isinstance(value, str):
                 return StrSettingCard(getter, attrgetter, setter, attrsetter)
             elif isinstance(value, list):
@@ -62,6 +65,11 @@ class SettingCard(QWidget):
         self.attrgetter = attrgetter
         self.setter = setter
         self.attrsetter = attrsetter
+        if self.attrgetter("callback", None) == None:
+            self.attrsetter("callback", [])
+        # 单独设置变量是为了方便移除
+        self.__callback = lambda *_: self.refresh()
+        self.attrgetter("callback").append(self.__callback)
 
     def sync(self):
         """写入设置"""
@@ -84,3 +92,7 @@ class SettingCard(QWidget):
         if _type != None:
             return self.TYPE_MAP[_type]
         return self.TYPE_MAP[type(value).__name__]
+
+    def deleteLater(self) -> None:
+        self.attrgetter("callback").remove(self.__callback)
+        return super().deleteLater()

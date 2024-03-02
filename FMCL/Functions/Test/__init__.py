@@ -5,6 +5,7 @@ import qtawesome as qta
 
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
 from qfluentwidgets import ScrollArea, PushButton
+from Setting import Setting
 
 from Core import Task, Download
 
@@ -14,7 +15,18 @@ def functionInfo():
 
 
 def defaultSetting():
-    return {"test.list": [], "test.dict": {}}
+    return {"test.list": [], "test.dict": {}, "test.auto_refresh": []}
+
+
+def defaultSettingAttr():
+    def getbutton():
+        button = PushButton()
+        button.clicked.connect(
+            lambda: Setting()["test.auto_refresh"].append(time.time())
+        )
+        return button
+
+    return {"test.auto_refresh": {"side_widgets": [getbutton]}}
 
 
 def empty(*_):
