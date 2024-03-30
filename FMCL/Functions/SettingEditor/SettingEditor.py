@@ -59,7 +59,7 @@ class SettingEditor(QWidget, Ui_SettingEditor):
         statetooltip.show()
 
         self.tw_setting.clear()
-        while self.gl_setting.count():
+        while self.gl_setting.count():  # 清理之前存在的控件
             item = self.gl_setting.takeAt(0)
             if item.widget() != None:
                 if isinstance(item.widget(), (QLabel, SettingCard)):

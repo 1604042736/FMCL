@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\SettingEditor\SettingCards\ListSettingCardOperator.ui'
+# Form implementation generated from reading ui file 'e:\User\PCG\FMCL\FMCL\Functions\SettingEditor\SettingCards\ListSettingCardOperator.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -14,8 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_ListSettingCardOperator(object):
     def setupUi(self, ListSettingCardOperator):
         ListSettingCardOperator.setObjectName("ListSettingCardOperator")
-        ListSettingCardOperator.resize(222, 300)
-        ListSettingCardOperator.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        ListSettingCardOperator.resize(222, 48)
         ListSettingCardOperator.setWindowTitle("")
         self.gridLayout = QtWidgets.QGridLayout(ListSettingCardOperator)
         self.gridLayout.setObjectName("gridLayout")

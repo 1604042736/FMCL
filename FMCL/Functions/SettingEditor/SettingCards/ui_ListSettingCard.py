@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\SettingEditor\SettingCards\ListSettingCard.ui'
+# Form implementation generated from reading ui file 'e:\User\PCG\FMCL\FMCL\Functions\SettingEditor\SettingCards\ListSettingCard.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -18,21 +18,16 @@ class Ui_ListSettingCard(object):
         ListSettingCard.setWindowTitle("")
         self._layout = QtWidgets.QGridLayout(ListSettingCard)
         self._layout.setObjectName("_layout")
-        self.frame = QtWidgets.QFrame(ListSettingCard)
-        self.frame.setStyleSheet("QFrame#frame{\n"
-"    border:1px solid black;\n"
-"}")
-        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
-        self.gl_elements = QtWidgets.QGridLayout(self.frame)
-        self.gl_elements.setObjectName("gl_elements")
-        self._layout.addWidget(self.frame, 0, 0, 1, 2)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self._layout.addItem(spacerItem, 1, 1, 1, 1)
         self.pb_add = TransparentToolButton(ListSettingCard)
         self.pb_add.setObjectName("pb_add")
         self._layout.addWidget(self.pb_add, 1, 0, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self._layout.addItem(spacerItem, 1, 1, 1, 1)
+        self.widget = QtWidgets.QWidget(ListSettingCard)
+        self.widget.setObjectName("widget")
+        self.gl_elements = QtWidgets.QGridLayout(self.widget)
+        self.gl_elements.setObjectName("gl_elements")
+        self._layout.addWidget(self.widget, 0, 0, 1, 2)
 
         self.retranslateUi(ListSettingCard)
         QtCore.QMetaObject.connectSlotsByName(ListSettingCard)

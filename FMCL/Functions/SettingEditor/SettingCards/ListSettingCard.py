@@ -1,6 +1,7 @@
 import qtawesome as qta
 
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, Qt, QEvent
+from PyQt5.QtGui import QPainter
 from PyQt5.QtWidgets import QWidget, QInputDialog, QSpacerItem, QSizePolicy
 from qfluentwidgets import MessageBox
 
@@ -61,6 +62,8 @@ class ListSettingCard(SettingCard, Ui_ListSettingCard):
             self.attrsetter("element_attrs", dict())  # 保存元素的属性
 
         self.card_operator_attrs = []
+
+        self.gl_elements.setColumnStretch(1, 3)
 
         self.refresh()
 
@@ -236,9 +239,15 @@ class ListSettingCard(SettingCard, Ui_ListSettingCard):
         element_attrs = self.attrgetter("element_attrs")
         if _type_key:
             if len(self.getter()) not in element_attrs:
-                element_attrs[len(self.getter()) ] = {}
+                element_attrs[len(self.getter())] = {}
             element_attrs[len(self.getter())]["type"] = _type_key
 
         self.getter().append(_type())
 
         self.refresh()
+
+    def event(self, a0: QEvent | None) -> bool:
+        if a0.type() == QEvent.Type.Paint:
+            painter = QPainter(self)
+            painter.drawRect(0, 0, self.width() - 1, self.height() - 1)
+        return super().event(a0)

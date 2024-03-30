@@ -1,6 +1,7 @@
 import qtawesome as qta
 
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, QEvent
+from PyQt5.QtGui import QPainter
 from PyQt5.QtWidgets import QLabel, QInputDialog, QSpacerItem, QSizePolicy
 from qfluentwidgets import TransparentToolButton
 
@@ -19,6 +20,8 @@ class DictSettingCard(SettingCard, Ui_DictSettingCard):
             self.attrsetter("element_attrs", dict())  # 保存元素的属性
 
         self.button_label_card_attrs = []
+
+        self.gl_elements.setColumnStretch(2, 3)
 
         self.refresh()
 
@@ -127,3 +130,9 @@ class DictSettingCard(SettingCard, Ui_DictSettingCard):
 
         self.on_valueChanged()
         self.refresh()
+
+    def event(self, a0: QEvent | None) -> bool:
+        if a0.type() == QEvent.Type.Paint:
+            painter = QPainter(self)
+            painter.drawRect(0, 0, self.width() - 1, self.height() - 1)
+        return super().event(a0)

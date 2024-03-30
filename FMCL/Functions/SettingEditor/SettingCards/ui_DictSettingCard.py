@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\SettingEditor\SettingCards\DictSettingCard.ui'
+# Form implementation generated from reading ui file 'e:\User\PCG\FMCL\FMCL\Functions\SettingEditor\SettingCards\DictSettingCard.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -20,19 +20,14 @@ class Ui_DictSettingCard(object):
         self.gridLayout_2.setObjectName("gridLayout_2")
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gridLayout_2.addItem(spacerItem, 1, 1, 1, 1)
-        self.frame = QtWidgets.QFrame(DictSettingCard)
-        self.frame.setStyleSheet("QFrame#frame{\n"
-"    border:1px solid black;\n"
-"}")
-        self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame.setObjectName("frame")
-        self.gl_elements = QtWidgets.QGridLayout(self.frame)
-        self.gl_elements.setObjectName("gl_elements")
-        self.gridLayout_2.addWidget(self.frame, 0, 0, 1, 2)
         self.pb_add = TransparentToolButton(DictSettingCard)
         self.pb_add.setObjectName("pb_add")
         self.gridLayout_2.addWidget(self.pb_add, 1, 0, 1, 1)
+        self.widget = QtWidgets.QWidget(DictSettingCard)
+        self.widget.setObjectName("widget")
+        self.gl_elements = QtWidgets.QGridLayout(self.widget)
+        self.gl_elements.setObjectName("gl_elements")
+        self.gridLayout_2.addWidget(self.widget, 0, 0, 1, 2)
 
         self.retranslateUi(DictSettingCard)
         QtCore.QMetaObject.connectSlotsByName(DictSettingCard)
