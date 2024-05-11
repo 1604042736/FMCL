@@ -15,3 +15,5 @@ from .APIs import (
     YggdrasilAPI,
 )
 from .MainThreadCreator import MainThreadCreator
+from .Function import Function
+from .Translation import Translation

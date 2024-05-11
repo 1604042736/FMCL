@@ -33,6 +33,8 @@ from qfluentwidgets import RoundMenu, setThemeColor
 from Events import *
 from Setting import Setting, DEFAULT_SETTING_PATH
 from Window import Window
+from Core.Function import Function
+from Core.Translation import Translation
 
 _translate = QCoreApplication.translate
 
@@ -71,10 +73,10 @@ class Kernel(QApplication):
 
         self.unpack()
 
-        self.loadTranslation()
+        Translation.load(self)
 
         logging.info("初始化功能...")
-        self.getAllFunctions()
+        Function.get_all()
 
         setThemeColor(Setting().get("system.theme_color"))
 
@@ -113,74 +115,6 @@ class Kernel(QApplication):
         self.showWidget(widget)
 
     @staticmethod
-    def getTranslationPath():
-        default_path = "FMCL/Default/FMCL"
-        return (
-            (
-                (
-                    [
-                        f"{default_path}/Functions/{i}/Translations"
-                        for i in os.listdir(f"{default_path}/Functions")
-                    ]
-                )
-                if os.path.exists(f"{default_path}/Functions")
-                else []
-            )
-            + (
-                (
-                    [
-                        f"FMCL/Functions/{i}/Translations"
-                        for i in os.listdir("FMCL/Functions")
-                    ]
-                )
-                if os.path.exists("FMCL/Functions")
-                else []
-            )
-            + (
-                [
-                    f"{default_path}/Translations/{i}"
-                    for i in os.listdir(f"{default_path}/Translations")
-                    if os.path.isdir(os.path.join(f"{default_path}/Translations", i))
-                ]
-                if os.path.exists(f"{default_path}/Translations")
-                else []
-            )
-            + (
-                [
-                    f"FMCL/Translations/{i}"
-                    for i in os.listdir("FMCL/Translations")
-                    if os.path.isdir(os.path.join("FMCL/Translations", i))
-                ]
-                if os.path.exists("FMCL/Translations")
-                else []
-            )
-        )
-
-    def loadTranslation(self):
-        """加载翻译"""
-        logging.info("加载翻译...")
-        # 在未加载翻译之前不能使用Setting
-        lang = (
-            json.load(open(DEFAULT_SETTING_PATH, encoding="utf-8")).get(
-                "language.type", "简体中文"
-            )
-            + ".qm"
-        )
-        self.__translators = []  # 防止Translator被销毁
-        # QTranslator优先搜索最新安装的文件
-        for i in self.getTranslationPath():
-            file = f"{i}/{lang}"
-            if not os.path.exists(file):
-                continue
-            translator = QTranslator()
-            if translator.load(file):
-                if self.installTranslator(translator):
-                    logging.info(f"已加载{file}")
-                    self.__translators.append(translator)
-                else:
-                    logging.error(f"无法加载{file}")
-
-    @staticmethod
     def unpack():
         if os.path.exists("FMCL/Default"):
             shutil.rmtree("FMCL/Default")
@@ -198,24 +132,6 @@ class Kernel(QApplication):
                 zip.extract(path, functions_path)
             zip.close()
 
-    @staticmethod
-    def getFunction(function_name: str):
-        """获取功能"""
-        # 并不捕获异常而是留给调用者捕获
-        if f"FMCL.Functions.{function_name}" in sys.modules:
-            return sys.modules[f"FMCL.Functions.{function_name}"]
-        function = import_module(f"FMCL.Functions.{function_name}")
-        logging.info(f"已获取功能: {function_name}({function}")
-        return function
-
-    @staticmethod
-    def execFunction(function_name: str, *args, **kwargs):
-        """运行功能"""
-        # 并不捕获异常而是留给调用者捕获
-        function = Kernel.getFunction(function_name)
-        logging.info(f"运行:{function_name}")
-        return getattr(function, "main")(*args, **kwargs)
-
     def execStartupFunctions(self):
         """运行启动项"""
         actions = Setting()["system.startup_functions"]
@@ -228,58 +144,6 @@ class Kernel(QApplication):
                     msg = traceback.format_exc()
                     logging.error(f"{title}:\n{msg}")
                     QMessageBox.critical(None, title, msg)
-
-    @staticmethod
-    def getAllFunctions():
-        """获取所有功能"""
-        functions = {}
-        for functions_path in ("FMCL/Functions", "FMCL/Default/FMCL/Functions"):
-            if not os.path.exists(functions_path):
-                continue
-            for function_name in os.listdir(functions_path):
-                try:
-                    functions[function_name] = Kernel.getFunction(function_name)
-                except:
-                    logging.warning(
-                        f"功能{function_name}将被忽略:\n{traceback.format_exc()}"
-                    )
-        return functions.values()
-
-    @staticmethod
-    def defaultFunctionInfo(function):
-        """默认功能信息"""
-        name = function.__name__.split(".")[-1]
-        return {"name": name, "id": name, "icon": qta.icon("mdi6.application-outline")}
-
-    @staticmethod
-    def getFunctionInfo(function):
-        """获取功能信息"""
-        info = (
-            Kernel.defaultFunctionInfo(function)
-            | getattr(function, "functionInfo", lambda: {})()
-        )
-        return info
-
-    @staticmethod
-    def getAllFunctionInfo():
-        """获取全部功能信息"""
-        function_info = []
-        for function in Kernel.getAllFunctions():
-            function_info.append(Kernel.getFunctionInfo(function))
-        return function_info
-
-    @staticmethod
-    def getFunctionHelpIndex(function) -> dict:
-        """获得功能的帮助索引"""
-        return getattr(function, "helpIndex", lambda: {})()
-
-    @staticmethod
-    def getAllFunctionHelpIndex() -> list:
-        """获取全部功能的帮助索引"""
-        function_helpindex = []
-        for function in Kernel.getAllFunctions():
-            function_helpindex.append(Kernel.getFunctionHelpIndex(function))
-        return function_helpindex
 
     @staticmethod
     def getHelpIndex() -> dict:
@@ -306,7 +170,7 @@ class Kernel(QApplication):
                     merge(helpindex, getattr(module, "helpIndex", lambda: {})())
                 except:
                     logging.error(traceback.format_exc())
-        for i in Kernel.getAllFunctionHelpIndex():
+        for i in Function.get_all_help_index():
             merge(helpindex, i)
         return helpindex
 
@@ -334,22 +198,6 @@ class Kernel(QApplication):
         window.show()
 
     @staticmethod
-    def getAllLanguages():
-        """获取所有语言"""
-        lang = []
-        for path in Kernel.getTranslationPath():
-            if not os.path.exists(path):
-                continue
-            for i in os.listdir(path):
-                full_path = os.path.join(path, i)
-                if os.path.isdir(full_path):
-                    continue
-                name, ext = os.path.splitext(i)
-                if ext == ".qm":
-                    lang.append(name)
-        return set(lang)
-
-    @staticmethod
     def runCommand(command: str):
         function, *args = command.split(maxsplit=1)
         pargs = []
@@ -363,7 +211,7 @@ class Kernel(QApplication):
                 exec(s, kwargs)
             else:
                 pargs.append(eval(s))
-        Kernel.execFunction(function, *pargs, **kwargs)
+        Function(function).exec(*pargs, **kwargs)
 
     @staticmethod
     def getAbout():

@@ -1,3 +1,4 @@
+from Core import Function
 from Kernel import Kernel
 from PyQt5.QtCore import QEvent, QSize
 from PyQt5.QtWidgets import QListView, QListWidgetItem
@@ -32,7 +33,7 @@ class AllFunctions(ListWidget):
     def refresh(self):
         self.clear()
         self.item_id = []
-        for function_info in Kernel.getAllFunctionInfo():
+        for function_info in Function.get_all_info():
             if "Explorer" in function_info["id"]:
                 continue
             name = function_info["name"]
@@ -48,7 +49,7 @@ class AllFunctions(ListWidget):
     def launchFunc(self):
         for item, id in self.item_id:
             if item == self.currentItem():
-                Kernel.execFunction(id)
+                Function(id).exec()
                 break
 
     def event(self, a0: QEvent) -> bool:

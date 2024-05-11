@@ -9,6 +9,7 @@ from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import QWidget, QFileDialog
 import psutil
 from qfluentwidgets import setThemeColor, PrimaryPushButton
+from Core.Function import Function
 
 _translate = QCoreApplication.translate
 
@@ -353,17 +354,13 @@ class Setting:
 
     def loadFunctionSetting(self):
         """加载功能的设置"""
-        from Kernel import Kernel
-
-        for function in Kernel.getAllFunctions():
-            self.add(getattr(function, "defaultSetting", lambda: {})())
+        for function in Function.get_all():
+            self.add(function.get_default_setting())
 
     def loadFunctionSettingAttr(self):
         """加载功能的设置属性"""
-        from Kernel import Kernel
-
-        for function in Kernel.getAllFunctions():
-            self.addAttr(getattr(function, "defaultSettingAttr", lambda: {})())
+        for function in Function.get_all():
+            self.addAttr(function.get_default_settingattr())
 
     def get(self, key, default=None):
         try:
