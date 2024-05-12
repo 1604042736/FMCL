@@ -56,18 +56,23 @@ class GameInfo(QWidget, Ui_GameInfo):
             ]
             if len(content) != 0:
                 total_time = 0
+                count = 0
                 i = 0
                 while i < len(content) - 1:
+                    if content[i][0] == 0:
+                        count += 1
                     if content[i][0] == 0 and content[i + 1][0] == 1:
                         total_time += content[i + 1][1] - content[i][1]
                         i += 2
                     else:
                         i += 1
+                if i < len(content) and content[i][0] == 0:
+                    count += 1
                 self.l_record.setText(
                     self.tr(
                         "自有记录以来, 一共启动了{count}次游戏, 总时长{hour_time}时{minute_time}分{second_time}秒"
                     ).format(
-                        count=len(content) // 2,
+                        count=count,
                         hour_time=total_time // 3600,
                         minute_time=total_time % 3600 // 60,
                         second_time=total_time % 3600 % 60,
