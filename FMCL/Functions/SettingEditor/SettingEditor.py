@@ -172,6 +172,8 @@ class SettingEditor(QWidget, Ui_SettingEditor):
     def show(self, id="") -> None:
         super().show()
         if id:
+            if not hasattr(self, "item_widget_id_layout"):  # 说明之前没有加载过
+                self.load()
             self.turnTo(id)
 
     def refresh(self):
