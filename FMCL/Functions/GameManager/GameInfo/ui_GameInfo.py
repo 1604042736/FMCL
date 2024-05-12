@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\GameManager\GameInfo\GameInfo.ui'
+# Form implementation generated from reading ui file 'e:\User\PCG\FMCL\FMCL\Functions\GameManager\GameInfo\GameInfo.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -44,16 +44,10 @@ class Ui_GameInfo(object):
         self.pb_opendir = PushButton(self.widget)
         self.pb_opendir.setObjectName("pb_opendir")
         self.gl_info.addWidget(self.pb_opendir, 1, 1, 1, 1)
-        self.pb_resourcepack = PushButton(self.widget)
-        self.pb_resourcepack.setObjectName("pb_resourcepack")
-        self.gl_info.addWidget(self.pb_resourcepack, 1, 2, 1, 1)
         self.l_logo = QtWidgets.QLabel(self.widget)
         self.l_logo.setText("")
         self.l_logo.setObjectName("l_logo")
         self.gl_info.addWidget(self.l_logo, 0, 0, 2, 1)
-        self.le_name = LineEdit(self.widget)
-        self.le_name.setObjectName("le_name")
-        self.gl_info.addWidget(self.le_name, 0, 1, 1, 5)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.gl_info.addItem(spacerItem1, 1, 5, 1, 1)
         self.pb_delete = PushButton(self.widget)
@@ -62,6 +56,16 @@ class Ui_GameInfo(object):
         self.pb_shaderpack = PushButton(self.widget)
         self.pb_shaderpack.setObjectName("pb_shaderpack")
         self.gl_info.addWidget(self.pb_shaderpack, 1, 3, 1, 1)
+        self.pb_resourcepack = PushButton(self.widget)
+        self.pb_resourcepack.setObjectName("pb_resourcepack")
+        self.gl_info.addWidget(self.pb_resourcepack, 1, 2, 1, 1)
+        self.le_name = LineEdit(self.widget)
+        self.le_name.setObjectName("le_name")
+        self.gl_info.addWidget(self.le_name, 0, 1, 1, 5)
+        self.l_record = QtWidgets.QLabel(self.widget)
+        self.l_record.setText("")
+        self.l_record.setObjectName("l_record")
+        self.gl_info.addWidget(self.l_record, 2, 1, 1, 5)
         self.gridLayout_2.addWidget(self.widget, 0, 0, 1, 2)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.gridLayout.addWidget(self.scrollArea, 0, 0, 1, 1)
@@ -73,7 +77,7 @@ class Ui_GameInfo(object):
         _translate = QtCore.QCoreApplication.translate
         GameInfo.setWindowTitle(_translate("GameInfo", "游戏信息"))
         self.pb_opendir.setText(_translate("GameInfo", "打开文件夹"))
-        self.pb_resourcepack.setText(_translate("GameInfo", "资源包文件夹"))
         self.pb_delete.setText(_translate("GameInfo", "删除"))
         self.pb_shaderpack.setText(_translate("GameInfo", "光影包文件夹"))
+        self.pb_resourcepack.setText(_translate("GameInfo", "资源包文件夹"))
 from qfluentwidgets import LineEdit, PushButton

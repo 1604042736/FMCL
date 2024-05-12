@@ -1,5 +1,5 @@
 import qtawesome as qta
-from Core import Version
+from Core import Function, Version
 from FMCL.Functions.SettingEditor import SettingEditor
 from Kernel import Kernel
 from PyQt5.QtCore import QEvent, pyqtSlot, QObject
@@ -82,7 +82,7 @@ class GameManager(QWidget, Ui_GameManager):
         self.setUi(self.gameinfo)
 
     def renamed(self, name):
-        Kernel.execFunction("GameManager", name=name)
+        Function("GameManager").exec(name=name)
         self.close()
 
     def setUi(self, widget: QWidget):

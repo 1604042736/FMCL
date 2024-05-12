@@ -1,6 +1,7 @@
 import math
 import os
 
+from Core import Function
 from Kernel import Kernel
 from PyQt5.QtCore import pyqtSlot
 from PyQt5.QtGui import QIcon
@@ -45,4 +46,4 @@ class StrongholdFinder(QWidget, Ui_StrongholdFinder):
 
     @pyqtSlot(bool)
     def on_pb_howgetdata_clicked(self, _):
-        Kernel.execFunction("HelpViewer", id="strongholdfinder.howtogetdata")
+        Function("HelpViewer").exec(id="strongholdfinder.howtogetdata")

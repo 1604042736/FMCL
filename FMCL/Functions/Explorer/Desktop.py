@@ -23,7 +23,7 @@ from qfluentwidgets import (
 )
 
 
-from Core import Version
+from Core import Version, Function
 from Setting import Setting
 from Events import *
 
@@ -87,8 +87,8 @@ class Desktop(ListWidget):
             a_background_image = QAction(self.tr("设置背景图片"), self)
             a_background_image.setIcon(qta.icon("fa.image"))
             a_background_image.triggered.connect(
-                lambda: Kernel.execFunction(
-                    "SettingEditor", id="explorer.desktop.background_image"
+                lambda: Function("SettingEditor").exec(
+                    id="explorer.desktop.background_image"
                 )
             )
 

@@ -4,6 +4,7 @@ from typing import *
 
 import multitasking
 import qtawesome as qta
+from Core import Function
 from Core.User import User
 from Kernel import Kernel
 from PyQt5.QtCore import QEvent, QPoint, pyqtSignal
@@ -57,7 +58,7 @@ class Start(QWidget):
         self.pb_user = NavigationPushButton(
             qta.icon("ph.user-circle"), self.tr("未选择用户"), False
         )
-        self.pb_user.clicked.connect(lambda: Kernel.execFunction("UserManager"))
+        self.pb_user.clicked.connect(lambda: Function("UserManager").exec())
         self.navigationInterface.addWidget(
             routeKey="user", widget=self.pb_user, position=NavigationItemPosition.BOTTOM
         )

@@ -1,4 +1,5 @@
 import qtawesome as qta
+from Core import Function
 from Events import *
 from Kernel import Kernel
 
@@ -42,13 +43,13 @@ class MusicPlayer(QWidget, Ui_MusicPlayer):
         self.pb_gosetting.setIcon(qta.icon("ri.settings-5-line"))
         self.pb_gosetting.resize(46, 32)
         self.pb_gosetting.clicked.connect(
-            lambda: Kernel.execFunction("SettingEditor", id="musicplayer")
+            lambda: Function("SettingEditor").exec(id="musicplayer")
         )
 
         self.pb_music = TransparentToolButton()
         self.pb_music.resize(46, 32)
         self.pb_music.setIcon(qta.icon("ei.music"))
-        self.pb_music.clicked.connect(lambda: Kernel.execFunction("MusicPlayer"))
+        self.pb_music.clicked.connect(lambda: Function("MusicPlayer").exec())
 
         setting = Setting()
         self.playlist = QMediaPlaylist(self)

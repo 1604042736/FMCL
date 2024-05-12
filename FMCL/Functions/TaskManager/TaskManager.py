@@ -1,4 +1,5 @@
 import qtawesome as qta
+from Core import Function
 from Events import *
 
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QTimer, Qt, QObject, QEvent
@@ -37,7 +38,7 @@ class TaskManager(QWidget, Ui_TaskManager):
         self.pb_taskmanager = TransparentToolButton()
         self.pb_taskmanager.setIcon(qta.icon("fa.tasks"))
         self.pb_taskmanager.resize(46, 32)
-        self.pb_taskmanager.clicked.connect(lambda: Kernel.execFunction("TaskManager"))
+        self.pb_taskmanager.clicked.connect(lambda:Function("TaskManager").exec())
 
         self.taskStarted.connect(self.on_taskStarted)
         self.taskFinished.connect(self.on_taskFinished)

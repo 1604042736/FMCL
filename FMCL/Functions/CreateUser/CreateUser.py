@@ -11,6 +11,7 @@ from qfluentwidgets import (
 
 from Setting import Setting
 from Core import YggdrasilAPI
+from Core import Function
 
 from .Microsoft import Microsoft
 from .Offline import Offline
@@ -51,7 +52,7 @@ class CreateUser(QWidget, Ui_CreateUser):
         functioninfo = Kernel.getFunctionInfo(Kernel.getFunction("UserManager"))
         self.pb_usermanager.setIcon(functioninfo["icon"])
         self.pb_usermanager.resize(46, 32)
-        self.pb_usermanager.clicked.connect(lambda: Kernel.execFunction("UserManager"))
+        self.pb_usermanager.clicked.connect(lambda: Function("UserManager").exec())
 
         self.sw_way.currentChanged.connect(self.changePanelState)
 

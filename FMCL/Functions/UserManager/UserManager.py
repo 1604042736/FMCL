@@ -1,4 +1,5 @@
 import qtawesome as qta
+from Core import Function
 from Events import *
 from Kernel import Kernel
 from PyQt5.QtCore import QEvent
@@ -31,7 +32,7 @@ class UserManager(QWidget, Ui_UserManager):
         functioninfo = Kernel.getFunctionInfo(Kernel.getFunction("CreateUser"))
         self.pb_add.setIcon(functioninfo["icon"])
         self.pb_add.resize(46, 32)
-        self.pb_add.clicked.connect(lambda: Kernel.execFunction("CreateUser"))
+        self.pb_add.clicked.connect(lambda: Function("CreateUser").exec())
 
         self.userinfo: list[UserInfo] = []
         self.refresh()

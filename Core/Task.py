@@ -1,6 +1,7 @@
 import logging
 import threading
 import time
+import traceback
 from typing import Callable
 from PyQt5.QtCore import QObject, QThread, pyqtSignal, QCoreApplication
 
@@ -114,7 +115,7 @@ class Task(QThread):
             try:
                 self.taskfunc(self.callback)
             except Exception as e:
-                logging.warning(f"产生错误:{e}")
+                logging.warning("".join(traceback.format_exception(e)))
                 self.occurException.emit(e, self.exception_handler)  # 交给主线程来raise
 
         self.status = self.tr("等待子任务执行完成")

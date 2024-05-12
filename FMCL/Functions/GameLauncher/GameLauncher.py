@@ -1,12 +1,17 @@
 import logging
+import sys
 import traceback
 import psutil
+import os
+import time
 
 import qtawesome as qta
-from Core import Version, Task
+from Core import Java, Version, Task
 from PyQt5.QtCore import QProcess, pyqtSignal, pyqtSlot, QTimer
 from PyQt5.QtWidgets import QWidget
 from qfluentwidgets import MessageBox
+
+from Setting import Setting
 
 from .ui_GameLauncher import Ui_GameLauncher
 
@@ -14,7 +19,7 @@ CPU_COUNT = psutil.cpu_count()
 
 
 class GameLauncher(QWidget, Ui_GameLauncher):
-    __commandGot = pyqtSignal(str, list)
+    __launchCommand = pyqtSignal()
 
     def __init__(self, game_name: str):
         super().__init__()
@@ -24,34 +29,18 @@ class GameLauncher(QWidget, Ui_GameLauncher):
         self.setWindowIcon(qta.icon("mdi.rocket-launch-outline"))
         self.name = game_name
         self.te_output.setReadOnly(True)
-        self.__commandGot.connect(self.__start)
+        self.__launchCommand.connect(self.__start)
+
+        self.process = QProcess()
+        self.process.readyReadStandardOutput.connect(self.outputStandard)
+        self.process.readyReadStandardError.connect(self.errorStandard)
 
         t = self.tr("启动游戏")
         self.game = Version(self.name)
-        self.root = Task(f"{t}:{game_name}")
-        self.check = Task(
-            self.tr("检查外置登录"),
-            parent=self.root,
-            taskfunc=self.game.check_authlibinjector,
+        self.root = Task(
+            f"{t}:{game_name}",
+            taskfunc=self.prepare,
             exception_handler=[self.showError],
-        )
-        self.getcommmand = Task(
-            self.tr("获取命令行参数"),
-            parent=self.root,
-            taskfunc=lambda _: (
-                setattr(self, "dir_command", self.game.get_launch_command())
-            ),
-            waittasks=[self.check],
-            exception_handler=[self.showError],
-        )
-        self.launch = Task(
-            self.tr("启动"),
-            parent=self.root,
-            taskfunc=lambda _: (
-                self.show(),
-                self.__commandGot.emit(self.dir_command[0], self.dir_command[1]),
-            ),
-            waittasks=[self.getcommmand],
         )
         self.root.start()
 
@@ -59,13 +48,17 @@ class GameLauncher(QWidget, Ui_GameLauncher):
         MessageBox(self.tr("启动游戏失败"), str(e), self).exec()
         return True
 
-    def __start(self, dir, command):
+    def prepare(self, callback=None):
+        """准备启动游戏"""
+        self.game_path, self.commands = self.game.get_launch_command(callback)
+        self.timerec_filepath = os.path.join(self.game_path, "FMCL", "TimeRecord.txt")
+        self.__launchCommand.emit()
+
+    def __start(self):
+        command = self.commands.pop(0)
         logging.info(command)
-        self.process = QProcess()
-        self.process.readyReadStandardOutput.connect(self.outputStandard)
-        self.process.readyReadStandardError.connect(self.errorStandard)
-        program, *args = command
-        self.process.setWorkingDirectory(dir)
+        program, args = command
+        self.process.setWorkingDirectory(self.game_path)
         self.process.start(program, args)
         self.pb_kill.setEnabled(True)
 
@@ -101,13 +94,20 @@ class GameLauncher(QWidget, Ui_GameLauncher):
     @pyqtSlot(bool)
     def on_pb_kill_clicked(self, _):
         self.process.kill()
+        self.process.waitForFinished()
+        self.commands = []  # 清空
         self.afterKilling()
         logging.info(f"{self.name}被用户终止")
+        with open(self.timerec_filepath, "a+") as file:  # 补写结束时间
+            file.write(f"1:{int(time.time())}\n")
 
     def afterKilling(self):
         self.timer.stop()
         self.pb_kill.setEnabled(False)
-        self.l_info.setText(self.tr("游戏已停止"))
+        if self.commands:
+            self.__launchCommand.emit()
+        else:
+            self.l_info.setText(self.tr("游戏已停止"))
 
     def showInfo(self):
         if self.process.state() == QProcess.ProcessState.NotRunning:

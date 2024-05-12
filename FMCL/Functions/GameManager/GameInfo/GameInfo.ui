@@ -77,22 +77,12 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="2">
-           <widget class="PushButton" name="pb_resourcepack">
-            <property name="text">
-             <string>资源包文件夹</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="0" rowspan="2">
            <widget class="QLabel" name="l_logo">
             <property name="text">
              <string/>
             </property>
            </widget>
-          </item>
-          <item row="0" column="1" colspan="5">
-           <widget class="LineEdit" name="le_name"/>
           </item>
           <item row="1" column="5">
            <spacer name="horizontalSpacer">
@@ -118,6 +108,23 @@
            <widget class="PushButton" name="pb_shaderpack">
             <property name="text">
              <string>光影包文件夹</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="PushButton" name="pb_resourcepack">
+            <property name="text">
+             <string>资源包文件夹</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="5">
+           <widget class="LineEdit" name="le_name"/>
+          </item>
+          <item row="2" column="1" colspan="5">
+           <widget class="QLabel" name="l_record">
+            <property name="text">
+             <string/>
             </property>
            </widget>
           </item>

@@ -5,6 +5,7 @@ import os
 import re
 import shutil
 from copy import deepcopy
+import sys
 import traceback
 from Kernel import Kernel
 import minecraft_launcher_lib as mll
@@ -20,6 +21,7 @@ from Core.Mod import Mod
 from Core.Java import Java
 from Core.Installer import Installer
 from Core.APIs.ModrinthAPI import ModrinthAPI
+from Core.Function import Function
 
 from .Task import Task
 from .User import User
@@ -66,7 +68,7 @@ class Version:
         self.pb_goglobalsetting = PrimaryPushButton()
         self.pb_goglobalsetting.setText(_translate("Version", "前往全局设置"))
         self.pb_goglobalsetting.clicked.connect(
-            lambda: Kernel.execFunction("SettingEditor", id="game")
+            lambda: Function("SettingEditor").exec(id="game")
         )
         self.DEFAULT_SETTING_ATTR = {
             "specific": {
@@ -112,6 +114,8 @@ class Version:
         setProgress = callback.get("setProgress", lambda _: None)
         setStatus = callback.get("setStatus", lambda _: None)
 
+        command = []
+
         cur_user = deepcopy(User.get_cur_user())
         if cur_user["type"] == "authlibInjector":
             logging.info(f"外置登录")
@@ -136,10 +140,11 @@ class Version:
             metab64 = base64.b64encode(meta)
             metab64 = str(metab64)[2:-1]
             logging.info(f"元数据Base64编码: {metab64}")
-            self.precommand.append(f"-javaagent:{path}={api}")
-            self.precommand.append(f"-Dauthlibinjector.yggdrasil.prefetched={metab64}")
+            command.append(f"-javaagent:{path}={api}")
+            command.append(f"-Dauthlibinjector.yggdrasil.prefetched={metab64}")
+        return command
 
-    def get_launch_command(self) -> tuple[str, str]:
+    def get_launch_command(self, callback=None) -> tuple[str, str]:
         """
         获取启动参数
         返回游戏目录和参数
@@ -151,7 +156,7 @@ class Version:
         else:
             setting = Setting()
 
-        command = deepcopy(self.precommand)
+        default_args = self.check_authlibinjector(callback)
 
         options = deepcopy(User.get_cur_user())
         if options == None:
@@ -170,16 +175,43 @@ class Version:
                 os.path.join(self.directory, "versions", self.name)
             )
 
-        _command = mll.command.get_minecraft_command(self.name, absdir, options)
-        command.insert(0, _command[0])
-        command += _command[1:]
+        t = mll.command.get_minecraft_command(self.name, absdir, options)
+        java_path = t[0]
+        default_args += t[1:]
         try:
-            i = command.index("--versionType")
-            command[i + 1] = "FMCL"
+            i = default_args.index("--versionType") + 1
+            default_args[i] = "FMCL"
         except:
             pass
+        logging.info(default_args)
 
-        return options["gameDirectory"], command
+        commands_dict = dict(setting.get("game.launch_commands"))
+        game_path = options["gameDirectory"]
+        commands = []
+        formats = {
+            "game_path": game_path,
+            "java_path": java_path,
+            "default_args": default_args,
+            "argv0": sys.argv[0],
+        }
+        for _, val in commands_dict.items():
+            val["program"] = val["program"].format(**formats)
+            for i in range(len(val["args"])):
+                val["args"][i] = val["args"][i].format(**formats)
+            # 展开args
+            args = []
+            for arg in val["args"]:
+                try:
+                    arg = eval(arg)
+                except:
+                    pass
+                if isinstance(arg, list):
+                    args.extend(arg)
+                else:
+                    args.append(arg)
+            commands.append((val["program"], args))
+        logging.info(commands)
+        return game_path, commands
 
     def install_forge(self, forge_version, callback):
         logging.info(f"安装Forge({forge_version})")
@@ -263,7 +295,9 @@ class Version:
     def install_resourcepack(self, filepath_or_url, filename):
         if "https://" in filepath_or_url or "http://" in filepath_or_url:
             Task(
-                _translate("Version", "从{url}中安装资源包").format(url=filepath_or_url),
+                _translate("Version", "从{url}中安装资源包").format(
+                    url=filepath_or_url
+                ),
                 taskfunc=lambda callback: self.install_resourcepack_fromurl(
                     filepath_or_url, filename, callback
                 ),
@@ -283,7 +317,9 @@ class Version:
     def install_shaderpack(self, filepath_or_url, filename):
         if "https://" in filepath_or_url or "http://" in filepath_or_url:
             Task(
-                _translate("Version", "从{url}中安装光影包").format(url=filepath_or_url),
+                _translate("Version", "从{url}中安装光影包").format(
+                    url=filepath_or_url
+                ),
                 taskfunc=lambda callback: self.install_shaderpack_fromurl(
                     filepath_or_url, filename, callback
                 ),
@@ -539,8 +575,12 @@ class Version:
                 result.append(Mod(os.path.join(path, i)))
         return result
 
+    def get_game_path(self):
+        """获取游戏目录(注意与启动时的游戏目录区分)"""
+        return os.path.join(self.directory, "versions", self.name)
+
     def open_directory(self):
-        os.startfile(os.path.join(self.directory, "versions", self.name))
+        os.startfile(self.get_game_path())
 
     def delete_screenshots(self, screenshots: list | str):
         if isinstance(screenshots, str):

@@ -1,7 +1,8 @@
 import qtawesome as qta
+from Core import Function
 from Events import *
 from Kernel import Kernel
-from PyQt5.QtCore import QEvent, QObject, QPoint, Qt, QUrl
+from PyQt5.QtCore import QEvent, QObject, QPoint, Qt
 from PyQt5.QtWidgets import QAction, QPushButton, QStackedWidget, QWidget, qApp
 from qfluentwidgets import RoundMenu, TransparentTogglePushButton
 from Setting import Setting
@@ -140,9 +141,7 @@ QPushButton:checked{
         elif a1.type() == QEvent.Type.DragMove:
             a1.accept()
         elif a1.type() == QEvent.Type.Drop:
-            Kernel.execFunction(
-                "NBTViewer", a1.mimeData().text().replace("file:///", "")
-            )
+            Function("NBTViewer").exec(a1.mimeData().text().replace("file:///", ""))
         return super().eventFilter(a0, a1)
 
     def removeTask(self, widget: QWidget):

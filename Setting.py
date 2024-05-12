@@ -27,6 +27,19 @@ DEFAULT_SETTING = {
     "game.width": 1000,
     "game.height": 618,
     "game.maxmem": 2048,
+    "game.launch_commands": {
+        "TimeRecord_Start1": {"program": "{argv0}", "args": ["--start", "{game_path}"]},
+        "TimeRecodr_Start2": {
+            "program": "python",
+            "args": ["{argv0}", "--start", "{game_path}"],
+        },
+        "Main": {"program": "{java_path}", "args": ["{default_args}"]},
+        "TimeRecord_End1": {"program": "{argv0}", "args": ["--end", "{game_path}"]},
+        "TimeRecodr_End2": {
+            "program": "python",
+            "args": ["{argv0}", "--end", "{game_path}"],
+        },
+    },
     "users": [],
     "users.selectindex": 0,
     "users.authlibinjector_servers": [],
@@ -155,6 +168,9 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
             "name": _translate("Setting", "最大内存"),
             "min_value": 512,
             "max_value": int(psutil.virtual_memory().total / 1024 / 1024),
+        },
+        "game.launch_commands": {
+            "name": _translate("Setting", "启动参数"),
         },
         "users": {"name": _translate("Setting", "用户")},
         "users.selectindex": {"name": _translate("Setting", "选择用户索引")},

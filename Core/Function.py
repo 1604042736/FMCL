@@ -1,4 +1,5 @@
 from importlib import import_module
+import sys
 import qtawesome as qta
 import os
 import logging
@@ -42,7 +43,11 @@ class Function:
 
     def __init__(self, name) -> None:
         self.name = name
-        self.module = import_module(f"FMCL.Functions.{name}")
+        if f"FMCL.Functions.{name}" not in sys.modules:
+            self.module = import_module(f"FMCL.Functions.{name}")
+            logging.info(f"加载功能: {name} ({self.module})")
+        else:
+            self.module = import_module(f"FMCL.Functions.{name}")
 
     def exec(self, *args, **kwargs):
         """运行功能"""
