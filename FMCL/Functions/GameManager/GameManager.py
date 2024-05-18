@@ -99,7 +99,7 @@ class GameManager(QWidget, Ui_GameManager):
     def on_pb_gamesetting_clicked(self, _):
         self.pb_gamesetting.setChecked(True)
         self.setUi(self.gamesetting)
-        self.gamesetting.load()
+        self.gamesetting.show()
 
     @pyqtSlot(bool)
     def on_pb_modmanager_clicked(self, _):

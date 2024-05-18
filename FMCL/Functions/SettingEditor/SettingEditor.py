@@ -49,6 +49,8 @@ class SettingEditor(QWidget, Ui_SettingEditor):
         self.pb_save.setIcon(qta.icon("fa.save"))
         self.pb_save.clicked.connect(lambda: self.setting.sync())
 
+        self.loaded=False
+
     def load(self):
         self.items = {}
         self.item_widget_id_layout = []
@@ -150,6 +152,8 @@ class SettingEditor(QWidget, Ui_SettingEditor):
         statetooltip.setContent(self.tr("加载完成"))
         statetooltip.setState(True)
 
+        self.loaded=True
+
     def addTreeItem(self, root: QTreeWidgetItem | None, item: QTreeWidgetItem):
         if root == None:
             self.tw_setting.addTopLevelItem(item)
@@ -171,9 +175,9 @@ class SettingEditor(QWidget, Ui_SettingEditor):
 
     def show(self, id="") -> None:
         super().show()
+        if not self.loaded:
+            self.load()
         if id:
-            if not hasattr(self, "item_widget_id_layout"):  # 说明之前没有加载过
-                self.load()
             self.turnTo(id)
 
     def refresh(self):
