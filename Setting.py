@@ -28,17 +28,17 @@ DEFAULT_SETTING = {
     "game.height": 618,
     "game.maxmem": 2048,
     "game.launch_commands": {
-        "TimeRecord_Start1": {"program": "{argv0}", "args": ["--start", "{game_path}"]},
-        "TimeRecodr_Start2": {
-            "program": "python",
-            "args": ["{argv0}", "--start", "{game_path}"],
-        },
+        # "TimeRecord_Start1": {"program": "{argv0}", "args": ["--start", "{game_path}"]},
+        # "TimeRecodr_Start2": {
+        #    "program": "python",
+        #    "args": ["{argv0}", "--start", "{game_path}"],
+        # },
         "Main": {"program": "{java_path}", "args": ["{default_args}"]},
-        "TimeRecord_End1": {"program": "{argv0}", "args": ["--end", "{game_path}"]},
-        "TimeRecodr_End2": {
-            "program": "python",
-            "args": ["{argv0}", "--end", "{game_path}"],
-        },
+        # "TimeRecord_End1": {"program": "{argv0}", "args": ["--end", "{game_path}"]},
+        # "TimeRecodr_End2": {
+        #    "program": "python",
+        #    "args": ["{argv0}", "--end", "{game_path}"],
+        # },
     },
     "users": [],
     "users.selectindex": 0,

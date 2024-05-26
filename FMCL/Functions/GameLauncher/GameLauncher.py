@@ -52,6 +52,7 @@ class GameLauncher(QWidget, Ui_GameLauncher):
         """准备启动游戏"""
         self.game_path, self.commands = self.game.get_launch_command(callback)
         self.timerec_filepath = os.path.join(self.game_path, "FMCL", "TimeRecord.txt")
+        open(self.timerec_filepath, "a+").write(f"0:{int(time.time())}\n")
         self.__launchCommand.emit()
 
     def __start(self):
@@ -98,8 +99,8 @@ class GameLauncher(QWidget, Ui_GameLauncher):
         self.commands = []  # 清空
         self.afterKilling()
         logging.info(f"{self.name}被用户终止")
-        with open(self.timerec_filepath, "a+") as file:  # 补写结束时间
-            file.write(f"1:{int(time.time())}\n")
+        """with open(self.timerec_filepath, "a+") as file:  # 补写结束时间
+            file.write(f"1:{int(time.time())}\n")"""
 
     def afterKilling(self):
         self.timer.stop()
@@ -108,6 +109,7 @@ class GameLauncher(QWidget, Ui_GameLauncher):
             self.__launchCommand.emit()
         else:
             self.l_info.setText(self.tr("游戏已停止"))
+            open(self.timerec_filepath, "a+").write(f"1:{int(time.time())}\n")
 
     def showInfo(self):
         if self.process.state() == QProcess.ProcessState.NotRunning:
