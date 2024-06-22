@@ -49,22 +49,6 @@ def init():
 
 
 def main():
-    """try:
-        index = sys.argv.index("--start") + 1
-        game_path = sys.argv[index]
-        timerec_filepath = os.path.join(game_path, "FMCL", "TimeRecord.txt")
-        open(timerec_filepath, "a+").write(f"0:{int(time.time())}\n")
-        return
-    except:
-        pass
-    try:
-        index = sys.argv.index("--end") + 1
-        game_path = sys.argv[index]
-        timerec_filepath = os.path.join(game_path, "FMCL", "TimeRecord.txt")
-        open(timerec_filepath, "a+").write(f"1:{int(time.time())}\n")
-        return
-    except:
-        pass"""
     init()
     try:
         index = sys.argv.index("--update") + 1

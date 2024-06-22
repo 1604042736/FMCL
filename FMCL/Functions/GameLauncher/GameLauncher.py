@@ -1,17 +1,16 @@
 import logging
-import sys
 import traceback
 import psutil
 import os
 import time
 
 import qtawesome as qta
-from Core import Java, Version, Task
-from PyQt5.QtCore import QProcess, pyqtSignal, pyqtSlot, QTimer
-from PyQt5.QtWidgets import QWidget
-from qfluentwidgets import MessageBox
+from Core import Version, Task
+from PyQt5.QtCore import QProcess, pyqtSignal, pyqtSlot, QTimer, QEvent
+from PyQt5.QtWidgets import QWidget, qApp
+from qfluentwidgets import MessageBox, TransparentToolButton
 
-from Setting import Setting
+from Events import *
 
 from .ui_GameLauncher import Ui_GameLauncher
 
@@ -27,6 +26,8 @@ class GameLauncher(QWidget, Ui_GameLauncher):
         t = self.tr("游戏日志")
         self.setWindowTitle(f"{t}:{game_name}")
         self.setWindowIcon(qta.icon("mdi.rocket-launch-outline"))
+
+        self.auto_scroll = True  # 自动滚动日志
         self.name = game_name
         self.te_output.setReadOnly(True)
         self.__launchCommand.connect(self.__start)
@@ -34,6 +35,13 @@ class GameLauncher(QWidget, Ui_GameLauncher):
         self.process = QProcess()
         self.process.readyReadStandardOutput.connect(self.outputStandard)
         self.process.readyReadStandardError.connect(self.errorStandard)
+
+        self.pb_auto_scroll = TransparentToolButton()
+        self.pb_auto_scroll.resize(46, 32)
+        self.pb_auto_scroll.clicked.connect(
+            lambda: self.setAutoScroll(not self.auto_scroll)
+        )
+        self.setAutoScroll(self.auto_scroll)
 
         t = self.tr("启动游戏")
         self.game = Version(self.name)
@@ -43,6 +51,15 @@ class GameLauncher(QWidget, Ui_GameLauncher):
             exception_handler=[self.showError],
         )
         self.root.start()
+
+    def setAutoScroll(self, auto_scroll: bool):
+        self.auto_scroll = auto_scroll
+        if self.auto_scroll:
+            self.pb_auto_scroll.setIcon(qta.icon("fa.lock"))
+            self.pb_auto_scroll.setToolTip(self.tr("自动滚动"))
+        else:
+            self.pb_auto_scroll.setIcon(qta.icon("fa.unlock-alt"))
+            self.pb_auto_scroll.setToolTip(self.tr("手动滚动"))
 
     def showError(self, e: Exception):
         MessageBox(self.tr("启动游戏失败"), str(e), self).exec()
@@ -57,7 +74,7 @@ class GameLauncher(QWidget, Ui_GameLauncher):
 
     def __start(self):
         command = self.commands.pop(0)
-        logging.info(command)
+        logging.info(f"__start: {command}")
         program, args = command
         self.process.setWorkingDirectory(self.game_path)
         self.process.start(program, args)
@@ -83,13 +100,9 @@ class GameLauncher(QWidget, Ui_GameLauncher):
         self.output(text)
 
     def output(self, text: str):
-        text = text.rstrip()
-        flag = False
         scrollbar = self.te_output.verticalScrollBar()
-        if scrollbar.value() == scrollbar.maximum():
-            flag = True
-        self.te_output.append(text)
-        if flag:
+        self.te_output.append(text.rstrip())
+        if self.auto_scroll:
             scrollbar.setValue(scrollbar.maximum())
 
     @pyqtSlot(bool)
@@ -99,8 +112,6 @@ class GameLauncher(QWidget, Ui_GameLauncher):
         self.commands = []  # 清空
         self.afterKilling()
         logging.info(f"{self.name}被用户终止")
-        """with open(self.timerec_filepath, "a+") as file:  # 补写结束时间
-            file.write(f"1:{int(time.time())}\n")"""
 
     def afterKilling(self):
         self.timer.stop()
@@ -123,3 +134,11 @@ class GameLauncher(QWidget, Ui_GameLauncher):
             self.l_info.setText(", ".join(info))
         except:
             logging.error(traceback.format_exc())
+
+    def event(self, a0: QEvent) -> bool:
+        if a0.type() == QEvent.Type.Show:
+            qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_auto_scroll, "right"))
+        elif a0.type() == QEvent.Type.Hide:
+            qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_auto_scroll))
+            self.pb_auto_scroll.setParent(self)
+        return super().event(a0)
