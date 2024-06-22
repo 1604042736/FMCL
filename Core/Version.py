@@ -6,6 +6,7 @@ import re
 import shutil
 from copy import deepcopy
 import sys
+import time
 import traceback
 from Kernel import Kernel
 import minecraft_launcher_lib as mll
@@ -631,3 +632,41 @@ class Version:
     def get_icon(self):
         self.generate_setting()
         return QIcon(self.setting.get("logo"))
+
+    def get_timerec_path(self):
+        return os.path.join(self.get_game_path(), "FMCL", "timerecord.json")
+
+    def get_timerec(self):
+        path = self.get_timerec_path()
+        if not os.path.exists(path):
+            return {}
+        timerec = json.load(open(path, encoding="utf-8"))
+        return {int(key): val for key, val in timerec.items()}
+
+    def save_timerec(self, timerec):
+        path=self.get_timerec_path()
+        if not os.path.exists(os.path.dirname(path)):
+            os.makedirs(os.path.dirname(path))
+        json.dump(
+            timerec,
+            open(path, mode="w", encoding="utf-8"),
+            ensure_ascii=False,
+            indent=4,
+        )
+
+    def record_new_start_time(self) -> int:
+        """记录新的开始时间并返回索引"""
+        timerec = self.get_timerec()
+        if len(timerec) > 0:
+            index = max(timerec) + 1
+        else:
+            index = 0
+        timerec[index] = {"start": time.time(), "end": time.time()}
+        self.save_timerec(timerec)
+        return index
+
+    def record_end_time(self, index):
+        """记录结束时间"""
+        timerec = self.get_timerec()
+        timerec[index]["end"] = time.time()
+        self.save_timerec(timerec)
