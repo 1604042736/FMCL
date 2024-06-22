@@ -16,6 +16,7 @@ import requests
 import toml
 import python_nbt
 import psutil
+import watchdog.version
 
 import qtawesome as qta
 from PyQt5.QtCore import QCoreApplication, QEvent, QObject, Qt, QTranslator, qVersion
@@ -453,6 +454,19 @@ class Kernel(QApplication):
                         (
                             lambda: webbrowser.open(
                                 "https://github.com/giampaolo/psutil"
+                            ),
+                            "GitHub",
+                        ),
+                    ),
+                ),
+                (
+                    "watchdog",
+                    f"v{watchdog.version.VERSION_STRING}",
+                    None,
+                    (
+                        (
+                            lambda: webbrowser.open(
+                                "https://github.com/gorakhargosh/watchdog"
                             ),
                             "GitHub",
                         ),

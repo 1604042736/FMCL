@@ -1,15 +1,19 @@
 import json
+import logging
 import os
 import shutil
+import traceback
 import multitasking
+import psutil
 
 from types import MappingProxyType
 from typing import Any, Literal, TypedDict, Callable
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtWidgets import QWidget, QFileDialog
-import psutil
 from qfluentwidgets import setThemeColor, PrimaryPushButton
 from Core.Function import Function
+from watchdog.events import FileSystemEvent, FileSystemEventHandler
+from watchdog.observers import Observer
 
 _translate = QCoreApplication.translate
 
@@ -28,17 +32,7 @@ DEFAULT_SETTING = {
     "game.height": 618,
     "game.maxmem": 2048,
     "game.launch_commands": {
-        # "TimeRecord_Start1": {"program": "{argv0}", "args": ["--start", "{game_path}"]},
-        # "TimeRecodr_Start2": {
-        #    "program": "python",
-        #    "args": ["{argv0}", "--start", "{game_path}"],
-        # },
         "Main": {"program": "{java_path}", "args": ["{default_args}"]},
-        # "TimeRecord_End1": {"program": "{argv0}", "args": ["--end", "{game_path}"]},
-        # "TimeRecodr_End2": {
-        #    "program": "python",
-        #    "args": ["{argv0}", "--end", "{game_path}"],
-        # },
     },
     "users": [],
     "users.selectindex": 0,
@@ -231,6 +225,17 @@ class DictSettingTrace(dict):
         self.op(dict(self))
 
 
+class SettingMonitor(FileSystemEventHandler):
+    def __init__(self, setting: "Setting"):
+        super().__init__()
+        self.setting = setting
+
+    def on_any_event(self, event: FileSystemEvent) -> None:
+        if event.src_path == self.setting.setting_path:
+            self.setting.update()
+        return super().on_any_event(event)
+
+
 class Setting:
     """设置"""
 
@@ -279,6 +284,29 @@ class Setting:
                 if key not in self.attrs:
                     self.attrs[key] = {}
                 self.attrs[key] |= val
+
+        self.monitor = SettingMonitor(self)
+        self.observer = Observer()
+        # 一直找到存在的path并监视
+        path = os.path.dirname(self.setting_path)
+        while not os.path.exists(path):
+            path = os.path.dirname(path)
+            
+        self.observer.schedule(self.monitor, path)
+        self.observer.start()
+
+    def update(self):
+        """更新设置(不包括属性)"""
+        try:
+            if os.path.exists(self.setting_path):
+                for key, val in json.load(
+                    open(self.setting_path, encoding="utf-8")
+                ).items():
+                    self.set(key, val)
+            else:
+                self.restore("")
+        except json.JSONDecodeError:
+            logging.error(traceback.format_exc())
 
     def add(self, new_setting: dict):
         """添加新的默认设置"""

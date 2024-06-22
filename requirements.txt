@@ -9,3 +9,4 @@ multitasking
 psutil
 requests
 toml
+watchdog
