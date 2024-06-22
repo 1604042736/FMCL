@@ -53,6 +53,7 @@ class GameInfo(QWidget, Ui_GameInfo):
             total_time = 0
             for key, val in timerec.items():
                 total_time += val["end"] - val["start"]
+            total_time = int(total_time)
             self.l_record.setText(
                 self.tr(
                     "自有记录以来, 一共启动了{count}次游戏, 总时长{hour_time}时{minute_time}分{second_time}秒"
