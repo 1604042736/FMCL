@@ -17,7 +17,6 @@ tasks = [
             r".*?/Skin.*?",
             r".*?/Default.*?",
             r".*?/Temp.*?",
-            r".*?/Test.*?",
         ],
     }
 ]

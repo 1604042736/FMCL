@@ -9,11 +9,13 @@ import traceback
 class Function:
     """功能"""
 
+    PATH = ["FMCL/Functions", "FMCL/Default/FMCL/Functions"]
+
     @staticmethod
     def get_all() -> list["Function"]:
         """获取所有功能"""
         functions = {}
-        for functions_path in ("FMCL/Functions", "FMCL/Default/FMCL/Functions"):
+        for functions_path in Function.PATH:
             if not os.path.exists(functions_path):
                 continue
             for function_name in os.listdir(functions_path):

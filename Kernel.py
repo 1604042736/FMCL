@@ -19,7 +19,7 @@ import psutil
 import watchdog.version
 
 import qtawesome as qta
-from PyQt5.QtCore import QCoreApplication, QEvent, QObject, Qt, QTranslator, qVersion
+from PyQt5.QtCore import QCoreApplication, QEvent, QObject, Qt, qVersion
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (
     QApplication,
@@ -55,6 +55,18 @@ class Kernel(QApplication):
         default_path = os.path.abspath("FMCL/Default")
         if default_path not in sys.path:
             sys.path.insert(1, default_path)
+
+        try:
+            i = 2
+            index = sys.argv.index("-I") + 1
+            for path in sys.argv[index].split(";"):
+                path=os.path.abspath(path)
+                if path not in sys.path:
+                    Function.PATH.append(os.path.join(path,"FMCL","Functions"))
+                    sys.path.insert(i, path)
+                    i += 1
+        except:
+            pass
 
         splash = QSplashScreen(QPixmap(":/Image/icon.png").scaled(64, 64))
         splash.setWindowFlags(splash.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
