@@ -32,7 +32,7 @@ from PyQt5.QtWidgets import (
 from qfluentwidgets import RoundMenu, setThemeColor
 
 from Events import *
-from Setting import Setting, DEFAULT_SETTING_PATH
+from Setting import Setting, DEFAULT_SETTING_PATH, DEFAULT_SETTING
 from Window import Window
 from Core.Function import Function
 from Core.Translation import Translation
@@ -57,19 +57,23 @@ class Kernel(QApplication):
         if default_path not in sys.path:
             sys.path.insert(1, default_path)
 
+        import_paths = json.load(open(DEFAULT_SETTING_PATH, encoding="utf-8")).get(
+            "system.import_paths", DEFAULT_SETTING["system.import_paths"]
+        )
         try:
-            i = 2
             index = sys.argv.index("-I") + 1
-            for path in sys.argv[index].split(";"):
-                path = os.path.abspath(path)
-                if path not in sys.path:
-                    Function.PATH.append(os.path.join(path, "FMCL", "Functions"))
-                    Translation.PATH.append(os.path.join(path, "FMCL", "Translations"))
-                    Help.PATH.append(os.path.join(path, "FMCL", "Help"))
-                    sys.path.insert(i, path)
-                    i += 1
+            import_paths.extends(sys.argv[index].split(";"))
         except:
             pass
+        i = 2
+        for path in import_paths:
+            path = os.path.abspath(path)
+            if path not in sys.path:
+                Function.PATH.append(os.path.join(path, "FMCL", "Functions"))
+                Translation.PATH.append(os.path.join(path, "FMCL", "Translations"))
+                Help.PATH.append(os.path.join(path, "FMCL", "Help"))
+                sys.path.insert(i, path)
+                i += 1
 
         splash = QSplashScreen(QPixmap(":/Image/icon.png").scaled(64, 64))
         splash.setWindowFlags(splash.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
@@ -82,7 +86,7 @@ class Kernel(QApplication):
 
         # 在未加载翻译之前不能使用Setting
         tempdir = json.load(open(DEFAULT_SETTING_PATH, encoding="utf-8")).get(
-            "system.temp_dir", "FMCL/Temp"
+            "system.temp_dir", DEFAULT_SETTING["system.temp_dir"]
         )
         if not os.path.exists(tempdir):
             os.makedirs(tempdir)

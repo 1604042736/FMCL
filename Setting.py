@@ -25,6 +25,7 @@ DEFAULT_SETTING = {
     "system.startup_functions": [],
     "system.theme_color": "#329632",
     "system.temp_dir": "FMCL/Temp",
+    "system.import_paths": [],
     "game.directories": [".minecraft"],
     "game.auto_choose_java": True,
     "game.java_paths": [],
@@ -91,6 +92,21 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
         if dir:
             Setting().get("game.directories").append(dir)
 
+    def chooseimportpath():
+        dir = QFileDialog.getExistingDirectory(
+            None, _translate("Setting", "选择包含路径")
+        )
+        if dir:
+            import_paths=Setting()["system.import_paths"]
+            if dir not in import_paths:
+                import_paths.append(dir)
+
+    def chooseimportpathbutton():
+        pb_chooseimportpath = PrimaryPushButton()
+        pb_chooseimportpath.setText(_translate("Setting", "添加"))
+        pb_chooseimportpath.clicked.connect(chooseimportpath)
+        return pb_chooseimportpath
+
     def choosejavabutton():
         pb_choosejava = PrimaryPushButton()
         pb_choosejava.setText(_translate("Setting", "手动添加Java"))
@@ -142,6 +158,10 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
             "name": _translate("Setting", "缓存文件夹"),
             "side_widgets": [cleantempdirbutton, choosetempdirbutton],
             "callback": [checktempdir],
+        },
+        "system.import_paths": {
+            "name": _translate("Setting", "包含路径"),
+            "side_widgets": [chooseimportpathbutton],
         },
         "game": {"name": _translate("Setting", "游戏")},
         "game.directories": {

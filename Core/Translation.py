@@ -1,7 +1,7 @@
 import os
 import logging
 import json
-from Setting import DEFAULT_SETTING_PATH
+from Setting import DEFAULT_SETTING_PATH, DEFAULT_SETTING
 
 from PyQt5.QtCore import QTranslator
 
@@ -41,7 +41,7 @@ class Translation:
         # 在未加载翻译之前不能使用Setting
         lang = (
             json.load(open(DEFAULT_SETTING_PATH, encoding="utf-8")).get(
-                "language.type", "简体中文"
+                "language.type", DEFAULT_SETTING["language.type"]
             )
             + ".qm"
         )
