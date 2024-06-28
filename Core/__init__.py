@@ -17,3 +17,4 @@ from .APIs import (
 from .MainThreadCreator import MainThreadCreator
 from .Function import Function
 from .Translation import Translation
+from .Help import Help

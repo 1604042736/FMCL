@@ -1,5 +1,6 @@
 import logging
 import qtawesome as qta
+from Core import Help
 from Events import *
 
 from PyQt5.QtCore import QEvent, pyqtSlot, Qt, QPoint, QObject
@@ -58,7 +59,7 @@ class HelpViewer(QWidget, Ui_HelpViewer):
         self.tw_helpindex.clear()
         while self.sw_pages.count():
             self.deletePage(self.sw_pages.currentWidget())
-        helpindex = self.helpindex = Kernel.getHelpIndex()
+        helpindex = self.helpindex = Help.get_index()
 
         def sethelpindex(root: QTreeWidgetItem | None, data: dict, id: str):
             for key, val in data.items():
@@ -108,7 +109,7 @@ class HelpViewer(QWidget, Ui_HelpViewer):
 
     def getPage(self, id: str) -> QWidget:
         """根据id获得对应的帮助界面"""
-        attr = Kernel.getHelpIndexAttr(self.helpindex, id)
+        attr = Help.get_index_attr(self.helpindex, id)
         if "page" not in attr:
             return
         if id in self.page_instance:

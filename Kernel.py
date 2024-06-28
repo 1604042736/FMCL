@@ -36,6 +36,7 @@ from Setting import Setting, DEFAULT_SETTING_PATH
 from Window import Window
 from Core.Function import Function
 from Core.Translation import Translation
+from Core.Help import Help
 
 _translate = QCoreApplication.translate
 
@@ -60,9 +61,11 @@ class Kernel(QApplication):
             i = 2
             index = sys.argv.index("-I") + 1
             for path in sys.argv[index].split(";"):
-                path=os.path.abspath(path)
+                path = os.path.abspath(path)
                 if path not in sys.path:
-                    Function.PATH.append(os.path.join(path,"FMCL","Functions"))
+                    Function.PATH.append(os.path.join(path, "FMCL", "Functions"))
+                    Translation.PATH.append(os.path.join(path, "FMCL", "Translations"))
+                    Help.PATH.append(os.path.join(path, "FMCL", "Help"))
                     sys.path.insert(i, path)
                     i += 1
         except:
@@ -157,44 +160,6 @@ class Kernel(QApplication):
                     msg = traceback.format_exc()
                     logging.error(f"{title}:\n{msg}")
                     QMessageBox.critical(None, title, msg)
-
-    @staticmethod
-    def getHelpIndex() -> dict:
-        """获取帮助索引"""
-
-        def merge(a: dict, b: dict):
-            for key, val in b.items():
-                if key not in a:
-                    a[key] = val
-                elif isinstance(val, dict) and isinstance(a[key], dict):
-                    merge(a[key], val)
-                elif isinstance(val, list) and isinstance(a[key], list):
-                    a[key].extend(val)
-                else:
-                    a[key] = val
-
-        helpindex = {}
-        for root in ("FMCL/Help", "FMCL/Default/FMCL/Help"):
-            if not os.path.exists(root):
-                continue
-            for i in os.listdir(root):
-                try:
-                    module = import_module(f"FMCL.Help.{i}")
-                    merge(helpindex, getattr(module, "helpIndex", lambda: {})())
-                except:
-                    logging.error(traceback.format_exc())
-        for i in Function.get_all_help_index():
-            merge(helpindex, i)
-        return helpindex
-
-    @staticmethod
-    def getHelpIndexAttr(helpindex: dict, id: str):
-        """通过id获得帮助索引中的属性"""
-        splitid = id.split(".")
-        val = helpindex
-        for i in splitid:
-            val = val[i]
-        return val
 
     @staticmethod
     def activateWidget(widget: QWidget):
