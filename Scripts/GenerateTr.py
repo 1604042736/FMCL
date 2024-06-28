@@ -22,7 +22,6 @@ tasks = (
             "targetpath": f"{root}/FMCL/Functions/{i}/Translations",
         }
         for i in os.listdir(f"{root}/FMCL/Functions")
-        if i != "Test"
     ]
     + [
         {
@@ -31,6 +30,14 @@ tasks = (
             "targetpath": f"{root}/FMCL/Help/{i}/Translations",
         }
         for i in os.listdir(f"{root}/FMCL/Help")
+    ]
+    + [
+        {
+            "scanpath": [f"{root}/FMCL/Extras/FMCL/Functions/{i}"],
+            "scanfile": [],
+            "targetpath": f"{root}/FMCL/Extras/FMCL/Functions/{i}/Translations",
+        }
+        for i in os.listdir(f"{root}/FMCL/Extras/FMCL/Functions")
     ]
 )
 
