@@ -195,7 +195,7 @@ class Version:
             "default_args": default_args,
             "argv0": sys.argv[0],
         }
-        for _, val in commands_dict.items():
+        for name, val in commands_dict.items():
             val["program"] = val["program"].format(**formats)
             for i in range(len(val["args"])):
                 val["args"][i] = val["args"][i].format(**formats)
@@ -210,7 +210,7 @@ class Version:
                     args.extend(arg)
                 else:
                     args.append(arg)
-            commands.append((val["program"], args))
+            commands.append((val["program"], args, name))
         logging.info(commands)
         return game_path, commands
 
@@ -644,7 +644,7 @@ class Version:
         return {int(key): val for key, val in timerec.items()}
 
     def save_timerec(self, timerec):
-        path=self.get_timerec_path()
+        path = self.get_timerec_path()
         if not os.path.exists(os.path.dirname(path)):
             os.makedirs(os.path.dirname(path))
         json.dump(

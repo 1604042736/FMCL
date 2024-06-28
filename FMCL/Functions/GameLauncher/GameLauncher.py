@@ -1,8 +1,6 @@
 import logging
 import traceback
 import psutil
-import os
-import time
 
 import qtawesome as qta
 from Core import Version, Task
@@ -27,6 +25,8 @@ class GameLauncher(QWidget, Ui_GameLauncher):
         self.setWindowTitle(f"{t}:{game_name}")
         self.setWindowIcon(qta.icon("mdi.rocket-launch-outline"))
 
+        self.command_name = ""
+
         self.auto_scroll = True  # 自动滚动日志
         self.name = game_name
         self.te_output.setReadOnly(True)
@@ -35,6 +35,8 @@ class GameLauncher(QWidget, Ui_GameLauncher):
         self.process = QProcess()
         self.process.readyReadStandardOutput.connect(self.outputStandard)
         self.process.readyReadStandardError.connect(self.errorStandard)
+
+        qApp.aboutToQuit.connect(self.on_aboutToQuit)
 
         self.pb_auto_scroll = TransparentToolButton()
         self.pb_auto_scroll.resize(46, 32)
@@ -68,13 +70,14 @@ class GameLauncher(QWidget, Ui_GameLauncher):
     def prepare(self, callback=None):
         """准备启动游戏"""
         self.game_path, self.commands = self.game.get_launch_command(callback)
-        self.timerec_index = self.game.record_new_start_time()
         self.__launchCommand.emit()
 
     def __start(self):
         command = self.commands.pop(0)
         logging.info(f"__start: {command}")
-        program, args = command
+        program, args, self.command_name = command
+        if self.command_name == "Main":
+            self.timerec_index = self.game.record_new_start_time()
         self.process.setWorkingDirectory(self.game_path)
         self.process.start(program, args)
         self.pb_kill.setEnabled(True)
@@ -115,11 +118,13 @@ class GameLauncher(QWidget, Ui_GameLauncher):
     def afterKilling(self):
         self.timer.stop()
         self.pb_kill.setEnabled(False)
+        if self.command_name == "Main":
+            self.game.record_end_time(self.timerec_index)
+        self.command_name = ""
         if self.commands:
             self.__launchCommand.emit()
         else:
             self.l_info.setText(self.tr("游戏已停止"))
-            self.game.record_end_time(self.timerec_index)
 
     def showInfo(self):
         if self.process.state() == QProcess.ProcessState.NotRunning:
@@ -141,3 +146,9 @@ class GameLauncher(QWidget, Ui_GameLauncher):
             qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_auto_scroll))
             self.pb_auto_scroll.setParent(self)
         return super().event(a0)
+
+    def on_aboutToQuit(self):
+        if self.process.state() != QProcess.ProcessState.NotRunning:
+            logging.info("等待游戏进程结束")
+            self.process.waitForFinished()
+            self.afterKilling()

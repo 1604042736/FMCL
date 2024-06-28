@@ -97,7 +97,7 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
             None, _translate("Setting", "选择包含路径")
         )
         if dir:
-            import_paths=Setting()["system.import_paths"]
+            import_paths = Setting()["system.import_paths"]
             if dir not in import_paths:
                 import_paths.append(dir)
 
