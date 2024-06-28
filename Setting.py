@@ -8,7 +8,7 @@ import psutil
 
 from types import MappingProxyType
 from typing import Any, Literal, TypedDict, Callable
-from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtCore import QCoreApplication, pyqtSignal, QObject
 from PyQt5.QtWidgets import QWidget, QFileDialog
 from qfluentwidgets import setThemeColor, PrimaryPushButton
 from Core.Function import Function
@@ -23,7 +23,7 @@ DEFAULT_SETTING_PATH = os.path.join("FMCL", "settings.json")
 # 默认设置
 DEFAULT_SETTING = {
     "system.startup_functions": [],
-    "system.theme_color": "#329632",
+    "system.theme_color": "#00dd00",
     "system.temp_dir": "FMCL/Temp",
     "system.import_paths": [],
     "game.directories": [".minecraft"],
@@ -245,14 +245,18 @@ class DictSettingTrace(dict):
         self.op(dict(self))
 
 
-class SettingMonitor(FileSystemEventHandler):
+class SettingMonitor(FileSystemEventHandler, QObject):
+    __changed = pyqtSignal()
+
     def __init__(self, setting: "Setting"):
         super().__init__()
         self.setting = setting
 
+        self.__changed.connect(self.setting.update)
+
     def on_any_event(self, event: FileSystemEvent) -> None:
         if event.src_path == self.setting.setting_path:
-            self.setting.update()
+            self.__changed.emit()
         return super().on_any_event(event)
 
 

@@ -15,6 +15,7 @@ from Setting import Setting
 
 from .SettingCards import SettingCard
 from .ui_SettingEditor import Ui_SettingEditor
+from .JsonEditor import JsonEditor
 
 
 class SettingEditor(QWidget, Ui_SettingEditor):
@@ -49,7 +50,14 @@ class SettingEditor(QWidget, Ui_SettingEditor):
         self.pb_save.setIcon(qta.icon("fa.save"))
         self.pb_save.clicked.connect(lambda: self.setting.sync())
 
-        self.loaded=False
+        self.pb_jsoneditor = TransparentToolButton()
+        self.pb_jsoneditor.resize(46, 32)
+        self.pb_jsoneditor.setIcon(qta.icon("mdi.code-json"))
+        self.pb_jsoneditor.clicked.connect(
+            lambda: JsonEditor(self.setting.setting_path).show()
+        )
+
+        self.loaded = False
 
     def load(self):
         self.items = {}
@@ -152,7 +160,7 @@ class SettingEditor(QWidget, Ui_SettingEditor):
         statetooltip.setContent(self.tr("加载完成"))
         statetooltip.setState(True)
 
-        self.loaded=True
+        self.loaded = True
 
     def addTreeItem(self, root: QTreeWidgetItem | None, item: QTreeWidgetItem):
         if root == None:
@@ -204,9 +212,12 @@ class SettingEditor(QWidget, Ui_SettingEditor):
         if a0.type() == QEvent.Type.Show:
             qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_refresh, "right"))
             qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_save, "right"))
+            qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_jsoneditor, "right"))
         elif a0.type() == QEvent.Type.Hide:
             qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_refresh))
             self.pb_refresh.setParent(self)
             qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_save))
             self.pb_save.setParent(self)
+            qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_jsoneditor))
+            self.pb_jsoneditor.setParent(self)
         return super().event(a0)

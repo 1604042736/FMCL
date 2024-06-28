@@ -6,7 +6,6 @@ import shutil
 import sys
 import traceback
 import webbrowser
-from importlib import import_module
 from zipfile import *
 import multitasking
 import PIL
@@ -37,6 +36,7 @@ from Window import Window
 from Core.Function import Function
 from Core.Translation import Translation
 from Core.Help import Help
+from PyQt5.Qsci import QSCINTILLA_VERSION_STR
 
 _translate = QCoreApplication.translate
 
@@ -450,6 +450,17 @@ class Kernel(QApplication):
                                 "https://github.com/gorakhargosh/watchdog"
                             ),
                             "GitHub",
+                        ),
+                    ),
+                ),
+                (
+                    "QScintilla",
+                    f"v{QSCINTILLA_VERSION_STR}",
+                    None,
+                    (
+                        (
+                            lambda: webbrowser.open("https://www.scintilla.org/"),
+                            _translate("About", "官网"),
                         ),
                     ),
                 ),

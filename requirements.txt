@@ -3,6 +3,7 @@ PyQt-Fluent-Widgets
 PyQt5
 PyQt5_Frameless_Window
 Python-NBT
+QScintilla
 QtAwesome
 minecraft_launcher_lib
 multitasking
