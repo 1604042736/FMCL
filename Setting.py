@@ -23,7 +23,7 @@ DEFAULT_SETTING_PATH = os.path.join("FMCL", "settings.json")
 # 默认设置
 DEFAULT_SETTING = {
     "system.startup_functions": [],
-    "system.theme_color": "#00ff00",
+    "system.theme_color": "#329632",
     "system.temp_dir": "FMCL/Temp",
     "game.directories": [".minecraft"],
     "game.auto_choose_java": True,
