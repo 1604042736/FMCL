@@ -291,7 +291,7 @@ class Setting:
         path = os.path.dirname(self.setting_path)
         while not os.path.exists(path):
             path = os.path.dirname(path)
-            
+
         self.observer.schedule(self.monitor, path)
         self.observer.start()
 
@@ -336,6 +336,8 @@ class Setting:
 
     def getAttr(self, id: str, attr: str, default=None):
         """获取设置项的属性"""
+        if id not in self.attrs:
+            self.attrs[id] = {"name": id}
         return self.attrs[id].get(attr, default)
 
     def sync(self):
