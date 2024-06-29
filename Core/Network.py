@@ -14,7 +14,7 @@ class Network:
         self,
         session: requests.Session = None,
         retry_time: int = 3,
-        retry_delay: int = 0,
+        retry_delay: float = 0,
     ):
         self.session = session if session != None else requests.session()
         retry = Retry(total=retry_time, backoff_factor=retry_delay)

@@ -1,7 +1,5 @@
 import qtawesome as qta
-from PyQt5.QtCore import qVersion
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QWidget, qApp
+from PyQt5.QtWidgets import QWidget
 from .AboutItem import AboutItem
 from .ui_About import Ui_About
 
