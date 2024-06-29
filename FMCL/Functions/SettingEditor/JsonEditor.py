@@ -61,6 +61,8 @@ class JsonEditor(QsciScintilla):
         if os.path.exists(self.json_path):
             with open(self.json_path, encoding="utf-8") as file:
                 self.setText(file.read())
+        else:
+            self.setText("{\n}")
 
     def check(self):
         """
