@@ -32,8 +32,7 @@ class ModManager(QWidget, Ui_ModManager):
         self.pb_refresh.setIcon(qta.icon("mdi.refresh"))
         self.pb_refresh.clicked.connect(lambda: self.refresh())
 
-        self.total = 0
-        self.enabled_num = 0
+        self.mods = []
 
         # 交给GameManager刷新
         # self.refresh()
@@ -58,14 +57,11 @@ class ModManager(QWidget, Ui_ModManager):
 
         keyword = self.le_search.text()
         self.lw_mods.clear()
-        mods = self.game.get_mods(keyword)
-        self.total = len(mods)
-        self.enabled_num = 0
+        self.mods = self.game.get_mods(keyword)
+        self.total = len(self.mods)
 
-        n = len(mods)
-        for i, mod in enumerate(mods):
-            if mod.enabled:
-                self.enabled_num += 1
+        n = len(self.mods)
+        for i, mod in enumerate(self.mods):
             item = QListWidgetItem()
             widget = ModItem(self.game, mod)
             widget.enabledChanged.connect(self.singlemodEnabledChanged)
@@ -81,10 +77,6 @@ class ModManager(QWidget, Ui_ModManager):
         statetooltip.setState(True)
 
     def singlemodEnabledChanged(self, enabled):
-        if enabled:
-            self.enabled_num += 1
-        else:
-            self.enabled_num -= 1
         self.setStatistics()
 
     def setStatistics(self):
@@ -92,8 +84,10 @@ class ModManager(QWidget, Ui_ModManager):
         t2 = self.tr("启用")
         t3 = self.tr("禁用")
         t4 = self.tr("已选择")
+        total = len(self.mods)
+        enabled_num = sum([1 if i.enabled else 0 for i in self.mods])
         self.l_statistics.setText(
-            f"{t1}: {self.total}, {t2}: {self.enabled_num}, {t3}: {self.total-self.enabled_num}, {t4}: {len(self.lw_mods.selectedItems())}"
+            f"{t1}: {total}, {t2}: {enabled_num}, {t3}: {total-enabled_num}, {t4}: {len(self.lw_mods.selectedItems())}"
         )
 
     @pyqtSlot(bool)
@@ -123,9 +117,7 @@ class ModManager(QWidget, Ui_ModManager):
                 mod.delete()
             self.refresh()
 
-        box = MessageBox(
-            self.tr("删除"), self.tr("确认删除") + str(mods) + "?", self
-        )
+        box = MessageBox(self.tr("删除"), self.tr("确认删除") + str(mods) + "?", self)
         box.yesSignal.connect(confirmDelete)
         box.exec()
 

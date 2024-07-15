@@ -36,6 +36,7 @@ class ModItem(QWidget, Ui_ModItem):
         if modenabled != self.mod.enabled:
             self.mod.set_enabled(modenabled)
             self.enabledChanged.emit(modenabled)
+        self.cb_modenabled.setCheckState((0, 2)[self.mod.enabled])
 
     @multitasking.task
     def setInfo(self):

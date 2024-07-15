@@ -186,7 +186,9 @@ class Version:
             pass
         logging.info(default_args)
 
-        commands_dict = dict(setting.get("game.launch_commands"))
+        commands_dict = deepcopy(
+            dict(setting.get("game.launch_commands"))
+        )  # 防止启动第二次时沿用上一次的内容
         game_path = options["gameDirectory"]
         commands = []
         formats = {
@@ -569,8 +571,9 @@ class Version:
         if not os.path.exists(path):
             return []
         result = []
+        keyword = keyword.lower()
         for i in os.listdir(path):
-            if keyword not in i:
+            if keyword not in i.lower():
                 continue
             if ".jar" in i:
                 result.append(Mod(os.path.join(path, i)))
