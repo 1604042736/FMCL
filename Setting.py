@@ -36,7 +36,7 @@ DEFAULT_SETTING = {
     "game.height": 618,
     "game.maxmem": 2048,
     "game.launch_commands": {
-        "Main": {"program": "{java_path}", "args": ["{default_args}"]},
+        "Main": {"program": "{java_path}", "args": "{default_args}"},
     },
     "users": [],
     "users.selectindex": 0,

@@ -199,20 +199,8 @@ class Version:
         }
         for name, val in commands_dict.items():
             val["program"] = val["program"].format(**formats)
-            for i in range(len(val["args"])):
-                val["args"][i] = val["args"][i].format(**formats)
-            # 展开args
-            args = []
-            for arg in val["args"]:
-                try:
-                    arg = eval(arg)
-                except:
-                    pass
-                if isinstance(arg, list):
-                    args.extend(arg)
-                else:
-                    args.append(arg)
-            commands.append((val["program"], args, name))
+            val["args"] = val["args"].format(**formats)
+            commands.append((val["program"], eval(val["args"]), name))
         logging.info(commands)
         return game_path, commands
 
