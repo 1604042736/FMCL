@@ -1,6 +1,6 @@
 import qtawesome as qta
 from Events import *
-from PyQt5.QtCore import pyqtSlot, QEvent
+from PyQt5.QtCore import pyqtSlot, QEvent, Qt
 from PyQt5.QtWidgets import (
     QLabel,
     QTreeWidgetItem,
@@ -15,7 +15,7 @@ from Setting import Setting
 
 from .SettingCards import SettingCard
 from .ui_SettingEditor import Ui_SettingEditor
-from .JsonEditor import JsonEditor
+from .SettingJsonEditor import SettingJsonEditor
 
 
 class SettingEditor(QWidget, Ui_SettingEditor):
@@ -54,7 +54,7 @@ class SettingEditor(QWidget, Ui_SettingEditor):
         self.pb_jsoneditor.resize(46, 32)
         self.pb_jsoneditor.setIcon(qta.icon("mdi.code-json"))
         self.pb_jsoneditor.clicked.connect(
-            lambda: JsonEditor(self.setting.setting_path).show()
+            lambda: SettingJsonEditor(self.setting).show()
         )
 
         self.loaded = False
@@ -110,6 +110,7 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                 hboxlayout = QHBoxLayout(layout_widget)
                 hboxlayout.setSpacing(2)
                 hboxlayout.setContentsMargins(0, 0, 0, 0)
+                hboxlayout.setAlignment(Qt.AlignmentFlag.AlignRight)
 
                 side_widgets = self.setting.getAttr(totalid, "side_widgets", tuple())
                 for i in side_widgets:
@@ -122,6 +123,16 @@ class SettingEditor(QWidget, Ui_SettingEditor):
                     lambda _, id=totalid: self.setting.restore(id)
                 )
                 hboxlayout.addWidget(pb_restore)
+
+                if totalid in self.setting:
+                    pb_editinjson = TransparentToolButton()
+                    pb_editinjson.setIcon(qta.icon("mdi.code-json"))
+                    pb_editinjson.setToolTip(self.tr("在Json文件中编辑"))
+                    pb_editinjson.clicked.connect(
+                        lambda _, id=totalid: SettingJsonEditor(self.setting).show(id)
+                    )
+                    hboxlayout.addWidget(pb_editinjson)
+
                 self.item_widget_id_layout.append(
                     (item, widget, totalid, layout_widget)
                 )

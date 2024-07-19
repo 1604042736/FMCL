@@ -573,3 +573,6 @@ class Setting:
         for id_ in (self.defaultsetting | self.modifiedsetting).keys():
             if id in id_:
                 self.set(id_, self.defaultsetting[id_])
+
+    def __contains__(self, key):
+        return key in self.modifiedsetting or key in self.defaultsetting
