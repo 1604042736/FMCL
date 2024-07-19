@@ -38,9 +38,7 @@
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">QFrame{
-	background-color: rgb(253,253,253);
-}</string>
+      <string notr="true"/>
      </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
@@ -64,24 +62,18 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <item row="1" column="1">
-       <widget class="TransparentTogglePushButton" name="pb_microsoft">
-        <property name="minimumSize">
+      <item row="3" column="1">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
          <size>
-          <width>0</width>
-          <height>32</height>
+          <width>20</width>
+          <height>40</height>
          </size>
         </property>
-        <property name="text">
-         <string>微软登录</string>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="autoExclusive">
-         <bool>true</bool>
-        </property>
-       </widget>
+       </spacer>
       </item>
       <item row="0" column="1">
        <widget class="TransparentTogglePushButton" name="pb_offline">
@@ -115,25 +107,31 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
       <item row="2" column="1">
        <layout class="QVBoxLayout" name="vl_yggdrasil">
         <property name="spacing">
          <number>0</number>
         </property>
        </layout>
+      </item>
+      <item row="1" column="1">
+       <widget class="TransparentTogglePushButton" name="pb_microsoft">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>微软登录</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="autoExclusive">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -145,13 +143,23 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>TransparentTogglePushButton</class>
+   <class>PushButton</class>
    <extends>QPushButton</extends>
    <header>qfluentwidgets</header>
   </customwidget>
   <customwidget>
+   <class>ToggleButton</class>
+   <extends>PushButton</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
    <class>TransparentPushButton</class>
-   <extends>QPushButton</extends>
+   <extends>PushButton</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
+   <class>TransparentTogglePushButton</class>
+   <extends>ToggleButton</extends>
    <header>qfluentwidgets</header>
   </customwidget>
  </customwidgets>

@@ -5,12 +5,14 @@ import shutil
 import traceback
 import multitasking
 import psutil
+import qtawesome as qta
 
 from types import MappingProxyType
 from typing import Any, Literal, TypedDict, Callable
 from PyQt5.QtCore import QCoreApplication, pyqtSignal, QObject
-from PyQt5.QtWidgets import QWidget, QFileDialog
-from qfluentwidgets import setThemeColor, PrimaryPushButton
+from PyQt5.QtGui import QPalette, QColor
+from PyQt5.QtWidgets import QWidget, QFileDialog, qApp
+from qfluentwidgets import setThemeColor, PrimaryPushButton, setTheme, Theme, qconfig
 from Core.Function import Function
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
 from watchdog.observers import Observer
@@ -23,9 +25,10 @@ DEFAULT_SETTING_PATH = os.path.join("FMCL", "settings.json")
 # 默认设置
 DEFAULT_SETTING = {
     "system.startup_functions": [],
-    "system.theme_color": "#00dd00",
+    "system.theme_color": "#00aa00",
     "system.temp_dir": "FMCL/Temp",
     "system.import_paths": [],
+    "system.theme": "Light",
     "game.directories": [".minecraft"],
     "game.auto_choose_java": True,
     "game.java_paths": [],
@@ -59,6 +62,104 @@ class SettingAttr(TypedDict):
     # 以下属性将用户Int或Float设置项
     min_value: int | float  # 最小值
     max_value: int | float  # 最大值
+
+
+def qta_dark(app):
+    dark_palette = QPalette()
+
+    # base
+    dark_palette.setColor(QPalette.WindowText, QColor(255, 255, 255))
+    dark_palette.setColor(QPalette.Button, QColor(51, 51, 51))
+    dark_palette.setColor(QPalette.Light, QColor(180, 180, 180))
+    dark_palette.setColor(QPalette.Midlight, QColor(90, 90, 90))
+    dark_palette.setColor(QPalette.Dark, QColor(35, 35, 35))
+    dark_palette.setColor(QPalette.Text, QColor(240, 240, 240))
+    dark_palette.setColor(QPalette.BrightText, QColor(180, 180, 180))
+    dark_palette.setColor(QPalette.ButtonText, QColor(255, 255, 255))
+    dark_palette.setColor(QPalette.Base, QColor(42, 42, 42))
+    dark_palette.setColor(QPalette.Window, QColor(31, 31, 31))
+    dark_palette.setColor(QPalette.Shadow, QColor(20, 20, 20))
+    dark_palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
+    dark_palette.setColor(QPalette.HighlightedText, QColor(180, 180, 180))
+    dark_palette.setColor(QPalette.Link, QColor(56, 252, 196))
+    dark_palette.setColor(QPalette.AlternateBase, QColor(66, 66, 66))
+    dark_palette.setColor(QPalette.ToolTipBase, QColor(53, 53, 53))
+    dark_palette.setColor(QPalette.ToolTipText, QColor(180, 180, 180))
+    dark_palette.setColor(QPalette.LinkVisited, QColor(80, 80, 80))
+
+    # disabled
+    dark_palette.setColor(QPalette.Disabled, QPalette.WindowText, QColor(127, 127, 127))
+    dark_palette.setColor(QPalette.Disabled, QPalette.Text, QColor(127, 127, 127))
+    dark_palette.setColor(QPalette.Disabled, QPalette.ButtonText, QColor(127, 127, 127))
+    dark_palette.setColor(QPalette.Disabled, QPalette.Highlight, QColor(80, 80, 80))
+    dark_palette.setColor(
+        QPalette.Disabled, QPalette.HighlightedText, QColor(127, 127, 127)
+    )
+
+    app.style().unpolish(app)
+    app.setPalette(dark_palette)
+
+
+def qta_light(app):
+    light_palette = QPalette()
+
+    # base
+    light_palette.setColor(QPalette.WindowText, QColor(0, 0, 0))
+    light_palette.setColor(QPalette.Button, QColor(240, 240, 240))
+    light_palette.setColor(QPalette.Light, QColor(180, 180, 180))
+    light_palette.setColor(QPalette.Midlight, QColor(200, 200, 200))
+    light_palette.setColor(QPalette.Dark, QColor(225, 225, 225))
+    light_palette.setColor(QPalette.Text, QColor(0, 0, 0))
+    light_palette.setColor(QPalette.BrightText, QColor(0, 0, 0))
+    light_palette.setColor(QPalette.ButtonText, QColor(0, 0, 0))
+    light_palette.setColor(QPalette.Base, QColor(237, 237, 237))
+    light_palette.setColor(QPalette.Window, QColor(240, 240, 240))
+    light_palette.setColor(QPalette.Shadow, QColor(20, 20, 20))
+    light_palette.setColor(QPalette.Highlight, QColor(76, 163, 224))
+    light_palette.setColor(QPalette.HighlightedText, QColor(0, 0, 0))
+    light_palette.setColor(QPalette.Link, QColor(0, 162, 232))
+    light_palette.setColor(QPalette.AlternateBase, QColor(225, 225, 225))
+    light_palette.setColor(QPalette.ToolTipBase, QColor(240, 240, 240))
+    light_palette.setColor(QPalette.ToolTipText, QColor(0, 0, 0))
+    light_palette.setColor(QPalette.LinkVisited, QColor(222, 222, 222))
+
+    # disabled
+    light_palette.setColor(
+        QPalette.Disabled, QPalette.WindowText, QColor(115, 115, 115)
+    )
+    light_palette.setColor(QPalette.Disabled, QPalette.Text, QColor(115, 115, 115))
+    light_palette.setColor(
+        QPalette.Disabled, QPalette.ButtonText, QColor(115, 115, 115)
+    )
+    light_palette.setColor(QPalette.Disabled, QPalette.Highlight, QColor(190, 190, 190))
+    light_palette.setColor(
+        QPalette.Disabled, QPalette.HighlightedText, QColor(115, 115, 115)
+    )
+
+    app.style().unpolish(app)
+    app.setPalette(light_palette)
+
+
+def set_qta_theme(theme: Theme):
+    qta.reset_cache()
+    if theme == Theme.LIGHT:
+        qta_light(qApp)
+    elif theme == Theme.DARK:
+        qta_dark(qApp)
+
+
+def set_theme(theme: str):
+    theme = theme.title()
+    if theme == "Light":
+        setTheme(Theme.LIGHT)
+    elif theme == "Dark":
+        setTheme(Theme.DARK)
+    elif theme == "Auto":
+        setTheme(Theme.AUTO)
+    else:
+        logging.error(f"未知的主题:{theme}")
+        return
+    set_qta_theme(qconfig.theme)
 
 
 def defaultSettingAttr() -> dict[str, SettingAttr]:
@@ -162,6 +263,10 @@ def defaultSettingAttr() -> dict[str, SettingAttr]:
         "system.import_paths": {
             "name": _translate("Setting", "包含路径"),
             "side_widgets": [chooseimportpathbutton],
+        },
+        "system.theme": {
+            "name": _translate("Setting", "主题"),
+            "callback": [set_theme],
         },
         "game": {"name": _translate("Setting", "游戏")},
         "game.directories": {

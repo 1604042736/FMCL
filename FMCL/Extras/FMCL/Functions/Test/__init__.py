@@ -122,6 +122,11 @@ def test_download2():
     task.start()
 
 
+def test_exception():
+    """测试异常"""
+    raise Exception()
+
+
 class Test(ScrollArea):
     def __init__(self):
         super().__init__()

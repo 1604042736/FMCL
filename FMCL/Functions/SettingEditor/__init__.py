@@ -4,6 +4,7 @@ from Setting import DEFAULT_SETTING_PATH, Setting
 
 from .SettingEditor import SettingEditor
 from .LanguageChooser import LanguageChooser
+from .ThemeChooser import ThemeChooser
 
 _translate = QCoreApplication.translate
 
@@ -21,6 +22,7 @@ def defaultSetting() -> dict:
 
 def defaultSettingAttr() -> dict:
     Setting().attrs["language.type"]["settingcard"] = LanguageChooser
+    Setting().attrs["system.theme"]["settingcard"] = ThemeChooser
     return {}
 
 

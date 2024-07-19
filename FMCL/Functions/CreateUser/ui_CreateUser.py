@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\CreateUser\CreateUser.ui'
+# Form implementation generated from reading ui file 'e:\User\PCG\FMCL\FMCL\Functions\CreateUser\CreateUser.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -21,9 +21,7 @@ class Ui_CreateUser(object):
         self.gridLayout.setObjectName("gridLayout")
         self.f_panel = QtWidgets.QFrame(CreateUser)
         self.f_panel.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.f_panel.setStyleSheet("QFrame{\n"
-"    background-color: rgb(253,253,253);\n"
-"}")
+        self.f_panel.setStyleSheet("")
         self.f_panel.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.f_panel.setFrameShadow(QtWidgets.QFrame.Raised)
         self.f_panel.setObjectName("f_panel")
@@ -31,12 +29,8 @@ class Ui_CreateUser(object):
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
         self.gridLayout_2.setSpacing(0)
         self.gridLayout_2.setObjectName("gridLayout_2")
-        self.pb_microsoft = TransparentTogglePushButton(self.f_panel)
-        self.pb_microsoft.setMinimumSize(QtCore.QSize(0, 32))
-        self.pb_microsoft.setCheckable(True)
-        self.pb_microsoft.setAutoExclusive(True)
-        self.pb_microsoft.setObjectName("pb_microsoft")
-        self.gridLayout_2.addWidget(self.pb_microsoft, 1, 1, 1, 1)
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.gridLayout_2.addItem(spacerItem, 3, 1, 1, 1)
         self.pb_offline = TransparentTogglePushButton(self.f_panel)
         self.pb_offline.setMinimumSize(QtCore.QSize(0, 32))
         self.pb_offline.setCheckable(True)
@@ -47,12 +41,16 @@ class Ui_CreateUser(object):
         self.pb_addauthlibinjector.setMinimumSize(QtCore.QSize(0, 32))
         self.pb_addauthlibinjector.setObjectName("pb_addauthlibinjector")
         self.gridLayout_2.addWidget(self.pb_addauthlibinjector, 4, 1, 1, 1)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.gridLayout_2.addItem(spacerItem, 3, 1, 1, 1)
         self.vl_yggdrasil = QtWidgets.QVBoxLayout()
         self.vl_yggdrasil.setSpacing(0)
         self.vl_yggdrasil.setObjectName("vl_yggdrasil")
         self.gridLayout_2.addLayout(self.vl_yggdrasil, 2, 1, 1, 1)
+        self.pb_microsoft = TransparentTogglePushButton(self.f_panel)
+        self.pb_microsoft.setMinimumSize(QtCore.QSize(0, 32))
+        self.pb_microsoft.setCheckable(True)
+        self.pb_microsoft.setAutoExclusive(True)
+        self.pb_microsoft.setObjectName("pb_microsoft")
+        self.gridLayout_2.addWidget(self.pb_microsoft, 1, 1, 1, 1)
         self.gridLayout.addWidget(self.f_panel, 0, 0, 1, 1)
         self.sw_way = QtWidgets.QStackedWidget(CreateUser)
         self.sw_way.setObjectName("sw_way")
@@ -64,7 +62,7 @@ class Ui_CreateUser(object):
     def retranslateUi(self, CreateUser):
         _translate = QtCore.QCoreApplication.translate
         CreateUser.setWindowTitle(_translate("CreateUser", "创建用户"))
-        self.pb_microsoft.setText(_translate("CreateUser", "微软登录"))
         self.pb_offline.setText(_translate("CreateUser", "离线登录"))
         self.pb_addauthlibinjector.setText(_translate("CreateUser", "添加外置登录"))
+        self.pb_microsoft.setText(_translate("CreateUser", "微软登录"))
 from qfluentwidgets import TransparentPushButton, TransparentTogglePushButton

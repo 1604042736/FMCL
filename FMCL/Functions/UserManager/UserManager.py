@@ -29,7 +29,7 @@ class UserManager(QWidget, Ui_UserManager):
         self.setWindowIcon(qta.icon("ph.users"))
 
         self.pb_add = TransparentToolButton()
-        functioninfo = Kernel.getFunctionInfo(Kernel.getFunction("CreateUser"))
+        functioninfo = Function("CreateUser").get_info()
         self.pb_add.setIcon(functioninfo["icon"])
         self.pb_add.resize(46, 32)
         self.pb_add.clicked.connect(lambda: Function("CreateUser").exec())

@@ -31,7 +31,7 @@ from PyQt5.QtWidgets import (
 from qfluentwidgets import RoundMenu, setThemeColor
 
 from Events import *
-from Setting import Setting, DEFAULT_SETTING_PATH, DEFAULT_SETTING
+from Setting import Setting, DEFAULT_SETTING_PATH, DEFAULT_SETTING, set_theme
 from Window import Window
 from Core.Function import Function
 from Core.Translation import Translation
@@ -99,6 +99,7 @@ class Kernel(QApplication):
         Function.get_all()
 
         setThemeColor(Setting().get("system.theme_color"))
+        set_theme(Setting().get("system.theme"))
 
         logging.info("运行启动项...")
         self.execStartupFunctions()

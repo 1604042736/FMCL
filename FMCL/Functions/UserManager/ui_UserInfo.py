@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'e:\王永健\PCG\FMCL\FMCL\Functions\UserManager\UserInfo.ui'
+# Form implementation generated from reading ui file 'e:\User\PCG\FMCL\FMCL\Functions\UserManager\UserInfo.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -18,9 +18,7 @@ class Ui_UserInfo(object):
         UserInfo.setMinimumSize(QtCore.QSize(0, 64))
         UserInfo.setMaximumSize(QtCore.QSize(16777215, 16777215))
         UserInfo.setWindowTitle("")
-        UserInfo.setStyleSheet("QFrame{\n"
-"    background-color:rgb(253,253,253);\n"
-"}")
+        UserInfo.setStyleSheet("")
         self.gridLayout = QtWidgets.QGridLayout(UserInfo)
         self.gridLayout.setObjectName("gridLayout")
         self.rb_select = RadioButton(UserInfo)

@@ -8,9 +8,21 @@ from PyQt5.QtWidgets import qApp
 from PyQt5.QtGui import QColor
 from PyQt5.Qsci import QsciScintilla, QsciLexerJSON
 
-from qfluentwidgets import TransparentToolButton
+from qfluentwidgets import TransparentToolButton, qconfig, Theme
 
 from Events import *
+
+
+LightLexerJSON = QsciLexerJSON
+
+
+class DarkLexerJSON(QsciLexerJSON):
+    def defaultColor(self, style):
+        color = super().defaultColor(style)
+        color.setRed(0xFF - color.red())
+        color.setGreen(0xFF - color.green())
+        color.setBlue(0xFF - color.blue())
+        return color
 
 
 class JsonEditor(QsciScintilla):
@@ -31,7 +43,7 @@ class JsonEditor(QsciScintilla):
         self.setWindowTitle(json_path)
         self.setWindowIcon(qta.icon("mdi.code-json"))
 
-        self.setLexer(QsciLexerJSON())
+        self.setLexer(LightLexerJSON())
         self.setIndentationGuides(True)  # 缩进提示
         self.setCaretLineVisible(True)  # 高亮当前行
         self.setIndentationsUseTabs(False)  # tab用空格代替
@@ -56,6 +68,21 @@ class JsonEditor(QsciScintilla):
         self.setMouseTracking(True)
 
         self.load()
+
+        qconfig.themeChanged.connect(self.on_themeChanged)
+        self.on_themeChanged()
+
+    def on_themeChanged(self):
+        theme = qconfig.theme
+        if theme == Theme.LIGHT:
+            lexer = LightLexerJSON()
+            self.setCaretForegroundColor(QColor(0, 0, 0))
+            self.setCaretLineBackgroundColor(QColor(230, 230, 230))
+        else:
+            lexer = DarkLexerJSON()
+            self.setCaretForegroundColor(QColor(255, 255, 255))
+            self.setCaretLineBackgroundColor(QColor(50, 50, 50))
+        self.setLexer(lexer)
 
     def load(self):
         if os.path.exists(self.json_path):

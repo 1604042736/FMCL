@@ -9,7 +9,7 @@ _translate = QCoreApplication.translate
 def functionInfo():
     return {
         "name": _translate("About", "关于"),
-        "icon": qta.icon("mdi.information-outline")
+        "icon": qta.icon("mdi.information-outline"),
     }
 
 

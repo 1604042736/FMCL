@@ -1,12 +1,13 @@
 import qtawesome as qta
 from Events import *
-from Kernel import Kernel
 from PyQt5.QtCore import pyqtSlot, QEvent
 from PyQt5.QtWidgets import QWidget, qApp, QInputDialog
 from qfluentwidgets import (
     TransparentToolButton,
     MessageBox,
     TransparentTogglePushButton,
+    qconfig,
+    isDarkTheme,
 )
 
 from Setting import Setting
@@ -49,14 +50,22 @@ class CreateUser(QWidget, Ui_CreateUser):
         self.sw_way.addWidget(self.offline)
 
         self.pb_usermanager = TransparentToolButton()
-        functioninfo = Kernel.getFunctionInfo(Kernel.getFunction("UserManager"))
+        functioninfo = Function("UserManager").get_info()
         self.pb_usermanager.setIcon(functioninfo["icon"])
         self.pb_usermanager.resize(46, 32)
         self.pb_usermanager.clicked.connect(lambda: Function("UserManager").exec())
 
         self.sw_way.currentChanged.connect(self.changePanelState)
 
+        qconfig.themeChanged.connect(self.on_themeChanged)
+        self.on_themeChanged()
+
         self.refresh()
+
+    def on_themeChanged(self):
+        self.f_panel.setStyleSheet(
+            f"QFrame{{background-color:rgba(255,255,255,{13 if isDarkTheme() else 170})}}"
+        )
 
     def refresh(self):
         while self.vl_yggdrasil.count():

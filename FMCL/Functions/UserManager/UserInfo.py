@@ -4,15 +4,14 @@ import multitasking
 
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QFrame
-from qfluentwidgets import InfoBar, InfoBarPosition, MessageBox
+from qfluentwidgets import InfoBar, InfoBarPosition, MessageBox, CardWidget
 
 from Core.User import User
 
 from .ui_UserInfo import Ui_UserInfo
 
 
-class UserInfo(QFrame, Ui_UserInfo):
+class UserInfo(CardWidget, Ui_UserInfo):
     __headGot = pyqtSignal(QPixmap)
     userSelectChanged = pyqtSignal(dict)
     userDeleted = pyqtSignal(dict)

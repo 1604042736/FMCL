@@ -1,11 +1,10 @@
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QFrame
-from qfluentwidgets import PrimaryPushButton
+from qfluentwidgets import PrimaryPushButton, CardWidget
 
 from .ui_AboutItem import Ui_AboutItem
 
 
-class AboutItem(QFrame, Ui_AboutItem):
+class AboutItem(CardWidget, Ui_AboutItem):
     def __init__(
         self,
         name: str,

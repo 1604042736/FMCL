@@ -26,9 +26,7 @@
    <string/>
   </property>
   <property name="styleSheet">
-   <string notr="true">QFrame{
-	background-color:rgb(253,253,253);
-}</string>
+   <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">

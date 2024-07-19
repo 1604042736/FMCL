@@ -1,9 +1,9 @@
 import typing
 
 from PyQt5.QtCore import QEvent, QObject, Qt
-from PyQt5.QtGui import QCloseEvent, QCursor, QFont, QPainter, QPaintEvent
+from PyQt5.QtGui import QCloseEvent, QCursor, QFont, QPainter, QPaintEvent, QColor
 from PyQt5.QtWidgets import QAction, QDesktopWidget, QSizePolicy, QSpacerItem, QWidget
-from qfluentwidgets import RoundMenu
+from qfluentwidgets import RoundMenu, qconfig, Theme
 from qframelesswindow import FramelessWindow
 
 from Events import *
@@ -46,6 +46,30 @@ class Window(FramelessWindow):
         self.titleBar.setObjectName("titleBar")
         self.titleBar.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.titleBar.customContextMenuRequested.connect(self.showTitleMenu)
+
+        qconfig.themeChanged.connect(self.on_themeChanged)
+        self.on_themeChanged()
+
+    def on_themeChanged(self):
+        theme = qconfig.theme
+        color = QColor(0, 0, 0) if theme == Theme.LIGHT else QColor(255, 255, 255)
+        hoverbgcolor = (
+            QColor(0, 0, 0, 26) if theme == Theme.LIGHT else QColor(255, 255, 255, 21)
+        )
+        pressedbgcolor = (
+            QColor(0, 0, 0, 51) if theme == Theme.LIGHT else QColor(255, 255, 255, 51)
+        )
+        for button in (
+            self.titleBar.minBtn,
+            self.titleBar.maxBtn,
+            self.titleBar.closeBtn,
+        ):
+            button.setNormalColor(color)
+            button.setHoverColor(color)
+            button.setPressedColor(color)
+            if button != self.titleBar.closeBtn:
+                button.setHoverBackgroundColor(hoverbgcolor)
+                button.setPressedBackgroundColor(pressedbgcolor)
 
     def paintEvent(self, a0: QPaintEvent) -> None:
         painter = QPainter(self)
