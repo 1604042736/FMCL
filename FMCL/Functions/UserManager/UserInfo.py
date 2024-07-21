@@ -40,9 +40,12 @@ class UserInfo(CardWidget, Ui_UserInfo):
 
     @multitasking.task
     def __getHead(self):
-        head = User.get_head(self.userinfo)
-        pixmap = QPixmap.fromImage(head)
-        self.__headGot.emit(pixmap)
+        try:
+            head = User.get_head(self.userinfo)
+            pixmap = QPixmap.fromImage(head)
+            self.__headGot.emit(pixmap)
+        except RuntimeError:  # 防止在UserManager里被删除
+            pass
 
     def __setHead(self, head):
         head = head.scaled(32, 32)
