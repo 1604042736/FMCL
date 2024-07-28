@@ -1,9 +1,10 @@
 import os
+import time
 import qtawesome as qta
 from Core import Version
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, QEvent
-from PyQt5.QtWidgets import QLabel, QWidget
-from qfluentwidgets import MessageBox
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, QEvent, QObject
+from PyQt5.QtWidgets import QLabel, QWidget, QTreeWidgetItem
+from qfluentwidgets import MessageBox, TreeWidget
 
 from .ui_GameInfo import Ui_GameInfo
 
@@ -23,7 +24,10 @@ class GameInfo(QWidget, Ui_GameInfo):
             "forge_version": self.tr("Forge版本"),
             "fabric_version": self.tr("Fabric版本"),
         }
+        self.name = name
         self.game = Version(name)
+
+        self.l_record.installEventFilter(self)
 
         self.refresh()
 
@@ -106,3 +110,53 @@ class GameInfo(QWidget, Ui_GameInfo):
         elif a0.type() == QEvent.Type.WindowActivate:
             self.refresh()
         return super().event(a0)
+
+    def eventFilter(self, a0: QObject, a1: QEvent):
+        if a0 == self.l_record:
+            if a1.type() == QEvent.Type.MouseButtonRelease:
+                TimeRecodeDetail(self.name).show()
+        return super().eventFilter(a0, a1)
+
+
+class TimeRecodeDetail(TreeWidget):
+    __instances = {}
+    __new_count = {}
+
+    def __new__(cls, name: str):
+        if name not in cls.__instances:
+            cls.__instances[name] = super().__new__(cls)
+            cls.__new_count[name] = 0
+        cls.__new_count[name] += 1
+        return cls.__instances[name]
+
+    def __init__(self, name: str):
+        super().__init__()
+        self.resize(1000, 618)
+        self.setWindowTitle(self.tr("游戏时间记录") + f": {name}")
+        self.setWindowIcon(qta.icon("ph.record"))
+        self.name = name
+        self.game = Version(name)
+
+        self.setColumnCount(3)
+        self.setHeaderLabels(
+            [self.tr("序号"), self.tr("开始时间"), self.tr("结束时间")]
+        )
+
+        self.refresh()
+
+    def refresh(self):
+        self.clear()
+
+        timerec = self.game.get_timerec()
+        for key, val in timerec.items():
+            item = QTreeWidgetItem()
+            item.setText(0, str(int(key) + 1))
+            item.setText(
+                1,
+                f'{time.strftime("%Y-%m-%d %H:%M:%S",time.localtime( val["start"]))}({val["start"]})',
+            )
+            item.setText(
+                2,
+                f'{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(val["end"]))}({val["end"]})',
+            )
+            self.addTopLevelItem(item)
