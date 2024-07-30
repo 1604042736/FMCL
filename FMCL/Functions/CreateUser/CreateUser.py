@@ -21,18 +21,7 @@ from .ui_CreateUser import Ui_CreateUser
 
 
 class CreateUser(QWidget, Ui_CreateUser):
-    instance = None
-    new_count = 0
-
-    def __new__(cls):
-        if CreateUser.instance == None:
-            CreateUser.instance = super().__new__(cls)
-        CreateUser.new_count += 1
-        return CreateUser.instance
-
     def __init__(self) -> None:
-        if CreateUser.new_count > 1:
-            return
         super().__init__()
         self.setupUi(self)
         self.setWindowIcon(qta.icon("ph.user-circle-plus"))
@@ -53,7 +42,7 @@ class CreateUser(QWidget, Ui_CreateUser):
         functioninfo = Function("UserManager").get_info()
         self.pb_usermanager.setIcon(functioninfo["icon"])
         self.pb_usermanager.resize(46, 32)
-        self.pb_usermanager.clicked.connect(lambda: Function("UserManager").exec())
+        self.pb_usermanager.clicked.connect(self.openUserManager)
 
         self.sw_way.currentChanged.connect(self.changePanelState)
 
@@ -66,6 +55,16 @@ class CreateUser(QWidget, Ui_CreateUser):
         self.f_panel.setStyleSheet(
             f"QFrame{{background-color:rgba(255,255,255,{13 if isDarkTheme() else 170})}}"
         )
+
+    def openUserManager(self):
+        from . import _monitor
+
+        if self in _monitor.instances:
+            # 将self移到最前
+            # 这样UserManager就会优先打开self
+            _monitor.instances.remove(self)
+            _monitor.instances.insert(0, self)
+        Function("UserManager").exec()
 
     def refresh(self):
         while self.vl_yggdrasil.count():

@@ -32,7 +32,7 @@ class UserManager(QWidget, Ui_UserManager):
         functioninfo = Function("CreateUser").get_info()
         self.pb_add.setIcon(functioninfo["icon"])
         self.pb_add.resize(46, 32)
-        self.pb_add.clicked.connect(lambda: Function("CreateUser").exec())
+        self.pb_add.clicked.connect(lambda: Function("CreateUser").exec(mode="attach"))
 
         self.userinfo: list[UserInfo] = []
         self.refresh()
