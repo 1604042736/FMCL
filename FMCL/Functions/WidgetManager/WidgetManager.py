@@ -1,50 +1,9 @@
-import inspect
-import logging
-import sys
-
 import qtawesome as qta
 from PyQt5.QtCore import QObject, QTimer, pyqtSlot
 from PyQt5.QtGui import QCloseEvent, QShowEvent
 from PyQt5.QtWidgets import QTreeWidgetItem, QWidget, qApp
 
 from .ui_WidgetManager import Ui_WidgetManager
-
-
-def get_size(obj, seen=None):
-    """Recursively finds size of objects in bytes"""
-    size = sys.getsizeof(obj)
-    if seen is None:
-        seen = set()
-    obj_id = id(obj)
-    if obj_id in seen:
-        return 0
-    # Important mark as seen *before* entering recursion to gracefully handle
-    # self-referential objects
-    seen.add(obj_id)
-    if hasattr(obj, "__dict__"):
-        for cls in obj.__class__.__mro__:
-            if "__dict__" in cls.__dict__:
-                d = cls.__dict__["__dict__"]
-                if inspect.isgetsetdescriptor(d) or inspect.ismemberdescriptor(d):
-                    size += get_size(obj.__dict__, seen)
-                break
-    if isinstance(obj, dict):
-        size += sum((get_size(v, seen) for v in obj.values()))
-        size += sum((get_size(k, seen) for k in obj.keys()))
-    elif hasattr(obj, "__iter__") and not isinstance(obj, (str, bytes, bytearray)):
-        try:
-            size += sum((get_size(i, seen) for i in obj))
-        except TypeError:
-            logging.exception(
-                "Unable to get size of %r. This may lead to incorrect sizes. Please report this error.",
-                obj,
-            )
-    if hasattr(obj, "__slots__"):  # can have __slots__ with __dict__
-        size += sum(
-            get_size(getattr(obj, s), seen) for s in obj.__slots__ if hasattr(obj, s)
-        )
-
-    return size
 
 
 class WidgetManager(QWidget, Ui_WidgetManager):
@@ -67,7 +26,6 @@ class WidgetManager(QWidget, Ui_WidgetManager):
             self.tr("对象名称"): lambda obj: obj.objectName(),
             self.tr("类"): lambda obj: obj.__class__.__name__,
             self.tr("标题"): lambda obj: obj.windowTitle(),
-            self.tr("内存"): lambda obj: f"{get_size(obj)}B",
         }
         self.tw_widgets.setColumnCount(len(self.widget_attr))
         self.tw_widgets.setHeaderLabels(self.widget_attr.keys())
