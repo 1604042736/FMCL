@@ -57,6 +57,10 @@ class Kernel(QApplication):
         if default_path not in sys.path:
             sys.path.insert(1, default_path)
 
+        if not os.path.exists(DEFAULT_SETTING_PATH):
+            with open(DEFAULT_SETTING_PATH, mode="w", encoding="utf-8") as file:
+                file.write("{}")
+
         import_paths = json.load(open(DEFAULT_SETTING_PATH, encoding="utf-8")).get(
             "system.import_paths", DEFAULT_SETTING["system.import_paths"]
         )
@@ -79,10 +83,6 @@ class Kernel(QApplication):
         splash.setWindowFlags(splash.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
         splash.show()
         self.processEvents()
-
-        if not os.path.exists(DEFAULT_SETTING_PATH):
-            with open(DEFAULT_SETTING_PATH, mode="w", encoding="utf-8") as file:
-                file.write("{}")
 
         # 在未加载翻译之前不能使用Setting
         tempdir = json.load(open(DEFAULT_SETTING_PATH, encoding="utf-8")).get(
