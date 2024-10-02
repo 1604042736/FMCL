@@ -13,10 +13,12 @@ tasks = [
             r".*?\.ts",
             r".*?latest.log",
             r".*?settings.json",
+            r".*?settings.attrs.py",
             r".*?/__pycache__.*?",
             r".*?/Skin.*?",
             r".*?/Default.*?",
             r".*?/Temp.*?",
+            r".*?Extras.*?",
         ],
     }
 ]

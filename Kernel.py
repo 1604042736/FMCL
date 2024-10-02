@@ -1,3 +1,4 @@
+from importlib import import_module
 import logging
 import re
 import os
@@ -5,38 +6,26 @@ import json
 import shutil
 import sys
 import traceback
-import webbrowser
-from zipfile import *
-import multitasking
-import PIL
-import qfluentwidgets
-import qframelesswindow
-import requests
-import toml
-import python_nbt
-import psutil
-import watchdog.version
+from zipfile import ZipFile
 
-import qtawesome as qta
-from PyQt5.QtCore import QCoreApplication, QEvent, QObject, Qt, qVersion
+from PyQt5.QtCore import QCoreApplication, QEvent, QObject, Qt
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (
     QApplication,
     QDialog,
     QMessageBox,
     QWidget,
-    qApp,
     QSplashScreen,
 )
 from qfluentwidgets import RoundMenu, setThemeColor
 
 from Events import *
-from Setting import Setting, DEFAULT_SETTING_PATH, DEFAULT_SETTING, set_theme
+import FMCL_About
+from Setting import Setting, DEFAULT_SETTING_PATH, DEFAULT_SETTING, set_theme, merge
 from Window import Window
 from Core.Function import Function
 from Core.Translation import Translation
 from Core.Help import Help
-from PyQt5.Qsci import QSCINTILLA_VERSION_STR
 
 _translate = QCoreApplication.translate
 
@@ -64,11 +53,6 @@ class Kernel(QApplication):
         import_paths = json.load(open(DEFAULT_SETTING_PATH, encoding="utf-8")).get(
             "system.import_paths", DEFAULT_SETTING["system.import_paths"]
         )
-        try:
-            index = sys.argv.index("-I") + 1
-            import_paths.extends(sys.argv[index].split(";"))
-        except:
-            pass
         i = 2
         for path in import_paths:
             path = os.path.abspath(path)
@@ -198,275 +182,25 @@ class Kernel(QApplication):
 
     @staticmethod
     def getAbout():
-        return {
-            "launcher": [
-                (
-                    f"Functional Minecraft Launcher",
-                    f"v{qApp.applicationVersion()}",
-                    QPixmap(":/Image/icon.png"),
-                    (
-                        (
-                            lambda: webbrowser.open(
-                                "https://github.com/1604042736/FMCL"
-                            ),
-                            "GitHub",
-                        ),
-                    ),
-                )
-            ],
-            "thanks": [
-                (
-                    "bangbang93",
-                    _translate("About", "提供镜像源"),
-                    QPixmap(":/Image/bangbang93.jpg"),
-                    (
-                        (
-                            lambda: webbrowser.open(
-                                "https://bmclapidoc.bangbang93.com/"
-                            ),
-                            _translate("About", "官网"),
-                        ),
-                        (
-                            lambda: webbrowser.open("https://afdian.net/a/bangbang93"),
-                            _translate("About", "赞助"),
-                        ),
-                    ),
-                ),
-                (
-                    "HMCL",
-                    _translate("About", "提供技术帮助"),
-                    QPixmap(":/Image/hmcl.png"),
-                    (
-                        (
-                            lambda: webbrowser.open("https://hmcl.huangyuhui.net/"),
-                            _translate("About", "官网"),
-                        ),
-                        (
-                            lambda: webbrowser.open(
-                                "https://afdian.net/a/huanghongxun"
-                            ),
-                            _translate("About", "赞助"),
-                        ),
-                        (
-                            lambda: webbrowser.open(
-                                "https://github.com/huanghongxun/HMCL"
-                            ),
-                            "GitHub",
-                        ),
-                    ),
-                ),
-                (
-                    "PCL",
-                    _translate("About", "提供技术帮助"),
-                    QPixmap(":/Image/pcl.png"),
-                    (
-                        (
-                            lambda: webbrowser.open("https://afdian.net/a/LTCat"),
-                            _translate("About", "赞助"),
-                        ),
-                        (
-                            lambda: webbrowser.open(
-                                "https://github.com/Hex-Dragon/PCL2"
-                            ),
-                            "GitHub",
-                        ),
-                    ),
-                ),
-            ],
-            "3rdparty": [
-                (
-                    "Python",
-                    sys.version,
-                    None,
-                    (
-                        (
-                            lambda: webbrowser.open("https://www.python.org"),
-                            _translate("About", "官网"),
-                        ),
-                        (
-                            lambda: webbrowser.open(
-                                "https://github.com/python/cpython"
-                            ),
-                            "Github",
-                        ),
-                    ),
-                ),
-                (
-                    "minecraft_launcher_lib",
-                    "v6.1",
-                    None,
-                    (
-                        (
-                            lambda: webbrowser.open(
-                                "https://github.com/BobDotCom/minecraft-launcher-lib"
-                            ),
-                            "GitHub",
-                        ),
-                    ),
-                ),
-                (
-                    "multitasking",
-                    "v" + multitasking.__version__,
-                    None,
-                    (
-                        (
-                            lambda: webbrowser.open(
-                                "https://github.com/ranaroussi/multitasking"
-                            ),
-                            "GitHub",
-                        ),
-                    ),
-                ),
-                (
-                    "Pillow",
-                    "v" + PIL.__version__,
-                    None,
-                    (
-                        (
-                            lambda: webbrowser.open(
-                                "https://github.com/python-pillow/Pillow"
-                            ),
-                            "GitHub",
-                        ),
-                    ),
-                ),
-                (
-                    "PyQt5",
-                    "v" + qVersion(),
-                    None,
-                    (
-                        (qApp.aboutQt, _translate("About", "关于Qt")),
-                        (
-                            lambda: webbrowser.open("https://www.qt.io"),
-                            _translate("About", "官网"),
-                        ),
-                    ),
-                ),
-                (
-                    "PyQt-Fluent-Widgets",
-                    "v" + qfluentwidgets.__version__,
-                    None,
-                    (
-                        (
-                            lambda: webbrowser.open("https://afdian.net/a/zhiyiYo"),
-                            _translate("About", "赞助"),
-                        ),
-                        (
-                            lambda: webbrowser.open("https://qfluentwidgets.com/"),
-                            _translate("About", "官网"),
-                        ),
-                        (
-                            lambda: webbrowser.open(
-                                "https://github.com/zhiyiYo/PyQt-Fluent-Widgets"
-                            ),
-                            "GitHub",
-                        ),
-                    ),
-                ),
-                (
-                    "PyQt5_Frameless_Window",
-                    "v" + qframelesswindow.__version__,
-                    None,
-                    (
-                        (
-                            lambda: webbrowser.open("https://afdian.net/a/zhiyiYo"),
-                            _translate("About", "赞助"),
-                        ),
-                        (
-                            lambda: webbrowser.open(
-                                "https://github.com/zhiyiYo/PyQt-Frameless-Window"
-                            ),
-                            "GitHub",
-                        ),
-                    ),
-                ),
-                (
-                    "requests",
-                    "v" + requests.__version__,
-                    None,
-                    (
-                        (
-                            lambda: webbrowser.open("https://github.com/psf/requests"),
-                            "GitHub",
-                        ),
-                    ),
-                ),
-                (
-                    "toml",
-                    "v" + toml.__version__,
-                    None,
-                    (
-                        (
-                            lambda: webbrowser.open("https://github.com/uiri/toml"),
-                            "GitHub",
-                        ),
-                    ),
-                ),
-                (
-                    "Python-NBT",
-                    "v" + ".".join(map(str, python_nbt.VERSION)),
-                    None,
-                    (
-                        (
-                            lambda: webbrowser.open(
-                                "https://github.com/TowardtheStars/Python-NBT"
-                            ),
-                            "GitHub",
-                        ),
-                    ),
-                ),
-                (
-                    "qtawesome",
-                    f"v{qta.__version__}",
-                    None,
-                    (
-                        (
-                            lambda: webbrowser.open(
-                                "https://github.com/spyder-ide/qtawesome"
-                            ),
-                            "GitHub",
-                        ),
-                    ),
-                ),
-                (
-                    "psutil",
-                    f"v{psutil.__version__}",
-                    None,
-                    (
-                        (
-                            lambda: webbrowser.open(
-                                "https://github.com/giampaolo/psutil"
-                            ),
-                            "GitHub",
-                        ),
-                    ),
-                ),
-                (
-                    "watchdog",
-                    f"v{watchdog.version.VERSION_STRING}",
-                    None,
-                    (
-                        (
-                            lambda: webbrowser.open(
-                                "https://github.com/gorakhargosh/watchdog"
-                            ),
-                            "GitHub",
-                        ),
-                    ),
-                ),
-                (
-                    "QScintilla",
-                    f"v{QSCINTILLA_VERSION_STR}",
-                    None,
-                    (
-                        (
-                            lambda: webbrowser.open("https://www.scintilla.org/"),
-                            _translate("About", "官网"),
-                        ),
-                    ),
-                ),
-            ],
-        }
+        all_about = FMCL_About.about()
+
+        import_paths = Setting()["system.import_paths"]
+        for path in import_paths:
+            if not os.path.exists(path):
+                continue
+            for i in os.listdir(path):
+                if i == "FMCL":
+                    continue
+                module_name = i
+                if os.path.isfile(os.path.join(path, i)):
+                    module_name, _ = os.path.splitext(i)
+                try:
+                    module = import_module(module_name + ".FMCL_About")
+                except:
+                    continue
+                about = getattr(module, "about", lambda: {})()
+                merge(all_about, about)
+        return all_about
 
     @staticmethod
     def getWidgetFromUi(ui_object):

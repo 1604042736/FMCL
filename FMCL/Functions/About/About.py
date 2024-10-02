@@ -15,5 +15,5 @@ class About(QWidget, Ui_About):
         for key, val in Kernel.getAbout().items():
             gl = getattr(self, f"gl_{key}")
             for i in val:
-                widget = AboutItem(*i)
+                widget = AboutItem(**i)
                 gl.addWidget(widget)

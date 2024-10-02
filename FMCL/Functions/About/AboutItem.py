@@ -10,7 +10,7 @@ class AboutItem(CardWidget, Ui_AboutItem):
         name: str,
         description: str = "",
         icon: QPixmap = None,
-        operators: tuple[tuple] = None,
+        operators: tuple[dict] = None,
     ):
         super().__init__()
         self.setupUi(self)
@@ -25,6 +25,6 @@ class AboutItem(CardWidget, Ui_AboutItem):
         if operators:
             for operator in operators:
                 button = PrimaryPushButton()
-                button.setText(operator[1])
-                button.clicked.connect(lambda _, op=operator: op[0]())
+                button.setText(operator["name"])
+                button.clicked.connect(lambda _, op=operator: op["action"]())
                 self.hl_operators.addWidget(button)

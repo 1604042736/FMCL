@@ -45,4 +45,3 @@ For details, see the `Kernel.getAbout` function in `Kernel.py`
 |Parameters     | Introduction                                                                          |
 |---------------|---------------------------------------------------------------------------------------|
 |`--updated`    | The file indicated after the parameter will be deleted, usually used after the update |
-|`-I`           | Add new import path                                                                   |

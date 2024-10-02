@@ -365,6 +365,18 @@ class SettingMonitor(FileSystemEventHandler, QObject):
         return super().on_any_event(event)
 
 
+def merge(a, b):
+    for key, val in b.items():
+        if key not in a:
+            a[key] = val
+        elif isinstance(val, dict):
+            merge(a[key], val)
+        elif isinstance(val, list):
+            a[key].extend(val)
+        else:
+            a[key] = val
+
+
 class Setting:
     """设置"""
 
@@ -397,18 +409,6 @@ class Setting:
             for key, val in json.load(open(setting_path, encoding="utf-8")).items():
                 self.modifiedsetting[key] = val
         if os.path.exists(self.attr_path):
-
-            def merge(a, b):
-                for key, val in b.items():
-                    if key not in a:
-                        a[key] = val
-                    elif isinstance(val, dict):
-                        merge(a[key], val)
-                    elif isinstance(val, list):
-                        a[key].extends(val)
-                    else:
-                        a[key] = val
-
             for key, val in eval(open(self.attr_path, encoding="utf-8").read()).items():
                 if key not in self.attrs:
                     self.attrs[key] = {}
