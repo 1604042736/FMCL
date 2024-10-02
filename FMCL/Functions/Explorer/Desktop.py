@@ -4,7 +4,7 @@ import traceback
 
 import qtawesome as qta
 from Kernel import Kernel
-from PyQt5.QtCore import QEvent, QSize, Qt, QPoint
+from PyQt5.QtCore import QEvent, QSize, Qt, QPoint, QObject, pyqtSignal
 from PyQt5.QtGui import QCursor, QPainter, QPixmap
 from PyQt5.QtWidgets import (
     QAction,
@@ -26,6 +26,23 @@ from qfluentwidgets import (
 from Core import Version, Function
 from Setting import Setting
 from Events import *
+from watchdog.events import FileSystemEvent, FileSystemEventHandler
+from watchdog.observers import Observer
+
+
+class DesktopMonitor(FileSystemEventHandler, QObject):
+    __changed = pyqtSignal()
+
+    def __init__(self, desktop: "Desktop"):
+        super().__init__()
+        self.desktop = desktop
+
+        self.__changed.connect(self.desktop.refresh)
+
+    def on_any_event(self, event: FileSystemEvent) -> None:
+        if Setting()["game.directories"][0] in event.src_path:
+            self.__changed.emit()
+        return super().on_any_event(event)
 
 
 class Desktop(ListWidget):
@@ -60,6 +77,14 @@ class Desktop(ListWidget):
         self.item_action = []
         self.setAcceptDrops(True)
         self.refresh()
+
+        self.monitor = DesktopMonitor(self)
+        self.observer = Observer()
+        self.observer.schedule(
+            self.monitor,
+            os.path.join(Setting()["game.directories"][0], "versions"),
+        )
+        self.observer.start()
 
     def showRightMenu(self):
         """显示右键菜单"""
@@ -158,7 +183,6 @@ class Desktop(ListWidget):
                     self.window(),
                     AddToTitleEvent(self.pb_quickswitchgamedir, "right", 0),
                 )
-            self.refresh()
         elif e.type() == QEvent.Type.Hide:
             qApp.sendEvent(
                 self.window(), RemoveFromTitleEvent(self.pb_quickswitchgamedir)
@@ -174,6 +198,10 @@ class Desktop(ListWidget):
             gamedir = Setting()["game.directories"]
             gamedir.remove(name)
             gamedir.insert(0, name)
+            self.observer.schedule(
+                self.monitor,
+                os.path.join(Setting()["game.directories"][0], "versions"),
+            )
             self.refresh()
 
         menu = CheckableMenu(self)
