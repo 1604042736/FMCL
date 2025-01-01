@@ -375,15 +375,21 @@ class Version:
             # 移动新的文件
             shutil.copy(f"{old_path}/{self.name}.jar", new_path)
             shutil.copy(f"{old_path}/{self.name}.json", new_path)
+            shutil.copy(f"{old_path}/{self.name}-natives", new_path)
             # 删除旧的文件
             if os.path.exists(f"{new_path}/{new_name}.jar"):
                 os.remove(f"{new_path}/{new_name}.jar")
             if os.path.exists(f"{new_path}/{new_name}.jar"):
                 os.remove(f"{new_path}/{new_name}.json")
+            if os.path.exists(f"{new_path}/{self.name}-natives"):
+                shutil.rmtree(f"{new_path}/{self.name}-natives")
 
             # 重命名
             os.rename(f"{new_path}/{self.name}.jar", f"{new_path}/{new_name}.jar")
             os.rename(f"{new_path}/{self.name}.json", f"{new_path}/{new_name}.json")
+            os.rename(
+                f"{new_path}/{self.name}-natives", f"{new_path}/{new_name}-natives"
+            )
 
             config = json.load(open(f"{new_path}/{new_name}.json"))
             config["id"] = new_name
@@ -393,6 +399,7 @@ class Version:
             return
         os.rename(f"{old_path}/{self.name}.jar", f"{old_path}/{new_name}.jar")
         os.rename(f"{old_path}/{self.name}.json", f"{old_path}/{new_name}.json")
+        os.rename(f"{old_path}/{self.name}-natives", f"{old_path}/{new_name}-natives")
         os.rename(old_path, new_path)
         config = json.load(open(f"{new_path}/{new_name}.json"))
         config["id"] = new_name
