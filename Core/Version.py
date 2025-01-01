@@ -170,11 +170,11 @@ class Version:
         options["resolutionHeight"] = str(setting.get("game.height"))
         options["executablePath"] = Java(setting).get_executable_path()
         options["jvmArguments"] = [f"-Xmx{setting.get('game.maxmem')}m"]
-        self.generate_setting()
+        options["nativesDirectory"] = os.path.join(  # self.name和data['id']相等
+            absdir, "versions", self.name, f"{self.name}-natives"
+        )
         if self.setting.get("isolation"):
-            options["gameDirectory"] = os.path.abspath(
-                os.path.join(self.directory, "versions", self.name)
-            )
+            options["gameDirectory"] = os.path.join(absdir, "versions", self.name)
 
         t = mll.command.get_minecraft_command(self.name, absdir, options)
         java_path = t[0]
