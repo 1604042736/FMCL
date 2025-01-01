@@ -50,6 +50,8 @@ class Window(FramelessWindow):
         qconfig.themeChanged.connect(self.on_themeChanged)
         self.on_themeChanged()
 
+        self.origin_size = self.size()
+
     def on_themeChanged(self):
         theme = qconfig.theme
         color = QColor(0, 0, 0) if theme == Theme.LIGHT else QColor(255, 255, 255)
@@ -145,4 +147,7 @@ class Window(FramelessWindow):
         elif a0.type() == RemoveFromTitleMenuEvent.EventType:
             if a0.action in self.titlemenu_actions:
                 self.titlemenu_actions.remove(a0.action)
+        elif a0.type() == QEvent.Type.Resize:
+            if self.windowState() != Qt.WindowState.WindowMaximized:
+                self.origin_size = self.size()
         return super().event(a0)

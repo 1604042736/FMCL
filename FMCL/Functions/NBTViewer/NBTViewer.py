@@ -160,7 +160,7 @@ class NBTViewer(QWidget, Ui_NBTViewer):
             MessageBox("", self.tr("无法打开") + f"{file}", self).exec()
 
     def separateViewer(self, widget):
-        qApp.sendEvent(self, SeparateWidgetEvent(widget, self.size()))
+        qApp.sendEvent(self, SeparateWidgetEvent(widget))
         a_back = QAction(widget)
         a_back.setText(self.tr("合并"))
         a_back.setIcon(qta.icon("msc.reply"))
