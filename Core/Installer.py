@@ -135,7 +135,7 @@ class Installer:
                         if "extract" in i:
                             extract_natives_file(
                                 os.path.join(current_path, jar_filename_native),
-                                os.path.join(path, "versions", id, "natives"),
+                                os.path.join(path, "versions", id, f"{id}-natives"),
                                 i["extract"],
                             )
                         return
@@ -160,7 +160,7 @@ class Installer:
                         if "extract" in i:
                             extract_natives_file(
                                 os.path.join(current_path, jar_filename_native),
-                                os.path.join(path, "versions", id, "natives"),
+                                os.path.join(path, "versions", id, f"{id}-natives"),
                                 i["extract"],
                             )
 
@@ -829,7 +829,7 @@ class Installer:
 
         # Make sure the Minecraft version is installed
         task_install_mc = Task(
-            _translate("Installer","安装")+minecraft_version,
+            _translate("Installer", "安装") + minecraft_version,
             callback.get("getCurTask", lambda _: None)(),
             lambda callback: self.install_minecraft_version(
                 minecraft_version, path, callback=callback
@@ -878,7 +878,7 @@ class Installer:
         # Install all libs of quilt
         quilt_minecraft_version = f"quilt-loader-{loader_version}-{minecraft_version}"
         task_install_mc = Task(
-            _translate("Installer","安装")+quilt_minecraft_version,
+            _translate("Installer", "安装") + quilt_minecraft_version,
             callback.get("getCurTask", lambda _: None)(),
             lambda callback: self.install_minecraft_version(
                 quilt_minecraft_version, path, callback=callback
