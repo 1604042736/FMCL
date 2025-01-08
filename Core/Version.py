@@ -410,7 +410,6 @@ class Version:
     def get_info(self) -> dict:
         if hasattr(self, "info"):
             return self.info
-        self.info = info = {"version": "", "forge_version": "", "fabric_version": ""}
         config = json.load(
             open(
                 os.path.join(
@@ -420,6 +419,8 @@ class Version:
             )
         )
         configstr = str(config)
+        # 如果版本json文件不存在, self.info的赋值又在打开版本json文件之前会导致self.info没有被更新
+        self.info = info = {"version": "", "forge_version": "", "fabric_version": ""}
 
         if "net.fabricmc:fabric-loader" in configstr:
             fabric_version = re.findall(
