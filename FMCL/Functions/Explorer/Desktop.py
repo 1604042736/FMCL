@@ -26,7 +26,7 @@ from qfluentwidgets import (
 from Core import Version, Function
 from Setting import Setting
 from Events import *
-from watchdog.events import FileSystemEvent, FileSystemEventHandler
+from watchdog.events import FileSystemEvent, FileSystemEventHandler, EVENT_TYPE_DELETED
 from watchdog.observers import Observer
 
 
@@ -40,7 +40,11 @@ class DesktopMonitor(FileSystemEventHandler, QObject):
         self.__changed.connect(self.desktop.refresh)
 
     def on_any_event(self, event: FileSystemEvent) -> None:
-        if Setting()["game.directories"][0] in event.src_path:
+        if (
+            Setting()["game.directories"][0] in event.src_path
+            and event.event_type != EVENT_TYPE_DELETED
+        ):  # 文件被删除了后再更新可能会出现异常, 特别是在删除版本的时侯
+            logging.debug(f"[DesktopMonitor]{event.src_path}, {event.event_type}")
             self.__changed.emit()
         return super().on_any_event(event)
 
