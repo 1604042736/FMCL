@@ -368,39 +368,26 @@ class Version:
         if new_name == self.name:
             return
         logging.info(f"重命名: {new_name}")
-        old_path = f"{self.directory}/versions/{self.name}"
-        new_path = f"{self.directory}/versions/{new_name}"
+        old_path = os.path.join(self.directory, "versions", self.name)
+        new_path = os.path.join(self.directory, "versions", new_name)
         if os.path.exists(new_path):  # 如果重命名之后的文件存在就覆盖原来的文件
             logging.warning(f"{new_name}已经存在")
-            # 移动新的文件
-            shutil.copy(f"{old_path}/{self.name}.jar", new_path)
-            shutil.copy(f"{old_path}/{self.name}.json", new_path)
-            shutil.copy(f"{old_path}/{self.name}-natives", new_path)
-            # 删除旧的文件
-            if os.path.exists(f"{new_path}/{new_name}.jar"):
-                os.remove(f"{new_path}/{new_name}.jar")
-            if os.path.exists(f"{new_path}/{new_name}.jar"):
-                os.remove(f"{new_path}/{new_name}.json")
-            if os.path.exists(f"{new_path}/{self.name}-natives"):
-                shutil.rmtree(f"{new_path}/{self.name}-natives")
+            for i in os.listdir(old_path):
+                if i.startswith(self.name):
+                    # 移动新的文件
+                    shutil.copy(os.path.join(old_path, i), new_path)
+                    origin_path = os.path.join(new_path, i.replace(self.name, new_name))
+                    if os.path.exists(origin_path):  # 删除原来存在的文件
+                        os.remove(origin_path)
+        else:
+            os.rename(old_path, new_path)
 
-            # 重命名
-            os.rename(f"{new_path}/{self.name}.jar", f"{new_path}/{new_name}.jar")
-            os.rename(f"{new_path}/{self.name}.json", f"{new_path}/{new_name}.json")
-            os.rename(
-                f"{new_path}/{self.name}-natives", f"{new_path}/{new_name}-natives"
-            )
-
-            config = json.load(open(f"{new_path}/{new_name}.json"))
-            config["id"] = new_name
-            json.dump(
-                config, open(f"{new_path}/{new_name}.json", mode="w", encoding="utf-8")
-            )
-            return
-        os.rename(f"{old_path}/{self.name}.jar", f"{old_path}/{new_name}.jar")
-        os.rename(f"{old_path}/{self.name}.json", f"{old_path}/{new_name}.json")
-        os.rename(f"{old_path}/{self.name}-natives", f"{old_path}/{new_name}-natives")
-        os.rename(old_path, new_path)
+        for i in os.listdir(new_path):
+            if i.startswith(self.name):
+                os.rename(
+                    os.path.join(new_path, i),
+                    os.path.join(new_path, i.replace(self.name, new_name)),
+                )
         config = json.load(open(f"{new_path}/{new_name}.json"))
         config["id"] = new_name
         json.dump(
