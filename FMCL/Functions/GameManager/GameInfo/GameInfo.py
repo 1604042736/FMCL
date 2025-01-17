@@ -137,9 +137,14 @@ class TimeRecodeDetail(TreeWidget):
         self.name = name
         self.game = Version(name)
 
-        self.setColumnCount(3)
+        self.setColumnCount(4)
         self.setHeaderLabels(
-            [self.tr("序号"), self.tr("开始时间"), self.tr("结束时间")]
+            [
+                self.tr("序号"),
+                self.tr("开始时间"),
+                self.tr("结束时间"),
+                self.tr("持续时间"),
+            ]
         )
 
         self.refresh()
@@ -158,5 +163,14 @@ class TimeRecodeDetail(TreeWidget):
             item.setText(
                 2,
                 f'{time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(val["end"]))}({val["end"]})',
+            )
+            total_time = int(val["end"] - val["start"])
+            item.setText(
+                3,
+                self.tr("{hour_time}时{minute_time}分{second_time}秒").format(
+                    hour_time=total_time // 3600,
+                    minute_time=total_time % 3600 // 60,
+                    second_time=total_time % 3600 % 60,
+                ),
             )
             self.addTopLevelItem(item)
