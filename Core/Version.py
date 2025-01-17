@@ -609,6 +609,9 @@ class Version:
         self.sync_default_setting()
 
     def delete(self):
+        if hasattr(self, "setting"):
+            # 防止设置的更新监视重新创建已删除的设置文件
+            del self.setting
         shutil.rmtree(os.path.join(self.directory, "versions", self.name))
 
     def get_pixmap(self):

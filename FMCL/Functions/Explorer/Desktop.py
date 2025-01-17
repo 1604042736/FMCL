@@ -4,7 +4,7 @@ import traceback
 
 import qtawesome as qta
 from Kernel import Kernel
-from PyQt5.QtCore import QEvent, QSize, Qt, QPoint, QObject, pyqtSignal
+from PyQt5.QtCore import QEvent, QSize, Qt, QPoint, QObject, pyqtSignal, QTimer
 from PyQt5.QtGui import QCursor, QPainter, QPixmap
 from PyQt5.QtWidgets import (
     QAction,
@@ -37,13 +37,16 @@ class DesktopMonitor(FileSystemEventHandler, QObject):
         super().__init__()
         self.desktop = desktop
 
-        self.__changed.connect(self.desktop.refresh)
+        self.delay_timer = QTimer(self.desktop)
+        self.delay_timer.timeout.connect(
+            lambda: (self.desktop.refresh(), self.delay_timer.stop())
+        )
+        # 延时刷新
+        # 防止频繁的事件导致频繁的刷新
+        self.__changed.connect(lambda: self.delay_timer.start(100))
 
     def on_any_event(self, event: FileSystemEvent) -> None:
-        if (
-            Setting()["game.directories"][0] in event.src_path
-            and event.event_type != EVENT_TYPE_DELETED
-        ):  # 文件被删除了后再更新可能会出现异常, 特别是在删除版本的时侯
+        if Setting()["game.directories"][0] in event.src_path:
             logging.debug(f"[DesktopMonitor]{event.src_path}, {event.event_type}")
             self.__changed.emit()
         return super().on_any_event(event)
@@ -81,7 +84,7 @@ class Desktop(ListWidget):
         self.item_action = []
         self.setAcceptDrops(True)
         self.refresh()
-
+        # refresh的时侯会创建versions文件夹
         self.monitor = DesktopMonitor(self)
         self.observer = Observer()
         self.observer.schedule(

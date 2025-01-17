@@ -420,7 +420,7 @@ class Setting:
         path = os.path.dirname(self.setting_path)
         while not os.path.exists(path):
             path = os.path.dirname(path)
-
+        logging.debug(f"{setting_path} 监视 {path}")
         self.observer.schedule(self.monitor, path)
         self.observer.start()
 
@@ -576,3 +576,7 @@ class Setting:
 
     def __contains__(self, key):
         return key in self.modifiedsetting or key in self.defaultsetting
+
+    def __del__(self):
+        self.observer.stop()
+        return super().__del__()
