@@ -50,7 +50,7 @@ class Update(QWidget, Ui_Update):
         self.pb_update.setEnabled(False)
         self.pb_check.setEnabled(False)
         try:
-            url = "https://api.github.com/repos/1604042736/FMCL/releases/latest"
+            url = "https://api.github.com/repos/wyj2006/FMCL/releases/latest"
             r = Network().get(url, verify=False)
             self.info = json.loads(r.content)
 
@@ -89,7 +89,9 @@ class Update(QWidget, Ui_Update):
 
     @pyqtSlot(bool)
     def on_pb_update_clicked(self, _):
-        Task(self.tr("下载更新"), taskfunc=lambda callback: self.update_(callback)).start()
+        Task(
+            self.tr("下载更新"), taskfunc=lambda callback: self.update_(callback)
+        ).start()
 
     @pyqtSlot(bool)
     def on_pb_check_clicked(self, _):

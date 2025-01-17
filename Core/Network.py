@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import qApp
 class Network:
     @staticmethod
     def get_default_headers():
-        return {"user-agent": f"1604042736/FMCL/{qApp.applicationVersion()}"}
+        return {"user-agent": f"wyj2006/FMCL/{qApp.applicationVersion()}"}
 
     def __init__(
         self,

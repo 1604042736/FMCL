@@ -33,7 +33,7 @@ def about():
                 "operators": (
                     {
                         "action": lambda: webbrowser.open(
-                            "https://github.com/1604042736/FMCL"
+                            "https://github.com/wyj2006/FMCL"
                         ),
                         "name": "GitHub",
                     },

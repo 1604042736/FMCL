@@ -1,8 +1,8 @@
 # Functional Minecraft Launcher
 
-![Downloads](https://img.shields.io/github/downloads/1604042736/FMCL/total)
-![Stars](https://img.shields.io/github/stars/1604042736/FMCL)
-![CodeSize](https://img.shields.io/github/languages/code-size/1604042736/FMCL)
+![Downloads](https://img.shields.io/github/downloads/wyj2006/FMCL/total)
+![Stars](https://img.shields.io/github/stars/wyj2006/FMCL)
+![CodeSize](https://img.shields.io/github/languages/code-size/wyj2006/FMCL)
 ![PoweredBy](https://img.shields.io/badge/Powered%20By-YongjianWang-green.svg)
 
 English | [中文](README.md)
