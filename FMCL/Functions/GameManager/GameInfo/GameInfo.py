@@ -130,6 +130,8 @@ class TimeRecodeDetail(TreeWidget):
         return cls.__instances[name]
 
     def __init__(self, name: str):
+        if TimeRecodeDetail.__new_count[name] > 1:
+            return
         super().__init__()
         self.resize(1000, 618)
         self.setWindowTitle(self.tr("游戏时间记录") + f": {name}")
@@ -174,3 +176,8 @@ class TimeRecodeDetail(TreeWidget):
                 ),
             )
             self.addTopLevelItem(item)
+
+    def event(self, a0: QEvent) -> bool:
+        if a0.type() == QEvent.Type.Show:
+            self.refresh()
+        return super().event(a0)

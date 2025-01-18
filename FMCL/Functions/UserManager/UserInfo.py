@@ -26,7 +26,7 @@ class UserInfo(CardWidget, Ui_UserInfo):
         _type = userinfo["type"]
         if _type == "offline":
             self.l_type.setText(self.tr("离线登录"))
-            self.pb_changeprofile.hide()
+            self.pb_refresh.hide()
         elif _type == "authlibInjector":
             self.l_type.setText(self.tr("外置登录"))
             self.l_mode.setText(User.get_servername(userinfo))

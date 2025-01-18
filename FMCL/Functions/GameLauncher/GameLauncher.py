@@ -1,4 +1,5 @@
 import logging
+import os
 import traceback
 import psutil
 
@@ -7,8 +8,10 @@ from Core import Version, Task
 from PyQt5.QtCore import QProcess, pyqtSignal, pyqtSlot, QTimer, QEvent
 from PyQt5.QtWidgets import QWidget, qApp
 from qfluentwidgets import MessageBox, TransparentToolButton
+from datetime import datetime
 
 from Events import *
+from Setting import Setting
 
 from .ui_GameLauncher import Ui_GameLauncher
 
@@ -22,7 +25,7 @@ class GameLauncher(QWidget, Ui_GameLauncher):
         super().__init__()
         self.setupUi(self)
         t = self.tr("游戏日志")
-        self.setWindowTitle(f"{t}:{game_name}")
+        self.setWindowTitle(f"[{datetime.now().strftime('%H:%M:%S')}]{t}:{game_name}")
         self.setWindowIcon(qta.icon("mdi.rocket-launch-outline"))
 
         self.command_name = ""
@@ -44,6 +47,8 @@ class GameLauncher(QWidget, Ui_GameLauncher):
             lambda: self.setAutoScroll(not self.auto_scroll)
         )
         self.setAutoScroll(self.auto_scroll)
+
+        self.use_javawrapper = False  # 使用JavaWrapper.jar
 
         t = self.tr("启动游戏")
         self.game = Version(self.name)
@@ -74,10 +79,37 @@ class GameLauncher(QWidget, Ui_GameLauncher):
 
     def __start(self):
         command = self.commands.pop(0)
-        logging.info(f"__start: {command}")
         program, args, self.command_name = command
+        self.use_javawrapper = False
         if self.command_name == "Main":
-            self.timerec_index = self.game.record_new_start_time()
+            # 假设username的前一个就是mainClass
+            main_class_index = args.index("--username") - 1
+            javawrapper_path = os.path.join(
+                os.path.abspath(os.path.dirname(__file__)),
+                "JavaWrapper.jar",
+            )
+            logging.info(f"{javawrapper_path}, {os.path.exists(javawrapper_path)}")
+            if os.path.exists(javawrapper_path) and not Setting().get(
+                "gamelauncher.never_use_javawrapper", False
+            ):
+                logging.info("使用javawrapper")
+                self.use_javawrapper = True
+                args = (
+                    args[:main_class_index]
+                    + ["-jar", javawrapper_path]
+                    + args[main_class_index:]
+                )
+                timerec = self.game.get_timerec()
+                if len(timerec) > 0:
+                    self.timerec_index = max(timerec) + 1
+                else:
+                    self.timerec_index = 0
+            else:
+                self.timerec_index = self.game.record_new_start_time()
+        logging.info(f"运行{self.command_name}: ")
+        logging.info(program)
+        logging.info(args)
+
         self.process.setWorkingDirectory(self.game_path)
         self.process.start(program, args)
         self.pb_kill.setEnabled(True)
@@ -118,6 +150,8 @@ class GameLauncher(QWidget, Ui_GameLauncher):
     def afterKilling(self):
         self.timer.stop()
         self.pb_kill.setEnabled(False)
+        # 无论用没用JavaWrapper都要写入结束时间
+        # 因为进程可能被用户终止或出现其它异常状况
         if self.command_name == "Main":
             self.game.record_end_time(self.timerec_index)
         self.command_name = ""
@@ -148,6 +182,9 @@ class GameLauncher(QWidget, Ui_GameLauncher):
         return super().event(a0)
 
     def on_aboutToQuit(self):
+        # 测试时, 父进程退出后子进程有时会退出, 有时不会
+        # 所以这里保留一下
+        return
         if self.process.state() != QProcess.ProcessState.NotRunning:
             logging.info("等待游戏进程结束")
             self.process.waitForFinished()

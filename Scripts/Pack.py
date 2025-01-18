@@ -19,6 +19,7 @@ tasks = [
             r".*?/Default.*?",
             r".*?/Temp.*?",
             r".*?Extras.*?",
+            r".*?JavaWrapper[^\.].*?",
         ],
     }
 ]

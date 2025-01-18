@@ -31,7 +31,18 @@ def defaultSetting() -> dict:
             setting.defaultsetting["explorer.desktop.item_rightclicked_actions"] = (
                 tuple(a)
             )
-    return {}
+    return {"gamelauncher.never_use_javawrapper": False}
+
+
+def defaultSettingAttr() -> dict:
+    return {
+        "gamelauncher": {
+            "name": _translate("GameLauncher", "游戏启动器"),
+        },
+        "gamelauncher.never_use_javawrapper": {
+            "name": _translate("GameLauncher", "永远不使用JavaWrapper")
+        },
+    }
 
 
 def main(name=None):
