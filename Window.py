@@ -30,8 +30,12 @@ class Window(FramelessWindow):
         self.client = client
         self.client.setParent(self)
         self.client.move(0, self.titleBar.height())
-        self.client.windowIconChanged.connect(self.setWindowIcon)
-        self.client.windowTitleChanged.connect(self.setWindowTitle)
+        self.client.windowIconChanged.connect(
+            lambda icon: (self.setWindowIcon(icon), self.repaint())
+        )
+        self.client.windowTitleChanged.connect(
+            lambda title: (self.setWindowTitle(title), self.repaint())
+        )
         self.client.installEventFilter(self)
         self.client.show()
 

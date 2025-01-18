@@ -160,6 +160,7 @@ class ResourceDownloader(QWidget, Ui_ResourceDownloader):
             if name.startswith("pb_type_") and item.widget().isChecked():
                 project_type = name.split("_", maxsplit=2)[-1]
 
+        self.setWindowTitle(self.tr("资源下载器") + f": {self.le_keyword.text()}")
         self.search_task = SearchTask(
             self.le_keyword.text(),
             sources,

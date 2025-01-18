@@ -132,6 +132,11 @@ class Explorer(QStackedWidget):
                 self.removeTask(a0)
             elif a1.type() == QEvent.Type.Show:
                 self.setCurrentWidget(a0)
+            elif a1.type() == QEvent.Type.WindowTitleChange:
+                self.caught_widgets[a0].setText(a0.windowTitle())
+                self.caught_widgets[a0].setToolTip(a0.windowTitle())
+            elif a1.type() == QEvent.Type.WindowIconChange:
+                self.caught_widgets[a0].setIcon(a0.windowIcon())
         elif a1.type() == WidgetCaughtEvent.EventType:
             self.addWidget(a1.widget)
         elif a1.type() == QEvent.Type.DragEnter:
