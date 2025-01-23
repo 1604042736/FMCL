@@ -1,8 +1,9 @@
 from PyQt5.QtCore import QCoreApplication
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, qApp
 from qfluentwidgets import PrimaryPushButton
 from Setting import Setting
 from Kernel import Kernel
+from Events import *
 
 from .Explorer import Explorer
 from .Help.ui_Launcher import Ui_Launcher
@@ -46,6 +47,7 @@ def defaultSetting() -> dict:
         "explorer.width": 1000,
         "explorer.height": 618,
         "explorer.auto_sync_size": True,
+        "explorer.quick_open_running_game": True,
     }
 
 
@@ -62,6 +64,19 @@ def defaultSettingAttr() -> dict:
         pb_chooseimage.setText(_translate("Explorer", "选择图片"))
         pb_chooseimage.clicked.connect(chooseimage)
         return pb_chooseimage
+
+    def changerunninggamebutton(_):
+        if explorer == None:
+            return
+        if Setting()["explorer.quick_open_running_game"]:
+            qApp.sendEvent(
+                explorer.window(), AddToTitleEvent(explorer.pb_runninggames, "right")
+            )
+        else:
+            qApp.sendEvent(
+                explorer.window(), RemoveFromTitleEvent(explorer.pb_runninggames)
+            )
+            explorer.pb_runninggames.setParent(explorer)
 
     return {
         "explorer": {"name": "Explorer"},
@@ -86,6 +101,10 @@ def defaultSettingAttr() -> dict:
         "explorer.height": {"name": _translate("Explorer", "启动器宽度")},
         "explorer.auto_sync_size": {
             "name": _translate("Explorer", "自动同步启动器大小")
+        },
+        "explorer.quick_open_running_game": {
+            "name": _translate("Explorer", "快速打开正在运行的游戏"),
+            "callback": [changerunninggamebutton],
         },
     }
 

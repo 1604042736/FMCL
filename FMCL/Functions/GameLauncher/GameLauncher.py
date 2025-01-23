@@ -19,6 +19,8 @@ CPU_COUNT = psutil.cpu_count()
 
 
 class GameLauncher(QWidget, Ui_GameLauncher):
+    instances: list["GameLauncher"] = []
+
     __launchCommand = pyqtSignal()
 
     def __init__(self, game_name: str):
@@ -38,8 +40,7 @@ class GameLauncher(QWidget, Ui_GameLauncher):
         self.process = QProcess()
         self.process.readyReadStandardOutput.connect(self.outputStandard)
         self.process.readyReadStandardError.connect(self.errorStandard)
-
-        qApp.aboutToQuit.connect(self.on_aboutToQuit)
+        self.process.finished.connect(self.afterKilling)
 
         self.pb_auto_scroll = TransparentToolButton()
         self.pb_auto_scroll.resize(46, 32)
@@ -58,6 +59,8 @@ class GameLauncher(QWidget, Ui_GameLauncher):
             exception_handler=[self.showError],
         )
         self.root.start()
+
+        GameLauncher.instances.append(self)
 
     def setAutoScroll(self, auto_scroll: bool):
         self.auto_scroll = auto_scroll
@@ -99,6 +102,7 @@ class GameLauncher(QWidget, Ui_GameLauncher):
                     + ["-jar", javawrapper_path]
                     + args[main_class_index:]
                 )
+                # 由JavaWrapper记录开始时间
                 timerec = self.game.get_timerec()
                 if len(timerec) > 0:
                     self.timerec_index = max(timerec) + 1
@@ -148,12 +152,13 @@ class GameLauncher(QWidget, Ui_GameLauncher):
         logging.info(f"{self.name}被用户终止")
 
     def afterKilling(self):
-        self.timer.stop()
-        self.pb_kill.setEnabled(False)
         # 无论用没用JavaWrapper都要写入结束时间
         # 因为进程可能被用户终止或出现其它异常状况
         if self.command_name == "Main":
             self.game.record_end_time(self.timerec_index)
+
+        self.timer.stop()
+        self.pb_kill.setEnabled(False)
         self.command_name = ""
         if self.commands:
             self.__launchCommand.emit()
@@ -179,13 +184,6 @@ class GameLauncher(QWidget, Ui_GameLauncher):
         elif a0.type() == QEvent.Type.Hide:
             qApp.sendEvent(self.window(), RemoveFromTitleEvent(self.pb_auto_scroll))
             self.pb_auto_scroll.setParent(self)
+        elif a0.type() == QEvent.Type.DeferredDelete:
+            GameLauncher.instances.remove(self)
         return super().event(a0)
-
-    def on_aboutToQuit(self):
-        # 测试时, 父进程退出后子进程有时会退出, 有时不会
-        # 所以这里保留一下
-        return
-        if self.process.state() != QProcess.ProcessState.NotRunning:
-            logging.info("等待游戏进程结束")
-            self.process.waitForFinished()
-            self.afterKilling()

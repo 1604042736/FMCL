@@ -36,6 +36,11 @@ class Explorer(QStackedWidget):
             "TransparentToolButton:checked{background-color: rgba(255, 255, 255, 9);border: none;}",
         )
 
+        self.pb_runninggames = TransparentToolButton()
+        self.pb_runninggames.resize(46, 32)
+        self.pb_runninggames.setIcon(qta.icon("mdi.rocket-launch-outline"))
+        self.pb_runninggames.clicked.connect(self.showRunningGames)
+
         self.a_showdesktop = QAction(self)
         self.a_showdesktop.setText(self.tr("显示桌面"))
         self.a_showdesktop.setIcon(qta.icon("ph.desktop"))
@@ -206,6 +211,10 @@ class Explorer(QStackedWidget):
     def event(self, e: QEvent | None) -> bool:
         if e.type() == QEvent.Type.Show:
             qApp.sendEvent(self.window(), AddToTitleEvent(self.pb_start, index=0))
+            if Setting()["explorer.quick_open_running_game"]:
+                qApp.sendEvent(
+                    self.window(), AddToTitleEvent(self.pb_runninggames, "right")
+                )
             for _, button in self.caught_widgets.items():  # 恢复
                 qApp.sendEvent(self.window(), AddToTitleEvent(button, "right", -1))
 
@@ -217,3 +226,24 @@ class Explorer(QStackedWidget):
                 setting.set("explorer.width", self.width())
                 setting.set("explorer.height", self.height())
         return super().event(e)
+
+    def showRunningGames(self):
+        menu = RoundMenu(self)
+
+        from FMCL.Functions.GameLauncher import GameLauncher
+
+        for instance in GameLauncher.instances:
+            action = QAction(self)
+            action.setText(instance.windowTitle())
+            action.triggered.connect(instance.show)
+            menu.addAction(action)
+
+        if not GameLauncher.instances:
+            action = QAction(self)
+            action.setText(self.tr("暂无运行中游戏"))
+            action.triggered.connect(lambda: Function("GameLauncher").exec())
+            menu.addAction(action)
+
+        menu.exec(
+            self.pb_runninggames.mapToGlobal(QPoint(0, self.pb_runninggames.height()))
+        )
