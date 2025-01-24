@@ -32,15 +32,17 @@ def defaultSetting() -> dict:
             setting.defaultsetting["explorer.desktop.item_rightclicked_actions"] = (
                 tuple(a)
             )
-    return {"gamelauncher.never_use_javawrapper": False}
+    # 各个游戏的Java版本可能和编译JavaWrapper的版本不一样
+    # 所以将这个设置作为每个游戏可以单独设置的
+    return {"game.gamelauncher.never_use_javawrapper": False}
 
 
 def defaultSettingAttr() -> dict:
     return {
-        "gamelauncher": {
+        "game.gamelauncher": {
             "name": _translate("GameLauncher", "游戏启动器"),
         },
-        "gamelauncher.never_use_javawrapper": {
+        "game.gamelauncher.never_use_javawrapper": {
             "name": _translate("GameLauncher", "永远不使用JavaWrapper")
         },
     }

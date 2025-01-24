@@ -92,8 +92,14 @@ class GameLauncher(QWidget, Ui_GameLauncher):
                 "JavaWrapper.jar",
             )
             logging.info(f"{javawrapper_path}, {os.path.exists(javawrapper_path)}")
-            if os.path.exists(javawrapper_path) and not Setting().get(
-                "gamelauncher.never_use_javawrapper", False
+
+            if self.game.setting.get("specific"):
+                setting = self.game.setting
+            else:
+                setting = Setting()
+
+            if os.path.exists(javawrapper_path) and not setting.get(
+                "game.gamelauncher.never_use_javawrapper", False
             ):
                 logging.info("使用javawrapper")
                 self.use_javawrapper = True
